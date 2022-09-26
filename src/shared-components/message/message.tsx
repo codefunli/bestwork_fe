@@ -9,10 +9,11 @@ interface MessageShowProps {
     message:string;
     showMessage:boolean;
     type:AlertColor;
+    handleCloseMsg:Function;
 }
 
 export default function MessageShow(props:MessageShowProps) {
-  const {message, showMessage, type} = props;
+  const {message, showMessage, type, handleCloseMsg} = props;
   const [state, setState] = useState<State>({
     open: false,
     vertical: 'top',
@@ -28,6 +29,7 @@ export default function MessageShow(props:MessageShowProps) {
   const handleClose = () => {
     console.log("HANDLE");
     setState({ ...state, open: false });
+    handleCloseMsg();
   };
 
   return (

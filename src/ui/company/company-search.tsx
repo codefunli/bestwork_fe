@@ -89,7 +89,6 @@ export default function CompanySearch() {
         nativgate(`${UrlFeApp.COMPANY.EDIT}/${id}`);
     }
 
-    // miss pass id with url
     const handleDeleteRecord = (e:any,id:number) => {
         setTypeCompanyMsg("success");
         setCompanyMsg(COMPANY_MESSAGE.DEL_SUCCESS);
@@ -106,6 +105,10 @@ export default function CompanySearch() {
         setIsShowMessage(false);
     }
 
+    const handleCloseMsg = () => {
+        setIsShowMessage(false);
+    }
+
     const arruBtton:ArrayAction[] = [
         {
             nameFn:"edit",
@@ -113,7 +116,7 @@ export default function CompanySearch() {
             iconFn: "ModeEditIcon",
         },
         {
-            nameFn:"edit2",
+            nameFn:"delete",
             acFn: handleDeleteRecord,
             iconFn: "Delete",
         },
@@ -252,6 +255,7 @@ export default function CompanySearch() {
                 message={companyMsg}
                 showMessage={isShowMessage}
                 type={typeCompanyMsg}
+                handleCloseMsg={handleCloseMsg}
             />
         </div>
     );

@@ -189,7 +189,7 @@ export default function EnhancedTable(props:EnhancedTable) {
                         <TableCell padding="normal">
                           {arrButton.map((arrBtn)=> {
                             return(
-                                <Tooltip title="Edit" placement="top-start">
+                                <Tooltip title={arrBtn.nameFn} placement="top-start">
                                 <IconButton size="small" color="primary" aria-label="add to shopping cart" 
                                   onClick={(event) => handlePropsEdit(event, row.id as string, arrBtn.acFn)}>
                                     {renderIcon(arrBtn.iconFn)}
