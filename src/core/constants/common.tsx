@@ -1,10 +1,11 @@
+import { AlertColor } from "@mui/material"
+
 export const CharacterConstants = {
     SLASH:"/",
 }
 
 export const UrlApiPaths = {
     USER_INFO : "/users/info",
-
 }
 
 export const UseQueryConstants = {
@@ -32,4 +33,13 @@ export const UrlFeApp = {
 
 export const FieldConstants = {
     ID:"id",
+}
+
+export const ConfirmConstants = {
+    DELETE:{
+        title:"DELETE",
+        content:"Are you certain that you want to delete this record!"
+    },
+    OK_BTN:"OK",
+    NO_BTN:"NO"
 }

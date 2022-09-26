@@ -1,9 +1,10 @@
 
-import { Avatar, Box, Button, ButtonGroup, Card, CardContent, CardHeader, Grid, InputLabel, TextField, Typography } from '@mui/material';
+import { AlertColor, Avatar, Box, Button, ButtonGroup, Card, CardContent, CardHeader, Grid, InputLabel, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useQuery, useQueryClient } from 'react-query';
 import { Link, useNavigate } from 'react-router-dom';
-import { UrlFeApp } from '../../core/constants/common';
+import { ConfirmConstants, UrlFeApp } from '../../core/constants/common';
+import { COMPANY_MESSAGE } from '../../core/constants/message';
 import { headCompanyCol } from '../../core/types/company';
 import { CompanyResDTO } from '../../models/company-req-dto';
 import { postCompany } from '../../services/company-service';
@@ -19,7 +20,9 @@ const initialValues = {
 
 export default function CompanySearch() {
     const [isOpenModal, setIsOpenModal] = useState(false);
-    const [showMessage, setShowMessage] = useState(false);
+    const [isShowMessage, setIsShowMessage] = useState(false);
+    const [companyMsg, setCompanyMsg] = useState("");
+    const [typeCompanyMsg, setTypeCompanyMsg] = useState<AlertColor>('success');
     const [formValues, setFormValues] = useState(initialValues);
     const queryClient = useQueryClient();
     const [state, setState] = useState<CompanyResDTO[]>([{
@@ -55,6 +58,7 @@ export default function CompanySearch() {
             // mutate data if you need to
             setState(data.data?.content);
         };
+        setIsShowMessage(false);
     },[data]);
 
     const handleInputChange = (e:any) => {
@@ -86,12 +90,20 @@ export default function CompanySearch() {
     }
 
     // miss pass id with url
-    const handleEditData2 = (e:any,id:number) => {
+    const handleDeleteRecord = (e:any,id:number) => {
+        setTypeCompanyMsg("success");
+        setCompanyMsg(COMPANY_MESSAGE.DEL_SUCCESS);
         setIsOpenModal(true);
     }
 
+    const alertOkFunc = () => {
+        setIsOpenModal(false);
+        setIsShowMessage(true);
+    }
+
     const closeModal = () => {
-        setShowMessage(true);
+        setIsOpenModal(false);
+        setIsShowMessage(false);
     }
 
     const arruBtton:ArrayAction[] = [
@@ -102,7 +114,7 @@ export default function CompanySearch() {
         },
         {
             nameFn:"edit2",
-            acFn: handleEditData2,
+            acFn: handleDeleteRecord,
             iconFn: "Delete",
         },
     ]
@@ -228,16 +240,18 @@ export default function CompanySearch() {
             
             <AlertDialogSlide 
                 isOpen={isOpenModal} 
-                closeFunc={closeModal} 
-                title="DELETE"
-                content="Are you certain that you want to delete this record!"
-                noBtn='No'
-                okBtn='Yes'
+                closeFunc={closeModal}
+                okFunc={alertOkFunc}
+                title={ConfirmConstants.DELETE.title}
+                content={ConfirmConstants.DELETE.content}
+                noBtn={ConfirmConstants.NO_BTN}
+                okBtn={ConfirmConstants.OK_BTN}
             />
 
             <MessageShow
-                message={"sucess"}
-                showMessage={showMessage}
+                message={companyMsg}
+                showMessage={isShowMessage}
+                type={typeCompanyMsg}
             />
         </div>
     );

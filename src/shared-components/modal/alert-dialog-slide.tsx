@@ -18,11 +18,17 @@ interface AlertDialogSlideProps {
     okBtn:string;
     isOpen:boolean;
     closeFunc:Function;
+    okFunc:Function;
 }
 
 export default function AlertDialogSlide(props : AlertDialogSlideProps) {
-    const { title, content, isOpen, closeFunc, noBtn, okBtn } = props;
+    const { title, content, isOpen, closeFunc, okFunc, noBtn, okBtn } = props;
     const [open, setOpen] = useState(false);
+
+    const handleOkFunc = () => {
+      setOpen(false);
+      okFunc();
+    }
 
     const handleClose = () => {
         setOpen(false);
@@ -54,7 +60,7 @@ export default function AlertDialogSlide(props : AlertDialogSlideProps) {
         </DialogContent>
         <DialogActions>
           <Button variant="outlined" onClick={handleClose}>{noBtn}</Button>
-          <Button variant="contained" onClick={handleClose}>{okBtn}</Button>
+          <Button variant="contained" onClick={handleOkFunc}>{okBtn}</Button>
         </DialogActions>
       </Dialog>
     </div>

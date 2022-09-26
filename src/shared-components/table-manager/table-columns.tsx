@@ -1,4 +1,4 @@
-import { Box, Checkbox, TableCell, TableHead, TableRow, TableSortLabel } from "@mui/material";
+import { Checkbox, TableCell, TableHead, TableRow, TableSortLabel } from "@mui/material";
 import { FieldConstants } from "../../core/constants/common";
 import { HeadColumn } from "../../core/types/base";
 import {  } from "../../ui/company/company-search";
@@ -11,10 +11,14 @@ interface EnhancedTableProps {
     order: Order;
     orderBy: string;
     rowCount: number;
+    onSelectAllProps:Function
 }
   
 export function EnhancedTableHead(props: EnhancedTableProps) {
-    const { order, orderBy, numSelected, rowCount, headCells } = props;
+    const { order, orderBy, numSelected, rowCount, headCells, onSelectAllProps } = props;
+    const onSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+      onSelectAllProps(event);
+    }
     return (
       <TableHead>
         <TableRow>
@@ -23,7 +27,7 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
               color="primary"
               indeterminate={numSelected > 0 && numSelected < rowCount}
               checked={rowCount > 0 && numSelected === rowCount}
-              //onChange={onSelectAllClick}
+              onChange={(event) => onSelectAllClick(event)}
               inputProps={{
                 'aria-label': 'select all desserts',
               }}

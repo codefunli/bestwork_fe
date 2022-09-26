@@ -4,10 +4,14 @@ import { alpha } from '@mui/material/styles';
 
 interface EnhancedTableToolbarProps {
     numSelected: number;
+    deleteRecordBySelected: Function;
 }
   
 export const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
-    const { numSelected } = props;
+    const { numSelected, deleteRecordBySelected } = props;
+    const deleteRecord = () => {
+      deleteRecordBySelected();
+    }
     return (
       <Toolbar
         sx={{
@@ -40,7 +44,7 @@ export const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
         )}
         {numSelected > 0 ? (
           <Tooltip title="Delete">
-            <IconButton>
+            <IconButton onClick={() => deleteRecord()}>
               <DeleteIcon />
             </IconButton>
           </Tooltip>
