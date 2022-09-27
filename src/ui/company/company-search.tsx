@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useQuery, useQueryClient } from 'react-query';
 import { Link, useNavigate } from 'react-router-dom';
 import { ConfirmConstants, UrlFeApp } from '../../core/constants/common';
-import { COMPANY_MESSAGE } from '../../core/constants/message';
+import { SUCCESS_MSG } from '../../core/constants/message';
 import { headCompanyCol } from '../../core/types/company';
 import { CompanyResDTO } from '../../models/company-req-dto';
 import { postCompany } from '../../services/company-service';
@@ -91,7 +91,7 @@ export default function CompanySearch() {
 
     const handleDeleteRecord = (e:any,id:number) => {
         setTypeCompanyMsg("success");
-        setCompanyMsg(COMPANY_MESSAGE.DEL_SUCCESS);
+        setCompanyMsg(SUCCESS_MSG.S01_004);
         setIsOpenModal(true);
     }
 

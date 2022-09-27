@@ -1,6 +1,5 @@
 import apiClient from "../core/services/api-service";
 import { DataResSuccess, PageableDataResSuccess } from "../core/types/base";
-import { BaseDTO } from "../models/base-dto";
 import { CompanyResDTO } from "../models/company-req-dto";
 
 export const getCompanys = async () => {

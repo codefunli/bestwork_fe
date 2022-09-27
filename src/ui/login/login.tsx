@@ -1,19 +1,38 @@
 import { AccountCircle, PasswordOutlined, Visibility, VisibilityOff } from "@mui/icons-material";
-import { Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, Typography } from "@mui/material";
+import { Button, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, Typography } from "@mui/material";
 import { red } from "@mui/material/colors";
 import { useState } from "react";
+import { FieldConstants } from "../../core/constants/common";
+import { getMessage, ERROR_MSG } from "../../core/constants/message";
+import { isObjectEmpty } from "../../core/utils/object-utils";
 import "./login.scss";
 
 const initialValues = {
-    user: "",
+    userName: "",
     password: "",
 };
-
+// https://www.bezkoder.com/react-hook-form-material-ui-validation/
+// https://dev.to/omardiaa48/how-to-make-a-robust-form-validation-in-react-with-material-ui-fields-1kb0
+// https://angularfixing.com/onchange-is-specified-more-than-once-so-this-usage-will-be-overwritten/
 export default function Login() {
     const [formValues, setFormValues] = useState(initialValues);
     const [showPassword, setShowPassword] = useState(false);
+    const [isErrorUserName, setIsErrorUserName] = useState(false);
+    const [msgUserName, setMsgUserName] = useState("");
+    const [isErrorPassword, setIsErrorPassword] = useState(false);
+    const [msgPassword, setMsgPassword] = useState("");
+
     const handleChangeValue = (event: any) => {
         const { name, value } = event.target;
+
+        if (FieldConstants.USER_NAME === name) {
+            setIsErrorUserName(false);
+        }
+
+        if (FieldConstants.PASSWORD === name) {       
+            setIsErrorPassword(false)
+        }
+
         setFormValues({
           ...formValues,
           [name]: value,
@@ -25,8 +44,17 @@ export default function Login() {
     }
 
     const handleLogin = () => {
-        alert("Login in here")
+        if (isObjectEmpty(formValues.userName)) {
+            setIsErrorUserName(true);
+            setMsgUserName(getMessage(ERROR_MSG.E01_001, [FieldConstants.USER_NAME]))
+        }
+
+        if (isObjectEmpty(formValues.password)) {
+            setIsErrorPassword(true);
+            setMsgPassword(getMessage(ERROR_MSG.E01_001, [FieldConstants.PASSWORD]))
+        }
     }
+
     return (
         <div className="login-wrapper">
             <div className="login-form-wrapper">
@@ -42,28 +70,33 @@ export default function Login() {
                     <div className="login-form-field">
                         <AccountCircle sx={{ mr: 1, my: 0.5}} />
                         <FormControl sx={{ m: 1, width: '30ch', color:red }} variant="outlined">
-                            <InputLabel required htmlFor="outlined-adornment-password" sx={{color:"white"}}>Account</InputLabel>
+                            <InputLabel required htmlFor="outlined-adornment-password">Account</InputLabel>
                             <OutlinedInput
                                 id="outlined-adornment-password"
                                 type='text'
-                                name="user"
-                                value={formValues.user}
+                                name="userName"
+                                value={formValues.userName}
                                 onChange={handleChangeValue}
+                                error={isErrorUserName}
                                 endAdornment={
-                                <InputAdornment position="end">
-                                    <IconButton aria-label="toggle password visibility"
-                                    edge="end">
-                                    </IconButton>
-                                </InputAdornment>
+                                    <InputAdornment position="end">
+                                        <IconButton aria-label="toggle password visibility"
+                                        edge="end">
+                                        </IconButton>
+                                    </InputAdornment>
                                 }
                                 label="account"
                             />
+                            {isErrorUserName && (
+                                <FormHelperText error>
+                                    {msgUserName}
+                                </FormHelperText>)}
                         </FormControl>
                     </div>
                     <div className="login-form-field">
                         <PasswordOutlined sx={{ mr: 1, my: 0.5 }} />
                         <FormControl sx={{ m: 1, width: '30ch' }} variant="outlined">
-                            <InputLabel  required htmlFor="outlined-adornment-password" sx={{color:"white"}}>
+                            <InputLabel  required htmlFor="outlined-adornment-password">
                                 Password
                             </InputLabel>
                             <OutlinedInput
@@ -72,6 +105,7 @@ export default function Login() {
                                 name="password"
                                 value={formValues.password}
                                 onChange={handleChangeValue}
+                                error={isErrorPassword}
                                 endAdornment={
                                 <InputAdornment position="end">
                                     <IconButton
@@ -79,19 +113,22 @@ export default function Login() {
                                     onClick={handleClickShowPassword}
                                     edge="end"
                                     >
-                                        {showPassword ? <VisibilityOff sx={{color:"white"}}/> : <Visibility sx={{color:"white"}}/>}
+                                        {showPassword ? <VisibilityOff/> : <Visibility/>}
                                     </IconButton>
                                 </InputAdornment>
                                 }
                                 label="Password"
                             />
+                            {isErrorPassword && (
+                                <FormHelperText error>
+                                    {msgPassword}
+                                </FormHelperText>)}
                         </FormControl>
                     </div>
-                        <Button variant="outlined" sx={{color:"white"}} className="justify-center" onClick={handleLogin}>Login</Button>
+                        <Button variant="outlined" className="justify-center" onClick={handleLogin}>Login</Button>
                     </div>
             </form>
             </div>
         </div>
-        
     )
 }

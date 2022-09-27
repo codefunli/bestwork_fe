@@ -1,4 +1,3 @@
-import { AlertColor } from "@mui/material"
 
 export const CharacterConstants = {
     SLASH:"/",
@@ -33,6 +32,8 @@ export const UrlFeApp = {
 
 export const FieldConstants = {
     ID:"id",
+    USER_NAME:"userName",
+    PASSWORD:"password"
 }
 
 export const ConfirmConstants = {

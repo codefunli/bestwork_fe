@@ -1,34 +1,32 @@
-import * as React from 'react';
-import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import MuiDrawer from '@mui/material/Drawer';
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import CssBaseline from '@mui/material/CssBaseline';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import LanguageIcon from '@mui/icons-material/Language';
+import MailIcon from '@mui/icons-material/Mail';
+import MenuIcon from '@mui/icons-material/Menu';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import { Avatar, Badge } from '@mui/material';
+import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import { deepOrange } from '@mui/material/colors';
+import CssBaseline from '@mui/material/CssBaseline';
+import Divider from '@mui/material/Divider';
+import MuiDrawer from '@mui/material/Drawer';
+import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-import { Outlet, useNavigate } from 'react-router-dom';
-import { isEmpty } from '../core/utils/ObjectUtils'
-import menuItemLinkData from '../core/constants/menu-item-link';
-import { Avatar, Badge, InputLabel, useScrollTrigger, Zoom } from '@mui/material';
-import CollapsedBreadcrumbs from './collapsed-breadcrumbs';
-import { deepOrange } from '@mui/material/colors';
-import LanguageIcon from '@mui/icons-material/Language';
-import AnimationPage from '../shared-components/animation-page';
-import { UrlFeApp } from '../core/constants/common';
+import { CSSObject, styled, Theme, useTheme } from '@mui/material/styles';
+import Toolbar from '@mui/material/Toolbar';
+import * as React from 'react';
 import { useEffect } from 'react';
+import { Outlet, useNavigate } from 'react-router-dom';
+import { ErrorPagePath, UrlFeApp } from '../core/constants/common';
+import menuItemLinkData from '../core/constants/menu-item-link';
+import { isObjectEmpty } from '../core/utils/object-utils';
+import CollapsedBreadcrumbs from './collapsed-breadcrumbs';
 
 const drawerWidth = 240;
 
@@ -124,10 +122,10 @@ export default function MiniDrawer() {
   };
 
   const navigateByLink = (link:any) => {
-      if (!isEmpty(link)) {
+      if (!isObjectEmpty(link)) {
         navigate(link);
       } else {
-        navigate(link);
+        navigate(ErrorPagePath.PAGE_404_NOT_FOUND);
       }
   }
 
@@ -193,7 +191,6 @@ export default function MiniDrawer() {
                     px: 2.5,
                   }}
                   onClick={(event) => {
-                    console.log("top suggestion clicked")
                     navigateByLink(menuItem.link);
                   }}
                 >

@@ -1,5 +1,3 @@
-//import { Data } from "../../ui/company/company-search";
-
 export interface DataResSuccess<T> {
 	code: string;
 	message: string;
