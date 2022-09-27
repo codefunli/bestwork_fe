@@ -18,22 +18,6 @@ const initialValues = {
     address1: "",
 };
 
-const initialValueRes = [{
-    id: -1,
-    version: -1,
-    name: '',
-    address1: '',
-    address2: '',
-    city: '',
-    state: '',
-    zip_code: '',
-    country: '',
-    created: '',
-    updated: '',
-    startDate: '',
-    expiredDate: '', 
-}]
-
 export default function CompanySearch() {
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [isShowMessage, setIsShowMessage] = useState(false);

@@ -10,12 +10,13 @@ import { getDistrictsByCityCode, getWardsByDistrictCode } from '../../core/utils
 const initialValues = {
     company:{
         name:"",
-        email: "",
+        cpEmail: "",
         telNo: "",
         taxNo:"",
         city: "",
         district: "",
         ward:"",
+        street:"",
         startDate:"",
         endDate:""
     },
@@ -25,7 +26,7 @@ const initialValues = {
         firstName:"",
         lastName:"",
         telNo: "",
-        email:"",
+        uEmail:"",
         isEnable:false,
         role:"admin"
     }
@@ -35,6 +36,21 @@ export default function CompanyRegister() {
     const [formValues, setFormValues] = useState(initialValues);
 	const [districts, setDistricts] = useState<District[]>([]);
     const [wards, setWards] = useState<Ward[]>([]);
+
+    const handleInputChange = (event:any) => {
+        const { name, value } = event.target;
+        setFormValues({
+            ...formValues,
+            company: {
+                ...formValues.company,
+                [name]: value,
+            },
+            user: {
+                ...formValues.user,
+                [name]: value,
+            }
+        });
+    }
 
     const handleCityChange = (event:any) => {
         const { name, value } = event.target;
@@ -100,7 +116,7 @@ export default function CompanyRegister() {
 
     const handleSubmit = (event:any) => {
         event.preventDefault();
-        console.log(formValues);
+        console.log(JSON.stringify(formValues));
     };
 
     return (
@@ -142,19 +158,21 @@ export default function CompanyRegister() {
                                                 id="outlined-required"
                                                 label="Required"
                                                 placeholder="Please input a new value"
+                                                onChange={handleInputChange}
                                             />
                                         </div>
                                         <div className='col-12 col-sm-6 d-block p-1'>
                                             <InputLabel htmlFor="outlined-adornment-amount">Email:</InputLabel>
                                             <TextField
                                                 size="small"
-                                                name="email"
-                                                value={formValues.company.email}
+                                                name="cpEmail"
+                                                value={formValues.company.cpEmail}
                                                 fullWidth sx={{ mt: 1, mb: 1 }}
                                                 required
                                                 id="outlined-required"
                                                 label="Required"
                                                 placeholder="Please input a new value"
+                                                onChange={handleInputChange}
                                             />
                                         </div>
                                     </div>
@@ -169,6 +187,7 @@ export default function CompanyRegister() {
                                                 id="outlined-required"
                                                 label="non-required"
                                                 placeholder="Please input a new value"
+                                                onChange={handleInputChange}
                                             />
                                         </div>
                                         <div className='col-12 col-sm-6 d-block p-1'>
@@ -182,6 +201,7 @@ export default function CompanyRegister() {
                                                 id="outlined-required"
                                                 label="Required"
                                                 placeholder="Please input a new value"
+                                                onChange={handleInputChange}
                                             />
                                         </div>
                                     </div>
@@ -259,6 +279,7 @@ export default function CompanyRegister() {
                                                 id="outlined-required"
                                                 label="non-required"
                                                 placeholder="Please input a new value"
+                                                onChange={handleInputChange}
                                             />
                                         </div>
                                     </div>
@@ -276,6 +297,7 @@ export default function CompanyRegister() {
                                                 InputLabelProps={{
                                                     shrink: true,
                                                 }}
+                                                onChange={handleInputChange}
                                             />
                                         </div>
                                         <div className='col-12 col-sm-6 d-block p-1'>
@@ -291,6 +313,7 @@ export default function CompanyRegister() {
                                                 InputLabelProps={{
                                                     shrink: true,
                                                 }}
+                                                onChange={handleInputChange}
                                             />
                                         </div>
                                     </div>
@@ -335,6 +358,7 @@ export default function CompanyRegister() {
                                                 id="outlined-required"
                                                 label="Required"
                                                 placeholder="Please input a new value"
+                                                onChange={handleInputChange}
                                             />
                                         </div>
                                         <div className='col-12 col-sm-6 d-block p-1'>
@@ -348,6 +372,7 @@ export default function CompanyRegister() {
                                                 id="outlined-required"
                                                 label="Required"
                                                 placeholder="Please input a new value"
+                                                onChange={handleInputChange}
                                             />
                                         </div>
                                     </div>
@@ -362,6 +387,7 @@ export default function CompanyRegister() {
                                                 id="outlined-required"
                                                 label="non-required"
                                                 placeholder="Please input a new value"
+                                                onChange={handleInputChange}
                                             />
                                         </div>
                                         <div className='col-12 col-sm-6 d-block p-1'>
@@ -374,6 +400,7 @@ export default function CompanyRegister() {
                                                 id="outlined-required"
                                                 label="non-required"
                                                 placeholder="Please input a new value"
+                                                onChange={handleInputChange}
                                             />
                                         </div>
                                     </div>
@@ -388,6 +415,7 @@ export default function CompanyRegister() {
                                                 id="outlined-required"
                                                 label="non-required"
                                                 placeholder="Please input a new value"
+                                                onChange={handleInputChange}
                                             />
                                         </div>
                                     </div>
@@ -395,13 +423,14 @@ export default function CompanyRegister() {
                                         <div className='col-12 col-sm-12 d-block p-1'>
                                             <InputLabel htmlFor="outlined-adornment-amount">Email:</InputLabel>
                                             <TextField
-                                                name="email"
-                                                value={formValues.user.email}
+                                                name="uEmail"
+                                                value={formValues.user.uEmail}
                                                 size="small"
                                                 fullWidth sx={{ mt: 1, mb: 1 }}
                                                 id="outlined-required"
                                                 label="non-required"
                                                 placeholder="Please input a new value"
+                                                onChange={handleInputChange}
                                             />
                                         </div>
                                     </div>
