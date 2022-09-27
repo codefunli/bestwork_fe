@@ -6,7 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ConfirmConstants, UrlFeApp } from '../../core/constants/common';
 import { SUCCESS_MSG } from '../../core/constants/message';
 import { headCompanyCol } from '../../core/types/company';
-import { CompanyResDTO } from '../../models/company-req-dto';
+import { CompanyResDTO } from '../../models/company-res-dto';
 import { postCompany } from '../../services/company-service';
 import MessageShow from '../../shared-components/message/message';
 import AlertDialogSlide from '../../shared-components/modal/alert-dialog-slide';
@@ -18,6 +18,22 @@ const initialValues = {
     address1: "",
 };
 
+const initialValueRes = [{
+    id: -1,
+    version: -1,
+    name: '',
+    address1: '',
+    address2: '',
+    city: '',
+    state: '',
+    zip_code: '',
+    country: '',
+    created: '',
+    updated: '',
+    startDate: '',
+    expiredDate: '', 
+}]
+
 export default function CompanySearch() {
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [isShowMessage, setIsShowMessage] = useState(false);
@@ -25,21 +41,7 @@ export default function CompanySearch() {
     const [typeCompanyMsg, setTypeCompanyMsg] = useState<AlertColor>('success');
     const [formValues, setFormValues] = useState(initialValues);
     const queryClient = useQueryClient();
-    const [state, setState] = useState<CompanyResDTO[]>([{
-        id: -1,
-        version: -1,
-        name: '',
-        address1: '',
-        address2: '',
-        city: '',
-        state: '',
-        zip_code: '',
-        country: '',
-        created: '',
-        updated: '',
-        startDate: '',
-        expiredDate: '', 
-    }]);
+    const [state, setState] = useState<CompanyResDTO[]>([]);
 
     const nativgate = useNavigate();
 
@@ -232,14 +234,13 @@ export default function CompanySearch() {
                     </Grid>
                 </Grid>
             </form>
-            {(state !== undefined && state.length > 0) && (
-                <EnhancedTable 
-                    headCells={headCompanyCol} 
-                    rows={state} 
-                    isLoading={isLoading}
-                    arrButton={arruBtton}
-                />
-            )}
+            
+            <EnhancedTable 
+                headCells={headCompanyCol} 
+                rows={state} 
+                isLoading={isLoading}
+                arrButton={arruBtton}
+            />
             
             <AlertDialogSlide 
                 isOpen={isOpenModal} 

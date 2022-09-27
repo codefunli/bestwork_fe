@@ -1,23 +1,102 @@
 
-import { Avatar, Box, Button, Card, CardContent, CardHeader, Divider, FormControl, FormControlLabel, FormLabel, Grid, InputLabel, MenuItem, Radio, RadioGroup, Select, Switch, TextField, Typography } from '@mui/material';
+import { Avatar, Box, Button, Card, CardContent, CardHeader, 
+    Divider, FormControl, FormControlLabel, FormLabel, Grid, InputLabel, 
+    MenuItem, Radio, RadioGroup, Select, Switch, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
+import cities from 'hanhchinhvn/dist/tinh_tp.json';
+import { District, Ward } from '../../core/types/administrative';
+import { getDistrictsByCityCode, getWardsByDistrictCode } from '../../core/utils/administrative-utils';
+
 const initialValues = {
-    firstName: "",
-    lastName: "",
-    gender: "male",
-    country: "Canada",
-    hobby: ""
+    company:{
+        name:"",
+        email: "",
+        telNo: "",
+        taxNo:"",
+        city: "",
+        district: "",
+        ward:"",
+        startDate:"",
+        endDate:""
+    },
+    user:{
+        userName:"",
+        password:"",
+        firstName:"",
+        lastName:"",
+        telNo: "",
+        email:"",
+        isEnable:false,
+        role:"admin"
+    }
 };
 
 export default function CompanyRegister() {
     const [formValues, setFormValues] = useState(initialValues);
-    const handleInputChange = (event:any) => {
+	const [districts, setDistricts] = useState<District[]>([]);
+    const [wards, setWards] = useState<Ward[]>([]);
+
+    const handleCityChange = (event:any) => {
         const { name, value } = event.target;
         setFormValues({
             ...formValues,
-            [name]: value,
+            company: {
+                ...formValues.company,
+                [name]: value,
+            } 
         });
-    };
+
+        setDistricts(getDistrictsByCityCode(value));
+    }
+
+    const handleDistrictChange = (event:any) => {
+        const { name, value } = event.target;
+        setFormValues({
+            ...formValues,
+            company: {
+                ...formValues.company,
+                [name]: value,
+            } 
+        });
+
+        setWards(getWardsByDistrictCode(value));
+    }
+
+    const handleWardChange = (event:any) => {
+        const { name, value } = event.target;
+        setFormValues({
+            ...formValues,
+            company: {
+                ...formValues.company,
+                [name]: value,
+            } 
+        });
+    }
+
+    const handleAllowLoginChange = (event:any) => {
+        const { name } = event.target;
+        setFormValues({
+            ...formValues,
+            user: {
+                ...formValues.user,
+                [name]: !formValues.user.isEnable,
+            } 
+        });
+    }
+
+    const handleClearCompany = () => {
+        setFormValues({
+            ...formValues,
+            company: initialValues.company
+        });
+    }
+
+    const handleClearUser = () => {
+        setFormValues({
+            ...formValues,
+            user: initialValues.user
+        });
+    }
 
     const handleSubmit = (event:any) => {
         event.preventDefault();
@@ -56,6 +135,8 @@ export default function CompanyRegister() {
                                             <InputLabel htmlFor="outlined-adornment-amount">Company Name:</InputLabel>
                                             <TextField
                                                 size="small"
+                                                name="name"
+                                                value={formValues.company.name}
                                                 fullWidth sx={{ mt: 1, mb: 1 }}
                                                 required
                                                 id="outlined-required"
@@ -67,6 +148,8 @@ export default function CompanyRegister() {
                                             <InputLabel htmlFor="outlined-adornment-amount">Email:</InputLabel>
                                             <TextField
                                                 size="small"
+                                                name="email"
+                                                value={formValues.company.email}
                                                 fullWidth sx={{ mt: 1, mb: 1 }}
                                                 required
                                                 id="outlined-required"
@@ -80,6 +163,8 @@ export default function CompanyRegister() {
                                             <InputLabel htmlFor="outlined-adornment-amount">Tel-no:</InputLabel>
                                             <TextField
                                                 size="small"
+                                                name="telNo"
+                                                value={formValues.company.telNo}
                                                 fullWidth sx={{ mt: 1, mb: 1 }}
                                                 id="outlined-required"
                                                 label="non-required"
@@ -90,6 +175,8 @@ export default function CompanyRegister() {
                                             <InputLabel htmlFor="outlined-adornment-amount">Tax-no:</InputLabel>
                                             <TextField
                                                 size="small"
+                                                name="taxNo"
+                                                value={formValues.company.taxNo}
                                                 fullWidth sx={{ mt: 1, mb: 1 }}
                                                 required
                                                 id="outlined-required"
@@ -104,18 +191,19 @@ export default function CompanyRegister() {
                                             <FormControl size="small" fullWidth sx={{ mt: 1, mb: 1 }} variant="outlined">
                                                 <InputLabel id="demo-simple-select-outlined-label">non-required</InputLabel>
                                                 <Select
-                                                labelId="demo-simple-select-outlined-label"
-                                                id="demo-simple-select-outlined"
-                                                //value={age}
-                                                //onChange={handleChange}
-                                                label="non-required"
+                                                    labelId="demo-simple-select-outlined-label"
+                                                    id="demo-simple-select-outlined"
+                                                    name='city'
+                                                    value={formValues.company.city}
+                                                    onChange={handleCityChange}
+                                                    label="non-required"
                                                 >
-                                                <MenuItem value="">
-                                                    <em>None</em>
-                                                </MenuItem>
-                                                <MenuItem value={10}>Ten</MenuItem>
-                                                <MenuItem value={20}>Twenty</MenuItem>
-                                                <MenuItem value={30}>Thirty</MenuItem>
+                                                    <MenuItem value="">
+                                                        <em>None</em>
+                                                    </MenuItem>
+                                                    {Object.values(cities).map(city => (
+                                                        <MenuItem value={city.code}>{city.name}</MenuItem>
+                                                    ))}
                                                 </Select>
                                             </FormControl>
                                         </div>
@@ -126,16 +214,17 @@ export default function CompanyRegister() {
                                                 <Select
                                                 labelId="demo-simple-select-outlined-label"
                                                 id="demo-simple-select-outlined"
-                                                //value={age}
-                                                //onChange={handleChange}
+                                                name='district'
+                                                value={formValues.company.district}
+                                                onChange={handleDistrictChange}
                                                 label="non-required"
                                                 >
-                                                <MenuItem value="">
-                                                    <em>None</em>
-                                                </MenuItem>
-                                                <MenuItem value={10}>Ten</MenuItem>
-                                                <MenuItem value={20}>Twenty</MenuItem>
-                                                <MenuItem value={30}>Thirty</MenuItem>
+                                                    <MenuItem value="">
+                                                        <em>None</em>
+                                                    </MenuItem>
+                                                    {districts.map(dis => (
+                                                        <MenuItem value={dis.code}>{dis.name}</MenuItem>
+                                                    ))}
                                                 </Select>
                                             </FormControl>
                                         </div>
@@ -148,16 +237,17 @@ export default function CompanyRegister() {
                                                 <Select
                                                 labelId="demo-simple-select-outlined-label"
                                                 id="demo-simple-select-outlined"
-                                                //value={age}
-                                                //onChange={handleChange}
+                                                name='ward'
+                                                value={formValues.company.ward}
+                                                onChange={handleWardChange}
                                                 label="non-required"
                                                 >
                                                 <MenuItem value="">
                                                     <em>None</em>
                                                 </MenuItem>
-                                                <MenuItem value={10}>Ten</MenuItem>
-                                                <MenuItem value={20}>Twenty</MenuItem>
-                                                <MenuItem value={30}>Thirty</MenuItem>
+                                                    {wards.map(ward => (
+                                                        <MenuItem value={ward.code}>{ward.name}</MenuItem>
+                                                    ))}
                                                 </Select>
                                             </FormControl>
                                         </div>
@@ -177,6 +267,8 @@ export default function CompanyRegister() {
                                             <InputLabel htmlFor="outlined-adornment-amount">Start Date/Time (UTC):</InputLabel>
                                             <TextField
                                                 fullWidth sx={{ mt: 1, mb: 1 }}
+                                                name="startDate"
+                                                value={formValues.company.startDate}
                                                 id="dateStart"
                                                 label="start"
                                                 type="datetime-local"
@@ -190,6 +282,8 @@ export default function CompanyRegister() {
                                             <InputLabel htmlFor="outlined-adornment-amount">End Date/Time (UTC):</InputLabel>
                                             <TextField
                                                 fullWidth sx={{ mt: 1, mb: 1 }}
+                                                name="endDate"
+                                                value={formValues.company.endDate}
                                                 id="dateEnd"
                                                 label="end"
                                                 type="datetime-local"
@@ -201,7 +295,7 @@ export default function CompanyRegister() {
                                         </div>
                                     </div>
                                     <div className='text-center justify-center m-1'>
-                                        <Button variant="outlined">
+                                        <Button variant="outlined" onClick={handleClearCompany}>
                                             Clear
                                         </Button>
                                     </div>
@@ -233,6 +327,8 @@ export default function CompanyRegister() {
                                         <div className='col-12 col-sm-6 d-block p-1'>
                                             <InputLabel htmlFor="outlined-adornment-amount">User Name:</InputLabel>
                                             <TextField
+                                                name="userName"
+                                                value={formValues.user.userName}
                                                 size="small"
                                                 fullWidth sx={{ mt: 1, mb: 1 }}
                                                 required
@@ -244,6 +340,8 @@ export default function CompanyRegister() {
                                         <div className='col-12 col-sm-6 d-block p-1'>
                                             <InputLabel htmlFor="outlined-adornment-amount">Password:</InputLabel>
                                             <TextField
+                                                name="password"
+                                                value={formValues.user.password}
                                                 size="small"
                                                 fullWidth sx={{ mt: 1, mb: 1 }}
                                                 required
@@ -257,6 +355,8 @@ export default function CompanyRegister() {
                                         <div className='col-12 col-sm-6 d-block p-1'>
                                             <InputLabel htmlFor="outlined-adornment-amount">First Name:</InputLabel>
                                             <TextField
+                                                name="firstName"
+                                                value={formValues.user.firstName}
                                                 size="small"
                                                 fullWidth sx={{ mt: 1, mb: 1 }}
                                                 id="outlined-required"
@@ -267,6 +367,8 @@ export default function CompanyRegister() {
                                         <div className='col-12 col-sm-6 d-block p-1'>
                                             <InputLabel htmlFor="outlined-adornment-amount">Last Name:</InputLabel>
                                             <TextField
+                                                name="lastName"
+                                                value={formValues.user.lastName}
                                                 size="small"
                                                 fullWidth sx={{ mt: 1, mb: 1 }}
                                                 id="outlined-required"
@@ -279,6 +381,8 @@ export default function CompanyRegister() {
                                         <div className='col-12 col-sm-12 d-block p-1'>
                                             <InputLabel htmlFor="outlined-adornment-amount">Tel-no:</InputLabel>
                                             <TextField
+                                                name="telNo"
+                                                value={formValues.user.telNo}
                                                 size="small"
                                                 fullWidth sx={{ mt: 1, mb: 1 }}
                                                 id="outlined-required"
@@ -291,6 +395,8 @@ export default function CompanyRegister() {
                                         <div className='col-12 col-sm-12 d-block p-1'>
                                             <InputLabel htmlFor="outlined-adornment-amount">Email:</InputLabel>
                                             <TextField
+                                                name="email"
+                                                value={formValues.user.email}
                                                 size="small"
                                                 fullWidth sx={{ mt: 1, mb: 1 }}
                                                 id="outlined-required"
@@ -304,15 +410,15 @@ export default function CompanyRegister() {
                                             <FormControl component="fieldset">
                                             <FormLabel component="legend">Allow Login</FormLabel>
                                             <FormControlLabel
-                                                control={<Switch checked={true} name="gilad" />}
+                                                control={<Switch checked={formValues.user.isEnable} name="isEnable" onChange={handleAllowLoginChange}/>}
                                                 label="Enabled"
-                                                />
+                                            />
                                             </FormControl>
                                         </div>
                                         <div className='col-12 col-md-6 d-block p-3'>
                                             <FormControl component="fieldset">
                                                 <FormLabel component="legend">Role Assigned:</FormLabel>
-                                                <RadioGroup row aria-label="role" name="role" value="admin" defaultValue="admin">
+                                                <RadioGroup row aria-label="role" name="role" value={formValues.user.role} defaultValue="admin">
                                                     <FormControlLabel value="admin" control={<Radio color="primary" />} label="Admin" />
                                                     <FormControlLabel value="user" control={<Radio color="primary" />} label="User" disabled/>
                                                 </RadioGroup>
@@ -320,7 +426,7 @@ export default function CompanyRegister() {
                                         </div>
                                     </div>
                                     <div className='text-center justify-center m-1'>
-                                        <Button variant="outlined">
+                                        <Button variant="outlined" onClick={handleClearUser}>
                                             Clear
                                         </Button>
                                     </div>
@@ -329,9 +435,7 @@ export default function CompanyRegister() {
                     </Card>
                 </Grid>
                 <Grid item xs={12} sm={12} className="text-center">
-                    <Button variant="contained" color="primary">
-                        SAVE
-                    </Button>
+                    <Button variant="contained" color="primary" onClick={handleSubmit}>SAVE</Button>
                 </Grid>
             </Grid>
         </form>

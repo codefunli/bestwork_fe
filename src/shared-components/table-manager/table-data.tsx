@@ -10,12 +10,12 @@ import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import * as React from 'react';
-import { useEffect } from 'react';
 import { FieldConstants } from '../../core/constants/common';
 import { HeadColumn } from '../../core/types/base';
 import { EnhancedTableHead, Order } from './table-columns';
 import { EnhancedTableToolbar } from './table-toolbar';
 import DeleteIcon from '@mui/icons-material/Delete';
+import './table-data.scss'
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -151,9 +151,7 @@ export default function EnhancedTable(props:EnhancedTable) {
               onSelectAllProps={handleSelectAllClick}
             />
             <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
+              {rows.map((row:any, index:any) => {
                   const isItemSelected = isSelected(row.id as string);
                   const labelId = `enhanced-table-checkbox-${index}`;
                     return (
@@ -201,18 +199,31 @@ export default function EnhancedTable(props:EnhancedTable) {
                       </TableRow>
                     );
                 })}
+                {rows.length === 0 && (
+                    <TableRow
+                      className="table-row"
+                      sx={{
+                        m: 3,
+                        minWidth: 300,
+                      }}
+                    >
+                      NO DATA
+                    </TableRow>
+                )}
             </TableBody>
           </Table>
         </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+        {rows != undefined && rows.length > 0 && (
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        )}
       </Paper>
     </Box>
   );

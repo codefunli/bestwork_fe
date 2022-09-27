@@ -1,6 +1,6 @@
 import apiClient from "../core/services/api-service";
 import { DataResSuccess, PageableDataResSuccess } from "../core/types/base";
-import { CompanyResDTO } from "../models/company-req-dto";
+import { CompanyResDTO } from "../models/company-res-dto";
 
 export const getCompanys = async () => {
 	const res = await apiClient.get<PageableDataResSuccess<CompanyResDTO[]>>('/organization/page');

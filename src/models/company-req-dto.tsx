@@ -1,6 +1,6 @@
 import { BaseDTO } from "./base-dto";
 
-export interface CompanyResDTO extends BaseDTO {
+export interface CompanyReqDTO {
 	id: number;
 	version: number;
 	name: string;

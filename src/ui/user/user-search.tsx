@@ -83,7 +83,6 @@ export default function UserSearch() {
         nativgate(`${UrlFeApp.COMPANY.EDIT}/${id}`);
     }
 
-
     const arrButton:ArrayAction[] = [
         {
             nameFn:"edit",
