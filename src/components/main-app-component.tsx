@@ -1,6 +1,5 @@
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import LanguageIcon from '@mui/icons-material/Language';
 import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from '@mui/icons-material/Menu';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
@@ -26,7 +25,9 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import { ErrorPagePath, UrlFeApp } from '../core/constants/common';
 import menuItemLinkData from '../core/constants/menu-item-link';
 import { isObjectEmpty } from '../core/utils/object-utils';
+import MLanguage from "../shared-components/language/m-language";
 import CollapsedBreadcrumbs from './collapsed-breadcrumbs';
+import { Trans, useTranslation } from "react-i18next";
 
 const drawerWidth = 240;
 
@@ -112,6 +113,7 @@ export default function MiniDrawer() {
   const navigate = useNavigate();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const { t } = useTranslation();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -166,7 +168,7 @@ export default function MiniDrawer() {
                   <CollapsedBreadcrumbs/>
             </Toolbar>
             <Toolbar>
-              <LanguageIcon sx={{ mr: 2 }}/>
+              <MLanguage color="inherit"/>
               <Badge sx={{ mr: 2 }} color="secondary" badgeContent={2}>
                 <NotificationsIcon />
               </Badge>

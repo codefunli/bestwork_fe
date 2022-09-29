@@ -6,8 +6,31 @@
         "btnLogin":"Login"
     },
     "company": {
-        "name": "Company Name",
-        "email": "Email",
-        "telNo": "Tel-no"
+        "title": "Company search",
+        "search":{
+            "title":"Seach info of your company",
+            "name": "Company Name",
+            "email": "Email",
+            "telNo": "Tel-no",
+            "taxNo": "Tax-no"
+        },
+        "table":{
+            "colCpName": "Company Name",
+            "colCpAddress":"Address",
+            "colCpStartDate":"Start Date"
+        }
+    },
+    "button":{
+        "btnRegister":"Register",
+        "btnSearch":"Search",
+        "btnClear":"Clear",
+        "btnSave":"Save",
+        "btnDelete":"Delete"
+    },
+    "common": {
+        "placeholder":"Please input a new value",
+        "nonRequired":"non-required",
+        "required":"required",
+        "action":"Action"
     }
 }

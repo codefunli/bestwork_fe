@@ -11,12 +11,12 @@ const queryClient = new QueryClient();
 function App() {
   //const isLoadingApp = useAppSelector(state => state.app.isAppLoading);
   return (
-
     <QueryClientProvider client={queryClient}>
-      {/* provides a uniform configuration support for components */}
+        <Suspense>
             <RootAppComponent>
                 <RenderRouter/>
-            </RootAppComponent>  
+            </RootAppComponent> 
+        </Suspense>
     </QueryClientProvider>
   );
 }

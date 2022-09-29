@@ -11,19 +11,19 @@ export const headCompanyCol: HeadColumn[] = [
 		id: 'name',
 		numeric: false,
 		disablePadding: false,
-		label: 'Company Name',
+		label: 'company.table.colCpName',
     },
     {
 		id: 'address1',
 		numeric: false,
 		disablePadding: false,
-		label: 'Address',
+		label: 'company.table.colCpAddress',
     },
 	{
 		id: 'startDate',
 		numeric: false,
 		disablePadding: false,
-		label: 'Start Date',
+		label: 'company.table.colCpStartDate',
 	},
     // {
     //   id: 'telNo',

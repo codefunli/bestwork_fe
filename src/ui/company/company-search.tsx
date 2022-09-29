@@ -1,6 +1,7 @@
 
 import { AlertColor, Avatar, Box, Button, ButtonGroup, Card, CardContent, CardHeader, Grid, InputLabel, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from 'react-query';
 import { Link, useNavigate } from 'react-router-dom';
 import { ConfirmConstants, UrlFeApp } from '../../core/constants/common';
@@ -26,6 +27,7 @@ export default function CompanySearch() {
     const [formValues, setFormValues] = useState(initialValues);
     const queryClient = useQueryClient();
     const [state, setState] = useState<CompanyResDTO[]>([]);
+    const { t } = useTranslation();
 
     const nativgate = useNavigate();
 
@@ -112,18 +114,18 @@ export default function CompanySearch() {
         <div>
             <div className='row'>
                 <div className="col-sm-12 col-md-6 text-start d-none d-lg-block">
-                    <Typography variant="h5" color="textSecondary" gutterBottom>
-                        COMPANY SEARCH
+                    <Typography variant="h5" color="textSecondary" gutterBottom  sx={{ textTransform: 'uppercase' }}>
+                        {t('company.title')}
                     </Typography>
                 </div>
                 <div className="col-sm-12 col-md-6 text-end d-none d-lg-block">
-                    <Button variant="contained" color="primary" component={Link} to={UrlFeApp.COMPANY.CREATE}>
-                        REGISTER
+                    <Button variant="contained" color="primary" component={Link} to={UrlFeApp.COMPANY.CREATE} sx={{ textTransform: 'uppercase' }}>
+                        {t('button.btnRegister')}
                     </Button>
                 </div>
                 <div className="col-sm-12 text-start d-block d-lg-none">
-                    <Button variant="contained" color="primary" component={Link} to={UrlFeApp.COMPANY.CREATE}>
-                        REGISTER
+                    <Button variant="contained" color="primary" component={Link} to={UrlFeApp.COMPANY.CREATE} sx={{ textTransform: 'uppercase' }}>
+                        {t('button.btnRegister')}
                     </Button>
                 </div>
             </div>
@@ -140,7 +142,7 @@ export default function CompanySearch() {
                                     SC
                                 </Avatar>
                                 }
-                                title="Seach info of your company"
+                                title= {t('company.search.title')}
                                 subheader={new Date().toLocaleDateString()}
                             />
                             <CardContent>
@@ -154,51 +156,48 @@ export default function CompanySearch() {
                                 >
                                     <div className='row justify-center m-1'>
                                         <div className='col-12 col-sm-6 d-block p-1'>
-                                            <InputLabel htmlFor="outlined-adornment-amount">Company Name:</InputLabel>
+                                            <InputLabel htmlFor="outlined-adornment-amount">{t('company.search.name')}:</InputLabel>
                                             <TextField
                                                 size="small"
                                                 fullWidth sx={{ mt: 1, mb: 1 }}
-                                                required
                                                 id="outlined-required"
-                                                label="non-required"
-                                                placeholder="Please input a new value"
+                                                label={t('common.nonRequired')}
+                                                placeholder={t('common.placeholder')}
                                                 name="name"
                                                 value={formValues.name}
                                                 onChange={handleInputChange}
                                             />
                                         </div>
                                         <div className='col-12 col-sm-6 d-block p-1'>
-                                            <InputLabel htmlFor="outlined-adornment-amount">Email:</InputLabel>
+                                            <InputLabel htmlFor="outlined-adornment-amount">{t('company.search.email')}:</InputLabel>
                                             <TextField
                                                 fullWidth sx={{ mt: 1, mb: 1 }}
-                                                required
                                                 size="small"
                                                 id="outlined-required"
-                                                label="non-required"
-                                                placeholder="Please input a new value"
+                                                label={t('common.nonRequired')}
+                                                placeholder={t('common.placeholder')}
                                             />
                                         </div>
                                     </div>
                                     <div className='row justify-center m-1'>
                                         <div className='col-12 col-sm-6 d-block p-1'>
-                                            <InputLabel htmlFor="outlined-adornment-amount">Tel-no:</InputLabel>
+                                            <InputLabel htmlFor="outlined-adornment-amount">{t('company.search.telNo')}:</InputLabel>
                                             <TextField
                                                 size="small"
                                                 fullWidth sx={{ mt: 1, mb: 1 }}
                                                 id="outlined-required"
-                                                label="non-required"
-                                                placeholder="Please input a new value"
+                                                label={t('common.nonRequired')}
+                                                placeholder={t('common.placeholder')}
                                             />
                                         </div>
                                         <div className='col-12 col-sm-6 d-block p-1'>
-                                            <InputLabel htmlFor="outlined-adornment-amount">Tax-no:</InputLabel>
+                                            <InputLabel htmlFor="outlined-adornment-amount">{t('company.search.taxNo')}:</InputLabel>
                                             <TextField
                                                 size="small"
                                                 fullWidth sx={{ mt: 1, mb: 1 }}
-                                                required
                                                 id="outlined-required"
-                                                label="non-required"
-                                                placeholder="Please input a new value"
+                                                label={t('common.nonRequired')}
+                                                placeholder={t('common.placeholder')}
                                             />
                                         </div>
                                     </div>
@@ -208,8 +207,8 @@ export default function CompanySearch() {
                                             variant="contained"
                                             aria-label="Disabled elevation buttons"
                                         >
-                                            <Button sx={{ mr: 1 }} size="small" variant="contained" onClick={handleSubmit}>Search</Button>
-                                            <Button onClick={handleClearData} variant="outlined">Clear</Button>
+                                            <Button sx={{ mr: 1, textTransform: 'uppercase' }} size="small" variant="contained" onClick={handleSubmit}>{t('button.btnSearch')}</Button>
+                                            <Button sx={{ textTransform: 'uppercase' }} onClick={handleClearData} variant="outlined">{t('button.btnClear')}</Button>
                                         </ButtonGroup>
                                     </div>
                                 </Box>

@@ -2,6 +2,7 @@ import { Checkbox, TableCell, TableHead, TableRow, TableSortLabel } from "@mui/m
 import { FieldConstants } from "../../core/constants/common";
 import { HeadColumn } from "../../core/types/base";
 import {  } from "../../ui/company/company-search";
+import { useTranslation } from 'react-i18next';
 
 export type Order = 'asc' | 'desc';
 
@@ -19,6 +20,8 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
     const onSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
       onSelectAllProps(event);
     }
+    const { t } = useTranslation();
+
     return (
       <TableHead>
         <TableRow>
@@ -46,12 +49,12 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
                 direction={orderBy === headCell.id ? order : 'asc'}
                 //onClick={createSortHandler(headCell.id)}
               >
-                {headCell.label}
+               {t(headCell.label as string)}
               </TableSortLabel>
             </TableCell>
           ))}
           <TableCell padding="normal">
-                  Action
+                  {t('common.action')}
           </TableCell>
         </TableRow>
       </TableHead>
