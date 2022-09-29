@@ -9,7 +9,6 @@ import { isObjectEmpty } from "../../core/utils/object-utils";
 import i18n from "../../transaction/i18n";
 import LanguageIcon from '@mui/icons-material/Language';
 import "./login.scss";
-import { useNavigate } from "react-router-dom";
 
 const initialValues = {
     userName: "",
@@ -40,7 +39,6 @@ export default function Login() {
     const anchorRef = useRef<HTMLDivElement>(null);
     const [open, setOpen] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(0);
-    const navigate = useNavigate();
 
     const handleChangeValue = (event: any) => {
         const { name, value } = event.target;
@@ -74,11 +72,6 @@ export default function Login() {
             setMsgPassword(getMessage(ERROR_MSG.E01_001, [FieldConstants.PASSWORD]))
         }
     }
-    
-    useEffect(() => {
-        navigate("/login")
-    },[])
-
 
     const handleMenuItemClick = (index:any, key:string) => {
         setSelectedIndex(index);
