@@ -1,0 +1,13 @@
+{
+    "login": {
+        "title":"Login",
+        "userName":"User Name",
+        "password":"Password",
+        "btnLogin":"Login"
+    },
+    "company": {
+        "name": "Company Name",
+        "email": "Email",
+        "telNo": "Tel-no"
+    }
+}

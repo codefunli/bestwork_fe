@@ -30,6 +30,13 @@ export const UrlFeApp = {
     }
 }
 
+export const UrlServer = {
+    API_LOGIN_URL:"/login",
+    COMPANY:{
+        GET:"/organization/page"
+    }
+}
+
 export const FieldConstants = {
     ID:"id",
     USER_NAME:"userName",

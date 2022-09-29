@@ -1,0 +1,15 @@
+.auth-wrapper {
+    height:100%;
+    background: {
+        image:url("../assets/background.png");
+        repeat: no-repeat;
+        size:cover;
+    };
+
+    .muilties-language {
+        display: flex;
+        width: 100%;
+        justify-content: end;
+        height: 10%;
+    }
+}

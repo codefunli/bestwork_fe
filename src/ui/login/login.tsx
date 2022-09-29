@@ -2,9 +2,11 @@ import { AccountCircle, PasswordOutlined, Visibility, VisibilityOff } from "@mui
 import { Button, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, Typography } from "@mui/material";
 import { red } from "@mui/material/colors";
 import { useState } from "react";
+import { Trans, Translation, useTranslation } from "react-i18next";
 import { FieldConstants } from "../../core/constants/common";
 import { getMessage, ERROR_MSG } from "../../core/constants/message";
 import { isObjectEmpty } from "../../core/utils/object-utils";
+import i18n from "../../transaction/i18n";
 import "./login.scss";
 
 const initialValues = {
@@ -21,6 +23,7 @@ export default function Login() {
     const [msgUserName, setMsgUserName] = useState("");
     const [isErrorPassword, setIsErrorPassword] = useState(false);
     const [msgPassword, setMsgPassword] = useState("");
+    const { t } = useTranslation()
 
     const handleChangeValue = (event: any) => {
         const { name, value } = event.target;
@@ -56,21 +59,23 @@ export default function Login() {
     }
     
     return (
-        <div className="login-wrapper">
-            <div className="login-form-wrapper">
+
+        <div className="login-form-wrapper">
             <form>
                 <div className="login-form">
                     <Typography
                         variant='h6'
                         component='h1'
-                        sx={{ textAlign: 'center', mb: '1.5rem' }}
+                        sx={{ textAlign: 'center', mb: '1.5rem', textTransform: 'uppercase' }}
                     >
-                        LOG INTO YOUR ACCOUNT
+                        <Trans i18nKey='login.title' />
                     </Typography>
                     <div className="login-form-field">
                         <AccountCircle sx={{ mr: 1, my: 0.5}} />
                         <FormControl sx={{ m: 1, width: '30ch', color:red }} variant="outlined">
-                            <InputLabel required htmlFor="outlined-adornment-password">Account</InputLabel>
+                            <InputLabel required htmlFor="outlined-adornment-password">
+                                <Trans i18nKey='login.userName' />
+                            </InputLabel>
                             <OutlinedInput
                                 id="outlined-adornment-password"
                                 type='text'
@@ -97,7 +102,7 @@ export default function Login() {
                         <PasswordOutlined sx={{ mr: 1, my: 0.5 }} />
                         <FormControl sx={{ m: 1, width: '30ch' }} variant="outlined">
                             <InputLabel  required htmlFor="outlined-adornment-password">
-                                Password
+                                <Trans i18nKey='login.password' />
                             </InputLabel>
                             <OutlinedInput
                                 id="outlined-adornment-password"
@@ -125,10 +130,11 @@ export default function Login() {
                                 </FormHelperText>)}
                         </FormControl>
                     </div>
-                        <Button variant="outlined" className="justify-center" onClick={handleLogin}>Login</Button>
+                        <Button variant="outlined" className="justify-center" onClick={handleLogin}>
+                            <Trans i18nKey='login.btnLogin' />
+                        </Button>
                     </div>
             </form>
-            </div>
         </div>
     )
 }

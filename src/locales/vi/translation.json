@@ -1,0 +1,13 @@
+{
+    "login": {
+        "title":"Đăng nhập",
+        "userName":"Tài khoản",
+        "password":"Mật khẩu",
+        "btnLogin":"Đăng nhập"
+    },
+    "company": {
+        "name": "Tên công ty",
+        "email": "Thư điện tử",
+        "telNo": "Số điện thoại"
+    }
+}
