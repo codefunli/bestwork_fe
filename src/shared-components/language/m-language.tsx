@@ -32,7 +32,6 @@ export default function MLanguage(props: Props) {
     },[selectedIndex])
 
     const handleMenuItemClick = (index:any, key:string) => {
-        alert(key);
         setSelectedIndex(index);
         setOpen(false);
     };

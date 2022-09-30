@@ -1,11 +1,13 @@
 import { AccountCircle, PasswordOutlined, Visibility, VisibilityOff } from "@mui/icons-material";
-import { Button, ClickAwayListener, FormControl, FormHelperText, Grid, Grow, IconButton, InputAdornment, InputLabel, MenuItem, MenuList, OutlinedInput, Paper, Popper, Tooltip, Typography } from "@mui/material";
+import { AlertColor, Button, ClickAwayListener, FormControl, FormHelperText, Grid, Grow, IconButton, InputAdornment, InputLabel, MenuItem, MenuList, OutlinedInput, Paper, Popper, Tooltip, Typography } from "@mui/material";
 import { red } from "@mui/material/colors";
 import { useEffect, useRef, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
-import { FieldConstants } from "../../core/constants/common";
+import { useNavigate } from "react-router-dom";
+import { FieldConstants, UrlFeApp } from "../../core/constants/common";
 import { getMessage, ERROR_MSG } from "../../core/constants/message";
 import { isObjectEmpty } from "../../core/utils/object-utils";
+import MessageShow from "../../shared-components/message/message";
 import "./login.scss";
 
 const initialValues = {
@@ -34,7 +36,11 @@ export default function Login() {
     const [msgUserName, setMsgUserName] = useState("");
     const [isErrorPassword, setIsErrorPassword] = useState(false);
     const [msgPassword, setMsgPassword] = useState("");
+    const [isShowMessage, setIsShowMessage] = useState(false);
+    const [companyMsg, setCompanyMsg] = useState("");
+    const [typeCompanyMsg, setTypeCompanyMsg] = useState<AlertColor>('error');
     const { t } = useTranslation();
+    const navigate = useNavigate();
 
     const handleChangeValue = (event: any) => {
         const { name, value } = event.target;
@@ -67,6 +73,18 @@ export default function Login() {
             setIsErrorPassword(true);
             setMsgPassword(getMessage(ERROR_MSG.E01_001, [FieldConstants.PASSWORD]))
         }
+
+        if ("admin" === formValues.userName && "123456" === formValues.password) {
+            navigate(UrlFeApp.DASH_BOARD);
+        } else {
+            setIsShowMessage(true);
+            setTypeCompanyMsg("error");
+            setCompanyMsg("The username or password is incorrect.");
+        }
+    }
+
+    const handleCloseMsg = () => {
+        setIsShowMessage(false);
     }
 
     return (
@@ -145,6 +163,12 @@ export default function Login() {
                     </Button>
                 </div>
             </form>
+            <MessageShow
+                message={companyMsg}
+                showMessage={isShowMessage}
+                type={typeCompanyMsg}
+                handleCloseMsg={handleCloseMsg}
+            />
         </div>
     )
 }
