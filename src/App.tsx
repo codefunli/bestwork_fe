@@ -9,16 +9,16 @@ import i18n from './transaction/i18n';
 
 const queryClient = new QueryClient();
 function App() {
-  //const isLoadingApp = useAppSelector(state => state.app.isAppLoading);
-  return (
-    <QueryClientProvider client={queryClient}>
-        <Suspense>
-            <RootAppComponent>
-                <RenderRouter/>
-            </RootAppComponent> 
-        </Suspense>
-    </QueryClientProvider>
-  );
+    //const isLoadingApp = useAppSelector(state => state.app.isAppLoading);
+    return (
+        <QueryClientProvider client={queryClient}>
+            <Suspense>
+                <RootAppComponent>
+                    <RenderRouter />
+                </RootAppComponent>
+            </Suspense>
+        </QueryClientProvider>
+    );
 }
 
 export default App;

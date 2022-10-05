@@ -6,39 +6,39 @@ export interface State extends SnackbarOrigin {
 }
 
 interface MessageShowProps {
-    message:string;
-    showMessage:boolean;
-    type:AlertColor;
-    handleCloseMsg:Function;
+    message: string;
+    showMessage: boolean;
+    type: AlertColor;
+    handleCloseMsg: Function;
 }
 
-export default function MessageShow(props:MessageShowProps) {
-  const {message, showMessage, type, handleCloseMsg} = props;
-  const [state, setState] = useState<State>({
-    open: false,
-    vertical: 'top',
-    horizontal: 'right',
-  });
-  
-  const { vertical, horizontal, open } = state;
+export default function MessageShow(props: MessageShowProps) {
+    const { message, showMessage, type, handleCloseMsg } = props;
+    const [state, setState] = useState<State>({
+        open: false,
+        vertical: 'top',
+        horizontal: 'right',
+    });
 
-  useEffect(() => {
-    setState({ ...state, open: showMessage });
-  },[showMessage])
-  
-  const handleClose = () => {
-    console.log("HANDLE");
-    setState({ ...state, open: false });
-    handleCloseMsg();
-  };
+    const { vertical, horizontal, open } = state;
 
-  return (
-    <div>
-      <Snackbar open={open} autoHideDuration={3000} onClose={handleClose} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
-        <Alert onClose={handleClose} severity={type} sx={{ width: '100%' }}>
-          {message}
-        </Alert>
-    </Snackbar>
-    </div>
-  );
+    useEffect(() => {
+        setState({ ...state, open: showMessage });
+    }, [showMessage])
+
+    const handleClose = () => {
+        console.log("HANDLE");
+        setState({ ...state, open: false });
+        handleCloseMsg();
+    };
+
+    return (
+        <div>
+            <Snackbar open={open} autoHideDuration={3000} onClose={handleClose} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
+                <Alert onClose={handleClose} severity={type} sx={{ width: '100%' }}>
+                    {message}
+                </Alert>
+            </Snackbar>
+        </div>
+    );
 }
