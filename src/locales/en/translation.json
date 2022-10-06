@@ -1,36 +1,39 @@
 {
     "login": {
-        "title":"Login",
-        "userName":"User Name",
-        "password":"Password",
-        "btnLogin":"Login"
+        "title": "Login",
+        "userName": "User Name",
+        "password": "Password",
+        "btnLogin": "Login"
     },
     "company": {
         "title": "Company search",
-        "search":{
-            "title":"Seach info of your company",
+        "search": {
+            "title": "Seach info of your company",
             "name": "Company Name",
             "email": "Email",
             "telNo": "Tel-no",
             "taxNo": "Tax-no"
         },
-        "table":{
+        "table": {
             "colCpName": "Company Name",
-            "colCpAddress":"Address",
-            "colCpStartDate":"Start Date"
+            "colCpAddress": "Address",
+            "colCpStartDate": "Start Date"
         }
     },
-    "button":{
-        "btnRegister":"Register",
-        "btnSearch":"Search",
-        "btnClear":"Clear",
-        "btnSave":"Save",
-        "btnDelete":"Delete"
+    "button": {
+        "btnRegister": "Register",
+        "btnSearch": "Search",
+        "btnClear": "Clear",
+        "btnSave": "Save",
+        "btnDelete": "Delete"
     },
     "common": {
-        "placeholder":"Please input a new value",
-        "nonRequired":"non-required",
-        "required":"required",
-        "action":"Action"
+        "placeholder": "Please input a new value",
+        "nonRequired": "non-required",
+        "required": "required",
+        "action": "Action"
+    },
+    "tooltip": {
+        "edit": "Edit"
     }
 }

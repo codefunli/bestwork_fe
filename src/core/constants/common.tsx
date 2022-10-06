@@ -34,6 +34,7 @@ export const UrlServer = {
   COMPANY: {
     GET_COMPANIES: "/bestwork/api/v1/companies",
     POST: "/bestwork/api/v1/companies/create",
+    DELETE: "/bestwork/api/v1/companies/delete",
   },
 };
 

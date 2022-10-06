@@ -33,3 +33,11 @@ export const putCompany = async (object: any) => {
   );
   return res.data;
 };
+
+export const deleteCompanies = async (object: any) => {
+  const res = await apiClient.post<DataResSuccess<CompanyResDTO[]>>(
+    UrlServer.COMPANY.DELETE,
+    object
+  );
+  return res.data;
+};

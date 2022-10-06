@@ -1,21 +1,21 @@
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import { IconButton, Tooltip } from "@mui/material";
-import Box from "@mui/material/Box";
-import Checkbox from "@mui/material/Checkbox";
-import Paper from "@mui/material/Paper";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TablePagination from "@mui/material/TablePagination";
-import TableRow from "@mui/material/TableRow";
-import * as React from "react";
-import { FieldConstants } from "../../core/constants/common";
-import { HeadColumn } from "../../core/types/base";
-import { EnhancedTableHead, Order } from "./table-columns";
-import { EnhancedTableToolbar } from "./table-toolbar";
-import DeleteIcon from "@mui/icons-material/Delete";
-import "./table-data.scss";
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import { IconButton, Tooltip } from '@mui/material';
+import Box from '@mui/material/Box';
+import Checkbox from '@mui/material/Checkbox';
+import Paper from '@mui/material/Paper';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TablePagination from '@mui/material/TablePagination';
+import TableRow from '@mui/material/TableRow';
+import * as React from 'react';
+import { FieldConstants } from '../../core/constants/common';
+import { HeadColumn } from '../../core/types/base';
+import { EnhancedTableHead, Order } from './table-columns';
+import { EnhancedTableToolbar } from './table-toolbar';
+import DeleteIcon from '@mui/icons-material/Delete';
+import './table-data.scss';
 
 export interface ArrayAction {
     nameFn: string;
@@ -28,19 +28,48 @@ interface EnhancedTable {
     rows?: any;
     isLoading: boolean;
     arrButton: ArrayAction[];
+    searchCallBack: Function;
+    deleteCallBack: Function;
 }
 
 export default function EnhancedTable(props: EnhancedTable) {
     const { headCells, rows, isLoading, arrButton } = props;
-    const [order, setOrder] = React.useState<Order>("asc");
-    const [orderBy, setOrderBy] = React.useState<string>("name");
+    const [order, setOrder] = React.useState<Order>('asc');
+    const [orderBy, setOrderBy] = React.useState<string>('id');
     const [selected, setSelected] = React.useState<readonly string[]>([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
+    React.useEffect(() => {
+        setSelected([]);
+    }, [rows]);
+
+    React.useEffect(() => {
+        props.searchCallBack({
+            page: page,
+            size: rowsPerPage,
+            sort: `${orderBy}, ${order}`,
+        });
+    }, [rowsPerPage, page, orderBy, order]);
+
+    const handleSortCallBack = (dataChild: string) => {
+        setOrderBy(dataChild);
+        if (order == 'asc') {
+            setOrder('desc');
+        } else {
+            setOrder('asc');
+        }
+    };
+
+    const handleDeleteRecordBySelected = () => {
+        props.deleteCallBack({
+            ids: selected,
+        });
+    };
+
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.checked) {
-            const newSelected = rows.map((n: any) => n.id);
+            const newSelected = rows.content.map((n: any) => n.id);
             setSelected(newSelected);
             return;
         }
@@ -58,10 +87,7 @@ export default function EnhancedTable(props: EnhancedTable) {
         } else if (selectedIndex === selected.length - 1) {
             newSelected = newSelected.concat(selected.slice(0, -1));
         } else if (selectedIndex > 0) {
-            newSelected = newSelected.concat(
-                selected.slice(0, selectedIndex),
-                selected.slice(selectedIndex + 1)
-            );
+            newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
         }
 
         setSelected(newSelected);
@@ -71,29 +97,24 @@ export default function EnhancedTable(props: EnhancedTable) {
         setPage(newPage);
     };
 
-    const handleChangeRowsPerPage = (
-        event: React.ChangeEvent<HTMLInputElement>
-    ) => {
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
 
-    const isSelected = (name: string) =>
-        selected.indexOf(name) !== -1 ? true : false;
+    const isSelected = (name: string) => {
+        return selected.indexOf(name) !== -1 ? true : false;
+    };
 
     const handlePropsEdit = (event: any, id: any, func: any) => {
         func(event, id);
     };
 
-    const handleDeleteRecordBySelected = () => {
-        alert("Delete Record by selected");
-    };
-
     const renderIcon = (iconFn: string) => {
         switch (iconFn) {
-            case "ModeEditIcon":
+            case 'ModeEditIcon':
                 return <ModeEditIcon />;
-            case "Delete":
+            case 'Delete':
                 return <DeleteIcon />;
             default:
                 break;
@@ -101,29 +122,33 @@ export default function EnhancedTable(props: EnhancedTable) {
     };
 
     return (
-        <Box sx={{ width: "100%" }}>
-            <Paper sx={{ width: "100%", mb: 2, overflow: "auto" }}>
+        <Box sx={{ width: '100%' }}>
+            <Paper sx={{ width: '100%', mb: 2, overflow: 'auto' }}>
                 <EnhancedTableToolbar
                     numSelected={selected.length}
                     deleteRecordBySelected={handleDeleteRecordBySelected}
                 />
                 <TableContainer>
                     <Table
+                        style={{
+                            minWidth: 650,
+                        }}
                         stickyHeader
-                        sx={{ minWidth: 320 }}
+                        sx={{ minWidth: 400 }}
                         aria-labelledby="tableTitle"
-                        size={"medium"}
+                        size={'medium'}
                     >
                         <EnhancedTableHead
+                            sortCallBack={handleSortCallBack}
                             numSelected={selected.length}
                             order={order}
                             orderBy={orderBy}
-                            rowCount={rows.length}
+                            rowCount={rows.content.length}
                             headCells={headCells != undefined ? headCells : []}
                             onSelectAllProps={handleSelectAllClick}
                         />
                         <TableBody>
-                            {rows.map((row: any, index: any) => {
+                            {rows.content.map((row: any, index: any) => {
                                 const isItemSelected = isSelected(row.id as string);
                                 const labelId = `enhanced-table-checkbox-${index}`;
                                 return (
@@ -140,11 +165,9 @@ export default function EnhancedTable(props: EnhancedTable) {
                                                 color="primary"
                                                 checked={isItemSelected}
                                                 inputProps={{
-                                                    "aria-labelledby": labelId,
+                                                    'aria-labelledby': labelId,
                                                 }}
-                                                onClick={(event) =>
-                                                    handleClick(event, row.id as string)
-                                                }
+                                                onClick={(event) => handleClick(event, row.id as string)}
                                             />
                                         </TableCell>
                                         {headCells != undefined &&
@@ -155,7 +178,12 @@ export default function EnhancedTable(props: EnhancedTable) {
                                                         align="left"
                                                         hidden={colValue.id === FieldConstants.ID}
                                                     >
-                                                        {row[colValue.id as string]}
+                                                        {
+                                                            (row[colValue.id as string] =
+                                                                colValue.id == 'startDate'
+                                                                    ? row[colValue.id as string].replace('T', ' ')
+                                                                    : row[colValue.id as string])
+                                                        }
                                                     </TableCell>
                                                 );
                                             })}
@@ -168,11 +196,7 @@ export default function EnhancedTable(props: EnhancedTable) {
                                                             color="primary"
                                                             aria-label="add to shopping cart"
                                                             onClick={(event) =>
-                                                                handlePropsEdit(
-                                                                    event,
-                                                                    row.id as string,
-                                                                    arrBtn.acFn
-                                                                )
+                                                                handlePropsEdit(event, row.id as string, arrBtn.acFn)
                                                             }
                                                         >
                                                             {renderIcon(arrBtn.iconFn)}
@@ -184,7 +208,7 @@ export default function EnhancedTable(props: EnhancedTable) {
                                     </TableRow>
                                 );
                             })}
-                            {rows.length === 0 && (
+                            {rows.content.length === 0 && (
                                 <TableRow
                                     className="table-row"
                                     sx={{
@@ -198,11 +222,11 @@ export default function EnhancedTable(props: EnhancedTable) {
                         </TableBody>
                     </Table>
                 </TableContainer>
-                {rows != undefined && rows.length > 0 && (
+                {rows != undefined && rows.content != undefined && rows.content.length > 0 && (
                     <TablePagination
                         rowsPerPageOptions={[5, 10, 25]}
                         component="div"
-                        count={rows.length}
+                        count={rows.totalElements}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         onPageChange={handleChangePage}
