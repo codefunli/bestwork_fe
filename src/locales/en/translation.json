@@ -1,36 +1,74 @@
 {
     "login": {
-        "title":"Login",
-        "userName":"User Name",
-        "password":"Password",
-        "btnLogin":"Login"
+        "title": "Login",
+        "userName": "User Name",
+        "password": "Password",
+        "btnLogin": "Login"
     },
     "company": {
         "title": "Company search",
-        "search":{
-            "title":"Seach info of your company",
+        "search": {
+            "title": "Seach info of your company",
             "name": "Company Name",
             "email": "Email",
             "telNo": "Tel-no",
             "taxNo": "Tax-no"
         },
-        "table":{
+        "table": {
             "colCpName": "Company Name",
-            "colCpAddress":"Address",
-            "colCpStartDate":"Start Date"
+            "colCpAddress": "Address",
+            "colCpStartDate": "Start Date"
         }
     },
-    "button":{
-        "btnRegister":"Register",
-        "btnSearch":"Search",
-        "btnClear":"Clear",
-        "btnSave":"Save",
-        "btnDelete":"Delete"
+    "register": {
+        "title": "Company Register",
+        "company": {
+            "title": "Register a new company",
+            "name": "Company Name",
+            "email": "Email",
+            "telNo": "Tel-No",
+            "taxNo": "Tax-No",
+            "city": "City/Province",
+            "district": "District/Town",
+            "ward": "Ward/Township",
+            "street": "Street",
+            "startDate": "Start Date/Time (UTC)",
+            "endDate": "End Date/Time (UTC)"
+        },
+        "user": {
+            "title": "Register a new admin user",
+            "userName": "User Name",
+            "password": "Password",
+            "firstName": "First Name",
+            "lastName": "Last Name",
+            "telNo": "Tel-No",
+            "email": "Email",
+            "allowLogin": "Allow Login",
+            "roleAssigned": "Role Assigned"
+        }
+    },
+    "radio": {
+        "enabled": "Enabled",
+        "admin": "Admin",
+        "user": "User"
+    },
+    "button": {
+        "btnRegister": "Register",
+        "btnSearch": "Search",
+        "btnClear": "Clear",
+        "btnSave": "Save",
+        "btnDelete": "Delete"
     },
     "common": {
-        "placeholder":"Please input a new value",
-        "nonRequired":"non-required",
-        "required":"required",
-        "action":"Action"
+        "placeholder": "Please input a new value",
+        "nonRequired": "non-required",
+        "required": "required",
+        "action": "Action",
+        "none": "None",
+        "start": "Start",
+        "end": "End"
+    },
+    "message": {
+        "required": "is required."
     }
 }
