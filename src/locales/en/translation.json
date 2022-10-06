@@ -57,7 +57,9 @@
         "btnSearch": "Search",
         "btnClear": "Clear",
         "btnSave": "Save",
-        "btnDelete": "Delete"
+        "btnDelete": "Delete",
+        "btnNo": "NO",
+        "btnOk": "Ok"
     },
     "common": {
         "placeholder": "Please input a new value",
@@ -70,9 +72,18 @@
     },
     "message": {
         "required": "is required.",
-        "noData": "NO DATA"
+        "noData": "NO DATA",
+        "rowsPerPage": "Rows per page",
+        "selected": "selected",
+        "data": "DATA",
+        "delete": "Are you certain that you want to delete this records!",
+        "someThingWrong": "Some thing wrong!"
+    },
+    "title": {
+        "delete": "DELETE"
     },
     "tooltip": {
-        "edit": "Edit"
+        "edit": "Edit",
+        "addUser": "Add user"
     }
 }

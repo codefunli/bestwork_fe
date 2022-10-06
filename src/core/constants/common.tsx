@@ -52,9 +52,9 @@ export const FieldConstants = {
 
 export const ConfirmConstants = {
     DELETE: {
-        title: 'DELETE',
-        content: 'Are you certain that you want to delete this record!',
+        title: 'title.delete',
+        content: 'message.delete',
     },
-    OK_BTN: 'OK',
-    NO_BTN: 'NO',
+    OK_BTN: 'button.btnOk',
+    NO_BTN: 'button.btnNo',
 };

@@ -44,6 +44,7 @@ export default function CompanySearch() {
     const queryClient = useQueryClient();
     const [state, setState] = useState<any>();
     const { t } = useTranslation();
+    const [ids, setIds] = useState({});
 
     const nativgate = useNavigate();
 
@@ -105,27 +106,11 @@ export default function CompanySearch() {
         setTypeCompanyMsg(type);
     };
 
-    const handleResponse = (resp: any) => {
-        switch (resp.status) {
-            case 'OK':
-                handleMessage(true, resp.message, 'success');
-                break;
-            case 'ERROR':
-                handleMessage(true, resp.message, 'error');
-                break;
-            default:
-                handleMessage(true, resp.message, 'warning');
-                break;
-        }
-    };
-
     const handleDeleteCallBack = (childData: any) => {
-        deleteCompanies(childData).then((value) => {
-            handleResponse(value);
-            fetchData({
-                ...formValues,
-            });
-        });
+        setTypeCompanyMsg('success');
+        setCompanyMsg(SUCCESS_MSG.S01_004);
+        setIsOpenModal(true);
+        setIds(childData);
     };
 
     const handleClearData = (e: any) => {
@@ -143,15 +128,22 @@ export default function CompanySearch() {
         nativgate(`${UrlFeApp.COMPANY.EDIT}/${id}`);
     };
 
-    const handleDeleteRecord = (e: any, id: number) => {
-        setTypeCompanyMsg('success');
-        setCompanyMsg(SUCCESS_MSG.S01_004);
-        setIsOpenModal(true);
+    const handleAddUser = (e: any, id: number) => {
+        alert('Add user function running...');
     };
 
     const alertOkFunc = () => {
-        setIsOpenModal(false);
-        setIsShowMessage(true);
+        deleteCompanies(ids)
+            .then((value) => {
+                setIsOpenModal(false);
+                setIsShowMessage(true);
+                fetchData({
+                    ...formValues,
+                });
+            })
+            .catch((err) => {
+                handleMessage(true, t('message.someThingWrong'), 'error');
+            });
     };
 
     const closeModal = () => {
@@ -168,6 +160,11 @@ export default function CompanySearch() {
             nameFn: t('tooltip.edit'),
             acFn: handleEditData,
             iconFn: 'ModeEditIcon',
+        },
+        {
+            nameFn: t('tooltip.addUser'),
+            acFn: handleAddUser,
+            iconFn: 'AddUser',
         },
     ];
 
@@ -205,7 +202,7 @@ export default function CompanySearch() {
             <form>
                 <Grid container direction="row" alignItems="center">
                     <Grid item xs={12} sx={{ mt: 1, mb: 1 }}>
-                        <Card w-full>
+                        <Card w-full="true">
                             <CardHeader
                                 avatar={<Avatar aria-label="recipe">SC</Avatar>}
                                 title={t('company.search.title')}
@@ -354,10 +351,10 @@ export default function CompanySearch() {
                 isOpen={isOpenModal}
                 closeFunc={closeModal}
                 okFunc={alertOkFunc}
-                title={ConfirmConstants.DELETE.title}
-                content={ConfirmConstants.DELETE.content}
-                noBtn={ConfirmConstants.NO_BTN}
-                okBtn={ConfirmConstants.OK_BTN}
+                title={t(ConfirmConstants.DELETE.title)}
+                content={t(ConfirmConstants.DELETE.content)}
+                noBtn={t(ConfirmConstants.NO_BTN)}
+                okBtn={t(ConfirmConstants.OK_BTN)}
             />
             <MessageShow
                 message={companyMsg}

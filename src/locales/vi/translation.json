@@ -58,7 +58,9 @@
         "btnSearch": "Tìm kiếm",
         "btnClear": "Xóa thông tin",
         "btnSave": "Cập nhật",
-        "btnDelete": "Xóa"
+        "btnDelete": "Xóa",
+        "btnNo": "Hủy",
+        "btnOk": "Đồng ý"
     },
     "common": {
         "placeholder": "Nhập một giá trị mới",
@@ -72,9 +74,18 @@
     },
     "message": {
         "required": "là bắt buộc.",
-        "noData": "KHÔNG CÓ DỮ LIỆU"
+        "noData": "KHÔNG CÓ DỮ LIỆU",
+        "rowsPerPage": "Hàng trên mỗi trang",
+        "selected": "lựa chọn",
+        "data": "DỮ LIỆU",
+        "delete": "Bạn có chắc chắn rằng bạn muốn xóa các bản ghi này!",
+        "someThingWrong": "Có gì đó không đúng!"
+    },
+    "title": {
+        "delete": "XÓA"
     },
     "tooltip": {
-        "edit": "Chỉnh sửa"
+        "edit": "Chỉnh sửa",
+        "addUser": "Thêm người dùng"
     }
 }

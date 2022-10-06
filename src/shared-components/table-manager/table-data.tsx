@@ -17,6 +17,7 @@ import { EnhancedTableToolbar } from './table-toolbar';
 import DeleteIcon from '@mui/icons-material/Delete';
 import './table-data.scss';
 import { useTranslation } from 'react-i18next';
+import AddIcon from '@mui/icons-material/Add';
 
 export interface ArrayAction {
     nameFn: string;
@@ -116,8 +117,8 @@ export default function EnhancedTable(props: EnhancedTable) {
         switch (iconFn) {
             case 'ModeEditIcon':
                 return <ModeEditIcon />;
-            case 'Delete':
-                return <DeleteIcon />;
+            case 'AddUser':
+                return <AddIcon />;
             default:
                 break;
         }
@@ -176,6 +177,7 @@ export default function EnhancedTable(props: EnhancedTable) {
                                             headCells.map((colValue) => {
                                                 return (
                                                     <TableCell
+                                                        key={colValue.id}
                                                         padding="normal"
                                                         align="left"
                                                         hidden={colValue.id === FieldConstants.ID}
@@ -192,7 +194,11 @@ export default function EnhancedTable(props: EnhancedTable) {
                                         <TableCell padding="normal">
                                             {arrButton.map((arrBtn) => {
                                                 return (
-                                                    <Tooltip title={arrBtn.nameFn} placement="top-start">
+                                                    <Tooltip
+                                                        key={arrBtn.nameFn}
+                                                        title={arrBtn.nameFn}
+                                                        placement="top-start"
+                                                    >
                                                         <IconButton
                                                             size="small"
                                                             color="primary"
@@ -226,11 +232,12 @@ export default function EnhancedTable(props: EnhancedTable) {
                 </TableContainer>
                 {rows != undefined && rows.content != undefined && rows.content.length > 0 && (
                     <TablePagination
-                        rowsPerPageOptions={[5, 10, 25]}
+                        rowsPerPageOptions={[5, 10]}
                         component="div"
                         count={rows.totalElements}
                         rowsPerPage={rowsPerPage}
                         page={page}
+                        labelRowsPerPage={t('message.rowsPerPage')}
                         onPageChange={handleChangePage}
                         onRowsPerPageChange={handleChangeRowsPerPage}
                     />
