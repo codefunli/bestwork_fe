@@ -16,6 +16,7 @@ import { EnhancedTableHead, Order } from './table-columns';
 import { EnhancedTableToolbar } from './table-toolbar';
 import DeleteIcon from '@mui/icons-material/Delete';
 import './table-data.scss';
+import { useTranslation } from 'react-i18next';
 
 export interface ArrayAction {
     nameFn: string;
@@ -39,6 +40,7 @@ export default function EnhancedTable(props: EnhancedTable) {
     const [selected, setSelected] = React.useState<readonly string[]>([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const { t } = useTranslation();
 
     React.useEffect(() => {
         setSelected([]);
@@ -216,7 +218,7 @@ export default function EnhancedTable(props: EnhancedTable) {
                                         minWidth: 300,
                                     }}
                                 >
-                                    NO DATA
+                                    {t('message.noData')}
                                 </TableRow>
                             )}
                         </TableBody>
