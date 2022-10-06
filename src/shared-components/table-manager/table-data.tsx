@@ -38,7 +38,9 @@ export default function EnhancedTable(props: EnhancedTable) {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-    const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSelectAllClick = (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
         if (event.target.checked) {
             const newSelected = rows.map((n: any) => n.id);
             setSelected(newSelected);
@@ -124,7 +126,11 @@ export default function EnhancedTable(props: EnhancedTable) {
                         />
                         <TableBody>
                             {rows.map((row: any, index: any) => {
-                                const isItemSelected = isSelected(row.id as string);
+                                console.log(row);
+
+                                const isItemSelected = isSelected(
+                                    row.id as string
+                                );
                                 const labelId = `enhanced-table-checkbox-${index}`;
                                 return (
                                     <TableRow
@@ -143,7 +149,10 @@ export default function EnhancedTable(props: EnhancedTable) {
                                                     "aria-labelledby": labelId,
                                                 }}
                                                 onClick={(event) =>
-                                                    handleClick(event, row.id as string)
+                                                    handleClick(
+                                                        event,
+                                                        row.id as string
+                                                    )
                                                 }
                                             />
                                         </TableCell>
@@ -153,16 +162,26 @@ export default function EnhancedTable(props: EnhancedTable) {
                                                     <TableCell
                                                         padding="normal"
                                                         align="left"
-                                                        hidden={colValue.id === FieldConstants.ID}
+                                                        hidden={
+                                                            colValue.id ===
+                                                            FieldConstants.ID
+                                                        }
                                                     >
-                                                        {row[colValue.id as string]}
+                                                        {
+                                                            row[
+                                                                colValue.id as string
+                                                            ]
+                                                        }
                                                     </TableCell>
                                                 );
                                             })}
                                         <TableCell padding="normal">
                                             {arrButton.map((arrBtn) => {
                                                 return (
-                                                    <Tooltip title={arrBtn.nameFn} placement="top-start">
+                                                    <Tooltip
+                                                        title={arrBtn.nameFn}
+                                                        placement="top-start"
+                                                    >
                                                         <IconButton
                                                             size="small"
                                                             color="primary"
@@ -175,7 +194,9 @@ export default function EnhancedTable(props: EnhancedTable) {
                                                                 )
                                                             }
                                                         >
-                                                            {renderIcon(arrBtn.iconFn)}
+                                                            {renderIcon(
+                                                                arrBtn.iconFn
+                                                            )}
                                                         </IconButton>
                                                     </Tooltip>
                                                 );

@@ -1,37 +1,76 @@
 {
     "login": {
-        "title":"Đăng nhập",
-        "userName":"Tài khoản",
-        "password":"Mật khẩu",
-        "btnLogin":"Đăng nhập"
+        "title": "Đăng nhập",
+        "userName": "Tài khoản",
+        "password": "Mật khẩu",
+        "btnLogin": "Đăng nhập"
     },
     "company": {
         "title": "Tìm Kiếm Công ty",
-        "search":{
-            "title":"Tim kiếm thông tin công ty của bạn",
-            "name": "Tên Công ty",
+        "search": {
+            "title": "Tim kiếm thông tin công ty của bạn",
+            "name": "Tên công ty",
             "email": "Thư điện tử",
             "telNo": "Số điện thoại",
             "taxNo": "Mã số thuế"
         },
-        "table":{
+        "table": {
             "colCpName": "Tên công ty",
-            "colCpAddress":"Địa chỉ",
-            "colCpStartDate":"Ngày bắt đầu"
+            "colCpAddress": "Địa chỉ",
+            "colCpStartDate": "Ngày bắt đầu"
         }
     },
-    "button":{
-        "btnRegister":"Đăng kí",
-        "btnSearch":"Tìm kiếm",
-        "btnClear":"Xóa thông tin",
-        "btnSave":"Cập nhật",
-        "btnDelete":"Xóa"
+    "register": {
+        "title": "Đăng Ký Công Ty",
+        "company": {
+            "title": "Đăng ký công ty mới",
+            "name": "Tên công Ty",
+            "email": "Thư điện tử",
+            "telNo": "Số điện thoại",
+            "taxNo": "Mã số thuế",
+            "city": "Tỉnh/Thành phố",
+            "district": "Quận/Huyện",
+            "ward": "Phường/Xã",
+            "street": "Tên đường",
+            "startDate": "Ngày bắt đầu/Thời gian (UTC)",
+            "endDate": "Ngày kết thúc/Thời gian (UTC)"
+        },
+        "user": {
+            "title": "Đăng ký tài khoản quản trị viên mới",
+            "userName": "Tên tài khoản",
+            "password": "Mật khẩu",
+            "firstName": "Tên",
+            "lastName": "Họ",
+            "telNo": "Số điện thoại",
+            "email": "Thư điện tử",
+            "allowLogin": "Chấp nhận đăng nhập",
+            "roleAssigned": "Vai trò"
+        }
+    },
+
+    "radio": {
+        "enabled": "Bật",
+        "admin": "Quản trị viên",
+        "user": "Người dùng"
+    },
+    "button": {
+        "btnRegister": "Đăng kí",
+        "btnSearch": "Tìm kiếm",
+        "btnClear": "Xóa thông tin",
+        "btnSave": "Cập nhật",
+        "btnDelete": "Xóa"
     },
     "common": {
-        "placeholder":"Nhập một giá trị mới",
-        "label":"Không yêu cầu",
-        "nonRequired":"Không bắt buộc",
-        "required":"Bắt buộc",
-        "action":"Thao tác"
+        "placeholder": "Nhập một giá trị mới",
+        "label": "Không yêu cầu",
+        "nonRequired": "Không bắt buộc",
+        "required": "Bắt buộc",
+        "action": "Thao tác",
+        "none": "Không có giá trị",
+        "start": "Bắt đầu",
+        "end": "Kết thúc"
+    },
+    "message": {
+        "required": "là bắt buộc."
     }
 }
