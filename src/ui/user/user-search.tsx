@@ -45,7 +45,7 @@ export default function UserSearch() {
         },
     ]);
 
-    const nativgate = useNavigate();
+    const navigate = useNavigate();
 
     const { data, isLoading } = useQuery(['getUsers'], () => getUsers(), {
         staleTime: 10000,
@@ -87,14 +87,14 @@ export default function UserSearch() {
     // miss pass id with url
     const handleEditData = (e: any, id: number) => {
         e.preventDefault();
-        nativgate(`${UrlFeApp.COMPANY.EDIT}/${id}`);
-    };
+        navigate(`${UrlFeApp.USER.INFO}/${id}`);
+    }
 
     // miss pass id with url
     const handleEditData2 = (e: any, id: number) => {
         e.preventDefault();
-        nativgate(`${UrlFeApp.COMPANY.EDIT}/${id}`);
-    };
+        navigate(`${UrlFeApp.USER.INFO}/${id}`);
+    }
 
     const arrButton: ArrayAction[] = [
         {
@@ -111,7 +111,8 @@ export default function UserSearch() {
 
     return (
         <div>
-            <div className="row">
+            <button onClick={(e) => handleEditData(e, 1)}>Info</button>
+            <div className='row'>
                 <div className="col-sm-12 col-md-6 text-start d-none d-lg-block">
                     <Typography variant="h5" color="textSecondary" gutterBottom>
                         COMPANY SEARCH

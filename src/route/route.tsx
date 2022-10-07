@@ -11,6 +11,7 @@ const DashBoard = lazy(() => import('../ui/dashboard/dashboard'));
 const CompanyRegister = lazy(() => import('../ui/company/company-register'));
 const CompanySearch = lazy(() => import('../ui/company/company-search'));
 const UserSearch = lazy(() => import('../ui/user/user-search'));
+const UserInfo = lazy(() => import('../ui/user/user-info'));
 
 const listRouter: RouteObject[] = [
     {
@@ -22,7 +23,7 @@ const listRouter: RouteObject[] = [
                 element: <DashBoard />,
             },
             {
-                path: UrlFeApp.COMPANY.SEACH,
+                path: UrlFeApp.COMPANY.SEARCH,
                 element: <CompanySearch />,
             },
             {
@@ -34,9 +35,13 @@ const listRouter: RouteObject[] = [
                 element: <CompanyEdit />,
             },
             {
-                path: UrlFeApp.USER.SEACH,
+                path: UrlFeApp.USER.SEARCH,
                 element: <UserSearch />,
             },
+            {
+                path: `${UrlFeApp.USER.INFO}/:userId`,
+                element: <UserInfo />,
+            }
         ],
     },
     {

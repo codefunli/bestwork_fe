@@ -1,0 +1,90 @@
+main {
+    background-color: #f5f8fb;
+}
+
+.MuiBox-root {
+    height: 100%;
+}
+
+.App {
+    text-align: center;
+}
+
+.App-logo {
+    height: 40vmin;
+    pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .App-logo {
+        animation: App-logo-spin infinite 20s linear;
+    }
+}
+
+.App-header {
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+}
+
+.App-link {
+    color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/** Custom text field */
+.MuiInputBase-input {
+    color: #000 !important;
+    border-radius: 0.5rem !important;
+}
+
+.MuiOutlinedInput-notchedOutline {
+    border-radius: 0.5rem !important;
+    border: 0.0625rem solid #d1d7e0 !important;
+}
+
+.MuiFormControl-root {
+    .MuiFormLabel-root {
+        color: #4a507377;
+        font-size: 0.9rem;
+    }
+
+    .MuiInputLabel-shrink {
+        color: #66799e !important;
+    }
+}
+
+.Mui-focused {
+    color: #4a507377 !important;
+    
+    fieldset {
+        border: 0.0625rem solid #66799e !important;
+        box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+        transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out !important;
+    }
+}
+
+/** Global class */
+.input-required {
+    color: red;
+}
+
+/** Custom Card */
+.MuiCard-root {
+    border: 1px solid #eaedf2 !important;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 4px 12px 0px !important;
+}

@@ -47,7 +47,6 @@
             "roleAssigned": "Vai trò"
         }
     },
-
     "radio": {
         "enabled": "Bật",
         "admin": "Quản trị viên",
@@ -58,11 +57,11 @@
         "btnSearch": "Tìm kiếm",
         "btnClear": "Xóa thông tin",
         "btnSave": "Cập nhật",
-        "btnDelete": "Xóa"
+        "btnDelete": "Xóa",
+        "btnCancel": "Huỷ"
     },
     "common": {
         "placeholder": "Nhập một giá trị mới",
-        "label": "Không yêu cầu",
         "nonRequired": "Không bắt buộc",
         "required": "Bắt buộc",
         "action": "Thao tác",
@@ -80,5 +79,32 @@
         "dashboard": "Bảng điều khiển",
         "register": "Đăng kí",
         "edit": "Chỉnh sửa"
+    },
+    "user": {
+        "title": "Thông tin người dùng",
+        "search": {
+            "title": "Tìm kiếm người dùng",
+            "name": "Tên công ty",
+            "email": "Email",
+            "telNo": "Tel-no",
+            "taxNo": "Tax-no"
+        },
+        "table": {
+            "colCpName": "Công ty",
+            "colCpAddress": "Địa chỉ",
+            "colCpStartDate": "Ngày bắt đầu"
+        },
+        "info": {
+            "userName": "Tên người dùng",
+            "email": "Thư điện tử",
+            "firstName": "Tên",
+            "lastName": "Họ",
+            "company": "Công ty",
+            "countLoginFailed": "Số lần đăng nhập thất bại",
+            "enabled": "Kích hoạt",
+            "role": "Vai trò",
+            "deleted": "Đã xoá",
+            "blocked": "Đã khoá"
+        }
     }
 }

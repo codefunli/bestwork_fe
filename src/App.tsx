@@ -1,5 +1,5 @@
 import logo from './logo.svg';
-import './App.css';
+import './App.scss';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Suspense } from 'react';
 import RootAppComponent from './core/layout/root-app-component';
