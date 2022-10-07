@@ -19,15 +19,16 @@ export const UrlFeApp = {
     MAIN_APP: '/app',
     DASH_BOARD: '/app/dashboard',
     COMPANY: {
-        SEACH: '/app/company',
-        CREATE: '/app/company/register',
-        EDIT: '/app/company/edit',
-        EDIT_HAS_ID: '/app/company/edit/:id',
+        SEARCH: "/app/company",
+        CREATE: "/app/company/register",
+        EDIT: "/app/company/edit",
+        EDIT_HAS_ID: "/app/company/edit/:id",
     },
     USER: {
-        SEACH: '/app/user',
-    },
-};
+        SEARCH: "/app/user",
+        INFO: "/app/user",
+    }
+}
 
 export const UrlServer = {
     API_LOGIN_URL: '/login',

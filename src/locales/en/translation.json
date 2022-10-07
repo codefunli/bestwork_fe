@@ -8,7 +8,7 @@
     "company": {
         "title": "Company search",
         "search": {
-            "title": "Seach info of your company",
+            "title": "Search info of your company",
             "name": "Company Name",
             "email": "Email",
             "telNo": "Tel-no",
@@ -57,7 +57,8 @@
         "btnSearch": "Search",
         "btnClear": "Clear",
         "btnSave": "Save",
-        "btnDelete": "Delete"
+        "btnDelete": "Delete",
+        "btnCancel": "Cancel"
     },
     "common": {
         "placeholder": "Please input a new value",
@@ -78,5 +79,32 @@
         "dashboard": "Dashboard",
         "register": "Register",
         "edit": "Edit"
+    },
+    "user": {
+        "title": "User Information",
+        "search": {
+            "title": "Search user",
+            "name": "Company Name",
+            "email": "Email",
+            "telNo": "Tel-no",
+            "taxNo": "Tax-no"
+        },
+        "table": {
+            "colCpName": "Company Name",
+            "colCpAddress": "Address",
+            "colCpStartDate": "Start Date"
+        },
+        "info": {
+            "userName": "User Name",
+            "email": "Email",
+            "firstName": "First Name",
+            "lastName": "Last Name",
+            "company": "Company",
+            "countLoginFailed": "Count login failed",
+            "enabled": "Enabled",
+            "role": "Role",
+            "deleted": "Deleted",
+            "blocked": "Blocked"
+        }
     }
 }

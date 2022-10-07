@@ -168,9 +168,9 @@ export default function CompanyRegister() {
 
     const handleResponse = (resp: any) => {
         switch (resp.status) {
-            case 'OK':
-                handleMessage(true, resp.message, 'success');
-                navigate(UrlFeApp.COMPANY.SEACH);
+            case "OK":
+                handleMessage(true, resp.message, "success");
+                navigate(UrlFeApp.COMPANY.SEARCH);
                 break;
             case 'ERROR':
                 handleMessage(true, resp.message, 'error');
