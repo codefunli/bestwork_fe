@@ -1,21 +1,21 @@
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import { IconButton, Tooltip } from "@mui/material";
-import Box from "@mui/material/Box";
-import Checkbox from "@mui/material/Checkbox";
-import Paper from "@mui/material/Paper";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TablePagination from "@mui/material/TablePagination";
-import TableRow from "@mui/material/TableRow";
-import * as React from "react";
-import { FieldConstants } from "../../core/constants/common";
-import { HeadColumn } from "../../core/types/base";
-import { EnhancedTableHead, Order } from "./table-columns";
-import { EnhancedTableToolbar } from "./table-toolbar";
-import DeleteIcon from "@mui/icons-material/Delete";
-import "./table-data.scss";
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import { IconButton, Tooltip } from '@mui/material';
+import Box from '@mui/material/Box';
+import Checkbox from '@mui/material/Checkbox';
+import Paper from '@mui/material/Paper';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TablePagination from '@mui/material/TablePagination';
+import TableRow from '@mui/material/TableRow';
+import * as React from 'react';
+import { FieldConstants } from '../../core/constants/common';
+import { HeadColumn } from '../../core/types/base';
+import { EnhancedTableHead, Order } from './table-columns';
+import { EnhancedTableToolbar } from './table-toolbar';
+import DeleteIcon from '@mui/icons-material/Delete';
+import './table-data.scss';
 
 export interface ArrayAction {
     nameFn: string;
@@ -32,15 +32,13 @@ interface EnhancedTable {
 
 export default function EnhancedTable(props: EnhancedTable) {
     const { headCells, rows, isLoading, arrButton } = props;
-    const [order, setOrder] = React.useState<Order>("asc");
-    const [orderBy, setOrderBy] = React.useState<string>("name");
+    const [order, setOrder] = React.useState<Order>('asc');
+    const [orderBy, setOrderBy] = React.useState<string>('name');
     const [selected, setSelected] = React.useState<readonly string[]>([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-    const handleSelectAllClick = (
-        event: React.ChangeEvent<HTMLInputElement>
-    ) => {
+    const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.checked) {
             const newSelected = rows.map((n: any) => n.id);
             setSelected(newSelected);
@@ -60,10 +58,7 @@ export default function EnhancedTable(props: EnhancedTable) {
         } else if (selectedIndex === selected.length - 1) {
             newSelected = newSelected.concat(selected.slice(0, -1));
         } else if (selectedIndex > 0) {
-            newSelected = newSelected.concat(
-                selected.slice(0, selectedIndex),
-                selected.slice(selectedIndex + 1)
-            );
+            newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
         }
 
         setSelected(newSelected);
@@ -73,29 +68,26 @@ export default function EnhancedTable(props: EnhancedTable) {
         setPage(newPage);
     };
 
-    const handleChangeRowsPerPage = (
-        event: React.ChangeEvent<HTMLInputElement>
-    ) => {
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
 
-    const isSelected = (name: string) =>
-        selected.indexOf(name) !== -1 ? true : false;
+    const isSelected = (name: string) => (selected.indexOf(name) !== -1 ? true : false);
 
     const handlePropsEdit = (event: any, id: any, func: any) => {
         func(event, id);
     };
 
     const handleDeleteRecordBySelected = () => {
-        alert("Delete Record by selected");
+        alert('Delete Record by selected');
     };
 
     const renderIcon = (iconFn: string) => {
         switch (iconFn) {
-            case "ModeEditIcon":
+            case 'ModeEditIcon':
                 return <ModeEditIcon />;
-            case "Delete":
+            case 'Delete':
                 return <DeleteIcon />;
             default:
                 break;
@@ -103,19 +95,14 @@ export default function EnhancedTable(props: EnhancedTable) {
     };
 
     return (
-        <Box sx={{ width: "100%" }}>
-            <Paper sx={{ width: "100%", mb: 2, overflow: "auto" }}>
+        <Box sx={{ width: '100%' }}>
+            <Paper sx={{ width: '100%', mb: 2, overflow: 'auto' }}>
                 <EnhancedTableToolbar
                     numSelected={selected.length}
                     deleteRecordBySelected={handleDeleteRecordBySelected}
                 />
                 <TableContainer>
-                    <Table
-                        stickyHeader
-                        sx={{ minWidth: 320 }}
-                        aria-labelledby="tableTitle"
-                        size={"medium"}
-                    >
+                    <Table stickyHeader sx={{ minWidth: 320 }} aria-labelledby="tableTitle" size={'medium'}>
                         <EnhancedTableHead
                             numSelected={selected.length}
                             order={order}
@@ -128,9 +115,7 @@ export default function EnhancedTable(props: EnhancedTable) {
                             {rows.map((row: any, index: any) => {
                                 console.log(row);
 
-                                const isItemSelected = isSelected(
-                                    row.id as string
-                                );
+                                const isItemSelected = isSelected(row.id as string);
                                 const labelId = `enhanced-table-checkbox-${index}`;
                                 return (
                                     <TableRow
@@ -146,14 +131,9 @@ export default function EnhancedTable(props: EnhancedTable) {
                                                 color="primary"
                                                 checked={isItemSelected}
                                                 inputProps={{
-                                                    "aria-labelledby": labelId,
+                                                    'aria-labelledby': labelId,
                                                 }}
-                                                onClick={(event) =>
-                                                    handleClick(
-                                                        event,
-                                                        row.id as string
-                                                    )
-                                                }
+                                                onClick={(event) => handleClick(event, row.id as string)}
                                             />
                                         </TableCell>
                                         {headCells != undefined &&
@@ -162,41 +142,25 @@ export default function EnhancedTable(props: EnhancedTable) {
                                                     <TableCell
                                                         padding="normal"
                                                         align="left"
-                                                        hidden={
-                                                            colValue.id ===
-                                                            FieldConstants.ID
-                                                        }
+                                                        hidden={colValue.id === FieldConstants.ID}
                                                     >
-                                                        {
-                                                            row[
-                                                                colValue.id as string
-                                                            ]
-                                                        }
+                                                        {row[colValue.id as string]}
                                                     </TableCell>
                                                 );
                                             })}
                                         <TableCell padding="normal">
                                             {arrButton.map((arrBtn) => {
                                                 return (
-                                                    <Tooltip
-                                                        title={arrBtn.nameFn}
-                                                        placement="top-start"
-                                                    >
+                                                    <Tooltip title={arrBtn.nameFn} placement="top-start">
                                                         <IconButton
                                                             size="small"
                                                             color="primary"
                                                             aria-label="add to shopping cart"
                                                             onClick={(event) =>
-                                                                handlePropsEdit(
-                                                                    event,
-                                                                    row.id as string,
-                                                                    arrBtn.acFn
-                                                                )
+                                                                handlePropsEdit(event, row.id as string, arrBtn.acFn)
                                                             }
                                                         >
-                                                            {renderIcon(
-                                                                arrBtn.iconFn
-                                                            )}
+                                                            {renderIcon(arrBtn.iconFn)}
                                                         </IconButton>
                                                     </Tooltip>
                                                 );

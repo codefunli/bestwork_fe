@@ -5,12 +5,12 @@ interface InitialState {
     isPageLoading: boolean;
     header: {};
     config: {
-		language: string;
-	};
-	errCode: string;
+        language: string;
+    };
+    errCode: string;
 }
 
-const initialState : InitialState = {
+const initialState: InitialState = {
     isAppLoading: true,
     isPageLoading: false,
     header: {},
@@ -18,17 +18,17 @@ const initialState : InitialState = {
         language: '',
     },
     errCode: '',
-}
+};
 
 export const appSlice = createSlice({
-    name: "app",
+    name: 'app',
     initialState,
     reducers: {
         setAppLoading(state, action: PayloadAction<boolean>) {
-            console.log("Action: " + action.payload);
+            console.log('Action: ' + action.payload);
             state.isAppLoading = action.payload;
-        }
-    }
+        },
+    },
 });
 
 export const appAction = appSlice.actions;

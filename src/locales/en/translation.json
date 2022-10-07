@@ -71,7 +71,7 @@
     "message": {
         "required": "is required."
     },
-    "bread_crumbs":{
+    "bread_crumbs": {
         "home": "Home",
         "company": "Company",
         "user": "User",

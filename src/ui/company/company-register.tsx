@@ -19,51 +19,45 @@ import {
     Switch,
     TextField,
     Typography,
-} from "@mui/material";
-import { useState } from "react";
-import cities from "hanhchinhvn/dist/tinh_tp.json";
-import { District, Ward } from "../../core/types/administrative";
-import {
-    getDistrictsByCityCode,
-    getWardsByDistrictCode,
-} from "../../core/utils/administrative-utils";
+} from '@mui/material';
+import { useState } from 'react';
+import cities from 'hanhchinhvn/dist/tinh_tp.json';
+import { District, Ward } from '../../core/types/administrative';
+import { getDistrictsByCityCode, getWardsByDistrictCode } from '../../core/utils/administrative-utils';
 
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { validateForm } from "../../core/constants/validate";
-import MessageShow from "../../shared-components/message/message";
-import { postCompany } from "../../services/company-service";
-import { useNavigate } from "react-router-dom";
-import { UrlFeApp } from "../../core/constants/common";
-import { useTranslation } from "react-i18next";
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { validateForm } from '../../core/constants/validate';
+import MessageShow from '../../shared-components/message/message';
+import { postCompany } from '../../services/company-service';
+import { useNavigate } from 'react-router-dom';
+import { UrlFeApp } from '../../core/constants/common';
+import { useTranslation } from 'react-i18next';
 
-const currentDateTime = new Date()
-    .toISOString()
-    .substring(0, 11)
-    .concat(new Date().toLocaleTimeString());
+const currentDateTime = new Date().toISOString().substring(0, 11).concat(new Date().toLocaleTimeString());
 
 const initialValues = {
     company: {
-        companyName: "",
-        cpEmail: "",
-        cpTelNo: "",
-        taxNo: "",
-        city: "",
-        district: "",
-        ward: "",
-        street: "",
+        companyName: '',
+        cpEmail: '',
+        cpTelNo: '',
+        taxNo: '',
+        city: '',
+        district: '',
+        ward: '',
+        street: '',
         startDate: currentDateTime,
         expiredDate: currentDateTime,
     },
     user: {
-        userName: "",
-        password: "",
-        firstName: "",
-        lastName: "",
-        uTelNo: "",
-        uEmail: "",
+        userName: '',
+        password: '',
+        firstName: '',
+        lastName: '',
+        uTelNo: '',
+        uEmail: '',
         enabled: false,
-        role: "admin",
+        role: 'admin',
     },
 };
 
@@ -72,8 +66,8 @@ export default function CompanyRegister() {
     const [districts, setDistricts] = useState<District[]>([]);
     const [wards, setWards] = useState<Ward[]>([]);
     const [isShowMessage, setIsShowMessage] = useState(false);
-    const [companyMsg, setCompanyMsg] = useState("");
-    const [typeCompanyMsg, setTypeCompanyMsg] = useState<AlertColor>("success");
+    const [companyMsg, setCompanyMsg] = useState('');
+    const [typeCompanyMsg, setTypeCompanyMsg] = useState<AlertColor>('success');
     const navigate = useNavigate();
     const { t } = useTranslation();
 
@@ -174,15 +168,15 @@ export default function CompanyRegister() {
 
     const handleResponse = (resp: any) => {
         switch (resp.status) {
-            case "OK":
-                handleMessage(true, resp.message, "success");
+            case 'OK':
+                handleMessage(true, resp.message, 'success');
                 navigate(UrlFeApp.COMPANY.SEACH);
                 break;
-            case "ERROR":
-                handleMessage(true, resp.message, "error");
+            case 'ERROR':
+                handleMessage(true, resp.message, 'error');
                 break;
             default:
-                handleMessage(true, resp.message, "warning");
+                handleMessage(true, resp.message, 'warning');
                 break;
         }
     };
@@ -209,27 +203,22 @@ export default function CompanyRegister() {
                     className="mb-4"
                     color="textSecondary"
                     gutterBottom
-                    sx={{ textTransform: "uppercase" }}
+                    sx={{ textTransform: 'uppercase' }}
                 >
-                    {t("register.title")}
+                    {t('register.title')}
                     <Divider />
                 </Typography>
                 <Grid container spacing={3}>
-                    <Card style={{ width: "100%" }}>
+                    <Card style={{ width: '100%' }}>
                         <Grid container spacing={3}>
                             <Grid item xs={12} lg={6}>
                                 <CardHeader
-                                    avatar={
-                                        <Avatar aria-label="recipe">C</Avatar>
-                                    }
-                                    title={t("register.company.title")}
+                                    avatar={<Avatar aria-label="recipe">C</Avatar>}
+                                    title={t('register.company.title')}
                                     subheader={new Date().toLocaleDateString()}
                                     action={
-                                        <Button
-                                            variant="outlined"
-                                            onClick={handleClearCompany}
-                                        >
-                                            {t("button.btnClear")}
+                                        <Button variant="outlined" onClick={handleClearCompany}>
+                                            {t('button.btnClear')}
                                         </Button>
                                     }
                                 />
@@ -237,7 +226,7 @@ export default function CompanyRegister() {
                                     <Box
                                         component="form"
                                         sx={{
-                                            "& > :not(style)": { m: 1 },
+                                            '& > :not(style)': { m: 1 },
                                         }}
                                         noValidate
                                         autoComplete="off"
@@ -246,79 +235,46 @@ export default function CompanyRegister() {
                                             <div className="col-12 col-sm-6 d-block p-1">
                                                 <InputLabel
                                                     htmlFor="outlined-adornment-amount"
-                                                    error={Boolean(
-                                                        errors.companyName
-                                                    )}
+                                                    error={Boolean(errors.companyName)}
                                                 >
-                                                    {t("register.company.name")}
-                                                    :
+                                                    {t('register.company.name')}:
                                                 </InputLabel>
                                                 <TextField
                                                     size="small"
-                                                    value={
-                                                        formValues.company
-                                                            .companyName
-                                                    }
+                                                    value={formValues.company.companyName}
                                                     fullWidth
                                                     sx={{ mt: 1, mb: 1 }}
                                                     required
                                                     id="outlined-required"
-                                                    label={t("common.required")}
-                                                    placeholder={t(
-                                                        "common.placeholder"
-                                                    )}
-                                                    error={Boolean(
-                                                        errors.companyName
-                                                    )}
-                                                    helperText={t(
-                                                        errors.companyName?.message?.toString() as string
-                                                    )}
-                                                    {...register(
-                                                        "companyName",
-                                                        {
-                                                            onChange: (e) =>
-                                                                handleInputChange(
-                                                                    e
-                                                                ),
-                                                        }
-                                                    )}
+                                                    label={t('common.required')}
+                                                    placeholder={t('common.placeholder')}
+                                                    error={Boolean(errors.companyName)}
+                                                    helperText={t(errors.companyName?.message?.toString() as string)}
+                                                    {...register('companyName', {
+                                                        onChange: (e) => handleInputChange(e),
+                                                    })}
                                                 />
                                             </div>
                                             <div className="col-12 col-sm-6 d-block p-1">
                                                 <InputLabel
                                                     htmlFor="outlined-adornment-amount"
-                                                    error={Boolean(
-                                                        errors.cpEmail
-                                                    )}
+                                                    error={Boolean(errors.cpEmail)}
                                                 >
-                                                    {t(
-                                                        "register.company.email"
-                                                    )}
-                                                    :
+                                                    {t('register.company.email')}:
                                                 </InputLabel>
                                                 <TextField
                                                     size="small"
-                                                    value={
-                                                        formValues.company
-                                                            .cpEmail
-                                                    }
+                                                    value={formValues.company.cpEmail}
                                                     fullWidth
                                                     sx={{ mt: 1, mb: 1 }}
                                                     required
                                                     id="outlined-required"
-                                                    label={t("common.required")}
-                                                    placeholder={t(
-                                                        "common.placeholder"
-                                                    )}
-                                                    error={Boolean(
-                                                        errors.cpEmail
-                                                    )}
+                                                    label={t('common.required')}
+                                                    placeholder={t('common.placeholder')}
+                                                    error={Boolean(errors.cpEmail)}
                                                     helperText={errors.cpEmail?.message?.toString()}
-                                                    {...register("cpEmail", {
-                                                        onChange: (e) =>
-                                                            handleInputChange(
-                                                                e
-                                                            ),
+                                                    {...register('cpEmail', {
+                                                        onChange: (e) => handleInputChange(e),
                                                     })}
                                                 />
                                             </div>
@@ -327,75 +283,46 @@ export default function CompanyRegister() {
                                             <div className="col-12 col-sm-6 d-block p-1">
                                                 <InputLabel
                                                     htmlFor="outlined-adornment-amount"
-                                                    error={Boolean(
-                                                        errors.cpTelNo
-                                                    )}
+                                                    error={Boolean(errors.cpTelNo)}
                                                 >
-                                                    {t(
-                                                        "register.company.telNo"
-                                                    )}
-                                                    :
+                                                    {t('register.company.telNo')}:
                                                 </InputLabel>
                                                 <TextField
                                                     size="small"
-                                                    value={
-                                                        formValues.company
-                                                            .cpTelNo
-                                                    }
+                                                    value={formValues.company.cpTelNo}
                                                     fullWidth
                                                     required
                                                     sx={{ mt: 1, mb: 1 }}
                                                     id="outlined-required"
-                                                    label={t("common.required")}
-                                                    placeholder={t(
-                                                        "common.placeholder"
-                                                    )}
-                                                    error={Boolean(
-                                                        errors.cpTelNo
-                                                    )}
+                                                    label={t('common.required')}
+                                                    placeholder={t('common.placeholder')}
+                                                    error={Boolean(errors.cpTelNo)}
                                                     helperText={errors.cpTelNo?.message?.toString()}
-                                                    {...register("cpTelNo", {
-                                                        onChange: (e) =>
-                                                            handleInputChange(
-                                                                e
-                                                            ),
+                                                    {...register('cpTelNo', {
+                                                        onChange: (e) => handleInputChange(e),
                                                     })}
                                                 />
                                             </div>
                                             <div className="col-12 col-sm-6 d-block p-1">
                                                 <InputLabel
                                                     htmlFor="outlined-adornment-amount"
-                                                    error={Boolean(
-                                                        errors.taxNo
-                                                    )}
+                                                    error={Boolean(errors.taxNo)}
                                                 >
-                                                    {t(
-                                                        "register.company.taxNo"
-                                                    )}
-                                                    :
+                                                    {t('register.company.taxNo')}:
                                                 </InputLabel>
                                                 <TextField
                                                     size="small"
-                                                    value={
-                                                        formValues.company.taxNo
-                                                    }
+                                                    value={formValues.company.taxNo}
                                                     fullWidth
                                                     sx={{ mt: 1, mb: 1 }}
                                                     required
                                                     id="outlined-required"
-                                                    label={t("common.required")}
-                                                    placeholder={t(
-                                                        "common.placeholder"
-                                                    )}
-                                                    error={Boolean(
-                                                        errors.taxNo
-                                                    )}
+                                                    label={t('common.required')}
+                                                    placeholder={t('common.placeholder')}
+                                                    error={Boolean(errors.taxNo)}
                                                     helperText={errors.taxNo?.message?.toString()}
-                                                    {...register("taxNo", {
-                                                        onChange: (e) =>
-                                                            handleInputChange(
-                                                                e
-                                                            ),
+                                                    {...register('taxNo', {
+                                                        onChange: (e) => handleInputChange(e),
                                                     })}
                                                 />
                                             </div>
@@ -403,7 +330,7 @@ export default function CompanyRegister() {
                                         <div className="row justify-center m-1">
                                             <div className="col-12 col-sm-6 p-1">
                                                 <InputLabel id="demo-simple-select-outlined-label">
-                                                    {t("register.company.city")}
+                                                    {t('register.company.city')}
                                                 </InputLabel>
                                                 <FormControl
                                                     size="small"
@@ -412,52 +339,28 @@ export default function CompanyRegister() {
                                                     variant="outlined"
                                                 >
                                                     <InputLabel id="demo-simple-select-outlined-label">
-                                                        {t(
-                                                            "common.nonRequired"
-                                                        )}
+                                                        {t('common.nonRequired')}
                                                     </InputLabel>
                                                     <Select
                                                         labelId="demo-simple-select-outlined-label"
                                                         id="demo-simple-select-outlined"
                                                         name="city"
-                                                        value={
-                                                            formValues.company
-                                                                .city
-                                                        }
-                                                        onChange={
-                                                            handleCityChange
-                                                        }
-                                                        label={t(
-                                                            "common.nonRequired"
-                                                        )}
+                                                        value={formValues.company.city}
+                                                        onChange={handleCityChange}
+                                                        label={t('common.nonRequired')}
                                                     >
                                                         <MenuItem value="">
-                                                            <em>
-                                                                {t(
-                                                                    "common.none"
-                                                                )}
-                                                            </em>
+                                                            <em>{t('common.none')}</em>
                                                         </MenuItem>
-                                                        {Object.values(
-                                                            cities
-                                                        ).map((city) => (
-                                                            <MenuItem
-                                                                value={
-                                                                    city.code
-                                                                }
-                                                            >
-                                                                {city.name}
-                                                            </MenuItem>
+                                                        {Object.values(cities).map((city) => (
+                                                            <MenuItem value={city.code}>{city.name}</MenuItem>
                                                         ))}
                                                     </Select>
                                                 </FormControl>
                                             </div>
                                             <div className="col-12 col-sm-6 p-1">
                                                 <InputLabel id="demo-simple-select-outlined-label">
-                                                    {t(
-                                                        "register.company.district"
-                                                    )}
-                                                    :
+                                                    {t('register.company.district')}:
                                                 </InputLabel>
                                                 <FormControl
                                                     size="small"
@@ -466,43 +369,22 @@ export default function CompanyRegister() {
                                                     variant="outlined"
                                                 >
                                                     <InputLabel id="demo-simple-select-outlined-label">
-                                                        {t(
-                                                            "common.nonRequired"
-                                                        )}
+                                                        {t('common.nonRequired')}
                                                     </InputLabel>
                                                     <Select
                                                         labelId="demo-simple-select-outlined-label"
                                                         id="demo-simple-select-outlined"
                                                         name="district"
-                                                        value={
-                                                            formValues.company
-                                                                .district
-                                                        }
-                                                        onChange={
-                                                            handleDistrictChange
-                                                        }
-                                                        label={t(
-                                                            "common.nonRequired"
-                                                        )}
+                                                        value={formValues.company.district}
+                                                        onChange={handleDistrictChange}
+                                                        label={t('common.nonRequired')}
                                                     >
                                                         <MenuItem value="">
-                                                            <em>
-                                                                {t(
-                                                                    "common.none"
-                                                                )}
-                                                            </em>
+                                                            <em>{t('common.none')}</em>
                                                         </MenuItem>
-                                                        {districts.map(
-                                                            (dis) => (
-                                                                <MenuItem
-                                                                    value={
-                                                                        dis.code
-                                                                    }
-                                                                >
-                                                                    {dis.name}
-                                                                </MenuItem>
-                                                            )
-                                                        )}
+                                                        {districts.map((dis) => (
+                                                            <MenuItem value={dis.code}>{dis.name}</MenuItem>
+                                                        ))}
                                                     </Select>
                                                 </FormControl>
                                             </div>
@@ -510,8 +392,7 @@ export default function CompanyRegister() {
                                         <div className="row justify-center m-1">
                                             <div className="col-12 col-sm-6 d-block p-1">
                                                 <InputLabel id="demo-simple-select-outlined-label">
-                                                    {t("register.company.ward")}
-                                                    :
+                                                    {t('register.company.ward')}:
                                                 </InputLabel>
                                                 <FormControl
                                                     size="small"
@@ -520,50 +401,28 @@ export default function CompanyRegister() {
                                                     variant="outlined"
                                                 >
                                                     <InputLabel id="demo-simple-select-outlined-label">
-                                                        {t(
-                                                            "common.nonRequired"
-                                                        )}
+                                                        {t('common.nonRequired')}
                                                     </InputLabel>
                                                     <Select
                                                         labelId="demo-simple-select-outlined-label"
                                                         id="demo-simple-select-outlined"
                                                         name="ward"
-                                                        value={
-                                                            formValues.company
-                                                                .ward
-                                                        }
-                                                        onChange={
-                                                            handleWardChange
-                                                        }
-                                                        label={t(
-                                                            "common.nonRequired"
-                                                        )}
+                                                        value={formValues.company.ward}
+                                                        onChange={handleWardChange}
+                                                        label={t('common.nonRequired')}
                                                     >
                                                         <MenuItem value="">
-                                                            <em>
-                                                                {t(
-                                                                    "common.nonRequired"
-                                                                )}
-                                                            </em>
+                                                            <em>{t('common.nonRequired')}</em>
                                                         </MenuItem>
                                                         {wards.map((ward) => (
-                                                            <MenuItem
-                                                                value={
-                                                                    ward.code
-                                                                }
-                                                            >
-                                                                {ward.name}
-                                                            </MenuItem>
+                                                            <MenuItem value={ward.code}>{ward.name}</MenuItem>
                                                         ))}
                                                     </Select>
                                                 </FormControl>
                                             </div>
                                             <div className="col-12 col-sm-6 d-block p-1">
                                                 <InputLabel htmlFor="outlined-adornment-amount">
-                                                    {t(
-                                                        "register.company.street"
-                                                    )}
-                                                    :
+                                                    {t('register.company.street')}:
                                                 </InputLabel>
                                                 <TextField
                                                     name="street"
@@ -571,12 +430,8 @@ export default function CompanyRegister() {
                                                     fullWidth
                                                     sx={{ mt: 1, mb: 1 }}
                                                     id="outlined-required"
-                                                    label={t(
-                                                        "common.nonRequired"
-                                                    )}
-                                                    placeholder={t(
-                                                        "common.placeholder"
-                                                    )}
+                                                    label={t('common.nonRequired')}
+                                                    placeholder={t('common.placeholder')}
                                                     onChange={handleInputChange}
                                                 />
                                             </div>
@@ -585,80 +440,51 @@ export default function CompanyRegister() {
                                             <div className="col-12 col-sm-6 d-block p-1">
                                                 <InputLabel
                                                     htmlFor="outlined-adornment-amount"
-                                                    error={Boolean(
-                                                        errors.startDate
-                                                    )}
+                                                    error={Boolean(errors.startDate)}
                                                 >
-                                                    {t(
-                                                        "register.company.startDate"
-                                                    )}
-                                                    :
+                                                    {t('register.company.startDate')}:
                                                 </InputLabel>
                                                 <TextField
                                                     fullWidth
                                                     sx={{ mt: 1, mb: 1 }}
-                                                    value={
-                                                        formValues.company
-                                                            .startDate
-                                                    }
+                                                    value={formValues.company.startDate}
                                                     id="dateStart"
-                                                    label={t("common.start")}
+                                                    label={t('common.start')}
                                                     type="datetime-local"
                                                     defaultValue="2017-05-23T10:30"
                                                     InputLabelProps={{
                                                         shrink: true,
                                                     }}
-                                                    error={Boolean(
-                                                        errors.startDate
-                                                    )}
+                                                    error={Boolean(errors.startDate)}
                                                     helperText={errors.startDate?.message?.toString()}
-                                                    {...register("startDate", {
-                                                        onChange: (e) =>
-                                                            handleInputChange(
-                                                                e
-                                                            ),
+                                                    {...register('startDate', {
+                                                        onChange: (e) => handleInputChange(e),
                                                     })}
                                                 />
                                             </div>
                                             <div className="col-12 col-sm-6 d-block p-1">
                                                 <InputLabel
                                                     htmlFor="outlined-adornment-amount"
-                                                    error={Boolean(
-                                                        errors.expiredDate
-                                                    )}
+                                                    error={Boolean(errors.expiredDate)}
                                                 >
-                                                    {t(
-                                                        "register.company.endDate"
-                                                    )}
-                                                    :
+                                                    {t('register.company.endDate')}:
                                                 </InputLabel>
                                                 <TextField
                                                     fullWidth
                                                     sx={{ mt: 1, mb: 1 }}
-                                                    value={
-                                                        formValues.company
-                                                            .expiredDate
-                                                    }
+                                                    value={formValues.company.expiredDate}
                                                     id="dateEnd"
-                                                    label={t("common.end")}
+                                                    label={t('common.end')}
                                                     type="datetime-local"
                                                     defaultValue="2017-05-24T10:30"
                                                     InputLabelProps={{
                                                         shrink: true,
                                                     }}
-                                                    error={Boolean(
-                                                        errors.expiredDate
-                                                    )}
+                                                    error={Boolean(errors.expiredDate)}
                                                     helperText={errors.expiredDate?.message?.toString()}
-                                                    {...register(
-                                                        "expiredDate",
-                                                        {
-                                                            onChange: (e) =>
-                                                                handleInputChange(
-                                                                    e
-                                                                ),
-                                                        }
-                                                    )}
+                                                    {...register('expiredDate', {
+                                                        onChange: (e) => handleInputChange(e),
+                                                    })}
                                                 />
                                             </div>
                                         </div>
@@ -667,17 +493,12 @@ export default function CompanyRegister() {
                             </Grid>
                             <Grid item xs={12} lg={6}>
                                 <CardHeader
-                                    avatar={
-                                        <Avatar aria-label="recipe">U</Avatar>
-                                    }
-                                    title={t("register.user.title")}
+                                    avatar={<Avatar aria-label="recipe">U</Avatar>}
+                                    title={t('register.user.title')}
                                     subheader={new Date().toLocaleDateString()}
                                     action={
-                                        <Button
-                                            variant="outlined"
-                                            onClick={handleClearUser}
-                                        >
-                                            {t("button.btnClear")}
+                                        <Button variant="outlined" onClick={handleClearUser}>
+                                            {t('button.btnClear')}
                                         </Button>
                                     }
                                 />
@@ -685,7 +506,7 @@ export default function CompanyRegister() {
                                     <Box
                                         component="form"
                                         sx={{
-                                            "& > :not(style)": { m: 1 },
+                                            '& > :not(style)': { m: 1 },
                                         }}
                                         noValidate
                                         autoComplete="off"
@@ -694,75 +515,47 @@ export default function CompanyRegister() {
                                             <div className="col-12 col-sm-6 d-block p-1">
                                                 <InputLabel
                                                     htmlFor="outlined-adornment-amount"
-                                                    error={Boolean(
-                                                        errors.userName
-                                                    )}
+                                                    error={Boolean(errors.userName)}
                                                 >
-                                                    {t(
-                                                        "register.user.userName"
-                                                    )}
-                                                    :
+                                                    {t('register.user.userName')}:
                                                 </InputLabel>
                                                 <TextField
-                                                    value={
-                                                        formValues.user.userName
-                                                    }
+                                                    value={formValues.user.userName}
                                                     size="small"
                                                     fullWidth
                                                     sx={{ mt: 1, mb: 1 }}
                                                     required
                                                     id="outlined-required"
-                                                    label={t("common.required")}
-                                                    placeholder={t(
-                                                        "common.placeholder"
-                                                    )}
-                                                    error={Boolean(
-                                                        errors.userName
-                                                    )}
+                                                    label={t('common.required')}
+                                                    placeholder={t('common.placeholder')}
+                                                    error={Boolean(errors.userName)}
                                                     helperText={errors.userName?.message?.toString()}
-                                                    {...register("userName", {
-                                                        onChange: (e) =>
-                                                            handleInputChange(
-                                                                e
-                                                            ),
+                                                    {...register('userName', {
+                                                        onChange: (e) => handleInputChange(e),
                                                     })}
                                                 />
                                             </div>
                                             <div className="col-12 col-sm-6 d-block p-1">
                                                 <InputLabel
                                                     htmlFor="outlined-adornment-amount"
-                                                    error={Boolean(
-                                                        errors.password
-                                                    )}
+                                                    error={Boolean(errors.password)}
                                                 >
-                                                    {t(
-                                                        "register.user.password"
-                                                    )}
-                                                    :
+                                                    {t('register.user.password')}:
                                                 </InputLabel>
                                                 <TextField
-                                                    type={"password"}
-                                                    value={
-                                                        formValues.user.password
-                                                    }
+                                                    type={'password'}
+                                                    value={formValues.user.password}
                                                     size="small"
                                                     fullWidth
                                                     sx={{ mt: 1, mb: 1 }}
                                                     required
                                                     id="outlined-required"
-                                                    label={t("common.required")}
-                                                    placeholder={t(
-                                                        "common.placeholder"
-                                                    )}
-                                                    error={Boolean(
-                                                        errors.password
-                                                    )}
+                                                    label={t('common.required')}
+                                                    placeholder={t('common.placeholder')}
+                                                    error={Boolean(errors.password)}
                                                     helperText={errors.password?.message?.toString()}
-                                                    {...register("password", {
-                                                        onChange: (e) =>
-                                                            handleInputChange(
-                                                                e
-                                                            ),
+                                                    {...register('password', {
+                                                        onChange: (e) => handleInputChange(e),
                                                     })}
                                                 />
                                             </div>
@@ -770,52 +563,33 @@ export default function CompanyRegister() {
                                         <div className="row justify-center m-1">
                                             <div className="col-12 col-sm-6 d-block p-1">
                                                 <InputLabel htmlFor="outlined-adornment-amount">
-                                                    {t(
-                                                        "register.user.firstName"
-                                                    )}
-                                                    :
+                                                    {t('register.user.firstName')}:
                                                 </InputLabel>
                                                 <TextField
                                                     name="firstName"
-                                                    value={
-                                                        formValues.user
-                                                            .firstName
-                                                    }
+                                                    value={formValues.user.firstName}
                                                     size="small"
                                                     fullWidth
                                                     sx={{ mt: 1, mb: 1 }}
                                                     id="outlined-required"
-                                                    label={t(
-                                                        "common.nonRequired"
-                                                    )}
-                                                    placeholder={t(
-                                                        "common.placeholder"
-                                                    )}
+                                                    label={t('common.nonRequired')}
+                                                    placeholder={t('common.placeholder')}
                                                     onChange={handleInputChange}
                                                 />
                                             </div>
                                             <div className="col-12 col-sm-6 d-block p-1">
                                                 <InputLabel htmlFor="outlined-adornment-amount">
-                                                    {t(
-                                                        "register.user.lastName"
-                                                    )}
-                                                    :
+                                                    {t('register.user.lastName')}:
                                                 </InputLabel>
                                                 <TextField
                                                     name="lastName"
-                                                    value={
-                                                        formValues.user.lastName
-                                                    }
+                                                    value={formValues.user.lastName}
                                                     size="small"
                                                     fullWidth
                                                     sx={{ mt: 1, mb: 1 }}
                                                     id="outlined-required"
-                                                    label={t(
-                                                        "common.nonRequired"
-                                                    )}
-                                                    placeholder={t(
-                                                        "common.placeholder"
-                                                    )}
+                                                    label={t('common.nonRequired')}
+                                                    placeholder={t('common.placeholder')}
                                                     onChange={handleInputChange}
                                                 />
                                             </div>
@@ -824,34 +598,23 @@ export default function CompanyRegister() {
                                             <div className="col-12 col-sm-12 d-block p-1">
                                                 <InputLabel
                                                     htmlFor="outlined-adornment-amount"
-                                                    error={Boolean(
-                                                        errors.uTelNo
-                                                    )}
+                                                    error={Boolean(errors.uTelNo)}
                                                 >
-                                                    {t("register.user.telNo")}:
+                                                    {t('register.user.telNo')}:
                                                 </InputLabel>
                                                 <TextField
-                                                    value={
-                                                        formValues.user.uTelNo
-                                                    }
+                                                    value={formValues.user.uTelNo}
                                                     size="small"
                                                     fullWidth
                                                     sx={{ mt: 1, mb: 1 }}
                                                     id="outlined-required"
                                                     required
-                                                    label={t("common.required")}
-                                                    placeholder={t(
-                                                        "common.placeholder"
-                                                    )}
-                                                    error={Boolean(
-                                                        errors.uTelNo
-                                                    )}
+                                                    label={t('common.required')}
+                                                    placeholder={t('common.placeholder')}
+                                                    error={Boolean(errors.uTelNo)}
                                                     helperText={errors.uTelNo?.message?.toString()}
-                                                    {...register("uTelNo", {
-                                                        onChange: (e) =>
-                                                            handleInputChange(
-                                                                e
-                                                            ),
+                                                    {...register('uTelNo', {
+                                                        onChange: (e) => handleInputChange(e),
                                                     })}
                                                 />
                                             </div>
@@ -860,33 +623,22 @@ export default function CompanyRegister() {
                                             <div className="col-12 col-sm-12 d-block p-1">
                                                 <InputLabel
                                                     htmlFor="outlined-adornment-amount"
-                                                    error={Boolean(
-                                                        errors.uEmail
-                                                    )}
+                                                    error={Boolean(errors.uEmail)}
                                                 >
-                                                    {t("register.user.email")}:
+                                                    {t('register.user.email')}:
                                                 </InputLabel>
                                                 <TextField
-                                                    value={
-                                                        formValues.user.uEmail
-                                                    }
+                                                    value={formValues.user.uEmail}
                                                     size="small"
                                                     fullWidth
                                                     sx={{ mt: 1, mb: 1 }}
                                                     id="outlined-required"
-                                                    label={t("common.required")}
-                                                    placeholder={t(
-                                                        "common.placeholder"
-                                                    )}
-                                                    error={Boolean(
-                                                        errors.uEmail
-                                                    )}
+                                                    label={t('common.required')}
+                                                    placeholder={t('common.placeholder')}
+                                                    error={Boolean(errors.uEmail)}
                                                     helperText={errors.uEmail?.message?.toString()}
-                                                    {...register("uEmail", {
-                                                        onChange: (e) =>
-                                                            handleInputChange(
-                                                                e
-                                                            ),
+                                                    {...register('uEmail', {
+                                                        onChange: (e) => handleInputChange(e),
                                                     })}
                                                 />
                                             </div>
@@ -895,64 +647,41 @@ export default function CompanyRegister() {
                                             <div className="col-12 col-lg-6 d-block p-3">
                                                 <FormControl component="fieldset">
                                                     <FormLabel component="legend">
-                                                        {t(
-                                                            "register.user.allowLogin"
-                                                        )}
+                                                        {t('register.user.allowLogin')}
                                                     </FormLabel>
                                                     <FormControlLabel
                                                         control={
                                                             <Switch
-                                                                checked={
-                                                                    formValues
-                                                                        .user
-                                                                        .enabled
-                                                                }
+                                                                checked={formValues.user.enabled}
                                                                 name="enabled"
-                                                                onChange={
-                                                                    handleAllowLoginChange
-                                                                }
+                                                                onChange={handleAllowLoginChange}
                                                             />
                                                         }
-                                                        label={t(
-                                                            "radio.enabled"
-                                                        )}
+                                                        label={t('radio.enabled')}
                                                     />
                                                 </FormControl>
                                             </div>
                                             <div className="col-12 col-md-6 d-block p-3">
                                                 <FormControl component="fieldset">
                                                     <FormLabel component="legend">
-                                                        {t(
-                                                            "register.user.roleAssigned"
-                                                        )}
-                                                        :
+                                                        {t('register.user.roleAssigned')}:
                                                     </FormLabel>
                                                     <RadioGroup
                                                         row
                                                         aria-label="role"
                                                         name="role"
-                                                        value={
-                                                            formValues.user.role
-                                                        }
+                                                        value={formValues.user.role}
                                                         defaultValue="admin"
                                                     >
                                                         <FormControlLabel
                                                             value="admin"
-                                                            control={
-                                                                <Radio color="primary" />
-                                                            }
-                                                            label={t(
-                                                                "radio.admin"
-                                                            )}
+                                                            control={<Radio color="primary" />}
+                                                            label={t('radio.admin')}
                                                         />
                                                         <FormControlLabel
                                                             value="user"
-                                                            control={
-                                                                <Radio color="primary" />
-                                                            }
-                                                            label={t(
-                                                                "radio.user"
-                                                            )}
+                                                            control={<Radio color="primary" />}
+                                                            label={t('radio.user')}
                                                             disabled
                                                         />
                                                     </RadioGroup>
@@ -965,12 +694,8 @@ export default function CompanyRegister() {
                         </Grid>
                     </Card>
                     <Grid item xs={12} sm={12} className="text-center">
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={handleSubmit(handleSubmitForm)}
-                        >
-                            {t("button.btnSave")}
+                        <Button variant="contained" color="primary" onClick={handleSubmit(handleSubmitForm)}>
+                            {t('button.btnSave')}
                         </Button>
                     </Grid>
                 </Grid>

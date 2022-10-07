@@ -1,5 +1,5 @@
-import { Alert, AlertColor, Snackbar, SnackbarOrigin } from "@mui/material";
-import { useEffect, useState } from "react";
+import { Alert, AlertColor, Snackbar, SnackbarOrigin } from '@mui/material';
+import { useEffect, useState } from 'react';
 
 export interface State extends SnackbarOrigin {
     open: boolean;
@@ -24,17 +24,23 @@ export default function MessageShow(props: MessageShowProps) {
 
     useEffect(() => {
         setState({ ...state, open: showMessage });
-    }, [showMessage])
+    }, [showMessage]);
 
     const handleClose = () => {
-        console.log("HANDLE");
+        console.log('HANDLE');
         setState({ ...state, open: false });
         handleCloseMsg();
     };
 
     return (
         <div>
-            <Snackbar open={open} autoHideDuration={3000} onClose={handleClose} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
+            <Snackbar
+                open={open}
+                autoHideDuration={3000}
+                onClose={handleClose}
+                key={vertical + horizontal}
+                anchorOrigin={{ vertical, horizontal }}
+            >
                 <Alert onClose={handleClose} severity={type} sx={{ width: '100%' }}>
                     {message}
                 </Alert>

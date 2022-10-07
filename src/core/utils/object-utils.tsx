@@ -7,7 +7,7 @@ export const isObjectEmpty = (object: any) => {
     }
 
     return false;
-}
+};
 
 /**
  * check undefined and null of array object
@@ -18,4 +18,4 @@ export const isArrayEmpty = (object: any[]) => {
     }
 
     return false;
-}
+};

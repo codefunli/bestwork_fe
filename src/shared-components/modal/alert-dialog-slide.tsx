@@ -1,6 +1,6 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide } from "@mui/material";
-import { TransitionProps } from "@mui/material/transitions";
-import { forwardRef, useEffect, useState } from "react";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide } from '@mui/material';
+import { TransitionProps } from '@mui/material/transitions';
+import { forwardRef, useEffect, useState } from 'react';
 
 const Transition = forwardRef(function Transition(
     props: TransitionProps & {
@@ -28,7 +28,7 @@ export default function AlertDialogSlide(props: AlertDialogSlideProps) {
     const handleOkFunc = () => {
         setOpen(false);
         okFunc();
-    }
+    };
 
     const handleClose = () => {
         setOpen(false);
@@ -40,7 +40,7 @@ export default function AlertDialogSlide(props: AlertDialogSlideProps) {
         if (isOpen) {
             // mutate data if you need to
             setOpen(isOpen);
-        };
+        }
     }, [isOpen]);
 
     return (
@@ -54,13 +54,15 @@ export default function AlertDialogSlide(props: AlertDialogSlideProps) {
             >
                 <DialogTitle>{title}</DialogTitle>
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-slide-description">
-                        {content}
-                    </DialogContentText>
+                    <DialogContentText id="alert-dialog-slide-description">{content}</DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button variant="outlined" onClick={handleClose}>{noBtn}</Button>
-                    <Button variant="contained" onClick={handleOkFunc}>{okBtn}</Button>
+                    <Button variant="outlined" onClick={handleClose}>
+                        {noBtn}
+                    </Button>
+                    <Button variant="contained" onClick={handleOkFunc}>
+                        {okBtn}
+                    </Button>
                 </DialogActions>
             </Dialog>
         </div>

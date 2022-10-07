@@ -1,11 +1,7 @@
-import { Trans, useTranslation } from "react-i18next";
+import { Trans, useTranslation } from 'react-i18next';
 
 export default function DashBoard() {
-    const { t } = useTranslation()
+    const { t } = useTranslation();
 
-    return (
-        <div>
-            DASHBOARD
-        </div>
-    );
+    return <div>DASHBOARD</div>;
 }

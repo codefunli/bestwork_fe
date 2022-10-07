@@ -25,9 +25,9 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import { ErrorPagePath, UrlFeApp } from '../core/constants/common';
 import menuItemLinkData from '../core/constants/menu-item-link';
 import { isObjectEmpty } from '../core/utils/object-utils';
-import MLanguage from "../shared-components/language/m-language";
+import MLanguage from '../shared-components/language/m-language';
 import CollapsedBreadcrumbs from './collapsed-breadcrumbs';
-import { Trans, useTranslation } from "react-i18next";
+import { Trans, useTranslation } from 'react-i18next';
 
 const drawerWidth = 240;
 
@@ -83,22 +83,20 @@ const AppBar = styled(MuiAppBar, {
     }),
 }));
 
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
-    ({ theme, open }) => ({
-        width: drawerWidth,
-        flexShrink: 0,
-        whiteSpace: 'nowrap',
-        boxSizing: 'border-box',
-        ...(open && {
-            ...openedMixin(theme),
-            '& .MuiDrawer-paper': openedMixin(theme),
-        }),
-        ...(!open && {
-            ...closedMixin(theme),
-            '& .MuiDrawer-paper': closedMixin(theme),
-        }),
+const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
+    width: drawerWidth,
+    flexShrink: 0,
+    whiteSpace: 'nowrap',
+    boxSizing: 'border-box',
+    ...(open && {
+        ...openedMixin(theme),
+        '& .MuiDrawer-paper': openedMixin(theme),
     }),
-);
+    ...(!open && {
+        ...closedMixin(theme),
+        '& .MuiDrawer-paper': closedMixin(theme),
+    }),
+}));
 
 interface Props {
     /**
@@ -129,7 +127,7 @@ export default function MiniDrawer() {
         } else {
             navigate(ErrorPagePath.PAGE_404_NOT_FOUND);
         }
-    }
+    };
 
     useEffect(() => {
         navigate(UrlFeApp.DASH_BOARD);
@@ -137,22 +135,24 @@ export default function MiniDrawer() {
 
     return (
         <React.Fragment>
-            <Box sx={{
-                display: 'flex',
-                "&::-webkit-scrollbar": {
-                    width: 20
-                },
-                "&::-webkit-scrollbar-track": {
-                    backgroundColor: "orange"
-                },
-                "&::-webkit-scrollbar-thumb": {
-                    backgroundColor: "red",
-                    borderRadius: 2
-                }
-            }}>
+            <Box
+                sx={{
+                    display: 'flex',
+                    '&::-webkit-scrollbar': {
+                        width: 20,
+                    },
+                    '&::-webkit-scrollbar-track': {
+                        backgroundColor: 'orange',
+                    },
+                    '&::-webkit-scrollbar-thumb': {
+                        backgroundColor: 'red',
+                        borderRadius: 2,
+                    },
+                }}
+            >
                 <CssBaseline />
                 <AppBar position="fixed" open={open}>
-                    <div className='d-flex justify-content-between'>
+                    <div className="d-flex justify-content-between">
                         <Toolbar>
                             <IconButton
                                 color="inherit"

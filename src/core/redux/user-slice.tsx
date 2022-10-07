@@ -1,20 +1,20 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RoleUser } from "../types/user";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RoleUser } from '../types/user';
 
 export interface UserInfo {
-	id: number;
-	userId: string;
-	currentOrgId: number;
-	userName: string;
-	role: RoleUser;
-	email: string;
-	firstName: string;
-	lastName: string;
-	isDeleted: boolean;
-	createdDt: string;
-	createdPrgId: string;
-	updatedDt: string;
-	updatedPrgId: string;
+    id: number;
+    userId: string;
+    currentOrgId: number;
+    userName: string;
+    role: RoleUser;
+    email: string;
+    firstName: string;
+    lastName: string;
+    isDeleted: boolean;
+    createdDt: string;
+    createdPrgId: string;
+    updatedDt: string;
+    updatedPrgId: string;
 }
 
 interface initialUserState {
@@ -23,25 +23,25 @@ interface initialUserState {
     info: UserInfo;
 }
 
-const initialState : initialUserState = {
+const initialState: initialUserState = {
     isVerify: false,
     isLogged: false,
     info: {
         id: -1,
-		userId: '',
-		currentOrgId: -1,
-		userName: '',
-		role: RoleUser.ORG_USER,
-		email: '',
-		firstName: '',
-		lastName: '',
-		isDeleted: false,
-		createdDt: '',
-		createdPrgId: '',
-		updatedDt: '',
-		updatedPrgId: '',
-    }
-}
+        userId: '',
+        currentOrgId: -1,
+        userName: '',
+        role: RoleUser.ORG_USER,
+        email: '',
+        firstName: '',
+        lastName: '',
+        isDeleted: false,
+        createdDt: '',
+        createdPrgId: '',
+        updatedDt: '',
+        updatedPrgId: '',
+    },
+};
 
 export const userSlice = createSlice({
     name: 'user',
@@ -49,8 +49,8 @@ export const userSlice = createSlice({
     reducers: {
         setVerifyUser(state, action: PayloadAction<boolean>) {
             state.isVerify = action.payload;
-        }
-    }
+        },
+    },
 });
 
 export const userActions = userSlice.actions;
