@@ -22,3 +22,8 @@ export const putCompany = async (object: any) => {
     const res = await apiClient.put<DataResSuccess<CompanyResDTO[]>>(UrlServer.COMPANY.GET_COMPANIES, object);
     return res.data;
 };
+
+export const deleteCompanies = async (object: any) => {
+    const res = await apiClient.post<DataResSuccess<CompanyResDTO[]>>(UrlServer.COMPANY.DELETE, object);
+    return res.data;
+};

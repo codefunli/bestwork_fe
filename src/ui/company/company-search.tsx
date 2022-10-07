@@ -19,16 +19,20 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ConfirmConstants, UrlFeApp } from '../../core/constants/common';
 import { SUCCESS_MSG } from '../../core/constants/message';
 import { headCompanyCol } from '../../core/types/company';
-import { CompanyResDTO } from '../../models/company-res-dto';
-import { postCompany } from '../../services/company-service';
+import { deleteCompanies, getCompanies } from '../../services/company-service';
 import MessageShow from '../../shared-components/message/message';
 import AlertDialogSlide from '../../shared-components/modal/alert-dialog-slide';
 import EnhancedTable, { ArrayAction } from '../../shared-components/table-manager/table-data';
 import './company.scss';
 
 const initialValues = {
-    name: '',
-    address1: '',
+    companyName: '',
+    cpEmail: '',
+    cpTelNo: '',
+    taxNo: '',
+    page: 0,
+    size: 5,
+    sort: 'id, asc',
 };
 
 export default function CompanySearch() {
@@ -38,14 +42,16 @@ export default function CompanySearch() {
     const [typeCompanyMsg, setTypeCompanyMsg] = useState<AlertColor>('success');
     const [formValues, setFormValues] = useState(initialValues);
     const queryClient = useQueryClient();
-    const [state, setState] = useState<CompanyResDTO[]>([]);
+    const [state, setState] = useState<any>();
     const { t } = useTranslation();
+    const [ids, setIds] = useState({});
 
     const nativgate = useNavigate();
 
-    const { data, isLoading } = useQuery(['postCompany'], () => postCompany(formValues), {
+    const { data, isLoading } = useQuery(['getCompanies'], () => getCompanies(formValues), {
         staleTime: 10000,
         onSuccess: (company: any) => {
+            setState(company.data);
             company.data?.content?.forEach((companyEl: { id: any }) => {
                 queryClient.setQueryData(['companyEl', companyEl.id], companyEl);
             });
@@ -56,7 +62,7 @@ export default function CompanySearch() {
         // do some checking here to ensure data exist
         if (data && data.data && data.data.content) {
             // mutate data if you need to
-            setState(data.data?.content);
+            setState(data.data);
         }
         setIsShowMessage(false);
     }, [data]);
@@ -71,14 +77,47 @@ export default function CompanySearch() {
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
-        let data = await postCompany(formValues);
+        let data = await getCompanies(formValues);
         if (data && data.data && data.data.content) {
-            setState(data.data?.content);
+            setState(data.data);
         }
+    };
+    const fetchData = async (obj: any) => {
+        const resp = await getCompanies(obj);
+        if (resp && resp.data && resp.data.content) {
+            setState(resp.data);
+        }
+    };
+
+    const handleSearchCallBack = (childData: any) => {
+        fetchData({
+            ...formValues,
+            ...childData,
+        });
+        setFormValues({
+            ...formValues,
+            ...childData,
+        });
+    };
+
+    const handleMessage = (showMsg: boolean, msg: string, type: AlertColor) => {
+        setIsShowMessage(showMsg);
+        setCompanyMsg(msg);
+        setTypeCompanyMsg(type);
+    };
+
+    const handleDeleteCallBack = (childData: any) => {
+        setTypeCompanyMsg('success');
+        setCompanyMsg(SUCCESS_MSG.S01_004);
+        setIsOpenModal(true);
+        setIds(childData);
     };
 
     const handleClearData = (e: any) => {
         setFormValues({
+            ...initialValues,
+        });
+        fetchData({
             ...initialValues,
         });
     };
@@ -89,15 +128,22 @@ export default function CompanySearch() {
         nativgate(`${UrlFeApp.COMPANY.EDIT}/${id}`);
     };
 
-    const handleDeleteRecord = (e: any, id: number) => {
-        setTypeCompanyMsg('success');
-        setCompanyMsg(SUCCESS_MSG.S01_004);
-        setIsOpenModal(true);
+    const handleAddUser = (e: any, id: number) => {
+        alert('Add user function running...');
     };
 
     const alertOkFunc = () => {
-        setIsOpenModal(false);
-        setIsShowMessage(true);
+        deleteCompanies(ids)
+            .then((value) => {
+                setIsOpenModal(false);
+                setIsShowMessage(true);
+                fetchData({
+                    ...formValues,
+                });
+            })
+            .catch((err) => {
+                handleMessage(true, t('message.someThingWrong'), 'error');
+            });
     };
 
     const closeModal = () => {
@@ -111,14 +157,14 @@ export default function CompanySearch() {
 
     const arruBtton: ArrayAction[] = [
         {
-            nameFn: 'edit',
+            nameFn: t('tooltip.edit'),
             acFn: handleEditData,
             iconFn: 'ModeEditIcon',
         },
         {
-            nameFn: 'delete',
-            acFn: handleDeleteRecord,
-            iconFn: 'Delete',
+            nameFn: t('tooltip.addUser'),
+            acFn: handleAddUser,
+            iconFn: 'AddUser',
         },
     ];
 
@@ -156,7 +202,7 @@ export default function CompanySearch() {
             <form>
                 <Grid container direction="row" alignItems="center">
                     <Grid item xs={12} sx={{ mt: 1, mb: 1 }}>
-                        <Card w-full>
+                        <Card w-full="true">
                             <CardHeader
                                 avatar={<Avatar aria-label="recipe">SC</Avatar>}
                                 title={t('company.search.title')}
@@ -166,7 +212,9 @@ export default function CompanySearch() {
                                 <Box
                                     component="form"
                                     sx={{
-                                        '& > :not(style)': { m: 1 },
+                                        '& > :not(style)': {
+                                            m: 1,
+                                        },
                                     }}
                                     noValidate
                                     autoComplete="off"
@@ -179,12 +227,15 @@ export default function CompanySearch() {
                                             <TextField
                                                 size="small"
                                                 fullWidth
-                                                sx={{ mt: 1, mb: 1 }}
+                                                sx={{
+                                                    mt: 1,
+                                                    mb: 1,
+                                                }}
                                                 id="outlined-required"
                                                 label={t('common.nonRequired')}
                                                 placeholder={t('common.placeholder')}
-                                                name="name"
-                                                value={formValues.name}
+                                                name="companyName"
+                                                value={formValues.companyName}
                                                 onChange={handleInputChange}
                                             />
                                         </div>
@@ -194,11 +245,17 @@ export default function CompanySearch() {
                                             </InputLabel>
                                             <TextField
                                                 fullWidth
-                                                sx={{ mt: 1, mb: 1 }}
+                                                sx={{
+                                                    mt: 1,
+                                                    mb: 1,
+                                                }}
                                                 size="small"
                                                 id="outlined-required"
                                                 label={t('common.nonRequired')}
                                                 placeholder={t('common.placeholder')}
+                                                name={'cpEmail'}
+                                                value={formValues.cpEmail}
+                                                onChange={handleInputChange}
                                             />
                                         </div>
                                     </div>
@@ -210,10 +267,16 @@ export default function CompanySearch() {
                                             <TextField
                                                 size="small"
                                                 fullWidth
-                                                sx={{ mt: 1, mb: 1 }}
+                                                sx={{
+                                                    mt: 1,
+                                                    mb: 1,
+                                                }}
                                                 id="outlined-required"
                                                 label={t('common.nonRequired')}
                                                 placeholder={t('common.placeholder')}
+                                                name={'cpTelNo'}
+                                                value={formValues.cpTelNo}
+                                                onChange={handleInputChange}
                                             />
                                         </div>
                                         <div className="col-12 col-sm-6 d-block p-1">
@@ -223,10 +286,16 @@ export default function CompanySearch() {
                                             <TextField
                                                 size="small"
                                                 fullWidth
-                                                sx={{ mt: 1, mb: 1 }}
+                                                sx={{
+                                                    mt: 1,
+                                                    mb: 1,
+                                                }}
                                                 id="outlined-required"
                                                 label={t('common.nonRequired')}
                                                 placeholder={t('common.placeholder')}
+                                                name={'taxNo'}
+                                                value={formValues.taxNo}
+                                                onChange={handleInputChange}
                                             />
                                         </div>
                                     </div>
@@ -237,7 +306,10 @@ export default function CompanySearch() {
                                             aria-label="Disabled elevation buttons"
                                         >
                                             <Button
-                                                sx={{ mr: 1, textTransform: 'uppercase' }}
+                                                sx={{
+                                                    mr: 1,
+                                                    textTransform: 'uppercase',
+                                                }}
                                                 size="small"
                                                 variant="contained"
                                                 onClick={handleSubmit}
@@ -245,7 +317,9 @@ export default function CompanySearch() {
                                                 {t('button.btnSearch')}
                                             </Button>
                                             <Button
-                                                sx={{ textTransform: 'uppercase' }}
+                                                sx={{
+                                                    textTransform: 'uppercase',
+                                                }}
                                                 onClick={handleClearData}
                                                 variant="outlined"
                                             >
@@ -260,18 +334,28 @@ export default function CompanySearch() {
                 </Grid>
             </form>
 
-            <EnhancedTable headCells={headCompanyCol} rows={state} isLoading={isLoading} arrButton={arruBtton} />
+            <EnhancedTable
+                deleteCallBack={handleDeleteCallBack}
+                searchCallBack={handleSearchCallBack}
+                headCells={headCompanyCol}
+                rows={
+                    state || {
+                        content: [],
+                    }
+                }
+                isLoading={isLoading}
+                arrButton={arruBtton}
+            />
 
             <AlertDialogSlide
                 isOpen={isOpenModal}
                 closeFunc={closeModal}
                 okFunc={alertOkFunc}
-                title={ConfirmConstants.DELETE.title}
-                content={ConfirmConstants.DELETE.content}
-                noBtn={ConfirmConstants.NO_BTN}
-                okBtn={ConfirmConstants.OK_BTN}
+                title={t(ConfirmConstants.DELETE.title)}
+                content={t(ConfirmConstants.DELETE.content)}
+                noBtn={t(ConfirmConstants.NO_BTN)}
+                okBtn={t(ConfirmConstants.OK_BTN)}
             />
-
             <MessageShow
                 message={companyMsg}
                 showMessage={isShowMessage}

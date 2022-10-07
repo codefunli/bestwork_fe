@@ -13,6 +13,7 @@ interface EnhancedTableProps {
     orderBy: string;
     rowCount: number;
     onSelectAllProps: Function;
+    sortCallBack: Function;
 }
 
 export function EnhancedTableHead(props: EnhancedTableProps) {
@@ -21,6 +22,10 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
         onSelectAllProps(event);
     };
     const { t } = useTranslation();
+
+    const createSortHandler = (id: string) => {
+        props.sortCallBack(id);
+    };
 
     return (
         <TableHead>
@@ -47,7 +52,7 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
                         <TableSortLabel
                             active={orderBy === headCell.id}
                             direction={orderBy === headCell.id ? order : 'asc'}
-                            //onClick={createSortHandler(headCell.id)}
+                            onClick={() => createSortHandler(headCell.id)}
                         >
                             {t(headCell.label as string)}
                         </TableSortLabel>
