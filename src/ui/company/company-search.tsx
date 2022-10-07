@@ -129,7 +129,7 @@ export default function CompanySearch() {
     };
 
     const handleAddUser = (e: any, id: number) => {
-        alert('Add user function running...');
+        alert('Add user func running...');
     };
 
     const alertOkFunc = () => {
