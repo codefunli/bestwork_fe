@@ -70,5 +70,13 @@
     },
     "message": {
         "required": "is required."
+    },
+    "bread_crumbs":{
+        "home": "Home",
+        "company": "Company",
+        "user": "User",
+        "dashboard": "Dashboard",
+        "register": "Register",
+        "edit": "Edit"
     }
 }

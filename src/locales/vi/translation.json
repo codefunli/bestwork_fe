@@ -72,5 +72,13 @@
     },
     "message": {
         "required": "là bắt buộc."
+    },
+    "bread_crumbs":{
+        "home": "Trang chủ",
+        "company": "Công ty",
+        "user": "Người dùng",
+        "dashboard": "Bảng điều khiển",
+        "register": "Đăng kí",
+        "edit": "Chỉnh sửa"
     }
 }
