@@ -19,22 +19,23 @@ export const UrlFeApp = {
     MAIN_APP: '/app',
     DASH_BOARD: '/app/dashboard',
     COMPANY: {
-        SEARCH: "/app/company",
-        CREATE: "/app/company/register",
-        EDIT: "/app/company/edit",
-        EDIT_HAS_ID: "/app/company/edit/:id",
+        SEARCH: '/app/company',
+        CREATE: '/app/company/register',
+        EDIT: '/app/company/edit',
+        EDIT_HAS_ID: '/app/company/edit/:id',
     },
     USER: {
-        SEARCH: "/app/user",
-        INFO: "/app/user",
-    }
-}
+        SEARCH: '/app/user',
+        INFO: '/app/user',
+    },
+};
 
 export const UrlServer = {
     API_LOGIN_URL: '/login',
     COMPANY: {
         GET_COMPANIES: '/bestwork/api/v1/companies',
         POST: '/bestwork/api/v1/companies/create',
+        DELETE: '/bestwork/api/v1/companies/delete',
     },
 };
 
@@ -52,9 +53,9 @@ export const FieldConstants = {
 
 export const ConfirmConstants = {
     DELETE: {
-        title: 'DELETE',
-        content: 'Are you certain that you want to delete this record!',
+        title: 'title.delete',
+        content: 'message.delete',
     },
-    OK_BTN: 'OK',
-    NO_BTN: 'NO',
+    OK_BTN: 'button.btnOk',
+    NO_BTN: 'button.btnNo',
 };

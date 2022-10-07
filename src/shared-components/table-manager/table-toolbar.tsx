@@ -1,6 +1,7 @@
 import { IconButton, Toolbar, Tooltip, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { alpha } from '@mui/material/styles';
+import { useTranslation } from 'react-i18next';
 
 interface EnhancedTableToolbarProps {
     numSelected: number;
@@ -9,6 +10,7 @@ interface EnhancedTableToolbarProps {
 
 export const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
     const { numSelected, deleteRecordBySelected } = props;
+    const { t } = useTranslation();
     const deleteRecord = () => {
         deleteRecordBySelected();
     };
@@ -24,11 +26,11 @@ export const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
         >
             {numSelected > 0 ? (
                 <Typography sx={{ flex: '1 1 100%' }} color="inherit" variant="subtitle1" component="div">
-                    {numSelected} selected
+                    {numSelected} {t('message.selected')}
                 </Typography>
             ) : (
                 <Typography sx={{ flex: '1 1 100%' }} variant="h6" id="tableTitle" component="div">
-                    DATA
+                    {t('message.data')}
                 </Typography>
             )}
             {numSelected > 0 ? (

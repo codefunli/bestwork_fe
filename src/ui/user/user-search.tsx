@@ -88,13 +88,13 @@ export default function UserSearch() {
     const handleEditData = (e: any, id: number) => {
         e.preventDefault();
         navigate(`${UrlFeApp.USER.INFO}/${id}`);
-    }
+    };
 
     // miss pass id with url
     const handleEditData2 = (e: any, id: number) => {
         e.preventDefault();
         navigate(`${UrlFeApp.USER.INFO}/${id}`);
-    }
+    };
 
     const arrButton: ArrayAction[] = [
         {
@@ -109,10 +109,18 @@ export default function UserSearch() {
         },
     ];
 
+    const handleSearchCallBack = (childData: any) => {
+        console.log(childData);
+    };
+
+    const handleDeleteCallBack = (childData: any) => {
+        console.log(childData);
+    };
+
     return (
         <div>
             <button onClick={(e) => handleEditData(e, 1)}>Info</button>
-            <div className='row'>
+            <div className="row">
                 <div className="col-sm-12 col-md-6 text-start d-none d-lg-block">
                     <Typography variant="h5" color="textSecondary" gutterBottom>
                         COMPANY SEARCH
@@ -222,7 +230,14 @@ export default function UserSearch() {
                 </Grid>
             </form>
             {state !== undefined && state.length > 0 && (
-                <EnhancedTable headCells={headUserCol} rows={state} isLoading={isLoading} arrButton={arrButton} />
+                <EnhancedTable
+                    deleteCallBack={handleDeleteCallBack}
+                    searchCallBack={handleSearchCallBack}
+                    headCells={headUserCol}
+                    rows={state}
+                    isLoading={isLoading}
+                    arrButton={arrButton}
+                />
             )}
         </div>
     );
