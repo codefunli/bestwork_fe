@@ -58,9 +58,9 @@
         "btnClear": "Clear",
         "btnSave": "Save",
         "btnDelete": "Delete",
-        "btnCancel": "Cancel",
         "btnNo": "NO",
-        "btnOk": "Ok"
+        "btnOk": "Ok",
+        "btnBack": "Back"
     },
     "common": {
         "placeholder": "Please input a new value",

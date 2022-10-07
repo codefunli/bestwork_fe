@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Button, ButtonGroup, Card, CardContent, FormControlLabel, Grid, InputLabel, Radio, RadioGroup, Switch, TextField, Typography } from '@mui/material';
+import { Button, ButtonGroup, Card, CardContent, FormControlLabel, Grid, InputLabel, Radio, RadioGroup, Switch, TextField, Typography, AlertColor } from '@mui/material';
 import { Box } from '@mui/system';
 import { useTranslation } from 'react-i18next';
 import { UserResDto } from '../../models/user-res-dto';
-import { getUserInfo } from '../../services/user-service';
+import { getUser, putUser } from '../../services/user-service';
 import { UrlFeApp } from '../../core/constants/common';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { validateForm } from '../../core/constants/validate';
+import { validateUserForm } from '../../core/constants/validate';
 import LocalSeeIcon from '@mui/icons-material/LocalSee';
+import MessageShow from '../../shared-components/message/message';
 import "./user.scss";
 
 const initialValues: UserResDto = {
@@ -35,31 +36,57 @@ export default function UserInfo() {
     const { t } = useTranslation();
 
     const [formValues, setFormValues] = useState(initialValues);
-    const [imgData, setImgData] = useState("https://scontent.fdad3-4.fna.fbcdn.net/v/t1.6435-9/82387386_3107327976158024_841015533552795648_n.jpg?stp=dst-jpg_s1080x2048&_nc_cat=111&ccb=1-7&_nc_sid=454319&_nc_ohc=07KAinhqPpEAX-ckh3f&_nc_ht=scontent.fdad3-4.fna&oh=00_AT_1j38NHBWL_Zvp6F2vfoDd8wWjWh3mfmc9A7MOGq95FA&oe=6363B991");
+    const [imgData, setImgData] = useState('/default-avatar.png');
+
+    const [userMsg, setUserMsg] = useState('');
+    const [userMsgType, setUserMsgType] = useState<AlertColor>('success');
+    const [isShowMsg, setIsShowMsg] = useState(false);
 
     const {
         register,
-        handleSubmit,
         reset,
-        formState: { errors },
+        handleSubmit,
+        formState: { errors, isSubmitting },
     } = useForm({
-        resolver: yupResolver(validateForm),
+        resolver: yupResolver(validateUserForm),
     });
 
     useEffect(() => {
         const fetchUserInfo = async () => {
-            const data = await getUserInfo(userId);
+            const data = await getUser(userId);
 
             if (data && data.data) {
                 setFormValues(data.data);
+                reset();
             };
         }
 
         fetchUserInfo();
-    }, [userId]);
+    }, [reset, userId]);
 
-    const handleCancelChange = (e: any) => {
+    const handleCancelChange = () => {
         navigate(`${UrlFeApp.USER.SEARCH}`);
+    };
+
+    const handleMessage = (showMsg: boolean, msg: string, type: AlertColor) => {
+        setIsShowMsg(showMsg);
+        setUserMsg(msg);
+        setUserMsgType(type);
+    };
+
+    const handleResponse = (res: any) => {
+        switch (res.status) {
+            case 'OK':
+                handleMessage(true, res.message, "success");
+                navigate(UrlFeApp.USER.SEARCH);
+                break;
+            case 'ERROR':
+                handleMessage(true, res.message, 'error');
+                break;
+            default:
+                handleMessage(true, res.message, 'warning');
+                break;
+        }
     };
 
     const handleInputChange = (e: any) => {
@@ -78,20 +105,27 @@ export default function UserInfo() {
         });
     };
 
-    const handleSubmitChange = (e: any) => {
-        e.preventDefault();
-        console.log(formValues);
+    const handleSubmitForm = () => {
+        putUser(userId, formValues).then((res) => {
+            handleResponse(res);
+        }).catch((err) => {
+            handleMessage(true, err.message, 'error');
+        });
     };
 
-    const onChangePicture = (e: any) => {
+    const onChangeAvatar = (e: any) => {
         if (e.target.files[0]) {
-            console.log("picture: ", e.target.files);
+            // console.log("picture: ", e.target.files[0]);
             const reader: any = new FileReader();
             reader.addEventListener("load", () => {
                 setImgData(reader.result);
             });
             reader.readAsDataURL(e.target.files[0]);
         }
+    };
+
+    const handleCloseMsg = () => {
+        setIsShowMsg(false);
     };
 
     return (
@@ -103,13 +137,13 @@ export default function UserInfo() {
                     </Typography>
                 </div>
             </div>
-            <form onSubmit={handleSubmitChange}>
+            <form>
                 <Grid
                     container
                     direction="row"
                     spacing={3}
                 >
-                    <Grid item xs={12} md={3} sx={{ mt: 1, mb: 1 }}>
+                    <Grid item xs={12} md={5} lg={3} sx={{ mt: 1, mb: 1 }}>
                         <Card className="general-info">
                             <label htmlFor="chosen-avatar" className="avatar">
                                 <img
@@ -125,7 +159,7 @@ export default function UserInfo() {
                                 id="chosen-avatar"
                                 type="file"
                                 hidden
-                                onChange={onChangePicture}
+                                onChange={onChangeAvatar}
                             />
                             <CardContent className="info">
                                 <Typography gutterBottom variant="h5" component="div">
@@ -137,7 +171,7 @@ export default function UserInfo() {
                             </CardContent>
                         </Card>
                     </Grid>
-                    <Grid item xs={12} md={9} sx={{ mt: 1, mb: 1 }}>
+                    <Grid item xs={12} md={7} lg={9} sx={{ mt: 1, mb: 1 }}>
                         <Card>
                             <CardContent>
                                 <Box
@@ -164,9 +198,12 @@ export default function UserInfo() {
                                                 id="userNm"
                                                 label=""
                                                 placeholder="Please input your username"
-                                                name="userNm"
                                                 value={formValues.userNm}
-                                                onChange={handleInputChange}
+                                                error={Boolean(errors.userNm)}
+                                                helperText={t(errors.userNm?.message?.toString() as string)}
+                                                {...register('userNm', {
+                                                    onChange: (e) => handleInputChange(e),
+                                                })}
                                             />
                                         </div>
                                         <div className='col-12 col-sm-6 d-block p-1'>
@@ -184,9 +221,12 @@ export default function UserInfo() {
                                                 id="email"
                                                 label=""
                                                 placeholder="Please input your username"
-                                                name="email"
                                                 value={formValues.email}
-                                                onChange={handleInputChange}
+                                                error={Boolean(errors.email)}
+                                                helperText={t(errors.email?.message?.toString() as string)}
+                                                {...register('email', {
+                                                    onChange: (e) => handleInputChange(e),
+                                                })}
                                             />
                                         </div>
                                     </div>
@@ -206,9 +246,12 @@ export default function UserInfo() {
                                                 id="firstNm"
                                                 label=""
                                                 placeholder="Please input your username"
-                                                name="firstNm"
                                                 value={formValues.firstNm}
-                                                onChange={handleInputChange}
+                                                error={Boolean(errors.firstNm)}
+                                                helperText={t(errors.firstNm?.message?.toString() as string)}
+                                                {...register('firstNm', {
+                                                    onChange: (e) => handleInputChange(e),
+                                                })}
                                             />
                                         </div>
                                         <div className='col-12 col-sm-6 d-block p-1'>
@@ -226,9 +269,12 @@ export default function UserInfo() {
                                                 id="lastNm"
                                                 label=""
                                                 placeholder="Please input your username"
-                                                name="lastNm"
                                                 value={formValues.lastNm}
-                                                onChange={handleInputChange}
+                                                error={Boolean(errors.lastNm)}
+                                                helperText={t(errors.lastNm?.message?.toString() as string)}
+                                                {...register('lastNm', {
+                                                    onChange: (e) => handleInputChange(e),
+                                                })}
                                             />
                                         </div>
                                     </div>
@@ -248,9 +294,12 @@ export default function UserInfo() {
                                                 id="currentCompanyId"
                                                 label=""
                                                 placeholder="Please input your username"
-                                                name="currentCompanyId"
                                                 value={formValues.currentCompanyId}
-                                                onChange={handleInputChange}
+                                                error={Boolean(errors.currentCompanyId)}
+                                                helperText={t(errors.currentCompanyId?.message?.toString() as string)}
+                                                {...register('currentCompanyId', {
+                                                    onChange: (e) => handleInputChange(e),
+                                                })}
                                             />
                                         </div>
                                         <div className='col-12 col-sm-6 d-block p-1'>
@@ -267,10 +316,9 @@ export default function UserInfo() {
                                                 required
                                                 id="countLoginFailed"
                                                 label=""
-                                                placeholder="Please input your username"
+                                                placeholder=""
                                                 name="countLoginFailed"
                                                 value={formValues.countLoginFailed}
-                                                onChange={handleInputChange}
                                                 disabled
                                             />
                                         </div>
@@ -325,14 +373,27 @@ export default function UserInfo() {
                                             />
                                         </div>
                                     </div>
-                                    <div className='text-center justify-center m-1'>
+                                    <div className='text-center justify-center mt-4'>
                                         <ButtonGroup
                                             disableElevation
                                             variant="contained"
                                             aria-label="Disabled elevation buttons"
                                         >
-                                            <Button sx={{ mr: 1 }} size="small" variant="contained" type="submit">{t("button.btnSave")}</Button>
-                                            <Button onClick={handleCancelChange} variant="outlined">{t("button.btnCancel")}</Button>
+                                            <Button
+                                                sx={{ mr: 1 }}
+                                                size="small"
+                                                variant="contained"
+                                                disabled={isSubmitting}
+                                                onClick={handleSubmit(handleSubmitForm)}
+                                            >
+                                                {t("button.btnSave")}
+                                            </Button>
+                                            <Button
+                                                onClick={handleCancelChange}
+                                                variant="outlined"
+                                            >
+                                                {t("button.btnBack")}
+                                            </Button>
                                         </ButtonGroup>
                                     </div>
                                 </Box>
@@ -341,6 +402,12 @@ export default function UserInfo() {
                     </Grid>
                 </Grid>
             </form>
+            <MessageShow
+                message={userMsg}
+                showMessage={isShowMsg}
+                type={userMsgType}
+                handleCloseMsg={handleCloseMsg}
+            />
         </div>
     );
 };

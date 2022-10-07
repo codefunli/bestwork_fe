@@ -58,9 +58,9 @@
         "btnClear": "Xóa thông tin",
         "btnSave": "Cập nhật",
         "btnDelete": "Xóa",
-        "btnCancel": "Huỷ",
         "btnNo": "Hủy",
-        "btnOk": "Đồng ý"
+        "btnOk": "Đồng ý",
+        "btnBack": "Quay lại"
     },
     "common": {
         "placeholder": "Nhập một giá trị mới",
