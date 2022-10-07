@@ -1,4 +1,4 @@
 export interface BaseDTO {
-	id: number;
-	version: number;
+    id: number;
+    version: number;
 }

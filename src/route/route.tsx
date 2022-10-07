@@ -1,6 +1,6 @@
 import { lazy } from 'react';
 import { UrlFeApp } from '../core/constants/common';
-import { RouteObject, useRoutes } from "react-router-dom";
+import { RouteObject, useRoutes } from 'react-router-dom';
 
 import CompanyEdit from '../ui/company/company-edit';
 import AuthComponent from '../components/auth-component';
@@ -12,10 +12,10 @@ const CompanyRegister = lazy(() => import('../ui/company/company-register'));
 const CompanySearch = lazy(() => import('../ui/company/company-search'));
 const UserSearch = lazy(() => import('../ui/user/user-search'));
 
-const listRouter : RouteObject[] = [
+const listRouter: RouteObject[] = [
     {
         path: UrlFeApp.MAIN_APP,
-        element: <MainApp/>,
+        element: <MainApp />,
         children: [
             {
                 path: UrlFeApp.DASH_BOARD,
@@ -30,27 +30,27 @@ const listRouter : RouteObject[] = [
                 element: <CompanyRegister />,
             },
             {
-                path:UrlFeApp.COMPANY.EDIT_HAS_ID,
+                path: UrlFeApp.COMPANY.EDIT_HAS_ID,
                 element: <CompanyEdit />,
             },
             {
-                path:UrlFeApp.USER.SEACH,
+                path: UrlFeApp.USER.SEACH,
                 element: <UserSearch />,
-            }
+            },
         ],
     },
     {
         path: '/',
-        element: <AuthComponent/>,
+        element: <AuthComponent />,
         children: [
             {
                 path: UrlFeApp.LOGIN_URL,
                 element: <Login />,
-            }
+            },
         ],
     },
-]
+];
 export default function RenderRouter() {
-	let element = useRoutes(listRouter);
-	return element;
+    let element = useRoutes(listRouter);
+    return element;
 }
