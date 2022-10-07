@@ -17,7 +17,7 @@ import { EnhancedTableToolbar } from './table-toolbar';
 import DeleteIcon from '@mui/icons-material/Delete';
 import './table-data.scss';
 import { useTranslation } from 'react-i18next';
-import AddIcon from '@mui/icons-material/Add';
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 
 export interface ArrayAction {
     nameFn: string;
@@ -118,7 +118,7 @@ export default function EnhancedTable(props: EnhancedTable) {
             case 'ModeEditIcon':
                 return <ModeEditIcon />;
             case 'AddUser':
-                return <AddIcon />;
+                return <PersonAddAlt1Icon />;
             default:
                 break;
         }
