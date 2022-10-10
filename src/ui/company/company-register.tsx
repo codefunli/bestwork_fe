@@ -168,8 +168,8 @@ export default function CompanyRegister() {
 
     const handleResponse = (resp: any) => {
         switch (resp.status) {
-            case "OK":
-                handleMessage(true, resp.message, "success");
+            case 'OK':
+                handleMessage(true, resp.message, 'success');
                 navigate(UrlFeApp.COMPANY.SEARCH);
                 break;
             case 'ERROR':
@@ -208,7 +208,7 @@ export default function CompanyRegister() {
                     {t('register.title')}
                     <Divider />
                 </Typography>
-                <Grid container spacing={3}>
+                <Grid container>
                     <Card style={{ width: '100%' }}>
                         <Grid container spacing={3}>
                             <Grid item xs={12} lg={6}>
@@ -237,16 +237,22 @@ export default function CompanyRegister() {
                                                     htmlFor="outlined-adornment-amount"
                                                     error={Boolean(errors.companyName)}
                                                 >
-                                                    {t('register.company.name')}:
+                                                    {t('register.company.name')}
+                                                    <span className="input-required">*</span>
                                                 </InputLabel>
                                                 <TextField
                                                     size="small"
                                                     value={formValues.company.companyName}
                                                     fullWidth
-                                                    sx={{ mt: 1, mb: 1 }}
                                                     required
+                                                    sx={{
+                                                        mt: 1,
+                                                        mb: 1,
+                                                        '& legend': { display: 'none' },
+                                                        '& fieldset': { top: 0 },
+                                                    }}
+                                                    label=""
                                                     id="outlined-required"
-                                                    label={t('common.required')}
                                                     placeholder={t('common.placeholder')}
                                                     error={Boolean(errors.companyName)}
                                                     helperText={t(errors.companyName?.message?.toString() as string)}
@@ -260,16 +266,22 @@ export default function CompanyRegister() {
                                                     htmlFor="outlined-adornment-amount"
                                                     error={Boolean(errors.cpEmail)}
                                                 >
-                                                    {t('register.company.email')}:
+                                                    {t('register.company.email')}
+                                                    <span className="input-required">*</span>
                                                 </InputLabel>
                                                 <TextField
                                                     size="small"
                                                     value={formValues.company.cpEmail}
                                                     fullWidth
-                                                    sx={{ mt: 1, mb: 1 }}
                                                     required
                                                     id="outlined-required"
-                                                    label={t('common.required')}
+                                                    sx={{
+                                                        mt: 1,
+                                                        mb: 1,
+                                                        '& legend': { display: 'none' },
+                                                        '& fieldset': { top: 0 },
+                                                    }}
+                                                    label=""
                                                     placeholder={t('common.placeholder')}
                                                     error={Boolean(errors.cpEmail)}
                                                     helperText={errors.cpEmail?.message?.toString()}
@@ -285,16 +297,22 @@ export default function CompanyRegister() {
                                                     htmlFor="outlined-adornment-amount"
                                                     error={Boolean(errors.cpTelNo)}
                                                 >
-                                                    {t('register.company.telNo')}:
+                                                    {t('register.company.telNo')}
+                                                    <span className="input-required">*</span>
                                                 </InputLabel>
                                                 <TextField
                                                     size="small"
                                                     value={formValues.company.cpTelNo}
                                                     fullWidth
                                                     required
-                                                    sx={{ mt: 1, mb: 1 }}
                                                     id="outlined-required"
-                                                    label={t('common.required')}
+                                                    sx={{
+                                                        mt: 1,
+                                                        mb: 1,
+                                                        '& legend': { display: 'none' },
+                                                        '& fieldset': { top: 0 },
+                                                    }}
+                                                    label=""
                                                     placeholder={t('common.placeholder')}
                                                     error={Boolean(errors.cpTelNo)}
                                                     helperText={errors.cpTelNo?.message?.toString()}
@@ -308,16 +326,22 @@ export default function CompanyRegister() {
                                                     htmlFor="outlined-adornment-amount"
                                                     error={Boolean(errors.taxNo)}
                                                 >
-                                                    {t('register.company.taxNo')}:
+                                                    {t('register.company.taxNo')}
+                                                    <span className="input-required">*</span>
                                                 </InputLabel>
                                                 <TextField
                                                     size="small"
                                                     value={formValues.company.taxNo}
                                                     fullWidth
-                                                    sx={{ mt: 1, mb: 1 }}
                                                     required
                                                     id="outlined-required"
-                                                    label={t('common.required')}
+                                                    sx={{
+                                                        mt: 1,
+                                                        mb: 1,
+                                                        '& legend': { display: 'none' },
+                                                        '& fieldset': { top: 0 },
+                                                    }}
+                                                    label=""
                                                     placeholder={t('common.placeholder')}
                                                     error={Boolean(errors.taxNo)}
                                                     helperText={errors.taxNo?.message?.toString()}
@@ -338,19 +362,16 @@ export default function CompanyRegister() {
                                                     sx={{ mt: 1, mb: 1 }}
                                                     variant="outlined"
                                                 >
-                                                    <InputLabel id="demo-simple-select-outlined-label">
-                                                        {t('common.nonRequired')}
-                                                    </InputLabel>
                                                     <Select
                                                         labelId="demo-simple-select-outlined-label"
                                                         id="demo-simple-select-outlined"
                                                         name="city"
+                                                        displayEmpty
                                                         value={formValues.company.city}
                                                         onChange={handleCityChange}
-                                                        label={t('common.nonRequired')}
                                                     >
-                                                        <MenuItem value="">
-                                                            <em>{t('common.none')}</em>
+                                                        <MenuItem value="" selected={true} disabled>
+                                                            <em>{t('message.cityLabel')}</em>
                                                         </MenuItem>
                                                         {Object.values(cities).map((city) => (
                                                             <MenuItem value={city.code}>{city.name}</MenuItem>
@@ -368,19 +389,16 @@ export default function CompanyRegister() {
                                                     sx={{ mt: 1, mb: 1 }}
                                                     variant="outlined"
                                                 >
-                                                    <InputLabel id="demo-simple-select-outlined-label">
-                                                        {t('common.nonRequired')}
-                                                    </InputLabel>
                                                     <Select
                                                         labelId="demo-simple-select-outlined-label"
                                                         id="demo-simple-select-outlined"
                                                         name="district"
+                                                        displayEmpty
                                                         value={formValues.company.district}
                                                         onChange={handleDistrictChange}
-                                                        label={t('common.nonRequired')}
                                                     >
                                                         <MenuItem value="">
-                                                            <em>{t('common.none')}</em>
+                                                            <em>{t('message.districtLabel')}</em>
                                                         </MenuItem>
                                                         {districts.map((dis) => (
                                                             <MenuItem value={dis.code}>{dis.name}</MenuItem>
@@ -400,19 +418,16 @@ export default function CompanyRegister() {
                                                     sx={{ mt: 1, mb: 1 }}
                                                     variant="outlined"
                                                 >
-                                                    <InputLabel id="demo-simple-select-outlined-label">
-                                                        {t('common.nonRequired')}
-                                                    </InputLabel>
                                                     <Select
                                                         labelId="demo-simple-select-outlined-label"
                                                         id="demo-simple-select-outlined"
                                                         name="ward"
+                                                        displayEmpty
                                                         value={formValues.company.ward}
                                                         onChange={handleWardChange}
-                                                        label={t('common.nonRequired')}
                                                     >
                                                         <MenuItem value="">
-                                                            <em>{t('common.nonRequired')}</em>
+                                                            <em>{t('message.wardLabel')}</em>
                                                         </MenuItem>
                                                         {wards.map((ward) => (
                                                             <MenuItem value={ward.code}>{ward.name}</MenuItem>
@@ -430,7 +445,6 @@ export default function CompanyRegister() {
                                                     fullWidth
                                                     sx={{ mt: 1, mb: 1 }}
                                                     id="outlined-required"
-                                                    label={t('common.nonRequired')}
                                                     placeholder={t('common.placeholder')}
                                                     onChange={handleInputChange}
                                                 />
@@ -449,7 +463,6 @@ export default function CompanyRegister() {
                                                     sx={{ mt: 1, mb: 1 }}
                                                     value={formValues.company.startDate}
                                                     id="dateStart"
-                                                    label={t('common.start')}
                                                     type="datetime-local"
                                                     defaultValue="2017-05-23T10:30"
                                                     InputLabelProps={{
@@ -474,7 +487,6 @@ export default function CompanyRegister() {
                                                     sx={{ mt: 1, mb: 1 }}
                                                     value={formValues.company.expiredDate}
                                                     id="dateEnd"
-                                                    label={t('common.end')}
                                                     type="datetime-local"
                                                     defaultValue="2017-05-24T10:30"
                                                     InputLabelProps={{
@@ -517,16 +529,21 @@ export default function CompanyRegister() {
                                                     htmlFor="outlined-adornment-amount"
                                                     error={Boolean(errors.userName)}
                                                 >
-                                                    {t('register.user.userName')}:
+                                                    {t('register.user.userName')}
+                                                    <span className="input-required">*</span>
                                                 </InputLabel>
                                                 <TextField
                                                     value={formValues.user.userName}
                                                     size="small"
                                                     fullWidth
-                                                    sx={{ mt: 1, mb: 1 }}
+                                                    sx={{
+                                                        mt: 1,
+                                                        mb: 1,
+                                                        '& legend': { display: 'none' },
+                                                        '& fieldset': { top: 0 },
+                                                    }}
                                                     required
                                                     id="outlined-required"
-                                                    label={t('common.required')}
                                                     placeholder={t('common.placeholder')}
                                                     error={Boolean(errors.userName)}
                                                     helperText={errors.userName?.message?.toString()}
@@ -540,17 +557,22 @@ export default function CompanyRegister() {
                                                     htmlFor="outlined-adornment-amount"
                                                     error={Boolean(errors.password)}
                                                 >
-                                                    {t('register.user.password')}:
+                                                    {t('register.user.password')}
+                                                    <span className="input-required">*</span>
                                                 </InputLabel>
                                                 <TextField
                                                     type={'password'}
                                                     value={formValues.user.password}
                                                     size="small"
                                                     fullWidth
-                                                    sx={{ mt: 1, mb: 1 }}
+                                                    sx={{
+                                                        mt: 1,
+                                                        mb: 1,
+                                                        '& legend': { display: 'none' },
+                                                        '& fieldset': { top: 0 },
+                                                    }}
                                                     required
                                                     id="outlined-required"
-                                                    label={t('common.required')}
                                                     placeholder={t('common.placeholder')}
                                                     error={Boolean(errors.password)}
                                                     helperText={errors.password?.message?.toString()}
@@ -570,9 +592,13 @@ export default function CompanyRegister() {
                                                     value={formValues.user.firstName}
                                                     size="small"
                                                     fullWidth
-                                                    sx={{ mt: 1, mb: 1 }}
+                                                    sx={{
+                                                        mt: 1,
+                                                        mb: 1,
+                                                        '& legend': { display: 'none' },
+                                                        '& fieldset': { top: 0 },
+                                                    }}
                                                     id="outlined-required"
-                                                    label={t('common.nonRequired')}
                                                     placeholder={t('common.placeholder')}
                                                     onChange={handleInputChange}
                                                 />
@@ -586,9 +612,13 @@ export default function CompanyRegister() {
                                                     value={formValues.user.lastName}
                                                     size="small"
                                                     fullWidth
-                                                    sx={{ mt: 1, mb: 1 }}
+                                                    sx={{
+                                                        mt: 1,
+                                                        mb: 1,
+                                                        '& legend': { display: 'none' },
+                                                        '& fieldset': { top: 0 },
+                                                    }}
                                                     id="outlined-required"
-                                                    label={t('common.nonRequired')}
                                                     placeholder={t('common.placeholder')}
                                                     onChange={handleInputChange}
                                                 />
@@ -600,16 +630,21 @@ export default function CompanyRegister() {
                                                     htmlFor="outlined-adornment-amount"
                                                     error={Boolean(errors.uTelNo)}
                                                 >
-                                                    {t('register.user.telNo')}:
+                                                    {t('register.user.telNo')}
+                                                    <span className="input-required">*</span>
                                                 </InputLabel>
                                                 <TextField
                                                     value={formValues.user.uTelNo}
                                                     size="small"
                                                     fullWidth
-                                                    sx={{ mt: 1, mb: 1 }}
+                                                    sx={{
+                                                        mt: 1,
+                                                        mb: 1,
+                                                        '& legend': { display: 'none' },
+                                                        '& fieldset': { top: 0 },
+                                                    }}
                                                     id="outlined-required"
                                                     required
-                                                    label={t('common.required')}
                                                     placeholder={t('common.placeholder')}
                                                     error={Boolean(errors.uTelNo)}
                                                     helperText={errors.uTelNo?.message?.toString()}
@@ -625,15 +660,20 @@ export default function CompanyRegister() {
                                                     htmlFor="outlined-adornment-amount"
                                                     error={Boolean(errors.uEmail)}
                                                 >
-                                                    {t('register.user.email')}:
+                                                    {t('register.user.email')}
+                                                    <span className="input-required">*</span>
                                                 </InputLabel>
                                                 <TextField
                                                     value={formValues.user.uEmail}
                                                     size="small"
                                                     fullWidth
-                                                    sx={{ mt: 1, mb: 1 }}
+                                                    sx={{
+                                                        mt: 1,
+                                                        mb: 1,
+                                                        '& legend': { display: 'none' },
+                                                        '& fieldset': { top: 0 },
+                                                    }}
                                                     id="outlined-required"
-                                                    label={t('common.required')}
                                                     placeholder={t('common.placeholder')}
                                                     error={Boolean(errors.uEmail)}
                                                     helperText={errors.uEmail?.message?.toString()}
@@ -693,7 +733,7 @@ export default function CompanyRegister() {
                             </Grid>
                         </Grid>
                     </Card>
-                    <Grid item xs={12} sm={12} className="text-center">
+                    <Grid item xs={12} sm={12} className="text-center" marginTop={3}>
                         <Button variant="contained" color="primary" onClick={handleSubmit(handleSubmitForm)}>
                             {t('button.btnSave')}
                         </Button>
