@@ -14,3 +14,21 @@ export interface UserResDto {
     createdDt: string,
     updatedDt: string,
 }
+
+export interface UserItemResDto {
+    id: number,
+    userId: string,
+    currentCompanyId: number,
+    userName: string,
+    password: string,
+    firstNm: string,
+    lastNm: string,
+    enabled: boolean,
+    countLoginFailed: number,
+    updatedDt: string,
+    token: string,
+    role: string,
+    deleted: boolean,
+    uEmail: string,
+    uTelNo: string
+}

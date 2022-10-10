@@ -6,22 +6,6 @@ export enum RoleUser {
     ORG_USER = 'USER',
 }
 
-export type UserInfoRes = {
-    id: number;
-    userId: string;
-    current_org_id: number;
-    user_nm: string;
-    role: RoleUser;
-    email: string;
-    first_nm: string;
-    last_nm: string;
-    is_deleted: boolean;
-    created_dt: string;
-    created_prg_id: string;
-    updated_dt: string;
-    updated_prg_id: string;
-};
-
 export const headUserCol: HeadColumn[] = [
     {
         id: 'id',
@@ -30,33 +14,33 @@ export const headUserCol: HeadColumn[] = [
         label: 'Id',
     },
     {
-        id: 'user_nm',
+        id: 'userName',
         numeric: false,
         disablePadding: false,
-        label: 'User Name',
+        label: 'user.table.userName',
     },
     {
-        id: 'email',
+        id: 'uEmail',
         numeric: false,
         disablePadding: false,
-        label: 'Address',
+        label: 'user.table.email',
     },
     {
-        id: 'first_name',
+        id: 'firstNm',
         numeric: false,
         disablePadding: false,
-        label: 'First Name',
+        label: 'user.table.firstName',
     },
-    // {
-    //   id: 'telNo',
-    //   numeric: false,
-    //   disablePadding: false,
-    //   label: 'Tel-No',
-    // },
-    // {
-    //   id: 'status',
-    //   numeric: false,
-    //   disablePadding: false,
-    //   label: 'Status',
-    // },
+    {
+        id: 'lastNm',
+        numeric: false,
+        disablePadding: false,
+        label: 'user.table.lastName',
+    },
+    {
+        id: 'uTelNo',
+        numeric: false,
+        disablePadding: false,
+        label: 'user.table.telNo',
+    }
 ];

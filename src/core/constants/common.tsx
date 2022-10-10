@@ -42,9 +42,9 @@ export const UrlServer = {
         UPDATE_COMPANY: '/bestwork/api/v1/companies/updates',
     },
     USER: {
-        GET_USER_LIST: `${prefixServerUrl}/users`,
-        GET_USER: `${prefixServerUrl}/user`,
-        PUT_USER: `${prefixServerUrl}/user`,
+        USER: `${prefixServerUrl}/user`,
+        USERS: `${prefixServerUrl}/users`,
+        DELETE_USERS: `${prefixServerUrl}/users/delete`,
     }
 };
 
