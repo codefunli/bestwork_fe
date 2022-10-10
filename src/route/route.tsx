@@ -41,7 +41,7 @@ const listRouter: RouteObject[] = [
             {
                 path: `${UrlFeApp.USER.INFO}/:userId`,
                 element: <UserInfo />,
-            }
+            },
         ],
     },
     {

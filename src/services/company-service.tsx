@@ -27,3 +27,13 @@ export const deleteCompanies = async (object: any) => {
     const res = await apiClient.post<DataResSuccess<CompanyResDTO[]>>(UrlServer.COMPANY.DELETE, object);
     return res.data;
 };
+
+export const getCompany = async (id: string) => {
+    const res = await apiClient.get<DataResSuccess<CompanyResDTO[]>>(UrlServer.COMPANY.GET_COMPANY + `/${id}`);
+    return res.data;
+};
+
+export const updateCompany = async (Object: any) => {
+    const res = await apiClient.post<DataResSuccess<CompanyResDTO[]>>(UrlServer.COMPANY.UPDATE_COMPANY, Object);
+    return res.data;
+};
