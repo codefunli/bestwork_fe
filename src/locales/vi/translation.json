@@ -78,7 +78,8 @@
         "user": "Người dùng",
         "dashboard": "Bảng điều khiển",
         "register": "Đăng kí",
-        "edit": "Chỉnh sửa"
+        "edit": "Chỉnh sửa",
+        "info": "Thông tin"
     },
     "user": {
         "title": "Thông tin người dùng",

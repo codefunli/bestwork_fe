@@ -12,6 +12,10 @@ const CollapsedBreadcrumbs = () => {
         .filter((x) => x)
         .splice(1);
     const { t } = useTranslation();
+    const lastChar = pathNames[pathNames.length -1];
+    if(!isNaN(+lastChar)){
+        pathNames.pop();
+    }
 
     return (
         <div role="presentation" className="d-none d-lg-block">
@@ -24,13 +28,10 @@ const CollapsedBreadcrumbs = () => {
                     )}
                     {pathNames.map((name, index) => {
                         const routeTo = `${UrlFeApp.MAIN_APP}/${pathNames.slice(0, index + 1).join('/')}`;
-                        console.log(routeTo);
-
                         const isLast = index === pathNames.length - 1;
                         return isLast ? (
                             <Typography color="white" key={name}>
-                                {' '}
-                                {t('bread_crumbs.' + `${name}` + '')}{' '}
+                                {t('bread_crumbs.' + `${name}` + '')}
                             </Typography>
                         ) : (
                             <Link key={name} to={routeTo}>

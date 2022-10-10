@@ -78,7 +78,8 @@
         "user": "User",
         "dashboard": "Dashboard",
         "register": "Register",
-        "edit": "Edit"
+        "edit": "Edit",
+        "info": "Information"
     },
     "user": {
         "title": "User Information",
