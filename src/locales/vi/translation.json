@@ -79,7 +79,10 @@
         "selected": "lựa chọn",
         "data": "DỮ LIỆU",
         "delete": "Bạn có chắc chắn rằng bạn muốn xóa các bản ghi này!",
-        "someThingWrong": "Có gì đó không đúng!"
+        "someThingWrong": "Có gì đó không đúng!",
+        "cityLabel": "Chọn tỉnh/thành phố",
+        "districtLabel": "Chọn quận/huyện",
+        "wardLabel": "Chọn phường/xã"
     },
     "title": {
         "delete": "XÓA"

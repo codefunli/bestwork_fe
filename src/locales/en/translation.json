@@ -78,7 +78,10 @@
         "selected": "selected",
         "data": "DATA",
         "delete": "Are you certain that you want to delete this records!",
-        "someThingWrong": "Some thing wrong!"
+        "someThingWrong": "Some thing wrong!",
+        "cityLabel": "Please choose a city/Province",
+        "districtLabel": "Please choose a district/town",
+        "wardLabel": "Please choose a ward/township"
     },
     "title": {
         "delete": "DELETE"
