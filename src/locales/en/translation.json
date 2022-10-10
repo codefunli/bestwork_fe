@@ -78,17 +78,10 @@
         "selected": "selected",
         "data": "DATA",
         "delete": "Are you certain that you want to delete this records!",
-        "someThingWrong": "Some thing wrong!",
+        "error": "An error has occurred. Please contact your system administrator!",
         "cityLabel": "Please choose a city/Province",
         "districtLabel": "Please choose a district/town",
         "wardLabel": "Please choose a ward/township"
-    },
-    "title": {
-        "delete": "DELETE"
-    },
-    "tooltip": {
-        "edit": "Edit",
-        "addUser": "Add user"
     },
     "bread_crumbs": {
         "home": "Home",
@@ -124,6 +117,40 @@
             "role": "Role",
             "deleted": "Deleted",
             "blocked": "Blocked"
+        }
+    },
+    "title": {
+        "delete": "DELETE"
+    },
+    "tooltip": {
+        "edit": "Edit",
+        "addUser": "Add user"
+    },
+    "edit": {
+        "title": "Company Edit",
+        "company": {
+            "title": "Edit company",
+            "name": "Company Name",
+            "email": "Email",
+            "telNo": "Tel-No",
+            "taxNo": "Tax-No",
+            "city": "City/Province",
+            "district": "District/Town",
+            "ward": "Ward/Township",
+            "street": "Street",
+            "startDate": "Start Date/Time (UTC)",
+            "endDate": "End Date/Time (UTC)"
+        },
+        "user": {
+            "title": "Edit user",
+            "userName": "User Name",
+            "password": "Password",
+            "firstName": "First Name",
+            "lastName": "Last Name",
+            "telNo": "Tel-No",
+            "email": "Email",
+            "allowLogin": "Allow Login",
+            "roleAssigned": "Role Assigned"
         }
     }
 }

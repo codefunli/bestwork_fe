@@ -24,7 +24,7 @@
         "title": "Đăng Ký Công Ty",
         "company": {
             "title": "Đăng ký công ty mới",
-            "name": "Tên công Ty",
+            "name": "Tên công ty",
             "email": "Thư điện tử",
             "telNo": "Số điện thoại",
             "taxNo": "Mã số thuế",
@@ -79,17 +79,10 @@
         "selected": "lựa chọn",
         "data": "DỮ LIỆU",
         "delete": "Bạn có chắc chắn rằng bạn muốn xóa các bản ghi này!",
-        "someThingWrong": "Có gì đó không đúng!",
+        "error": "Một lỗi đã xảy ra. Xin vui lòng liên hệ với quản trị viên!",
         "cityLabel": "Chọn tỉnh/thành phố",
         "districtLabel": "Chọn quận/huyện",
         "wardLabel": "Chọn phường/xã"
-    },
-    "title": {
-        "delete": "XÓA"
-    },
-    "tooltip": {
-        "edit": "Chỉnh sửa",
-        "addUser": "Thêm người dùng"
     },
     "bread_crumbs": {
         "home": "Trang chủ",
@@ -125,6 +118,40 @@
             "role": "Vai trò",
             "deleted": "Đã xoá",
             "blocked": "Đã khoá"
+        }
+    },
+    "title": {
+        "delete": "XÓA"
+    },
+    "tooltip": {
+        "edit": "Chỉnh sửa",
+        "addUser": "Thêm người dùng"
+    },
+    "edit": {
+        "title": "Chỉnh sửa công ty",
+        "company": {
+            "title": "Chỉnh sửa công ty",
+            "name": "Tên công ty",
+            "email": "Thư điện tử",
+            "telNo": "Số điện thoại",
+            "taxNo": "Mã số thuế",
+            "city": "Tỉnh/Thành phố",
+            "district": "Quận/Huyện",
+            "ward": "Phường/Xã",
+            "street": "Tên đường",
+            "startDate": "Ngày bắt đầu/Thời gian (UTC)",
+            "endDate": "Ngày kết thúc/Thời gian (UTC)"
+        },
+        "user": {
+            "title": "Chỉnh sửa thông tin tài khoản",
+            "userName": "Tên tài khoản",
+            "password": "Mật khẩu",
+            "firstName": "Tên",
+            "lastName": "Họ",
+            "telNo": "Số điện thoại",
+            "email": "Thư điện tử",
+            "allowLogin": "Chấp nhận đăng nhập",
+            "roleAssigned": "Vai trò"
         }
     }
 }
