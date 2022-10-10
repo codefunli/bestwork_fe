@@ -30,6 +30,8 @@ export const UrlFeApp = {
     },
 };
 
+const prefixServerUrl = '/bestwork/api/v1';
+
 export const UrlServer = {
     API_LOGIN_URL: '/login',
     COMPANY: {
@@ -39,6 +41,11 @@ export const UrlServer = {
         GET_COMPANY: '/bestwork/api/v1/companies',
         UPDATE_COMPANY: '/bestwork/api/v1/companies/updates',
     },
+    USER: {
+        GET_USER_LIST: `${prefixServerUrl}/users`,
+        GET_USER: `${prefixServerUrl}/user`,
+        PUT_USER: `${prefixServerUrl}/user`,
+    }
 };
 
 export const FieldConstants = {
@@ -51,6 +58,8 @@ export const FieldConstants = {
     TAX_NO: 'Tax-No',
     START_DATE: 'Start date',
     EXPIRED_DATE: 'Expired Date',
+    FIRST_NAME: 'First Name',
+    LAST_NAME: 'Last Name'
 };
 
 export const ConfirmConstants = {
