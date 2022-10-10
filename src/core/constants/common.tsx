@@ -26,7 +26,7 @@ export const UrlFeApp = {
     },
     USER: {
         SEARCH: '/app/user',
-        INFO: '/app/user',
+        INFO: '/app/user/info',
     },
 };
 
