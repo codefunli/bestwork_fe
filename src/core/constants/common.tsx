@@ -36,6 +36,8 @@ export const UrlServer = {
         GET_COMPANIES: '/bestwork/api/v1/companies',
         POST: '/bestwork/api/v1/companies/create',
         DELETE: '/bestwork/api/v1/companies/delete',
+        GET_COMPANY: '/bestwork/api/v1/companies',
+        UPDATE_COMPANY: '/bestwork/api/v1/companies/updates',
     },
 };
 
@@ -58,4 +60,10 @@ export const ConfirmConstants = {
     },
     OK_BTN: 'button.btnOk',
     NO_BTN: 'button.btnNo',
+};
+
+export const AlertColorConstants: any = {
+    SUCCESS: 'success',
+    ERROR: 'error',
+    WARNING: 'warning',
 };
