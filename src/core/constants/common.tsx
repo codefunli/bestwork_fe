@@ -67,3 +67,8 @@ export const AlertColorConstants: any = {
     ERROR: 'error',
     WARNING: 'warning',
 };
+
+export const StatusCode = {
+    OK: 'OK',
+    ERROR: 'ERROR',
+};

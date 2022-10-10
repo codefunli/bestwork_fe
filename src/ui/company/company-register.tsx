@@ -31,7 +31,7 @@ import { validateForm } from '../../core/constants/validate';
 import MessageShow from '../../shared-components/message/message';
 import { postCompany } from '../../services/company-service';
 import { useNavigate } from 'react-router-dom';
-import { UrlFeApp } from '../../core/constants/common';
+import { AlertColorConstants, StatusCode, UrlFeApp } from '../../core/constants/common';
 import { useTranslation } from 'react-i18next';
 
 const currentDateTime = new Date().toISOString().substring(0, 11).concat(new Date().toLocaleTimeString());
@@ -168,15 +168,15 @@ export default function CompanyRegister() {
 
     const handleResponse = (resp: any) => {
         switch (resp.status) {
-            case 'OK':
-                handleMessage(true, resp.message, 'success');
+            case StatusCode.OK:
+                handleMessage(true, resp.message, AlertColorConstants.SUCCESS);
                 navigate(UrlFeApp.COMPANY.SEARCH);
                 break;
-            case 'ERROR':
-                handleMessage(true, resp.message, 'error');
+            case StatusCode:
+                handleMessage(true, resp.message, AlertColorConstants.ERROR);
                 break;
             default:
-                handleMessage(true, resp.message, 'warning');
+                handleMessage(true, resp.message, AlertColorConstants.WARNING);
                 break;
         }
     };
@@ -186,8 +186,8 @@ export default function CompanyRegister() {
             .then((resp) => {
                 handleResponse(resp);
             })
-            .catch((err) => {
-                console.log(err);
+            .catch(() => {
+                handleMessage(true, t('message.error'), AlertColorConstants.ERROR);
             });
     };
 
@@ -237,7 +237,7 @@ export default function CompanyRegister() {
                                                     htmlFor="outlined-adornment-amount"
                                                     error={Boolean(errors.companyName)}
                                                 >
-                                                    {t('register.company.name')}
+                                                    {t('register.company.name')}{' '}
                                                     <span className="input-required">*</span>
                                                 </InputLabel>
                                                 <TextField
@@ -266,7 +266,7 @@ export default function CompanyRegister() {
                                                     htmlFor="outlined-adornment-amount"
                                                     error={Boolean(errors.cpEmail)}
                                                 >
-                                                    {t('register.company.email')}
+                                                    {t('register.company.email')}{' '}
                                                     <span className="input-required">*</span>
                                                 </InputLabel>
                                                 <TextField
@@ -297,7 +297,7 @@ export default function CompanyRegister() {
                                                     htmlFor="outlined-adornment-amount"
                                                     error={Boolean(errors.cpTelNo)}
                                                 >
-                                                    {t('register.company.telNo')}
+                                                    {t('register.company.telNo')}{' '}
                                                     <span className="input-required">*</span>
                                                 </InputLabel>
                                                 <TextField
@@ -326,7 +326,7 @@ export default function CompanyRegister() {
                                                     htmlFor="outlined-adornment-amount"
                                                     error={Boolean(errors.taxNo)}
                                                 >
-                                                    {t('register.company.taxNo')}
+                                                    {t('register.company.taxNo')}{' '}
                                                     <span className="input-required">*</span>
                                                 </InputLabel>
                                                 <TextField
@@ -381,7 +381,7 @@ export default function CompanyRegister() {
                                             </div>
                                             <div className="col-12 col-sm-6 p-1">
                                                 <InputLabel id="demo-simple-select-outlined-label">
-                                                    {t('register.company.district')}:
+                                                    {t('register.company.district')}
                                                 </InputLabel>
                                                 <FormControl
                                                     size="small"
@@ -410,7 +410,7 @@ export default function CompanyRegister() {
                                         <div className="row justify-center m-1">
                                             <div className="col-12 col-sm-6 d-block p-1">
                                                 <InputLabel id="demo-simple-select-outlined-label">
-                                                    {t('register.company.ward')}:
+                                                    {t('register.company.ward')}
                                                 </InputLabel>
                                                 <FormControl
                                                     size="small"
@@ -437,7 +437,7 @@ export default function CompanyRegister() {
                                             </div>
                                             <div className="col-12 col-sm-6 d-block p-1">
                                                 <InputLabel htmlFor="outlined-adornment-amount">
-                                                    {t('register.company.street')}:
+                                                    {t('register.company.street')}
                                                 </InputLabel>
                                                 <TextField
                                                     name="street"
@@ -456,7 +456,7 @@ export default function CompanyRegister() {
                                                     htmlFor="outlined-adornment-amount"
                                                     error={Boolean(errors.startDate)}
                                                 >
-                                                    {t('register.company.startDate')}:
+                                                    {t('register.company.startDate')}
                                                 </InputLabel>
                                                 <TextField
                                                     fullWidth
@@ -480,7 +480,7 @@ export default function CompanyRegister() {
                                                     htmlFor="outlined-adornment-amount"
                                                     error={Boolean(errors.expiredDate)}
                                                 >
-                                                    {t('register.company.endDate')}:
+                                                    {t('register.company.endDate')}
                                                 </InputLabel>
                                                 <TextField
                                                     fullWidth
@@ -529,7 +529,7 @@ export default function CompanyRegister() {
                                                     htmlFor="outlined-adornment-amount"
                                                     error={Boolean(errors.userName)}
                                                 >
-                                                    {t('register.user.userName')}
+                                                    {t('register.user.userName')}{' '}
                                                     <span className="input-required">*</span>
                                                 </InputLabel>
                                                 <TextField
@@ -557,7 +557,7 @@ export default function CompanyRegister() {
                                                     htmlFor="outlined-adornment-amount"
                                                     error={Boolean(errors.password)}
                                                 >
-                                                    {t('register.user.password')}
+                                                    {t('register.user.password')}{' '}
                                                     <span className="input-required">*</span>
                                                 </InputLabel>
                                                 <TextField
@@ -585,7 +585,7 @@ export default function CompanyRegister() {
                                         <div className="row justify-center m-1">
                                             <div className="col-12 col-sm-6 d-block p-1">
                                                 <InputLabel htmlFor="outlined-adornment-amount">
-                                                    {t('register.user.firstName')}:
+                                                    {t('register.user.firstName')}
                                                 </InputLabel>
                                                 <TextField
                                                     name="firstName"
@@ -605,7 +605,7 @@ export default function CompanyRegister() {
                                             </div>
                                             <div className="col-12 col-sm-6 d-block p-1">
                                                 <InputLabel htmlFor="outlined-adornment-amount">
-                                                    {t('register.user.lastName')}:
+                                                    {t('register.user.lastName')}
                                                 </InputLabel>
                                                 <TextField
                                                     name="lastName"
@@ -630,8 +630,7 @@ export default function CompanyRegister() {
                                                     htmlFor="outlined-adornment-amount"
                                                     error={Boolean(errors.uTelNo)}
                                                 >
-                                                    {t('register.user.telNo')}
-                                                    <span className="input-required">*</span>
+                                                    {t('register.user.telNo')} <span className="input-required">*</span>
                                                 </InputLabel>
                                                 <TextField
                                                     value={formValues.user.uTelNo}
@@ -660,8 +659,7 @@ export default function CompanyRegister() {
                                                     htmlFor="outlined-adornment-amount"
                                                     error={Boolean(errors.uEmail)}
                                                 >
-                                                    {t('register.user.email')}
-                                                    <span className="input-required">*</span>
+                                                    {t('register.user.email')} <span className="input-required">*</span>
                                                 </InputLabel>
                                                 <TextField
                                                     value={formValues.user.uEmail}
@@ -704,7 +702,7 @@ export default function CompanyRegister() {
                                             <div className="col-12 col-md-6 d-block p-3">
                                                 <FormControl component="fieldset">
                                                     <FormLabel component="legend">
-                                                        {t('register.user.roleAssigned')}:
+                                                        {t('register.user.roleAssigned')}
                                                     </FormLabel>
                                                     <RadioGroup
                                                         row
