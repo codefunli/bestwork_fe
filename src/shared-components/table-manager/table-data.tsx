@@ -146,7 +146,7 @@ export default function EnhancedTable(props: EnhancedTable) {
                             order={order}
                             orderBy={orderBy}
                             rowCount={rows.content.length}
-                            headCells={headCells != undefined ? headCells : []}
+                            headCells={headCells !== undefined ? headCells : []}
                             onSelectAllProps={handleSelectAllClick}
                         />
                         <TableBody>

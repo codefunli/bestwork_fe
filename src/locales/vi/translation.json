@@ -97,15 +97,22 @@
         "title": "Thông tin người dùng",
         "search": {
             "title": "Tìm kiếm người dùng",
-            "name": "Tên công ty",
-            "email": "Email",
-            "telNo": "Tel-no",
-            "taxNo": "Tax-no"
+            "subtitle": "Tìm kiếm người dùng thông qua bộ lọc",
+            "keyword": "Từ khoá",
+            "companyName": "Tên công ty",
+            "status": "Trạng thái",
+            "enabled": "Đã kích hoạt",
+            "notEnabled": "Chưa kích hoạt",
+            "selectCompanyName": "Chọn tên công ty",
+            "selectRole": "Chọn vai trò",
+            "selectStatus": "Chọn trạng thái"
         },
         "table": {
-            "colCpName": "Công ty",
-            "colCpAddress": "Địa chỉ",
-            "colCpStartDate": "Ngày bắt đầu"
+            "userName": "Tên người dùng",
+            "email": "Thư điện tử",
+            "firstName": "Tên",
+            "lastName": "Họ",
+            "telNo": "Số điện thoại"
         },
         "info": {
             "userName": "Tên người dùng",

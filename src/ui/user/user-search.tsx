@@ -7,63 +7,80 @@ import {
     Card,
     CardContent,
     CardHeader,
+    FormControl,
     Grid,
     InputLabel,
+    MenuItem,
+    Select,
     TextField,
     Typography,
+    AlertColor
 } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { UrlFeApp } from '../../core/constants/common';
 import { useQuery, useQueryClient } from 'react-query';
 import EnhancedTable, { ArrayAction } from '../../shared-components/table-manager/table-data';
-import { headUserCol, RoleUser, UserInfoRes } from '../../core/types/user';
-import { getUsers } from '../../services/user-service';
+import { headUserCol, RoleUser } from '../../core/types/user';
+import { useTranslation } from 'react-i18next';
+import { getUsers, deleteUsers } from '../../services/user-service';
+import { getCompanies } from '../../services/company-service';
+import AlertDialogSlide from '../../shared-components/modal/alert-dialog-slide';
+import MessageShow from '../../shared-components/message/message';
+import { ConfirmConstants } from '../../core/constants/common';
+import { SUCCESS_MSG } from '../../core/constants/message';
 
 const initialValues = {
-    name: '',
-    email: '',
+    keyword: '',
+    companyId: '',
+    role: '',
+    enabled: ''
 };
 
 export default function UserSearch() {
+    const { t } = useTranslation();
     const [formValues, setFormValues] = useState(initialValues);
     const queryClient = useQueryClient();
-    const [state, setState] = useState<UserInfoRes[]>([
-        {
-            id: -1,
-            userId: '',
-            current_org_id: -1,
-            user_nm: '',
-            role: RoleUser.SYS_ADMIN,
-            email: '',
-            first_nm: '',
-            last_nm: '',
-            is_deleted: false,
-            created_dt: '',
-            created_prg_id: '',
-            updated_dt: '',
-            updated_prg_id: '',
-        },
-    ]);
+    const [state, setState] = useState<any>({});
+    const [companies, setCompanies] = useState<any>();
+    const [isOpenModal, setIsOpenModal] = useState(false);
+    const [isShowMessage, setIsShowMessage] = useState(false);
+    const [userMsg, setUserMsg] = useState('');
+    const [typeUserMsg, setTypeUserMsg] = useState<AlertColor>('success');
+    const [selectedUserIdList, setSelectedUserIdList] = useState([]);
 
     const navigate = useNavigate();
 
-    const { data, isLoading } = useQuery(['getUsers'], () => getUsers(), {
+    const { data, isLoading } = useQuery(['getUsers'], () => getUsers(formValues), {
         staleTime: 10000,
-        onSuccess: (company: any) => {
-            company.data?.content?.forEach((userEl: { id: any }) => {
+        onSuccess: (user: any) => {
+            user.data?.content?.forEach((userEl: { id: any }) => {
                 queryClient.setQueryData(['userEl', userEl.id], userEl);
             });
         },
     });
 
     useEffect(() => {
-        // do some checking here to ensure data exist
-        setState([]);
+        const fetchCompanies = async () => {
+            const companies = await getCompanies({});
+            if (companies && companies.data && companies.data.content) {
+                setCompanies(companies?.data?.content);
+            };
+        };
+        fetchCompanies();
+    }, [])
+
+    useEffect(() => {
         if (data && data.data && data.data.content) {
-            // mutate data if you need to
-            setState(data.data?.content);
+            setState(data.data);
         }
     }, [data]);
+
+    const fetchData = async (obj: any) => {
+        const res = await getUsers(obj);
+        if (res && res.data && res.data.content) {
+            setState(res.data);
+        }
+    };
 
     const handleInputChange = (e: any) => {
         const { name, value } = e.target;
@@ -73,77 +90,92 @@ export default function UserSearch() {
         });
     };
 
-    const handleSubmit = (event: any) => {
-        event.preventDefault();
-        console.log(formValues);
+    const handleSubmit = () => {
+        fetchData({
+            ...formValues
+        });
     };
 
-    const handleClearData = (e: any) => {
+    const handleClearData = () => {
         setFormValues({
             ...initialValues,
         });
     };
 
-    // miss pass id with url
     const handleEditData = (e: any, id: number) => {
-        e.preventDefault();
-        navigate(`${UrlFeApp.USER.INFO}/${id}`);
-    };
-
-    // miss pass id with url
-    const handleEditData2 = (e: any, id: number) => {
         e.preventDefault();
         navigate(`${UrlFeApp.USER.INFO}/${id}`);
     };
 
     const arrButton: ArrayAction[] = [
         {
-            nameFn: 'edit',
+            nameFn: 'Edit',
             acFn: handleEditData,
             iconFn: 'ModeEditIcon',
-        },
-        {
-            nameFn: 'edit2',
-            acFn: handleEditData2,
-            iconFn: 'AcUnitIcon',
-        },
+        }
     ];
 
     const handleSearchCallBack = (childData: any) => {
-        console.log(childData);
+        fetchData({
+            ...formValues,
+            ...childData,
+        });
+        setFormValues({
+            ...formValues,
+            ...childData,
+        });
     };
 
-    const handleDeleteCallBack = (childData: any) => {
-        console.log(childData);
+    const handleMessage = (showMsg: boolean, msg: string, type: AlertColor) => {
+        setIsShowMessage(showMsg);
+        setUserMsg(msg);
+        setTypeUserMsg(type);
+    };
+
+    const handleDeleteCallBack = (userIdList: any) => {
+        setUserMsg(SUCCESS_MSG.S01_004);
+        setTypeUserMsg('success');
+        setIsOpenModal(true);
+        setSelectedUserIdList(userIdList);
+    };
+
+    const alertOkFunc = () => {
+        deleteUsers(selectedUserIdList).then((value) => {
+            setIsShowMessage(true);
+            fetchData({
+                ...formValues,
+            });
+        }).catch((err) => {
+            handleMessage(true, t('message.error'), 'error');
+        });
+        setIsOpenModal(false);
+    };
+
+    const closeModal = () => {
+        setIsOpenModal(false);
+        setIsShowMessage(false);
+    };
+
+    const handleCloseMsg = () => {
+        setIsShowMessage(false);
     };
 
     return (
         <div>
-            <button onClick={(e) => handleEditData(e, 1)}>Info</button>
             <div className="row">
                 <div className="col-sm-12 col-md-6 text-start d-none d-lg-block">
-                    <Typography variant="h5" color="textSecondary" gutterBottom>
-                        COMPANY SEARCH
+                    <Typography variant="h5" color="textSecondary" gutterBottom sx={{ textTransform: 'uppercase' }}>
+                        {t("user.search.title")}
                     </Typography>
                 </div>
-                <div className="col-sm-12 col-md-6 text-end d-none d-lg-block">
-                    <Button variant="contained" color="primary" component={Link} to={UrlFeApp.COMPANY.CREATE}>
-                        REGISTER
-                    </Button>
-                </div>
-                <div className="col-sm-12 text-start d-block d-lg-none">
-                    <Button variant="contained" color="primary" component={Link} to={UrlFeApp.COMPANY.CREATE}>
-                        REGISTER
-                    </Button>
-                </div>
             </div>
-            <form onSubmit={handleSubmit}>
+            <form>
                 <Grid container direction="row" alignItems="center">
                     <Grid item xs={12} sx={{ mt: 1, mb: 1 }}>
                         <Card w-full>
                             <CardHeader
                                 avatar={<Avatar aria-label="recipe">SC</Avatar>}
-                                title="Seach info of your company"
+                                title={t("user.search.subtitle")}
                                 subheader={new Date().toLocaleDateString()}
                             />
                             <CardContent>
@@ -157,56 +189,106 @@ export default function UserSearch() {
                                 >
                                     <div className="row justify-center m-1">
                                         <div className="col-12 col-sm-6 d-block p-1">
-                                            <InputLabel htmlFor="outlined-adornment-amount">Company Name:</InputLabel>
+                                            <InputLabel htmlFor="outlined-adornment-amount">{t('user.search.keyword')}</InputLabel>
                                             <TextField
                                                 size="small"
                                                 fullWidth
-                                                sx={{ mt: 1, mb: 1 }}
-                                                required
-                                                id="outlined-required"
-                                                label="non-required"
+                                                sx={{
+                                                    mt: 1,
+                                                    mb: 1,
+                                                    '& legend': { display: 'none' },
+                                                    '& fieldset': { top: 0 }
+                                                }}
+                                                name="keyword"
+                                                label=""
                                                 placeholder="Please input a new value"
-                                                name="name"
-                                                value={formValues.name}
+                                                value={formValues.keyword}
                                                 onChange={handleInputChange}
                                             />
                                         </div>
-                                        <div className="col-12 col-sm-6 d-block p-1">
-                                            <InputLabel htmlFor="outlined-adornment-amount">Email:</InputLabel>
-                                            <TextField
+                                        <div className="col-12 col-sm-2 d-block p-1">
+                                            <InputLabel htmlFor="outlined-adornment-amount">{t('user.search.companyName')}</InputLabel>
+                                            <FormControl
+                                                size="small"
                                                 fullWidth
                                                 sx={{ mt: 1, mb: 1 }}
-                                                required
-                                                size="small"
-                                                id="outlined-required"
-                                                label="non-required"
-                                                placeholder="Please input a new value"
-                                            />
+                                                variant="outlined"
+                                            >
+                                                <Select
+                                                    name="companyId"
+                                                    value={formValues.companyId}
+                                                    displayEmpty
+                                                    sx={{
+                                                        '& legend': { display: 'none' },
+                                                        '& fieldset': { top: 0 }
+                                                    }}
+                                                    onChange={handleInputChange}
+                                                >
+                                                    <MenuItem value="" selected={true}>
+                                                        <em>{t('user.search.selectCompanyName')}</em>
+                                                    </MenuItem>
+                                                    {companies && companies.length > 0 && companies.map((company: any) => (
+                                                        <MenuItem value={company.companyId}>{company.companyName}</MenuItem>
+                                                    ))}
+                                                </Select>
+                                            </FormControl>
                                         </div>
-                                    </div>
-                                    <div className="row justify-center m-1">
-                                        <div className="col-12 col-sm-6 d-block p-1">
-                                            <InputLabel htmlFor="outlined-adornment-amount">Tel-no:</InputLabel>
-                                            <TextField
+                                        <div className="col-6 col-sm-2 d-block p-1">
+                                            <InputLabel htmlFor="role">{t("user.info.role")}</InputLabel>
+                                            <FormControl
                                                 size="small"
                                                 fullWidth
                                                 sx={{ mt: 1, mb: 1 }}
-                                                id="outlined-required"
-                                                label="non-required"
-                                                placeholder="Please input a new value"
-                                            />
+                                                variant="outlined"
+                                            >
+                                                <Select
+                                                    name="role"
+                                                    value={formValues.role}
+                                                    displayEmpty
+                                                    sx={{
+                                                        '& legend': { display: 'none' },
+                                                        '& fieldset': { top: 0 }
+                                                    }}
+                                                    onChange={handleInputChange}
+                                                >
+                                                    <MenuItem value="" selected={true}>
+                                                        <em>{t('user.search.selectRole')}</em>
+                                                    </MenuItem>
+                                                    {Object.values(RoleUser).map((role) => (
+                                                        <MenuItem value={role}>{role}</MenuItem>
+                                                    ))}
+                                                </Select>
+                                            </FormControl>
                                         </div>
-                                        <div className="col-12 col-sm-6 d-block p-1">
-                                            <InputLabel htmlFor="outlined-adornment-amount">Tax-no:</InputLabel>
-                                            <TextField
+                                        <div className="col-6 col-sm-2 d-block p-1">
+                                            <InputLabel htmlFor="isBlocked">{t("user.search.status")}</InputLabel>
+                                            <FormControl
                                                 size="small"
                                                 fullWidth
                                                 sx={{ mt: 1, mb: 1 }}
-                                                required
-                                                id="outlined-required"
-                                                label="non-required"
-                                                placeholder="Please input a new value"
-                                            />
+                                                variant="outlined"
+                                            >
+                                                <Select
+                                                    name="enabled"
+                                                    value={formValues.enabled}
+                                                    displayEmpty
+                                                    sx={{
+                                                        '& legend': { display: 'none' },
+                                                        '& fieldset': { top: 0 }
+                                                    }}
+                                                    onChange={handleInputChange}
+                                                >
+                                                    <MenuItem value="" selected={true}>
+                                                        <em>{t('user.search.selectStatus')}</em>
+                                                    </MenuItem>
+                                                    <MenuItem value="true">
+                                                        <em>{t('user.search.enabled')}</em>
+                                                    </MenuItem>
+                                                    <MenuItem value="false">
+                                                        <em>{t('user.search.notEnabled')}</em>
+                                                    </MenuItem>
+                                                </Select>
+                                            </FormControl>
                                         </div>
                                     </div>
                                     <div className="text-center justify-center m-1">
@@ -215,7 +297,7 @@ export default function UserSearch() {
                                             variant="contained"
                                             aria-label="Disabled elevation buttons"
                                         >
-                                            <Button sx={{ mr: 1 }} size="small" variant="contained" type="submit">
+                                            <Button onClick={handleSubmit} sx={{ mr: 1 }} size="small" variant="contained">
                                                 Search
                                             </Button>
                                             <Button onClick={handleClearData} variant="outlined">
@@ -229,16 +311,36 @@ export default function UserSearch() {
                     </Grid>
                 </Grid>
             </form>
-            {state !== undefined && state.length > 0 && (
+            {state && state.content && state.content.length > 0 && (
                 <EnhancedTable
                     deleteCallBack={handleDeleteCallBack}
                     searchCallBack={handleSearchCallBack}
                     headCells={headUserCol}
-                    rows={state}
+                    rows={
+                        state || {
+                            content: state,
+                        }
+                    }
                     isLoading={isLoading}
                     arrButton={arrButton}
                 />
             )}
+
+            <AlertDialogSlide
+                isOpen={isOpenModal}
+                closeFunc={closeModal}
+                okFunc={alertOkFunc}
+                title={t(ConfirmConstants.DELETE.title)}
+                content={t(ConfirmConstants.DELETE.content)}
+                noBtn={t(ConfirmConstants.NO_BTN)}
+                okBtn={t(ConfirmConstants.OK_BTN)}
+            />
+            <MessageShow
+                message={userMsg}
+                showMessage={isShowMessage}
+                type={typeUserMsg}
+                handleCloseMsg={handleCloseMsg}
+            />
         </div>
     );
 }

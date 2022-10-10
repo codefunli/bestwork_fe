@@ -96,15 +96,22 @@
         "title": "User Information",
         "search": {
             "title": "Search user",
-            "name": "Company Name",
-            "email": "Email",
-            "telNo": "Tel-no",
-            "taxNo": "Tax-no"
+            "subtitle": "Search users through filters",
+            "keyword": "Keyword",
+            "companyName": "Company Name",
+            "status": "Status",
+            "enabled": "Enabled",
+            "notEnabled": "Not enabled",
+            "selectCompanyName": "Select company name",
+            "selectRole": "Select role",
+            "selectStatus": "Select status"
         },
         "table": {
-            "colCpName": "Company Name",
-            "colCpAddress": "Address",
-            "colCpStartDate": "Start Date"
+            "userName": "User Name",
+            "email": "Email",
+            "firstName": "First Name",
+            "lastName": "Last Name",
+            "telNo": "Tel-No"
         },
         "info": {
             "userName": "User Name",
