@@ -29,6 +29,12 @@ export const UrlFeApp = {
         INFO: '/app/user/info',
         CREATE: '/app/user/create',
     },
+    PROJECT: {
+        SEARCH: '/app/project',
+        CREATE: '/app/project/register',
+        EDIT: '/app/project/edit',
+        EDIT_HAS_ID: '/app/project/edit/:id',
+    },
 };
 
 const prefixServerUrl = '/bestwork/api/v1';
@@ -47,7 +53,11 @@ export const UrlServer = {
         USERS: `${prefixServerUrl}/users`,
         DELETE_USERS: `${prefixServerUrl}/users/delete`,
         CREATE: `${prefixServerUrl}/users/create`,
-    }
+    },
+    PROJECT: {
+        GET: '/bestwork/api/v1/projects',
+        DELETE: '/bestwork/api/v1/projects/delete',
+    },
 };
 
 export const FieldConstants = {
@@ -62,7 +72,7 @@ export const FieldConstants = {
     EXPIRED_DATE: 'Expired Date',
     FIRST_NAME: 'First Name',
     LAST_NAME: 'Last Name',
-    ROLE: 'Role'
+    ROLE: 'Role',
 };
 
 export const ConfirmConstants = {
@@ -86,5 +96,5 @@ export const StatusCode = {
 };
 
 export const DefaultImage = {
-    USER_AVATAR: '/default-avatar.png'
+    USER_AVATAR: '/default-avatar.png',
 };

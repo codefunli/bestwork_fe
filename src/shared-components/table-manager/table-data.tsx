@@ -185,7 +185,9 @@ export default function EnhancedTable(props: EnhancedTable) {
                                                     >
                                                         {colValue.id == 'startDate' ? (
                                                             row[colValue.id as string].replace('T', ' ')
-                                                        ) : colValue.id == 'expired' || colValue.id == 'enabled' ? (
+                                                        ) : colValue.id == 'expired' ||
+                                                          colValue.id == 'enabled' ||
+                                                          colValue.id == 'status' ? (
                                                             String(row[colValue.id as string]) == 'true' ? (
                                                                 <Chip
                                                                     color="secondary"
