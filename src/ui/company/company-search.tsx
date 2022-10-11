@@ -7,8 +7,12 @@ import {
     Card,
     CardContent,
     CardHeader,
+    Chip,
+    FormControl,
     Grid,
     InputLabel,
+    MenuItem,
+    Select,
     TextField,
     Typography,
 } from '@mui/material';
@@ -24,12 +28,12 @@ import MessageShow from '../../shared-components/message/message';
 import AlertDialogSlide from '../../shared-components/modal/alert-dialog-slide';
 import EnhancedTable, { ArrayAction } from '../../shared-components/table-manager/table-data';
 import './company.scss';
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
 
 const initialValues = {
-    companyName: '',
-    cpEmail: '',
-    cpTelNo: '',
-    taxNo: '',
+    keyword: '',
+    status: '',
     page: 0,
     size: 5,
     sort: 'id, asc',
@@ -76,7 +80,8 @@ export default function CompanySearch() {
     };
 
     const handleSubmit = async (e: any) => {
-        e.preventDefault();
+        console.log(formValues);
+
         let data = await getCompanies(formValues);
         if (data && data.data && data.data.content) {
             setState(data.data);
@@ -134,14 +139,14 @@ export default function CompanySearch() {
 
     const alertOkFunc = () => {
         deleteCompanies(ids)
-            .then((value) => {
+            .then(() => {
                 setIsOpenModal(false);
                 setIsShowMessage(true);
                 fetchData({
                     ...formValues,
                 });
             })
-            .catch((err) => {
+            .catch(() => {
                 handleMessage(true, t('message.someThingWrong'), 'error');
             });
     };
@@ -169,183 +174,171 @@ export default function CompanySearch() {
     ];
 
     return (
-        <div>
-            <div className="row">
-                <div className="col-sm-12 col-md-6 text-start d-none d-lg-block">
-                    <Typography variant="h5" color="textSecondary" gutterBottom sx={{ textTransform: 'uppercase' }}>
-                        {t('company.title')}
-                    </Typography>
+        <Grid container direction="row" spacing={3}>
+            <Grid item xs={12} sx={{ mt: 1 }}>
+                <div className="row">
+                    <div className="col-sm-12 col-md-6 text-start d-none d-lg-block">
+                        <Typography variant="h5" color="textSecondary" gutterBottom sx={{ textTransform: 'uppercase' }}>
+                            {t('company.title')}
+                        </Typography>
+                    </div>
+                    <div className="col-sm-12 col-md-6 text-end d-none d-lg-block">
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            component={Link}
+                            to={UrlFeApp.COMPANY.CREATE}
+                            sx={{ textTransform: 'uppercase' }}
+                        >
+                            {t('button.btnRegister')}
+                        </Button>
+                    </div>
+                    <div className="col-sm-12 text-start d-block d-lg-none">
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            component={Link}
+                            to={UrlFeApp.COMPANY.CREATE}
+                            sx={{ textTransform: 'uppercase' }}
+                        >
+                            {t('button.btnRegister')}
+                        </Button>
+                    </div>
                 </div>
-                <div className="col-sm-12 col-md-6 text-end d-none d-lg-block">
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        component={Link}
-                        to={UrlFeApp.COMPANY.CREATE}
-                        sx={{ textTransform: 'uppercase' }}
-                    >
-                        {t('button.btnRegister')}
-                    </Button>
-                </div>
-                <div className="col-sm-12 text-start d-block d-lg-none">
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        component={Link}
-                        to={UrlFeApp.COMPANY.CREATE}
-                        sx={{ textTransform: 'uppercase' }}
-                    >
-                        {t('button.btnRegister')}
-                    </Button>
-                </div>
-            </div>
-            <form>
-                <Grid container direction="row" alignItems="center">
-                    <Grid item xs={12} sx={{ mt: 1, mb: 1 }}>
-                        <Card w-full="true">
-                            <CardHeader
-                                avatar={<Avatar aria-label="recipe">SC</Avatar>}
-                                title={t('company.search.title')}
-                                subheader={new Date().toLocaleDateString()}
-                            />
-                            <CardContent>
-                                <Box
-                                    component="form"
-                                    sx={{
-                                        '& > :not(style)': {
-                                            m: 1,
-                                        },
-                                    }}
-                                    noValidate
-                                    autoComplete="off"
-                                >
-                                    <div className="row justify-center m-1">
-                                        <div className="col-12 col-sm-6 d-block p-1">
-                                            <InputLabel htmlFor="outlined-adornment-amount">
-                                                {t('company.search.name')}:
-                                            </InputLabel>
-                                            <TextField
-                                                size="small"
-                                                fullWidth
-                                                sx={{
-                                                    mt: 1,
-                                                    mb: 1,
-                                                }}
-                                                id="outlined-required"
-                                                label={t('common.nonRequired')}
-                                                placeholder={t('common.placeholder')}
-                                                name="companyName"
-                                                value={formValues.companyName}
-                                                onChange={handleInputChange}
-                                            />
+            </Grid>
+            <Grid item lg={3} xs={12}>
+                <form>
+                    <Grid container direction="row" alignItems="center">
+                        <Grid item xs={12} sx={{ mt: 1, mb: 1 }}>
+                            <Card w-full="true">
+                                <CardHeader
+                                    avatar={<Avatar aria-label="recipe">SC</Avatar>}
+                                    title={t('company.search.title')}
+                                    subheader={new Date().toLocaleDateString()}
+                                />
+                                <CardContent>
+                                    <Box
+                                        component="form"
+                                        sx={{
+                                            '& > :not(style)': {
+                                                m: 1,
+                                            },
+                                        }}
+                                        noValidate
+                                        autoComplete="off"
+                                    >
+                                        <div className="row justify-center m-1">
+                                            <div className="col-12 d-block p-1">
+                                                <InputLabel htmlFor="outlined-adornment-amount">
+                                                    {t('company.search.keyword')}
+                                                </InputLabel>
+                                                <TextField
+                                                    size="small"
+                                                    fullWidth
+                                                    sx={{
+                                                        mt: 1,
+                                                        mb: 1,
+                                                        '& legend': { display: 'none' },
+                                                        '& fieldset': { top: 0 },
+                                                    }}
+                                                    id="outlined-required"
+                                                    placeholder={t('common.placeholder')}
+                                                    name="keyword"
+                                                    value={formValues.keyword}
+                                                    onChange={handleInputChange}
+                                                />
+                                            </div>
                                         </div>
-                                        <div className="col-12 col-sm-6 d-block p-1">
-                                            <InputLabel htmlFor="outlined-adornment-amount">
-                                                {t('company.search.email')}:
-                                            </InputLabel>
-                                            <TextField
-                                                fullWidth
-                                                sx={{
-                                                    mt: 1,
-                                                    mb: 1,
-                                                }}
-                                                size="small"
-                                                id="outlined-required"
-                                                label={t('common.nonRequired')}
-                                                placeholder={t('common.placeholder')}
-                                                name={'cpEmail'}
-                                                value={formValues.cpEmail}
-                                                onChange={handleInputChange}
-                                            />
+                                        <div className="row justify-center m-1">
+                                            <div className="col-12 d-block p-1">
+                                                <InputLabel id="demo-simple-select-outlined-label">
+                                                    {t('company.search.status')}
+                                                </InputLabel>
+                                                <FormControl
+                                                    size="small"
+                                                    fullWidth
+                                                    sx={{ mt: 1, mb: 1 }}
+                                                    variant="outlined"
+                                                >
+                                                    <Select
+                                                        labelId="demo-simple-select-outlined-label"
+                                                        id="demo-simple-select-outlined"
+                                                        name="status"
+                                                        displayEmpty
+                                                        value={formValues.status}
+                                                        onChange={handleInputChange}
+                                                    >
+                                                        <MenuItem value="">
+                                                            <em>{t('message.status')}</em>
+                                                        </MenuItem>
+                                                        <MenuItem value={0}>
+                                                            <Chip
+                                                                color="secondary"
+                                                                label={t('button.btnActive')}
+                                                                size="small"
+                                                                icon={<CheckIcon />}
+                                                            />
+                                                        </MenuItem>
+                                                        <MenuItem value={1}>
+                                                            <Chip
+                                                                label={t('button.btnPending')}
+                                                                size="small"
+                                                                icon={<CloseIcon />}
+                                                            />
+                                                        </MenuItem>
+                                                    </Select>
+                                                </FormControl>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="row justify-center m-1">
-                                        <div className="col-12 col-sm-6 d-block p-1">
-                                            <InputLabel htmlFor="outlined-adornment-amount">
-                                                {t('company.search.telNo')}:
-                                            </InputLabel>
-                                            <TextField
-                                                size="small"
-                                                fullWidth
-                                                sx={{
-                                                    mt: 1,
-                                                    mb: 1,
-                                                }}
-                                                id="outlined-required"
-                                                label={t('common.nonRequired')}
-                                                placeholder={t('common.placeholder')}
-                                                name={'cpTelNo'}
-                                                value={formValues.cpTelNo}
-                                                onChange={handleInputChange}
-                                            />
-                                        </div>
-                                        <div className="col-12 col-sm-6 d-block p-1">
-                                            <InputLabel htmlFor="outlined-adornment-amount">
-                                                {t('company.search.taxNo')}:
-                                            </InputLabel>
-                                            <TextField
-                                                size="small"
-                                                fullWidth
-                                                sx={{
-                                                    mt: 1,
-                                                    mb: 1,
-                                                }}
-                                                id="outlined-required"
-                                                label={t('common.nonRequired')}
-                                                placeholder={t('common.placeholder')}
-                                                name={'taxNo'}
-                                                value={formValues.taxNo}
-                                                onChange={handleInputChange}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="text-center justify-center m-1">
-                                        <ButtonGroup
-                                            disableElevation
-                                            variant="contained"
-                                            aria-label="Disabled elevation buttons"
-                                        >
-                                            <Button
-                                                sx={{
-                                                    mr: 1,
-                                                    textTransform: 'uppercase',
-                                                }}
-                                                size="small"
+                                        <div className="text-center justify-center m-1">
+                                            <ButtonGroup
+                                                disableElevation
                                                 variant="contained"
-                                                onClick={handleSubmit}
+                                                aria-label="Disabled elevation buttons"
                                             >
-                                                {t('button.btnSearch')}
-                                            </Button>
-                                            <Button
-                                                sx={{
-                                                    textTransform: 'uppercase',
-                                                }}
-                                                onClick={handleClearData}
-                                                variant="outlined"
-                                            >
-                                                {t('button.btnClear')}
-                                            </Button>
-                                        </ButtonGroup>
-                                    </div>
-                                </Box>
-                            </CardContent>
-                        </Card>
+                                                <Button
+                                                    sx={{
+                                                        mr: 1,
+                                                        textTransform: 'uppercase',
+                                                    }}
+                                                    size="small"
+                                                    variant="contained"
+                                                    onClick={handleSubmit}
+                                                >
+                                                    {t('button.btnSearch')}
+                                                </Button>
+                                                <Button
+                                                    sx={{
+                                                        textTransform: 'uppercase',
+                                                    }}
+                                                    onClick={handleClearData}
+                                                    variant="outlined"
+                                                >
+                                                    {t('button.btnClear')}
+                                                </Button>
+                                            </ButtonGroup>
+                                        </div>
+                                    </Box>
+                                </CardContent>
+                            </Card>
+                        </Grid>
                     </Grid>
-                </Grid>
-            </form>
-
-            <EnhancedTable
-                deleteCallBack={handleDeleteCallBack}
-                searchCallBack={handleSearchCallBack}
-                headCells={headCompanyCol}
-                rows={
-                    state || {
-                        content: [],
+                </form>
+            </Grid>
+            <Grid item lg={9} xs={12} sx={{ mt: 1, mb: 1 }}>
+                <EnhancedTable
+                    deleteCallBack={handleDeleteCallBack}
+                    searchCallBack={handleSearchCallBack}
+                    headCells={headCompanyCol}
+                    rows={
+                        state || {
+                            content: [],
+                        }
                     }
-                }
-                isLoading={isLoading}
-                arrButton={arruBtton}
-            />
+                    isLoading={isLoading}
+                    arrButton={arruBtton}
+                />
+            </Grid>
 
             <AlertDialogSlide
                 isOpen={isOpenModal}
@@ -362,6 +355,6 @@ export default function CompanySearch() {
                 type={typeCompanyMsg}
                 handleCloseMsg={handleCloseMsg}
             />
-        </div>
+        </Grid>
     );
 }
