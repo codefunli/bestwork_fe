@@ -27,6 +27,7 @@ export const UrlFeApp = {
     USER: {
         SEARCH: '/app/user',
         INFO: '/app/user/info',
+        CREATE: '/app/user/create',
     },
 };
 
@@ -45,6 +46,7 @@ export const UrlServer = {
         USER: `${prefixServerUrl}/user`,
         USERS: `${prefixServerUrl}/users`,
         DELETE_USERS: `${prefixServerUrl}/users/delete`,
+        CREATE: `${prefixServerUrl}/users/create`,
     }
 };
 
@@ -59,7 +61,8 @@ export const FieldConstants = {
     START_DATE: 'Start date',
     EXPIRED_DATE: 'Expired Date',
     FIRST_NAME: 'First Name',
-    LAST_NAME: 'Last Name'
+    LAST_NAME: 'Last Name',
+    ROLE: 'Role'
 };
 
 export const ConfirmConstants = {
@@ -80,4 +83,8 @@ export const AlertColorConstants: any = {
 export const StatusCode = {
     OK: 'OK',
     ERROR: 'ERROR',
+};
+
+export const DefaultImage = {
+    USER_AVATAR: '/default-avatar.png'
 };

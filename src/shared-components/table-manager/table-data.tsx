@@ -1,6 +1,6 @@
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
-import { IconButton, Tooltip } from '@mui/material';
+import { Chip, IconButton, Tooltip } from '@mui/material';
 import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
 import Paper from '@mui/material/Paper';
@@ -17,6 +17,8 @@ import { HeadColumn } from '../../core/types/base';
 import { EnhancedTableHead, Order } from './table-columns';
 import './table-data.scss';
 import { EnhancedTableToolbar } from './table-toolbar';
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
 
 export interface ArrayAction {
     nameFn: string;
@@ -181,12 +183,26 @@ export default function EnhancedTable(props: EnhancedTable) {
                                                         align="left"
                                                         hidden={colValue.id === FieldConstants.ID}
                                                     >
-                                                        {
-                                                            (row[colValue.id as string] =
-                                                                colValue.id == 'startDate'
-                                                                    ? row[colValue.id as string].replace('T', ' ')
-                                                                    : row[colValue.id as string])
-                                                        }
+                                                        {colValue.id == 'startDate' ? (
+                                                            row[colValue.id as string].replace('T', ' ')
+                                                        ) : colValue.id == 'expired' || colValue.id == 'enabled' ? (
+                                                            String(row[colValue.id as string]) == 'true' ? (
+                                                                <Chip
+                                                                    color="secondary"
+                                                                    label={t('button.btnActive')}
+                                                                    size="small"
+                                                                    icon={<CheckIcon />}
+                                                                />
+                                                            ) : (
+                                                                <Chip
+                                                                    label={t('button.btnPending')}
+                                                                    size="small"
+                                                                    icon={<CloseIcon />}
+                                                                />
+                                                            )
+                                                        ) : (
+                                                            row[colValue.id as string]
+                                                        )}
                                                     </TableCell>
                                                 );
                                             })}

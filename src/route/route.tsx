@@ -12,6 +12,7 @@ const CompanyRegister = lazy(() => import('../ui/company/company-register'));
 const CompanySearch = lazy(() => import('../ui/company/company-search'));
 const UserSearch = lazy(() => import('../ui/user/user-search'));
 const UserInfo = lazy(() => import('../ui/user/user-info'));
+const UserCreate = lazy(() => import('../ui/user/user-create'));
 
 const listRouter: RouteObject[] = [
     {
@@ -41,6 +42,10 @@ const listRouter: RouteObject[] = [
             {
                 path: `${UrlFeApp.USER.INFO}/:userId`,
                 element: <UserInfo />,
+            },
+            {
+                path: UrlFeApp.USER.CREATE,
+                element: <UserCreate />,
             },
         ],
     },

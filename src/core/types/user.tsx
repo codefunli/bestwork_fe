@@ -42,5 +42,11 @@ export const headUserCol: HeadColumn[] = [
         numeric: false,
         disablePadding: false,
         label: 'user.table.telNo',
+    },
+    {
+        id: 'enabled',
+        numeric: false,
+        disablePadding: false,
+        label: 'user.table.status',
     }
 ];

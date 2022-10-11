@@ -60,7 +60,10 @@
         "btnDelete": "Xóa",
         "btnNo": "Hủy",
         "btnOk": "Đồng ý",
-        "btnBack": "Quay lại"
+        "btnBack": "Quay lại",
+        "btnCreate": "Tạo mới",
+        "btnActive": "Hoạt động",
+        "btnPending": "Tạm dừng"
     },
     "common": {
         "placeholder": "Nhập một giá trị mới",
@@ -91,7 +94,8 @@
         "dashboard": "Bảng điều khiển",
         "register": "Đăng kí",
         "edit": "Chỉnh sửa",
-        "info": "Thông tin"
+        "info": "Thông tin",
+        "create": "Tạo mới"
     },
     "user": {
         "title": "Thông tin người dùng",
@@ -112,7 +116,8 @@
             "email": "Thư điện tử",
             "firstName": "Tên",
             "lastName": "Họ",
-            "telNo": "Số điện thoại"
+            "telNo": "Số điện thoại",
+            "status": "Trạng thái"
         },
         "info": {
             "userName": "Tên người dùng",
@@ -125,6 +130,9 @@
             "role": "Vai trò",
             "deleted": "Đã xoá",
             "blocked": "Đã khoá"
+        },
+        "create": {
+            "title": "Tạo mới người dùng"
         }
     },
     "title": {
