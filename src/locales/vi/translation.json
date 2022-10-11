@@ -99,7 +99,8 @@
         "register": "Đăng kí",
         "edit": "Chỉnh sửa",
         "info": "Thông tin",
-        "create": "Tạo mới"
+        "create": "Tạo mới",
+        "project": "Dự án"
     },
     "user": {
         "title": "Thông tin người dùng",
@@ -171,6 +172,23 @@
             "email": "Thư điện tử",
             "allowLogin": "Chấp nhận đăng nhập",
             "roleAssigned": "Vai trò"
+        }
+    },
+    "project": {
+        "title": "Tìm kiếm dự án",
+        "search": {
+            "title": "Tìm kiếm thông tin về dự án của bạn",
+            "prjName": "Tên dự án",
+            "prjType": "Loại dự án",
+            "prjTitle": "Tiêu đề",
+            "description": "Mô tả"
+        },
+        "table": {
+            "colPrjName": "Tên dự án",
+            "colPrjType": "Loại dự án",
+            "colTitle": "Tiêu đề",
+            "colDescription": "Mô tả",
+            "colStatus": "Trạng thái"
         }
     }
 }

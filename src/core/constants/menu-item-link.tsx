@@ -11,13 +11,17 @@ const menuItemLinkData: MenuItemLink[] = [
         link: UrlFeApp.DASH_BOARD,
     },
     {
-        name: "Company",
-        link: UrlFeApp.COMPANY.SEARCH
+        name: 'Company',
+        link: UrlFeApp.COMPANY.SEARCH,
     },
     {
-        name: "User",
-        link: UrlFeApp.USER.SEARCH
-    }
-]
+        name: 'User',
+        link: UrlFeApp.USER.SEARCH,
+    },
+    {
+        name: 'Project',
+        link: UrlFeApp.PROJECT.SEARCH,
+    },
+];
 
 export default menuItemLinkData;

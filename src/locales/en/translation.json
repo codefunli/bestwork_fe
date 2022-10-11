@@ -98,7 +98,8 @@
         "register": "Register",
         "edit": "Edit",
         "info": "Information",
-        "create": "Create"
+        "create": "Create",
+        "project": "Project"
     },
     "user": {
         "title": "User Information",
@@ -170,6 +171,23 @@
             "email": "Email",
             "allowLogin": "Allow Login",
             "roleAssigned": "Role Assigned"
+        }
+    },
+    "project": {
+        "title": "Project Search",
+        "search": {
+            "title": "Search info of your project",
+            "prjName": "Project Name",
+            "prjType": "Project Type",
+            "prjTitle": "Title",
+            "description": "Description"
+        },
+        "table": {
+            "colPrjName": "Project Name",
+            "colPrjType": "Project Type",
+            "colTitle": "Title",
+            "colDescription": "Description",
+            "colStatus": "Status"
         }
     }
 }
