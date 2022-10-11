@@ -1,38 +1,29 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Button, ButtonGroup, Card, CardContent, FormControlLabel, Grid, InputLabel, Radio, RadioGroup, Switch, TextField, Typography, AlertColor, FormControl, Select, MenuItem, FormHelperText } from '@mui/material';
 import { Box } from '@mui/system';
 import { useTranslation } from 'react-i18next';
-import { UserResDto } from '../../models/user-res-dto';
-import { getUser, putUser } from '../../services/user-service';
-import { UrlFeApp, AlertColorConstants, StatusCode, DefaultImage } from '../../core/constants/common';
+import { createUsers } from '../../services/user-service';
+import { AlertColorConstants, StatusCode, UrlFeApp, DefaultImage } from '../../core/constants/common';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { validateUserForm } from '../../core/constants/validate';
+import { validateCreateUserForm } from '../../core/constants/validate';
 import LocalSeeIcon from '@mui/icons-material/LocalSee';
 import MessageShow from '../../shared-components/message/message';
 import { getCompanies } from '../../services/company-service';
 import "./user.scss";
 
-const initialValues: UserResDto = {
-    id: 0,
-    userId: "",
-    currentCompanyId: "",
-    enabled: false,
-    role: "",
+const initialValues: any = {
     userNm: "",
+    companyId: "",
+    role: "ADMIN",
     email: "",
     firstNm: "",
     lastNm: "",
-    isDeleted: false,
-    isBlocked: false,
-    countLoginFailed: 0,
-    createdDt: "",
-    updatedDt: "",
+    enabled: false,
 };
 
-export default function UserInfo() {
-    const { userId } = useParams();
+export default function UserAdd() {
     const navigate = useNavigate();
     const { t } = useTranslation();
 
@@ -49,7 +40,7 @@ export default function UserInfo() {
         handleSubmit,
         formState: { errors, isSubmitting },
     } = useForm({
-        resolver: yupResolver(validateUserForm),
+        resolver: yupResolver(validateCreateUserForm),
     });
 
     useEffect(() => {
@@ -62,21 +53,9 @@ export default function UserInfo() {
         fetchCompanies();
     }, [])
 
-    useEffect(() => {
-        const fetchUserInfo = async () => {
-            const data = await getUser(userId);
-
-            if (data && data.data) {
-                setFormValues(data.data);
-                reset();
-            };
-        }
-
-        fetchUserInfo();
-    }, [reset, userId]);
-
-    const handleCancelChange = () => {
-        navigate(`${UrlFeApp.USER.SEARCH}`);
+    const handleClearForm = () => {
+        setFormValues(initialValues);
+        reset();
     };
 
     const handleMessage = (showMsg: boolean, msg: string, type: AlertColor) => {
@@ -117,7 +96,7 @@ export default function UserInfo() {
     };
 
     const handleSubmitForm = () => {
-        putUser(userId, formValues).then((res) => {
+        createUsers(formValues).then((res) => {
             handleResponse(res);
         }).catch((err) => {
             handleMessage(true, err.message, AlertColorConstants.ERROR);
@@ -143,7 +122,7 @@ export default function UserInfo() {
             <div className='row'>
                 <div className="col-sm-12 col-md-6">
                     <Typography variant="h5">
-                        <span className="font-weight-bold text-uppercase">{t('user.title')}</span>
+                        <span className="font-weight-bold text-uppercase">{t('user.create.title')}</span>
                     </Typography>
                 </div>
             </div>
@@ -290,7 +269,7 @@ export default function UserInfo() {
                                     </div>
                                     <div className='row justify-center m-1'>
                                         <div className='col-12 col-sm-6 d-block p-1'>
-                                            <InputLabel htmlFor="currentCompanyId" error={Boolean(errors.currentCompanyId)}>{t("user.info.company")} <span className="input-required">*</span></InputLabel>
+                                            <InputLabel htmlFor="companyId" error={Boolean(errors.companyId)}>{t("user.info.company")} <span className="input-required">*</span></InputLabel>
                                             <FormControl
                                                 size="small"
                                                 fullWidth
@@ -299,53 +278,28 @@ export default function UserInfo() {
                                                 error
                                             >
                                                 <Select
-                                                    value={formValues.currentCompanyId}
+                                                    value={formValues.companyId}
                                                     displayEmpty
                                                     sx={{
                                                         '& legend': { display: 'none' },
                                                         '& fieldset': { top: 0 }
                                                     }}
-                                                    error={Boolean(errors.currentCompanyId)}
-                                                    {...register('currentCompanyId', {
+                                                    error={Boolean(errors.companyId)}
+                                                    {...register('companyId', {
                                                         onChange: (e) => handleInputChange(e),
                                                     })}
                                                 >
-                                                    <MenuItem value="" disabled>
+                                                    <MenuItem value="" selected={true} disabled>
                                                         <em>{t('user.search.selectCompanyName')}</em>
                                                     </MenuItem>
                                                     {companies && companies.length > 0 && companies.map((company: any) => (
-                                                        <MenuItem
-                                                            value={company.companyId}
-                                                            selected={company.companyId === formValues.currentCompanyId}
-                                                        >
-                                                            {company.companyName}
-                                                        </MenuItem>
+                                                        <MenuItem value={company.companyId}>{company.companyName}</MenuItem>
                                                     ))}
                                                 </Select>
-                                                {Boolean(errors.currentCompanyId) &&
-                                                    <FormHelperText id="component-error-text">{errors?.currentCompanyId?.message as string}</FormHelperText>
+                                                {Boolean(errors.companyId) &&
+                                                    <FormHelperText id="component-error-text">{errors?.companyId?.message as string}</FormHelperText>
                                                 }
                                             </FormControl>
-                                        </div>
-                                        <div className='col-12 col-sm-6 d-block p-1'>
-                                            <InputLabel htmlFor="countLoginFailed">{t("user.info.countLoginFailed")}</InputLabel>
-                                            <TextField
-                                                size="small"
-                                                fullWidth
-                                                sx={{
-                                                    mt: 1,
-                                                    mb: 1,
-                                                    '& legend': { display: 'none' },
-                                                    '& fieldset': { top: 0 }
-                                                }}
-                                                required
-                                                id="countLoginFailed"
-                                                label=""
-                                                placeholder=""
-                                                name="countLoginFailed"
-                                                value={formValues.countLoginFailed}
-                                                disabled
-                                            />
                                         </div>
                                     </div>
                                     <div className='row justify-center m-1'>
@@ -358,14 +312,15 @@ export default function UserInfo() {
                                             />
                                         </div>
                                         <div className='col-12 col-sm-6 d-block p-1'>
-                                            <InputLabel htmlFor="role">{t("user.info.role")}</InputLabel>
+                                            <InputLabel htmlFor="role">{t("user.info.role")} <span className="input-required">*</span></InputLabel>
                                             <RadioGroup
                                                 row
                                                 aria-label="role"
-                                                name="role"
                                                 value={formValues.role}
                                                 defaultValue="ADMIN"
-                                                onChange={handleInputChange}
+                                                {...register('role', {
+                                                    onChange: (e) => handleInputChange(e),
+                                                })}
                                             >
                                                 <FormControlLabel
                                                     value="ADMIN"
@@ -378,24 +333,6 @@ export default function UserInfo() {
                                                     label={t('radio.user')}
                                                 />
                                             </RadioGroup>
-                                        </div>
-                                    </div>
-                                    <div className='row justify-center m-1'>
-                                        <div className='col-12 col-sm-6 d-block p-1'>
-                                            <InputLabel htmlFor="isDeleted">{t("user.info.deleted")}</InputLabel>
-                                            <Switch
-                                                checked={formValues.isDeleted}
-                                                name="isDeleted"
-                                                onChange={handleSwitchChange}
-                                            />
-                                        </div>
-                                        <div className='col-12 col-sm-6 d-block p-1'>
-                                            <InputLabel htmlFor="isBlocked">{t("user.info.blocked")}</InputLabel>
-                                            <Switch
-                                                checked={formValues.isBlocked}
-                                                name="isBlocked"
-                                                onChange={handleSwitchChange}
-                                            />
                                         </div>
                                     </div>
                                     <div className='text-center justify-center mt-4'>
@@ -411,13 +348,13 @@ export default function UserInfo() {
                                                 disabled={isSubmitting}
                                                 onClick={handleSubmit(handleSubmitForm)}
                                             >
-                                                {t("button.btnSave")}
+                                                {t("button.btnCreate")}
                                             </Button>
                                             <Button
-                                                onClick={handleCancelChange}
+                                                onClick={handleClearForm}
                                                 variant="outlined"
                                             >
-                                                {t("button.btnBack")}
+                                                {t("button.btnClear")}
                                             </Button>
                                         </ButtonGroup>
                                     </div>

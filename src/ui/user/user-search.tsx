@@ -8,16 +8,16 @@ import {
     CardContent,
     CardHeader,
     FormControl,
-    Grid,
     InputLabel,
     MenuItem,
     Select,
     TextField,
     Typography,
-    AlertColor
+    AlertColor,
+    Grid
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import { UrlFeApp } from '../../core/constants/common';
+import { Link, useNavigate } from 'react-router-dom';
+import { AlertColorConstants, UrlFeApp, ConfirmConstants } from '../../core/constants/common';
 import { useQuery, useQueryClient } from 'react-query';
 import EnhancedTable, { ArrayAction } from '../../shared-components/table-manager/table-data';
 import { headUserCol, RoleUser } from '../../core/types/user';
@@ -26,8 +26,8 @@ import { getUsers, deleteUsers } from '../../services/user-service';
 import { getCompanies } from '../../services/company-service';
 import AlertDialogSlide from '../../shared-components/modal/alert-dialog-slide';
 import MessageShow from '../../shared-components/message/message';
-import { ConfirmConstants } from '../../core/constants/common';
 import { SUCCESS_MSG } from '../../core/constants/message';
+import "./user.scss";
 
 const initialValues = {
     keyword: '',
@@ -45,7 +45,7 @@ export default function UserSearch() {
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [isShowMessage, setIsShowMessage] = useState(false);
     const [userMsg, setUserMsg] = useState('');
-    const [typeUserMsg, setTypeUserMsg] = useState<AlertColor>('success');
+    const [typeUserMsg, setTypeUserMsg] = useState<AlertColor>(AlertColorConstants.SUCCESS);
     const [selectedUserIdList, setSelectedUserIdList] = useState([]);
 
     const navigate = useNavigate();
@@ -134,7 +134,7 @@ export default function UserSearch() {
 
     const handleDeleteCallBack = (userIdList: any) => {
         setUserMsg(SUCCESS_MSG.S01_004);
-        setTypeUserMsg('success');
+        setTypeUserMsg(AlertColorConstants.SUCCESS);
         setIsOpenModal(true);
         setSelectedUserIdList(userIdList);
     };
@@ -146,7 +146,7 @@ export default function UserSearch() {
                 ...formValues,
             });
         }).catch((err) => {
-            handleMessage(true, t('message.error'), 'error');
+            handleMessage(true, t('message.error'), AlertColorConstants.ERROR);
         });
         setIsOpenModal(false);
     };
@@ -161,170 +161,199 @@ export default function UserSearch() {
     };
 
     return (
-        <div>
-            <div className="row">
-                <div className="col-sm-12 col-md-6 text-start d-none d-lg-block">
-                    <Typography variant="h5" color="textSecondary" gutterBottom sx={{ textTransform: 'uppercase' }}>
-                        {t("user.search.title")}
-                    </Typography>
-                </div>
-            </div>
-            <form>
-                <Grid container direction="row" alignItems="center">
-                    <Grid item xs={12} sx={{ mt: 1, mb: 1 }}>
-                        <Card w-full>
-                            <CardHeader
-                                avatar={<Avatar aria-label="recipe">SC</Avatar>}
-                                title={t("user.search.subtitle")}
-                                subheader={new Date().toLocaleDateString()}
-                            />
-                            <CardContent>
-                                <Box
-                                    component="form"
-                                    sx={{
-                                        '& > :not(style)': { m: 1 },
-                                    }}
-                                    noValidate
-                                    autoComplete="off"
-                                >
-                                    <div className="row justify-center m-1">
-                                        <div className="col-12 col-sm-6 d-block p-1">
-                                            <InputLabel htmlFor="outlined-adornment-amount">{t('user.search.keyword')}</InputLabel>
-                                            <TextField
-                                                size="small"
-                                                fullWidth
+        <div className="user-search">
+            <Grid
+                container
+                direction="row"
+                spacing={3}
+            >
+                <Grid item xs={12} sx={{ mt: 1 }}>
+                    <div className="row">
+                        <div className="col-sm-12 col-md-6 text-start d-none d-lg-block">
+                            <Typography variant="h5" color="textSecondary" gutterBottom sx={{ textTransform: 'uppercase' }}>
+                                {t("user.search.title")}
+                            </Typography>
+                        </div>
+                        <div className="col-sm-12 col-md-6 text-end d-none d-lg-block">
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                component={Link}
+                                to={UrlFeApp.USER.CREATE}
+                                sx={{ textTransform: 'uppercase' }}
+                            >
+                                {t('button.btnCreate')}
+                            </Button>
+                        </div>
+                        <div className="col-sm-12 text-start d-block d-lg-none">
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                component={Link}
+                                to={UrlFeApp.USER.CREATE}
+                                sx={{ textTransform: 'uppercase' }}
+                            >
+                                {t('button.btnCreate')}
+                            </Button>
+                        </div>
+                    </div>
+                </Grid>
+                <Grid item xs={12} lg={3} sx={{ mt: 1, mb: 1 }}>
+                    <Card w-full>
+                        <CardHeader
+                            avatar={<Avatar aria-label="recipe">SC</Avatar>}
+                            title={t("user.search.subtitle")}
+                            subheader={new Date().toLocaleDateString()}
+                        />
+                        <CardContent>
+                            <Box
+                                component="form"
+                                sx={{
+                                    '& > :not(style)': { m: 1 },
+                                }}
+                                noValidate
+                                autoComplete="off"
+                            >
+                                <div className="row justify-center m-1">
+                                    <div className="col-12 d-block p-1">
+                                        <InputLabel htmlFor="outlined-adornment-amount">{t('user.search.keyword')}</InputLabel>
+                                        <TextField
+                                            size="small"
+                                            fullWidth
+                                            sx={{
+                                                mt: 1,
+                                                mb: 1,
+                                                '& legend': { display: 'none' },
+                                                '& fieldset': { top: 0 }
+                                            }}
+                                            name="keyword"
+                                            label=""
+                                            placeholder={t('common.placeholder')}
+                                            value={formValues.keyword}
+                                            onChange={handleInputChange}
+                                        />
+                                    </div>
+                                    <div className="col-12 d-block p-1">
+                                        <InputLabel htmlFor="outlined-adornment-amount">{t('user.search.companyName')}</InputLabel>
+                                        <FormControl
+                                            size="small"
+                                            fullWidth
+                                            sx={{ mt: 1, mb: 1 }}
+                                            variant="outlined"
+                                        >
+                                            <Select
+                                                name="companyId"
+                                                value={formValues.companyId}
+                                                displayEmpty
                                                 sx={{
-                                                    mt: 1,
-                                                    mb: 1,
                                                     '& legend': { display: 'none' },
                                                     '& fieldset': { top: 0 }
                                                 }}
-                                                name="keyword"
-                                                label=""
-                                                placeholder="Please input a new value"
-                                                value={formValues.keyword}
                                                 onChange={handleInputChange}
-                                            />
-                                        </div>
-                                        <div className="col-12 col-sm-2 d-block p-1">
-                                            <InputLabel htmlFor="outlined-adornment-amount">{t('user.search.companyName')}</InputLabel>
-                                            <FormControl
-                                                size="small"
-                                                fullWidth
-                                                sx={{ mt: 1, mb: 1 }}
-                                                variant="outlined"
                                             >
-                                                <Select
-                                                    name="companyId"
-                                                    value={formValues.companyId}
-                                                    displayEmpty
-                                                    sx={{
-                                                        '& legend': { display: 'none' },
-                                                        '& fieldset': { top: 0 }
-                                                    }}
-                                                    onChange={handleInputChange}
-                                                >
-                                                    <MenuItem value="" selected={true}>
-                                                        <em>{t('user.search.selectCompanyName')}</em>
-                                                    </MenuItem>
-                                                    {companies && companies.length > 0 && companies.map((company: any) => (
-                                                        <MenuItem value={company.companyId}>{company.companyName}</MenuItem>
-                                                    ))}
-                                                </Select>
-                                            </FormControl>
-                                        </div>
-                                        <div className="col-6 col-sm-2 d-block p-1">
-                                            <InputLabel htmlFor="role">{t("user.info.role")}</InputLabel>
-                                            <FormControl
-                                                size="small"
-                                                fullWidth
-                                                sx={{ mt: 1, mb: 1 }}
-                                                variant="outlined"
-                                            >
-                                                <Select
-                                                    name="role"
-                                                    value={formValues.role}
-                                                    displayEmpty
-                                                    sx={{
-                                                        '& legend': { display: 'none' },
-                                                        '& fieldset': { top: 0 }
-                                                    }}
-                                                    onChange={handleInputChange}
-                                                >
-                                                    <MenuItem value="" selected={true}>
-                                                        <em>{t('user.search.selectRole')}</em>
-                                                    </MenuItem>
-                                                    {Object.values(RoleUser).map((role) => (
-                                                        <MenuItem value={role}>{role}</MenuItem>
-                                                    ))}
-                                                </Select>
-                                            </FormControl>
-                                        </div>
-                                        <div className="col-6 col-sm-2 d-block p-1">
-                                            <InputLabel htmlFor="isBlocked">{t("user.search.status")}</InputLabel>
-                                            <FormControl
-                                                size="small"
-                                                fullWidth
-                                                sx={{ mt: 1, mb: 1 }}
-                                                variant="outlined"
-                                            >
-                                                <Select
-                                                    name="enabled"
-                                                    value={formValues.enabled}
-                                                    displayEmpty
-                                                    sx={{
-                                                        '& legend': { display: 'none' },
-                                                        '& fieldset': { top: 0 }
-                                                    }}
-                                                    onChange={handleInputChange}
-                                                >
-                                                    <MenuItem value="" selected={true}>
-                                                        <em>{t('user.search.selectStatus')}</em>
-                                                    </MenuItem>
-                                                    <MenuItem value="true">
-                                                        <em>{t('user.search.enabled')}</em>
-                                                    </MenuItem>
-                                                    <MenuItem value="false">
-                                                        <em>{t('user.search.notEnabled')}</em>
-                                                    </MenuItem>
-                                                </Select>
-                                            </FormControl>
-                                        </div>
+                                                <MenuItem value="" selected={true}>
+                                                    <em>{t('user.search.selectCompanyName')}</em>
+                                                </MenuItem>
+                                                {companies && companies.length > 0 && companies.map((company: any) => (
+                                                    <MenuItem value={company.companyId}>{company.companyName}</MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
                                     </div>
-                                    <div className="text-center justify-center m-1">
-                                        <ButtonGroup
-                                            disableElevation
-                                            variant="contained"
-                                            aria-label="Disabled elevation buttons"
+                                    <div className="col-12 d-block p-1">
+                                        <InputLabel htmlFor="role">{t("user.info.role")}</InputLabel>
+                                        <FormControl
+                                            size="small"
+                                            fullWidth
+                                            sx={{ mt: 1, mb: 1 }}
+                                            variant="outlined"
                                         >
-                                            <Button onClick={handleSubmit} sx={{ mr: 1 }} size="small" variant="contained">
-                                                Search
-                                            </Button>
-                                            <Button onClick={handleClearData} variant="outlined">
-                                                Clear
-                                            </Button>
-                                        </ButtonGroup>
+                                            <Select
+                                                name="role"
+                                                value={formValues.role}
+                                                displayEmpty
+                                                sx={{
+                                                    '& legend': { display: 'none' },
+                                                    '& fieldset': { top: 0 }
+                                                }}
+                                                onChange={handleInputChange}
+                                            >
+                                                <MenuItem value="" selected={true}>
+                                                    <em>{t('user.search.selectRole')}</em>
+                                                </MenuItem>
+                                                {Object.values(RoleUser).map((role) => (
+                                                    <MenuItem value={role}>{role}</MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
                                     </div>
-                                </Box>
-                            </CardContent>
-                        </Card>
-                    </Grid>
+                                    <div className="col-12 d-block p-1">
+                                        <InputLabel htmlFor="isBlocked">{t("user.search.status")}</InputLabel>
+                                        <FormControl
+                                            size="small"
+                                            fullWidth
+                                            sx={{ mt: 1, mb: 1 }}
+                                            variant="outlined"
+                                        >
+                                            <Select
+                                                name="enabled"
+                                                value={formValues.enabled}
+                                                displayEmpty
+                                                sx={{
+                                                    '& legend': { display: 'none' },
+                                                    '& fieldset': { top: 0 }
+                                                }}
+                                                onChange={handleInputChange}
+                                            >
+                                                <MenuItem value="" selected={true}>
+                                                    <em>{t('user.search.selectStatus')}</em>
+                                                </MenuItem>
+                                                <MenuItem value="true">
+                                                    <em>{t('user.search.enabled')}</em>
+                                                </MenuItem>
+                                                <MenuItem value="false">
+                                                    <em>{t('user.search.notEnabled')}</em>
+                                                </MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </div>
+                                </div>
+                                <div className="text-center justify-center m-1">
+                                    <ButtonGroup
+                                        disableElevation
+                                        variant="contained"
+                                        aria-label="Disabled elevation buttons"
+                                    >
+                                        <Button onClick={handleSubmit} sx={{ mr: 1 }} size="small" variant="contained">
+                                            Search
+                                        </Button>
+                                        <Button onClick={handleClearData} variant="outlined">
+                                            Clear
+                                        </Button>
+                                    </ButtonGroup>
+                                </div>
+                            </Box>
+                        </CardContent>
+                    </Card>
                 </Grid>
-            </form>
-            {state && state.content && state.content.length > 0 && (
-                <EnhancedTable
-                    deleteCallBack={handleDeleteCallBack}
-                    searchCallBack={handleSearchCallBack}
-                    headCells={headUserCol}
-                    rows={
-                        state || {
-                            content: state,
-                        }
-                    }
-                    isLoading={isLoading}
-                    arrButton={arrButton}
-                />
-            )}
+
+                <Grid item xs={12} lg={9} sx={{ mt: 1, mb: 1 }}>
+                    {state && state.content && state.content.length > 0 && (
+                        <EnhancedTable
+                            deleteCallBack={handleDeleteCallBack}
+                            searchCallBack={handleSearchCallBack}
+                            headCells={headUserCol}
+                            rows={
+                                state || {
+                                    content: state,
+                                }
+                            }
+                            isLoading={isLoading}
+                            arrButton={arrButton}
+                        />
+                    )}
+                </Grid>
+            </Grid>
 
             <AlertDialogSlide
                 isOpen={isOpenModal}

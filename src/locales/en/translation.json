@@ -60,7 +60,10 @@
         "btnDelete": "Delete",
         "btnNo": "NO",
         "btnOk": "Ok",
-        "btnBack": "Back"
+        "btnBack": "Back",
+        "btnCreate": "Create",
+        "btnActive": "Active",
+        "btnPending": "Pending"
     },
     "common": {
         "placeholder": "Please input a new value",
@@ -90,7 +93,8 @@
         "dashboard": "Dashboard",
         "register": "Register",
         "edit": "Edit",
-        "info": "Information"
+        "info": "Information",
+        "create": "Create"
     },
     "user": {
         "title": "User Information",
@@ -111,7 +115,8 @@
             "email": "Email",
             "firstName": "First Name",
             "lastName": "Last Name",
-            "telNo": "Tel-No"
+            "telNo": "Tel-No",
+            "status": "Status"
         },
         "info": {
             "userName": "User Name",
@@ -124,6 +129,9 @@
             "role": "Role",
             "deleted": "Deleted",
             "blocked": "Blocked"
+        },
+        "create": {
+            "title": "Create new user"
         }
     },
     "title": {

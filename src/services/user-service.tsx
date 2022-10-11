@@ -19,6 +19,11 @@ export const putUser = async (id: any, user: any) => {
 };
 
 export const deleteUsers = async (userIdList: any) => {
-    const res = await apiClient.post<DataResSuccess<UserResDto[]>>(UrlServer.USER.DELETE_USERS, userIdList); g
+    const res = await apiClient.post<DataResSuccess<UserResDto[]>>(UrlServer.USER.DELETE_USERS, userIdList);
+    return res.data;
+};
+
+export const createUsers = async (user: any) => {
+    const res = await apiClient.post<DataResSuccess<UserResDto[]>>(UrlServer.USER.CREATE, user);
     return res.data;
 };
