@@ -12,12 +12,15 @@
             "name": "Company Name",
             "email": "Email",
             "telNo": "Tel-no",
-            "taxNo": "Tax-no"
+            "taxNo": "Tax-no",
+            "keyword": "Keyword",
+            "status": "Status"
         },
         "table": {
             "colCpName": "Company Name",
             "colCpAddress": "Address",
-            "colCpStartDate": "Start Date"
+            "colCpStartDate": "Start Date",
+            "colCpExpired": "Status"
         }
     },
     "register": {
@@ -84,7 +87,8 @@
         "error": "An error has occurred. Please contact your system administrator!",
         "cityLabel": "Please choose a city/Province",
         "districtLabel": "Please choose a district/town",
-        "wardLabel": "Please choose a ward/township"
+        "wardLabel": "Please choose a ward/township",
+        "status": "Status"
     },
     "bread_crumbs": {
         "home": "Home",

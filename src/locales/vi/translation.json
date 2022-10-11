@@ -12,12 +12,15 @@
             "name": "Tên công ty",
             "email": "Thư điện tử",
             "telNo": "Số điện thoại",
-            "taxNo": "Mã số thuế"
+            "taxNo": "Mã số thuế",
+            "keyword": "Từ khóa",
+            "status": "Trạng thái"
         },
         "table": {
             "colCpName": "Tên công ty",
             "colCpAddress": "Địa chỉ",
-            "colCpStartDate": "Ngày bắt đầu"
+            "colCpStartDate": "Ngày bắt đầu",
+            "colCpExpired": "Trạng thái"
         }
     },
     "register": {
@@ -85,7 +88,8 @@
         "error": "Một lỗi đã xảy ra. Xin vui lòng liên hệ với quản trị viên!",
         "cityLabel": "Chọn tỉnh/thành phố",
         "districtLabel": "Chọn quận/huyện",
-        "wardLabel": "Chọn phường/xã"
+        "wardLabel": "Chọn phường/xã",
+        "status": "Trạng thái"
     },
     "bread_crumbs": {
         "home": "Trang chủ",

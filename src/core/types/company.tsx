@@ -25,16 +25,10 @@ export const headCompanyCol: HeadColumn[] = [
         disablePadding: false,
         label: 'company.table.colCpStartDate',
     },
-    // {
-    //   id: 'telNo',
-    //   numeric: false,
-    //   disablePadding: false,
-    //   label: 'Tel-No',
-    // },
-    // {
-    //   id: 'status',
-    //   numeric: false,
-    //   disablePadding: false,
-    //   label: 'Status',
-    // },
+    {
+        id: 'expired',
+        numeric: false,
+        disablePadding: false,
+        label: 'company.table.colCpExpired',
+    },
 ];
