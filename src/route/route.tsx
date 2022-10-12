@@ -4,6 +4,7 @@ import { RouteObject, useRoutes } from 'react-router-dom';
 
 import CompanyEdit from '../ui/company/company-edit';
 import AuthComponent from '../components/auth-component';
+import Page404NotFound from '../ui/error-page/404NotFound';
 
 const Login = lazy(() => import('../ui/login/login'));
 const MainApp = lazy(() => import('../components/main-app-component'));
@@ -14,6 +15,7 @@ const UserSearch = lazy(() => import('../ui/user/user-search'));
 const UserInfo = lazy(() => import('../ui/user/user-info'));
 const UserCreate = lazy(() => import('../ui/user/user-create'));
 const ProjectSearch = lazy(() => import('../ui/project/project-search'));
+const MaterialSchedule = lazy(() => import('../ui/schedule/material-schedule'));
 
 const listRouter: RouteObject[] = [
     {
@@ -52,6 +54,10 @@ const listRouter: RouteObject[] = [
                 path: UrlFeApp.PROJECT.SEARCH,
                 element: <ProjectSearch />,
             },
+            {
+                path: UrlFeApp.SCHEDULE.MATERIAL_STATUS,
+                element: <MaterialSchedule />,
+            },
         ],
     },
     {
@@ -63,6 +69,10 @@ const listRouter: RouteObject[] = [
                 element: <Login />,
             },
         ],
+    },
+    {
+        path: '/*',
+        element: <Page404NotFound />,
     },
 ];
 export default function RenderRouter() {

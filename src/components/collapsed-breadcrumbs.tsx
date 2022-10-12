@@ -12,8 +12,8 @@ const CollapsedBreadcrumbs = () => {
         .filter((x) => x)
         .splice(1);
     const { t } = useTranslation();
-    const lastChar = pathNames[pathNames.length -1];
-    if(!isNaN(+lastChar)){
+    const lastChar = pathNames[pathNames.length - 1];
+    if (!isNaN(+lastChar)) {
         pathNames.pop();
     }
 

@@ -25,7 +25,6 @@ export interface ArrayAction {
     acFn: (object1: any, object2: any) => void;
     iconFn: string;
 }
-
 interface EnhancedTable {
     headCells?: HeadColumn[];
     rows?: any;

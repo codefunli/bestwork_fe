@@ -66,7 +66,8 @@
         "btnBack": "Back",
         "btnCreate": "Create",
         "btnActive": "Active",
-        "btnPending": "Pending"
+        "btnPending": "Pending",
+        "btnGoHome": "Go Home"
     },
     "common": {
         "placeholder": "Please input a new value",
@@ -100,7 +101,9 @@
         "edit": "Edit",
         "info": "Information",
         "create": "Create",
-        "project": "Project"
+        "project": "Project",
+        "material": "material",
+        "status": "status"
     },
     "user": {
         "title": "User Information",

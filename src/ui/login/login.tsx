@@ -92,6 +92,7 @@ export default function Login() {
         if (isObjectEmpty(formValues.password)) {
             setIsErrorPassword(true);
             setMsgPassword(getMessage(ERROR_MSG.E01_001, [FieldConstants.PASSWORD]));
+            return;
         }
 
         if ('admin' === formValues.userName && '123456' === formValues.password) {

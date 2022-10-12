@@ -84,3 +84,8 @@
     border: 1px solid #eaedf2 !important;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 4px 12px 0px !important;
 }
+
+.MuiTablePagination-selectLabel,
+.MuiTablePagination-displayedRows {
+    margin-top: 1em;
+}

@@ -35,6 +35,9 @@ export const UrlFeApp = {
         EDIT: '/app/project/edit',
         EDIT_HAS_ID: '/app/project/edit/:id',
     },
+    SCHEDULE: {
+        MATERIAL_STATUS: '/app/material/status',
+    },
 };
 
 const prefixServerUrl = '/bestwork/api/v1';

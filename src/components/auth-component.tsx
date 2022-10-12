@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
-import './auth.scss';
 import MLanguage from '../shared-components/language/m-language';
+import './auth.scss';
 
 export default function AuthComponent() {
     const navigate = useNavigate();

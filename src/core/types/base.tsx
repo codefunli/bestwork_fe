@@ -54,3 +54,11 @@ export type HeadColumn = {
     label: string;
     numeric: boolean;
 };
+
+export type Comment = {
+    id: number;
+    user: string;
+    comment: string;
+    dateTime: string;
+    subComment: Comment[];
+};
