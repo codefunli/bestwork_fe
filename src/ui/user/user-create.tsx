@@ -8,9 +8,9 @@ import { AlertColorConstants, StatusCode, UrlFeApp, DefaultImage } from '../../c
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { validateCreateUserForm } from '../../core/constants/validate';
-import LocalSeeIcon from '@mui/icons-material/LocalSee';
 import MessageShow from '../../shared-components/message/message';
 import { getCompanies } from '../../services/company-service';
+import FileUpload from '../../shared-components/file-upload/file-upload';
 import "./user.scss";
 
 const initialValues: any = {
@@ -103,14 +103,8 @@ export default function UserAdd() {
         });
     };
 
-    const onChangeAvatar = (e: any) => {
-        if (e.target.files[0]) {
-            const reader: any = new FileReader();
-            reader.addEventListener("load", () => {
-                setImgData(reader.result);
-            });
-            reader.readAsDataURL(e.target.files[0]);
-        }
+    const onChangeAvatar = (event: any) => {
+        setImgData(event.target.files[0]);
     };
 
     const handleCloseMsg = () => {
@@ -134,22 +128,7 @@ export default function UserAdd() {
                 >
                     <Grid item xs={12} md={5} lg={3} sx={{ mt: 1, mb: 1 }}>
                         <Card className="general-info">
-                            <label htmlFor="chosen-avatar" className="avatar">
-                                <img
-                                    alt="Avatar"
-                                    src={imgData}
-                                />
-                                <span>
-                                    <LocalSeeIcon />
-                                </span>
-                            </label>
-                            <input
-                                accept="image/*"
-                                id="chosen-avatar"
-                                type="file"
-                                hidden
-                                onChange={onChangeAvatar}
-                            />
+                            <FileUpload defaultImage={DefaultImage.USER_AVATAR} callbackFunc={onChangeAvatar} />
                             <CardContent className="info">
                                 <Typography gutterBottom variant="h5" component="div">
                                     {formValues.firstNm} {formValues.lastNm}

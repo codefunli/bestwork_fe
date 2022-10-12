@@ -3,19 +3,24 @@ import { useEffect, useRef, useState } from 'react';
 import LanguageIcon from '@mui/icons-material/Language';
 import React from 'react';
 import i18n from '../../transaction/i18n';
+import { useTranslation } from 'react-i18next';
+import './m-language.scss';
 
 type Language = {
     key: string;
     name: string;
+    icon: string;
 };
 const options: Language[] = [
     {
         key: 'en',
-        name: 'English',
+        name: 'en',
+        icon: '/language/en.png'
     },
     {
         key: 'vi',
-        name: 'Viet Nam',
+        name: 'vi',
+        icon: '/language/vi.png'
     },
 ];
 
@@ -28,6 +33,7 @@ export default function MLanguage(props: Props) {
     const anchorRef = useRef<HTMLDivElement>(null);
     const [open, setOpen] = useState(false);
     const [selectedIndex, setSelectedIndex] = React.useState(0);
+    const { t } = useTranslation();
 
     useEffect(() => {
         i18n.changeLanguage(options[selectedIndex].key);
@@ -51,10 +57,10 @@ export default function MLanguage(props: Props) {
     };
 
     return (
-        <div>
+        <div className="multiple-language">
             <Grid container direction="column" alignItems="end">
                 <Grid item xs={12}>
-                    <Tooltip title="Chọn ngôn ngữ" placement="bottom-start" ref={anchorRef}>
+                    <Tooltip title={t('common.selectLanguage')} placement="bottom-start" ref={anchorRef}>
                         <IconButton
                             size="small"
                             color={color}
@@ -95,6 +101,7 @@ export default function MLanguage(props: Props) {
                                             selected={index === selectedIndex}
                                             onClick={() => handleMenuItemClick(index, option.key)}
                                         >
+                                            <img className="language-icon" src={option.icon} alt={option.name} title={option.name} />
                                             {option.name}
                                         </MenuItem>
                                     ))}

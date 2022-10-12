@@ -76,7 +76,8 @@
         "action": "Thao tác",
         "none": "Không có giá trị",
         "start": "Bắt đầu",
-        "end": "Kết thúc"
+        "end": "Kết thúc",
+        "selectLanguage": "Chọn ngôn ngữ"
     },
     "message": {
         "required": "là bắt buộc.",
