@@ -28,7 +28,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { getCompany, updateCompany } from '../../services/company-service';
 import { useTranslation } from 'react-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { validateForm } from '../../core/constants/validate';
+import { validateEditCompanyForm, validateForm } from '../../core/constants/validate';
 import { useForm } from 'react-hook-form';
 import { AlertColorConstants, UrlFeApp } from '../../core/constants/common';
 import MessageShow from '../../shared-components/message/message';
@@ -74,7 +74,7 @@ export default function CompanyEdit() {
         reset,
         formState: { errors },
     } = useForm({
-        resolver: yupResolver(validateForm),
+        resolver: yupResolver(validateEditCompanyForm),
     });
 
     useEffect(() => {
@@ -97,10 +97,6 @@ export default function CompanyEdit() {
             ...formValues,
             tcompany: {
                 ...formValues.tcompany,
-                [name]: value,
-            },
-            tuser: {
-                ...formValues.tuser,
                 [name]: value,
             },
         });
@@ -128,8 +124,6 @@ export default function CompanyEdit() {
                 [name]: value,
             },
         });
-        console.log(value);
-
         setWards(getWardsByDistrictCode(value));
     };
 
@@ -163,14 +157,6 @@ export default function CompanyEdit() {
         reset();
     };
 
-    const handleClearUser = () => {
-        setFormValues({
-            ...formValues,
-            tuser: initialValues.tuser,
-        });
-        reset();
-    };
-
     const handleMessage = (showMsg: boolean, msg: string, type: AlertColor) => {
         setIsShowMessage(showMsg);
         setCompanyMsg(msg);
@@ -182,6 +168,8 @@ export default function CompanyEdit() {
     };
 
     const handleEdit = () => {
+        console.log(formValues);
+
         updateCompany(formValues)
             .then(() => {
                 navigate(UrlFeApp.COMPANY.SEARCH);
@@ -494,11 +482,6 @@ export default function CompanyEdit() {
                                     avatar={<Avatar aria-label="recipe">U</Avatar>}
                                     title={t('edit.user.title')}
                                     subheader={new Date().toLocaleDateString()}
-                                    action={
-                                        <Button variant="outlined" onClick={handleClearUser}>
-                                            {t('button.btnClear')}
-                                        </Button>
-                                    }
                                 />
                                 <CardContent>
                                     <Box
@@ -519,6 +502,7 @@ export default function CompanyEdit() {
                                                 </InputLabel>
                                                 <TextField
                                                     value={formValues.tuser.userName}
+                                                    disabled
                                                     size="small"
                                                     fullWidth
                                                     sx={{
@@ -546,7 +530,8 @@ export default function CompanyEdit() {
                                                 </InputLabel>
                                                 <TextField
                                                     type={'password'}
-                                                    value={formValues.tuser.password}
+                                                    disabled
+                                                    value="hidden"
                                                     size="small"
                                                     fullWidth
                                                     sx={{
@@ -574,6 +559,7 @@ export default function CompanyEdit() {
                                                 <TextField
                                                     name="firstName"
                                                     value={formValues.tuser.firstNm}
+                                                    disabled
                                                     size="small"
                                                     fullWidth
                                                     sx={{
@@ -594,6 +580,7 @@ export default function CompanyEdit() {
                                                 <TextField
                                                     name="lastName"
                                                     value={formValues.tuser.lastNm}
+                                                    disabled
                                                     size="small"
                                                     fullWidth
                                                     sx={{
@@ -618,6 +605,7 @@ export default function CompanyEdit() {
                                                 </InputLabel>
                                                 <TextField
                                                     value={formValues.tuser.uTelNo}
+                                                    disabled
                                                     size="small"
                                                     fullWidth
                                                     sx={{
@@ -648,6 +636,7 @@ export default function CompanyEdit() {
                                                     value={formValues.tuser.uEmail}
                                                     size="small"
                                                     fullWidth
+                                                    disabled
                                                     sx={{
                                                         mt: 1,
                                                         mb: 1,
@@ -655,8 +644,8 @@ export default function CompanyEdit() {
                                                         '& fieldset': { top: 0 },
                                                     }}
                                                     id="outlined-required"
-                                                    label={t('common.nonRequired')}
                                                     error={Boolean(errors.uEmail)}
+                                                    placeholder={t('common.placeholder')}
                                                     helperText={errors.uEmail?.message?.toString()}
                                                     {...register('uEmail', {
                                                         onChange: (e) => handleInputChange(e),
@@ -674,6 +663,7 @@ export default function CompanyEdit() {
                                                         control={
                                                             <Switch
                                                                 checked={formValues.tuser.enable}
+                                                                disabled
                                                                 name="enable"
                                                                 onChange={handleAllowLoginChange}
                                                             />
@@ -698,6 +688,7 @@ export default function CompanyEdit() {
                                                             value="admin"
                                                             control={<Radio color="primary" />}
                                                             label={t('radio.admin')}
+                                                            disabled
                                                         />
                                                         <FormControlLabel
                                                             value="user"
