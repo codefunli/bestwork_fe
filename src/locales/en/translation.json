@@ -75,7 +75,8 @@
         "action": "Action",
         "none": "None",
         "start": "Start",
-        "end": "End"
+        "end": "End",
+        "selectLanguage": "Select language"
     },
     "message": {
         "required": "is required.",

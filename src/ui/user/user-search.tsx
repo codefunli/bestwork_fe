@@ -40,7 +40,7 @@ export default function UserSearch() {
     const { t } = useTranslation();
     const [formValues, setFormValues] = useState(initialValues);
     const queryClient = useQueryClient();
-    const [state, setState] = useState<any>({});
+    const [state, setState] = useState<any>();
     const [companies, setCompanies] = useState<any>();
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [isShowMessage, setIsShowMessage] = useState(false);
@@ -53,6 +53,7 @@ export default function UserSearch() {
     const { data, isLoading } = useQuery(['getUsers'], () => getUsers(formValues), {
         staleTime: 10000,
         onSuccess: (user: any) => {
+            setState(user.data);
             user.data?.content?.forEach((userEl: { id: any }) => {
                 queryClient.setQueryData(['userEl', userEl.id], userEl);
             });
@@ -338,20 +339,18 @@ export default function UserSearch() {
                 </Grid>
 
                 <Grid item xs={12} lg={9} sx={{ mt: 1, mb: 1 }}>
-                    {state && state.content && state.content.length > 0 && (
-                        <EnhancedTable
-                            deleteCallBack={handleDeleteCallBack}
-                            searchCallBack={handleSearchCallBack}
-                            headCells={headUserCol}
-                            rows={
-                                state || {
-                                    content: state,
-                                }
+                    <EnhancedTable
+                        deleteCallBack={handleDeleteCallBack}
+                        searchCallBack={handleSearchCallBack}
+                        headCells={headUserCol}
+                        rows={
+                            state || {
+                                content: [],
                             }
-                            isLoading={isLoading}
-                            arrButton={arrButton}
-                        />
-                    )}
+                        }
+                        isLoading={isLoading}
+                        arrButton={arrButton}
+                    />
                 </Grid>
             </Grid>
 
