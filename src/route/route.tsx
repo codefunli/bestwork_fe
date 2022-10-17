@@ -4,6 +4,7 @@ import { RouteObject, useRoutes } from 'react-router-dom';
 
 import CompanyEdit from '../ui/company/company-edit';
 import AuthComponent from '../components/auth-component';
+import ProjectEdit from '../ui/project/project-edit';
 
 const Login = lazy(() => import('../ui/login/login'));
 const MainApp = lazy(() => import('../components/main-app-component'));
@@ -51,6 +52,10 @@ const listRouter: RouteObject[] = [
             {
                 path: UrlFeApp.PROJECT.SEARCH,
                 element: <ProjectSearch />,
+            },
+            {
+                path: UrlFeApp.PROJECT.EDIT_HAS_ID,
+                element: <ProjectEdit />,
             },
         ],
     },
