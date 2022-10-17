@@ -265,6 +265,10 @@ export default function CompanySearch() {
                                                         id="demo-simple-select-outlined"
                                                         name="status"
                                                         displayEmpty
+                                                        sx={{
+                                                            '& legend': { display: 'none' },
+                                                            '& fieldset': { top: 0 },
+                                                        }}
                                                         value={formValues.status}
                                                         onChange={handleInputChange}
                                                     >
