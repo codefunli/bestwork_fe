@@ -18,14 +18,12 @@ export interface UserInfo {
 }
 
 interface initialUserState {
-    isVerify: boolean;
-    isLogged: boolean;
+    isLogined: boolean;
     info: UserInfo;
 }
 
 const initialState: initialUserState = {
-    isVerify: false,
-    isLogged: false,
+    isLogined: false,
     info: {
         id: -1,
         userId: '',
@@ -47,8 +45,8 @@ export const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-        setVerifyUser(state, action: PayloadAction<boolean>) {
-            state.isVerify = action.payload;
+        setIsLogined(state, action: PayloadAction<boolean>) {
+            state.isLogined = action.payload;
         },
     },
 });

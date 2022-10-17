@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface InitialState {
-    isAppLoading: boolean;
+    isShowMsgErrLogin: boolean;
     isPageLoading: boolean;
     header: {};
     config: {
@@ -11,7 +11,7 @@ interface InitialState {
 }
 
 const initialState: InitialState = {
-    isAppLoading: true,
+    isShowMsgErrLogin: false,
     isPageLoading: false,
     header: {},
     config: {
@@ -24,9 +24,13 @@ export const appSlice = createSlice({
     name: 'app',
     initialState,
     reducers: {
-        setAppLoading(state, action: PayloadAction<boolean>) {
+        setIsPageLoading(state, action: PayloadAction<boolean>) {
             console.log('Action: ' + action.payload);
-            state.isAppLoading = action.payload;
+            state.isPageLoading = action.payload;
+        },
+        setIsShowMsgErrLogin(state, action: PayloadAction<boolean>) {
+            console.log('Action: ' + action.payload);
+            state.isShowMsgErrLogin = action.payload;
         },
     },
 });

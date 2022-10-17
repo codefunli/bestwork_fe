@@ -1,7 +1,7 @@
-import apiClient from "../core/services/api-service";
+import apiClient from '../core/services/api-service';
 import { UrlServer } from '../core/constants/common';
-import { DataResSuccess, PageableDataResSuccess } from "../core/types/base";
-import { UserResDto } from "../models/user-res-dto";
+import { DataResSuccess, PageableDataResSuccess } from '../core/types/base';
+import { UserResDto } from '../models/user-res-dto';
 
 export const getUser = async (id: any) => {
     const res = await apiClient.get(`${UrlServer.USER.USER}/${id}`);
@@ -25,5 +25,10 @@ export const deleteUsers = async (userIdList: any) => {
 
 export const createUsers = async (user: any) => {
     const res = await apiClient.post<DataResSuccess<UserResDto[]>>(UrlServer.USER.CREATE, user);
+    return res.data;
+};
+
+export const isCheckLogined = async () => {
+    const res = await apiClient.get(`${UrlServer.USER.IS_LOGINED}`);
     return res.data;
 };

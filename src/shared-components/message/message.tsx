@@ -27,7 +27,6 @@ export default function MessageShow(props: MessageShowProps) {
     }, [showMessage]);
 
     const handleClose = () => {
-        console.log('HANDLE');
         setState({ ...state, open: false });
         handleCloseMsg();
     };
