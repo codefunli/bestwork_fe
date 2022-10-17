@@ -197,7 +197,7 @@ export default function CompanyRegister() {
     };
 
     return (
-        <div>
+        <>
             <form onSubmit={handleSubmitForm}>
                 <Typography
                     variant="h5"
@@ -745,6 +745,6 @@ export default function CompanyRegister() {
                 type={typeCompanyMsg}
                 handleCloseMsg={handleCloseMsg}
             />
-        </div>
+        </>
     );
 }

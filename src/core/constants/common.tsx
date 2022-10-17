@@ -33,10 +33,13 @@ export const UrlFeApp = {
     },
     PROJECT: {
         SEARCH: '/app/project',
+        CREATE: '/app/project/register',
         EDIT: '/app/project/edit',
         EDIT_HAS_ID: '/app/project/edit/:id',
-        CREATE: '/app/project/register',
     },
+    ROLE: {
+        INDEX: '/app/role'
+    }
 };
 
 export const UrlServer = {
@@ -59,8 +62,13 @@ export const UrlServer = {
         GET: `${PREFIX_SERVER_URL}/projects`,
         DELETE: `${PREFIX_SERVER_URL}/projects/delete`,
         UPDATE: `${PREFIX_SERVER_URL}/projects`,
-        CREATE: '/bestwork/api/v1/projects/create',
     },
+    ROLE: {
+        GET: `${PREFIX_SERVER_URL}/roles`,
+        CREATE: `${PREFIX_SERVER_URL}/roles/create`,
+        UPDATE: `${PREFIX_SERVER_URL}/roles/update`,
+        DELETE: `${PREFIX_SERVER_URL}/roles/delete`,
+    }
 };
 
 export const FieldConstants = {
@@ -76,6 +84,7 @@ export const FieldConstants = {
     FIRST_NAME: 'First Name',
     LAST_NAME: 'Last Name',
     ROLE: 'Role',
+    DESCRIPTION: 'Description',
 };
 
 export const ConfirmConstants = {

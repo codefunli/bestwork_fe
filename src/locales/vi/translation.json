@@ -70,7 +70,11 @@
         "btnBack": "Quay lại",
         "btnCreate": "Tạo mới",
         "btnActive": "Hoạt động",
-        "btnPending": "Tạm dừng"
+        "btnPending": "Tạm dừng",
+        "btnCancel": "Huỷ",
+        "btnReset": "Đặt lại",
+        "btnResetAll": "Đặt lại tất cả",
+        "btnUpdate": "Cập nhật"
     },
     "common": {
         "placeholder": "Nhập một giá trị mới",
@@ -108,7 +112,8 @@
         "edit": "Chỉnh sửa",
         "info": "Thông tin",
         "create": "Tạo mới",
-        "project": "Dự án"
+        "project": "Dự án",
+        "role": "Phân quyền"
     },
     "user": {
         "title": "Thông tin người dùng",
@@ -214,6 +219,22 @@
         "edit": {
             "title": "Chỉnh sửa thông tin dự án",
             "updateDate": "Ngày cập nhật"
+        }
+    },
+    "role": {
+        "title": "Quản lý phân quyền",
+        "tab": {
+            "screen": "Màn hình",
+            "all": "Tất cả",
+            "view": "Xem",
+            "create": "Tạo",
+            "edit": "Chỉnh sửa",
+            "delete": "Xoá"
+        },
+        "modal": {
+            "title": "Tạo phân quyền mới",
+            "roleName": "Tên phân quyền",
+            "description": "Mô tả"
         }
     }
 }
