@@ -109,6 +109,11 @@ export const validateProjectRegisterForm = yup.object({
         .required(getMessage(ERROR_MSG.E01_001, [FieldProjectConstants.CREATE_DATE]))
         .max(new Date(), getMessage(ERROR_MSG.E01_009, [FieldProjectConstants.CREATE_DATE]))
         .typeError(getMessage(ERROR_MSG.E01_001, [FieldProjectConstants.CREATE_DATE])),
+    updateDate: yup
+        .date()
+        .required(getMessage(ERROR_MSG.E01_001, [FieldProjectConstants.UPDATE_DATE]))
+        .max(new Date(), getMessage(ERROR_MSG.E01_009, [FieldProjectConstants.UPDATE_DATE]))
+        .typeError(getMessage(ERROR_MSG.E01_001, [FieldProjectConstants.UPDATE_DATE])),
 });
 
 export const validateProjectEditForm = yup.object({
@@ -118,4 +123,13 @@ export const validateProjectEditForm = yup.object({
         .required(getMessage(ERROR_MSG.E01_001, [FieldProjectConstants.UPDATE_DATE]))
         .max(new Date(), getMessage(ERROR_MSG.E01_009, [FieldProjectConstants.UPDATE_DATE]))
         .typeError(getMessage(ERROR_MSG.E01_001, [FieldProjectConstants.UPDATE_DATE])),
+});
+
+export const validateCreateRoleForm = yup.object({
+    roleName: yup
+        .string()
+        .required(getMessage(ERROR_MSG.E01_001, [FieldConstants.ROLE])),
+    description: yup
+        .string()
+        .required(getMessage(ERROR_MSG.E01_001, [FieldConstants.DESCRIPTION]))
 });

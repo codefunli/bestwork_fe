@@ -70,7 +70,11 @@
         "btnBack": "Back",
         "btnCreate": "Create",
         "btnActive": "Active",
-        "btnPending": "Pending"
+        "btnPending": "Pending",
+        "btnCancel": "Cancel",
+        "btnReset": "Reset",
+        "btnResetAll": "Reset All",
+        "btnUpdate": "Update"
     },
     "common": {
         "placeholder": "Please input a new value",
@@ -107,7 +111,8 @@
         "edit": "Edit",
         "info": "Information",
         "create": "Create",
-        "project": "Project"
+        "project": "Project",
+        "role": "Role"
     },
     "user": {
         "title": "User Information",
@@ -213,6 +218,22 @@
         "edit": {
             "title": "Edit info of your project",
             "updateDate": "Update date"
+        }
+    },
+    "role": {
+        "title": "Role Management",
+        "tab": {
+            "screen": "Screen",
+            "all": "All",
+            "view": "View",
+            "create": "Create",
+            "edit": "Edit",
+            "delete": "Delete"
+        },
+        "modal": {
+            "title": "Create new role",
+            "roleName": "Role Name",
+            "description": "Description"
         }
     }
 }

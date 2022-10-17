@@ -22,6 +22,10 @@ const menuItemLinkData: MenuItemLink[] = [
         name: 'Project',
         link: UrlFeApp.PROJECT.SEARCH,
     },
+    {
+        name: 'Role',
+        link: UrlFeApp.ROLE.INDEX,
+    },
 ];
 
 export default menuItemLinkData;
