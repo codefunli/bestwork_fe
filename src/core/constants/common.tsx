@@ -1,3 +1,5 @@
+import { PREFIX_SERVER_URL } from './urls';
+
 export const CharacterConstants = {
     SLASH: '/',
 };
@@ -37,26 +39,24 @@ export const UrlFeApp = {
     },
 };
 
-const prefixServerUrl = '/bestwork/api/v1';
-
 export const UrlServer = {
     API_LOGIN_URL: '/login',
     COMPANY: {
-        GET_COMPANIES: '/bestwork/api/v1/companies',
-        POST: '/bestwork/api/v1/companies/create',
-        DELETE: '/bestwork/api/v1/companies/delete',
-        GET_COMPANY: '/bestwork/api/v1/companies',
-        UPDATE_COMPANY: '/bestwork/api/v1/companies/updates',
+        GET_COMPANIES: `${PREFIX_SERVER_URL}/companies`,
+        POST: `${PREFIX_SERVER_URL}/companies/create`,
+        DELETE: `${PREFIX_SERVER_URL}/companies/delete`,
+        GET_COMPANY: `${PREFIX_SERVER_URL}/companies`,
+        UPDATE_COMPANY: `${PREFIX_SERVER_URL}/companies/updates`,
     },
     USER: {
-        USER: `${prefixServerUrl}/user`,
-        USERS: `${prefixServerUrl}/users`,
-        DELETE_USERS: `${prefixServerUrl}/users/delete`,
-        CREATE: `${prefixServerUrl}/users/create`,
+        USER: `${PREFIX_SERVER_URL}/user`,
+        USERS: `${PREFIX_SERVER_URL}/users`,
+        DELETE_USERS: `${PREFIX_SERVER_URL}/users/delete`,
+        CREATE: `${PREFIX_SERVER_URL}/users/create`,
     },
     PROJECT: {
-        GET: '/bestwork/api/v1/projects',
-        DELETE: '/bestwork/api/v1/projects/delete',
+        GET: `${PREFIX_SERVER_URL}/projects`,
+        DELETE: `${PREFIX_SERVER_URL}/projects/delete`,
     },
 };
 
