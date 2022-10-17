@@ -1,7 +1,7 @@
 {
     "login": {
         "title": "Login",
-        "userName": "User Name",
+        "userName": "User name",
         "password": "Password",
         "btnLogin": "Login"
     },
@@ -94,7 +94,9 @@
         "districtLabel": "Please choose a district/town",
         "wardLabel": "Please choose a ward/township",
         "status": "Status",
-        "statusLabel": "Please choose status"
+        "statusLabel": "Please choose status",
+        "loginFailed": "The Username or Password is Incorrect",
+        "accessDenied": "Access denied, you don't have permission to access on this server"
     },
     "bread_crumbs": {
         "home": "Home",

@@ -7,7 +7,7 @@ const apiClient = axios.create({
     withCredentials: true,
     headers: {
         'content-type': 'application/json',
-        prefixToken: 'Bearer',
+        prefix: 'Bearer',
     },
     paramsSerializer(params: any) {
         return stringify(params);
@@ -20,13 +20,16 @@ apiClient.interceptors.response.use(
     },
     (err) => {
         return Promise.reject(err);
-    }
+    },
 );
 
 export default apiClient;
 
 export const get = (url: string, param?: any) => {
-    axios.get(url, param).then(res => {
-        return res;
-    }).catch(error => console.log(error));
-}
+    axios
+        .get(url, param)
+        .then((res) => {
+            return res;
+        })
+        .catch((error) => console.log(error));
+};

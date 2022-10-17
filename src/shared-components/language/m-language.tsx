@@ -15,12 +15,12 @@ const options: Language[] = [
     {
         key: 'en',
         name: 'en',
-        icon: '/language/en.png'
+        icon: '/language/en.png',
     },
     {
         key: 'vi',
         name: 'vi',
-        icon: '/language/vi.png'
+        icon: '/language/vi.png',
     },
 ];
 
@@ -67,7 +67,7 @@ export default function MLanguage(props: Props) {
                             aria-label="change other language"
                             onClick={handleToggle}
                         >
-                            <LanguageIcon sx={{ mr: 2 }} />
+                            <LanguageIcon />
                         </IconButton>
                     </Tooltip>
                 </Grid>
@@ -101,7 +101,12 @@ export default function MLanguage(props: Props) {
                                             selected={index === selectedIndex}
                                             onClick={() => handleMenuItemClick(index, option.key)}
                                         >
-                                            <img className="language-icon" src={option.icon} alt={option.name} title={option.name} />
+                                            <img
+                                                className="language-icon"
+                                                src={option.icon}
+                                                alt={option.name}
+                                                title={option.name}
+                                            />
                                             {option.name}
                                         </MenuItem>
                                     ))}

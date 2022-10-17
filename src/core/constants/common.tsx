@@ -40,7 +40,7 @@ export const UrlFeApp = {
 };
 
 export const UrlServer = {
-    API_LOGIN_URL: '/login',
+    API_LOGIN_URL: '/bestwork/login',
     COMPANY: {
         GET_COMPANIES: `${PREFIX_SERVER_URL}/companies`,
         POST: `${PREFIX_SERVER_URL}/companies/create`,
@@ -53,6 +53,7 @@ export const UrlServer = {
         USERS: `${PREFIX_SERVER_URL}/users`,
         DELETE_USERS: `${PREFIX_SERVER_URL}/users/delete`,
         CREATE: `${PREFIX_SERVER_URL}/users/create`,
+        IS_LOGINED: `${PREFIX_SERVER_URL}/users/isCheckLogin`,
     },
     PROJECT: {
         GET: `${PREFIX_SERVER_URL}/projects`,
@@ -94,6 +95,11 @@ export const AlertColorConstants: any = {
 export const StatusCode = {
     OK: 'OK',
     ERROR: 'ERROR',
+};
+
+export const HttpStatusCode = {
+    OK: 200,
+    ERROR: 403,
 };
 
 export const DefaultImage = {

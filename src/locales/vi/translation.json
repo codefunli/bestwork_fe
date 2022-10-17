@@ -95,7 +95,9 @@
         "districtLabel": "Chọn quận/huyện",
         "wardLabel": "Chọn phường/xã",
         "status": "Trạng thái",
-        "statusLabel": "Chọn trạng thái"
+        "statusLabel": "Chọn trạng thái",
+        "loginFailed": "Tài khoản và mật khẩu không chính xác",
+        "accessDenied": "Từ chối truy cập, bạn không có quyền truy cập hệ thống"
     },
     "bread_crumbs": {
         "home": "Trang chủ",

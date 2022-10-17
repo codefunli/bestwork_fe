@@ -2,29 +2,23 @@ import { AccountCircle, PasswordOutlined, Visibility, VisibilityOff } from '@mui
 import {
     AlertColor,
     Button,
-    ClickAwayListener,
     FormControl,
     FormHelperText,
-    Grid,
-    Grow,
     IconButton,
     InputAdornment,
     InputLabel,
-    MenuItem,
-    MenuList,
     OutlinedInput,
-    Paper,
-    Popper,
-    Tooltip,
     Typography,
 } from '@mui/material';
-import { red } from '@mui/material/colors';
-import { useEffect, useRef, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { FieldConstants, UrlFeApp } from '../../core/constants/common';
-import { getMessage, ERROR_MSG } from '../../core/constants/message';
+import { AlertColorConstants, FieldConstants, HttpStatusCode, UrlFeApp } from '../../core/constants/common';
+import { ERROR_MSG, getMessage } from '../../core/constants/message';
+import { useAppDispatch } from '../../core/hook/redux';
+import { userActions } from '../../core/redux/user-slice';
 import { isObjectEmpty } from '../../core/utils/object-utils';
+import { login } from '../../services/login-service';
 import MessageShow from '../../shared-components/message/message';
 import './login.scss';
 
@@ -32,22 +26,6 @@ const initialValues = {
     userName: '',
     password: '',
 };
-
-type Language = {
-    key: string;
-    name: string;
-};
-
-const options: Language[] = [
-    {
-        key: 'en',
-        name: 'English',
-    },
-    {
-        key: 'vi',
-        name: 'VietNamese',
-    },
-];
 
 export default function Login() {
     const [formValues, setFormValues] = useState(initialValues);
@@ -61,6 +39,7 @@ export default function Login() {
     const [typeCompanyMsg, setTypeCompanyMsg] = useState<AlertColor>('error');
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
 
     const handleChangeValue = (event: any) => {
         const { name, value } = event.target;
@@ -83,23 +62,61 @@ export default function Login() {
         setShowPassword(!showPassword);
     };
 
+    const handleMessage = (showMsg: boolean, msg: string, type: AlertColor) => {
+        setIsShowMessage(showMsg);
+        setCompanyMsg(msg);
+        setTypeCompanyMsg(type);
+    };
+
+    const handleResponse = (resp: any) => {
+        switch (resp.status) {
+            case HttpStatusCode.OK:
+                handleMessage(true, resp.message, AlertColorConstants.SUCCESS);
+                dispatch(userActions.setIsLogined(true));
+                navigate(UrlFeApp.MAIN_APP);
+                break;
+            case HttpStatusCode.ERROR:
+                handleMessage(true, t('message.loginFailed'), AlertColorConstants.ERROR);
+                break;
+            default:
+                handleMessage(true, t('message.loginFailed'), AlertColorConstants.WARNING);
+                break;
+        }
+    };
+
     const handleLogin = () => {
+        let isStopLogin = false;
         if (isObjectEmpty(formValues.userName)) {
+            isStopLogin = true;
             setIsErrorUserName(true);
             setMsgUserName(getMessage(ERROR_MSG.E01_001, [FieldConstants.USER_NAME]));
+        } else {
+            setIsErrorUserName(false);
         }
 
         if (isObjectEmpty(formValues.password)) {
+            isStopLogin = true;
             setIsErrorPassword(true);
             setMsgPassword(getMessage(ERROR_MSG.E01_001, [FieldConstants.PASSWORD]));
+        } else {
+            setIsErrorPassword(false);
         }
 
-        if ('admin' === formValues.userName && '123456' === formValues.password) {
-            navigate(UrlFeApp.DASH_BOARD);
+        if (isStopLogin) {
+            return;
         } else {
-            setIsShowMessage(true);
-            setTypeCompanyMsg('error');
-            setCompanyMsg('The username or password is incorrect.');
+            let objectLogin = {
+                username: formValues.userName,
+                password: formValues.password,
+            };
+
+            login(objectLogin)
+                .then((resp) => {
+                    handleResponse(resp);
+                })
+                .catch(() => {
+                    handleMessage(true, t('message.error'), AlertColorConstants.ERROR);
+                });
         }
     };
 
@@ -120,7 +137,7 @@ export default function Login() {
                     </Typography>
                     <div className="login-form-field">
                         <AccountCircle sx={{ mr: 1, my: 0.5 }} />
-                        <FormControl sx={{ m: 1, width: '30ch', color: red }} variant="outlined">
+                        <FormControl sx={{ m: 1, width: '30ch' }} variant="outlined">
                             <InputLabel required htmlFor="outlined-adornment-password">
                                 {t('login.userName')}
                             </InputLabel>
@@ -131,12 +148,8 @@ export default function Login() {
                                 value={formValues.userName}
                                 onChange={handleChangeValue}
                                 error={isErrorUserName}
-                                endAdornment={
-                                    <InputAdornment position="end">
-                                        <IconButton aria-label="toggle password visibility" edge="end"></IconButton>
-                                    </InputAdornment>
-                                }
-                                label="account"
+                                autoComplete="false"
+                                label="Password"
                             />
                             {isErrorUserName && <FormHelperText error>{msgUserName}</FormHelperText>}
                         </FormControl>
@@ -154,6 +167,7 @@ export default function Login() {
                                 value={formValues.password}
                                 onChange={handleChangeValue}
                                 error={isErrorPassword}
+                                autoComplete="false"
                                 endAdornment={
                                     <InputAdornment position="end">
                                         <IconButton
