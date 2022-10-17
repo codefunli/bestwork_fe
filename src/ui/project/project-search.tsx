@@ -125,8 +125,6 @@ export default function ProjectSearch() {
         });
     };
 
-    nativgate(`${UrlFeApp.PROJECT.EDIT}/1`);
-
     // miss pass id with url
     const handleEditData = (e: any, id: number) => {
         e.preventDefault();

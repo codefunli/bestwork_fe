@@ -15,6 +15,7 @@ const UserSearch = lazy(() => import('../ui/user/user-search'));
 const UserInfo = lazy(() => import('../ui/user/user-info'));
 const UserCreate = lazy(() => import('../ui/user/user-create'));
 const ProjectSearch = lazy(() => import('../ui/project/project-search'));
+const ProjectRegister = lazy(() => import('../ui/project/project-register'));
 
 const listRouter: RouteObject[] = [
     {
@@ -56,6 +57,10 @@ const listRouter: RouteObject[] = [
             {
                 path: UrlFeApp.PROJECT.EDIT_HAS_ID,
                 element: <ProjectEdit />,
+            },
+            {
+                path: UrlFeApp.PROJECT.CREATE,
+                element: <ProjectRegister />,
             },
         ],
     },

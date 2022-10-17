@@ -1,0 +1,17 @@
+.role {
+    button.MuiButtonBase-root {
+        align-items: start;
+    }
+
+    .role-content {
+        width: 100%;
+
+        .role-table {
+            width: 100%;
+        }
+    }
+
+    button.Mui-selected {
+        background-color: #1976d213;
+    }
+}
