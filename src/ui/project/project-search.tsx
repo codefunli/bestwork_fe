@@ -125,10 +125,12 @@ export default function ProjectSearch() {
         });
     };
 
+    nativgate(`${UrlFeApp.PROJECT.EDIT}/1`);
+
     // miss pass id with url
     const handleEditData = (e: any, id: number) => {
         e.preventDefault();
-        nativgate(`${UrlFeApp.COMPANY.EDIT}/${id}`);
+        nativgate(`${UrlFeApp.PROJECT.EDIT}/${id}`);
     };
 
     const handleAddUser = (e: any, id: number) => {
@@ -263,6 +265,10 @@ export default function ProjectSearch() {
                                                         id="demo-simple-select-outlined"
                                                         name="status"
                                                         displayEmpty
+                                                        sx={{
+                                                            '& legend': { display: 'none' },
+                                                            '& fieldset': { top: 0 },
+                                                        }}
                                                         value={formValues.status}
                                                         onChange={handleInputChange}
                                                     >

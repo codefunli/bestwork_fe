@@ -53,7 +53,11 @@
     "radio": {
         "enabled": "Enabled",
         "admin": "Admin",
-        "user": "User"
+        "user": "User",
+        "accept": "Accept",
+        "deny": "Deny",
+        "paid": "Paid",
+        "unPaid": "Unpaid"
     },
     "button": {
         "btnRegister": "Register",
@@ -89,7 +93,8 @@
         "cityLabel": "Please choose a city/Province",
         "districtLabel": "Please choose a district/town",
         "wardLabel": "Please choose a ward/township",
-        "status": "Status"
+        "status": "Status",
+        "statusLabel": "Please choose status"
     },
     "bread_crumbs": {
         "home": "Home",
@@ -176,6 +181,8 @@
     },
     "project": {
         "title": "Project Search",
+        "registerTitle": "Project Register",
+        "editTitle": "Edit Project",
         "search": {
             "title": "Search info of your project",
             "prjName": "Project Name",
@@ -189,6 +196,21 @@
             "colTitle": "Title",
             "colDescription": "Description",
             "colStatus": "Status"
+        },
+        "register": {
+            "title": "Register info of your project",
+            "name": "Project name",
+            "type": "Project type",
+            "description": "Description",
+            "comment": "Comment",
+            "createDate": "Create date",
+            "status": "Status",
+            "notificationFlag": "Auto send email",
+            "isPaid": "Pain status"
+        },
+        "edit": {
+            "title": "Edit info of your project",
+            "updateDate": "Update date"
         }
     }
 }

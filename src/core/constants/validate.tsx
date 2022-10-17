@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 import { pattern } from './regex-pattern';
 import { ERROR_MSG, getMessage } from './message';
-import { FieldConstants } from './common';
+import { FieldConstants, FieldProjectConstants } from './common';
 
 export const validateForm = yup.object({
     companyName: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.COMPANY_NAME])),
@@ -101,4 +101,26 @@ export const validateEditCompanyForm = yup.object({
             yup.ref('startDate'),
             getMessage(ERROR_MSG.E01_003, [FieldConstants.EXPIRED_DATE, FieldConstants.START_DATE]),
         ),
+});
+export const validateProjectRegisterForm = yup.object({
+    projectName: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldProjectConstants.PROJECT_NAME])),
+    createDate: yup
+        .date()
+        .required(getMessage(ERROR_MSG.E01_001, [FieldProjectConstants.CREATE_DATE]))
+        .max(new Date(), getMessage(ERROR_MSG.E01_009, [FieldProjectConstants.CREATE_DATE]))
+        .typeError(getMessage(ERROR_MSG.E01_001, [FieldProjectConstants.CREATE_DATE])),
+    updateDate: yup
+        .date()
+        .required(getMessage(ERROR_MSG.E01_001, [FieldProjectConstants.UPDATE_DATE]))
+        .max(new Date(), getMessage(ERROR_MSG.E01_009, [FieldProjectConstants.UPDATE_DATE]))
+        .typeError(getMessage(ERROR_MSG.E01_001, [FieldProjectConstants.UPDATE_DATE])),
+});
+
+export const validateProjectEditForm = yup.object({
+    projectName: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldProjectConstants.PROJECT_NAME])),
+    updateDate: yup
+        .date()
+        .required(getMessage(ERROR_MSG.E01_001, [FieldProjectConstants.UPDATE_DATE]))
+        .max(new Date(), getMessage(ERROR_MSG.E01_009, [FieldProjectConstants.UPDATE_DATE]))
+        .typeError(getMessage(ERROR_MSG.E01_001, [FieldProjectConstants.UPDATE_DATE])),
 });

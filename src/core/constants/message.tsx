@@ -17,6 +17,7 @@ export const ERROR_MSG = {
     E01_006: '{0} is number and must be start with 0 or +84. Ex: 0395XXXXXX.',
     E01_007: '{0} must be a number.',
     E01_008: '{0} should be in correct format.',
+    E01_009: '{0} must be at earlier than current date',
 };
 
 export const getMessage = (msg: string, params: any[]) => {

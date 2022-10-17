@@ -57,6 +57,7 @@ export const UrlServer = {
     PROJECT: {
         GET: `${PREFIX_SERVER_URL}/projects`,
         DELETE: `${PREFIX_SERVER_URL}/projects/delete`,
+        UPDATE: `${PREFIX_SERVER_URL}/projects`,
     },
 };
 
@@ -97,4 +98,14 @@ export const StatusCode = {
 
 export const DefaultImage = {
     USER_AVATAR: '/default-avatar.png',
+};
+
+export const FieldProjectConstants = {
+    PROJECT_NAME: 'Project Name',
+    PROJECT_TYPE: 'Project Type',
+    DESCRIPTION: 'Description',
+    COMMENT: 'Comment',
+    CREATE_DATE: 'Create date',
+    STATUS: 'Status',
+    UPDATE_DATE: 'Update date',
 };
