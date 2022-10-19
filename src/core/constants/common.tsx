@@ -4,10 +4,6 @@ export const CharacterConstants = {
     SLASH: '/',
 };
 
-export const UrlApiPaths = {
-    USER_INFO: '/users/info',
-};
-
 export const UseQueryConstants = {
     USER_INFO: 'userInfo',
 };
@@ -38,8 +34,8 @@ export const UrlFeApp = {
         EDIT_HAS_ID: '/app/project/edit/:id',
     },
     ROLE: {
-        INDEX: '/app/role'
-    }
+        INDEX: '/app/role',
+    },
 };
 
 export const UrlServer = {
@@ -68,7 +64,7 @@ export const UrlServer = {
         CREATE: `${PREFIX_SERVER_URL}/roles/create`,
         UPDATE: `${PREFIX_SERVER_URL}/roles/update`,
         DELETE: `${PREFIX_SERVER_URL}/roles/delete`,
-    }
+    },
 };
 
 export const FieldConstants = {

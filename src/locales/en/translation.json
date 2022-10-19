@@ -74,7 +74,8 @@
         "btnCancel": "Cancel",
         "btnReset": "Reset",
         "btnResetAll": "Reset All",
-        "btnUpdate": "Update"
+        "btnUpdate": "Update",
+        "btnBackToHome": "Back To Home"
     },
     "common": {
         "placeholder": "Please input a new value",
@@ -234,6 +235,13 @@
             "title": "Create new role",
             "roleName": "Role Name",
             "description": "Description"
+        }
+    },
+    "error": {
+        "pageNotFound": {
+            "label": "404",
+            "msg_title": "Oops! Page not found!",
+            "msg_content": "The page you requested was not found."
         }
     }
 }
