@@ -26,6 +26,10 @@ const menuItemLinkData: MenuItemLink[] = [
         name: 'Role',
         link: UrlFeApp.ROLE.INDEX,
     },
+    {
+        name: 'Schedule',
+        link: UrlFeApp.SCHEDULE.MATERIAL_STATUS,
+    },
 ];
 
 export default menuItemLinkData;

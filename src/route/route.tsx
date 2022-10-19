@@ -18,6 +18,7 @@ const ProjectSearch = lazy(() => import('../ui/project/project-search'));
 const Role = lazy(() => import('../ui/role/role'));
 const Page404NotFound = lazy(() => import('../ui/error-page/404NotFound'));
 const ProjectRegister = lazy(() => import('../ui/project/project-register'));
+const MaterialStatus = lazy(() => import('../ui/schedule/material-status'));
 
 const listRouter: RouteObject[] = [
     {
@@ -67,6 +68,10 @@ const listRouter: RouteObject[] = [
             {
                 path: UrlFeApp.PROJECT.CREATE,
                 element: <ProjectRegister />,
+            },
+            {
+                path: UrlFeApp.SCHEDULE.MATERIAL_STATUS,
+                element: <MaterialStatus />,
             },
         ],
     },

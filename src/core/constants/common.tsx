@@ -36,6 +36,9 @@ export const UrlFeApp = {
     ROLE: {
         INDEX: '/app/role',
     },
+    SCHEDULE: {
+        MATERIAL_STATUS: '/app/material/status',
+    },
 };
 
 export const UrlServer = {

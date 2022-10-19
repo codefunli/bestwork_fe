@@ -113,7 +113,9 @@
         "info": "Information",
         "create": "Create",
         "project": "Project",
-        "role": "Role"
+        "role": "Role",
+        "material": "material",
+        "status": "status"
     },
     "user": {
         "title": "User Information",
