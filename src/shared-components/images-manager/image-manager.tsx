@@ -28,7 +28,7 @@ export default function ImageManager(props: ImageManager) {
                     justifyContent: 'center',
                 }}
             >
-                <QuiltedImage callBackFn={() => {}} images={images} isOpenModal={false} />
+                <QuiltedImage callBackFn={() => { }} images={images} isOpenModal={false} />
             </div>
             <ShowImage
                 isOpen={isShowModal}

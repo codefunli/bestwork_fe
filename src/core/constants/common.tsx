@@ -32,6 +32,7 @@ export const UrlFeApp = {
         EDIT: '/app/project/edit',
         EDIT_HAS_ID: '/app/project/edit/:id',
         CREATE: '/app/project/register',
+        DETAIL_HAS_ID: '/app/project/detail/:id',
     },
     ROLE: {
         INDEX: '/app/role',
@@ -124,4 +125,9 @@ export const FieldProjectConstants = {
     CREATE_DATE: 'Create date',
     STATUS: 'Status',
     UPDATE_DATE: 'Update date',
+};
+
+export const FieldProjectProgress = {
+    START_DATE: 'Start date',
+    END_DATE: 'End date',
 };

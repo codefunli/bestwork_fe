@@ -4,17 +4,10 @@ import {
     DialogActions,
     DialogContent,
     DialogContentText,
-    DialogTitle,
-    Grid,
-    IconButton,
-    InputLabel,
-    Slide,
-    TextField,
+    DialogTitle, Slide
 } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
 import { forwardRef, useEffect, useState } from 'react';
-import { DefaultImage } from '../../core/constants/common';
-import FilesUpload from '../file-upload/files-upload';
 
 const Transition = forwardRef(function Transition(
     props: TransitionProps & {

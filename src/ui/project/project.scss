@@ -15,3 +15,21 @@
         background-color: #1976d213;
     }
 }
+
+.progress-drawer {
+    .header {
+        background-color: #66799e;
+    }
+
+    .item {
+        .item-header {
+            background-color: #66799e46;
+            border-top: 1px solid #66799e46;
+            padding: 0.5rem;
+        }
+
+        .content {
+            padding: 0.5rem;
+        }
+    }
+}

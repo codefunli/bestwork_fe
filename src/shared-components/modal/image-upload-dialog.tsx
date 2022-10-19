@@ -8,12 +8,11 @@ import {
     Divider,
     Grid,
     Slide,
-    TextField,
+    TextField
 } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
 import { forwardRef, useEffect, useState } from 'react';
-import FilesUpload from '../file-upload/files-upload';
-import QuiltedImage from '../images-manager/quilted-image';
+import MultipleFileUpload from '../file-upload/multiple-file-upload';
 
 const Transition = forwardRef(function Transition(
     props: TransitionProps & {
@@ -79,7 +78,7 @@ export default function ImageUploadDialog(props: AlertDialogSlideProps) {
         }
     }, [isOpen]);
 
-    const onChangeAvatar = (data: any) => {
+    const onChangeImage = (data: any) => {
         setImgData({
             ...imgData,
             images: data,
@@ -120,6 +119,7 @@ export default function ImageUploadDialog(props: AlertDialogSlideProps) {
                 >
                     {title}
                 </DialogTitle>
+                <Divider />
                 <DialogContent>
                     <DialogContentText id="alert-dialog-slide-description" width={500} height={'auto'}>
                         <Grid container spacing={3}>
@@ -127,7 +127,6 @@ export default function ImageUploadDialog(props: AlertDialogSlideProps) {
                                 <div
                                     w-fullWidth
                                     style={{
-                                        padding: '2px 4px',
                                         display: 'flex',
                                         alignItems: 'center',
                                     }}
@@ -135,6 +134,8 @@ export default function ImageUploadDialog(props: AlertDialogSlideProps) {
                                     <TextField
                                         size="small"
                                         fullWidth
+                                        multiline
+                                        rows={3}
                                         value={imgData.comment}
                                         sx={{
                                             mt: 1,
@@ -147,25 +148,15 @@ export default function ImageUploadDialog(props: AlertDialogSlideProps) {
                                         name="comment"
                                         onChange={handleInputChange}
                                     />
-                                    <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-                                    <FilesUpload
-                                        defaultImages={imgData.images}
-                                        updateImage={imgData.images}
-                                        callbackFunc={onChangeAvatar}
-                                        closeModal={open}
-                                    />
                                 </div>
-                            </Grid>
+                            </Grid >
                             <Grid item xs={12} lg={12}>
-                                <QuiltedImage
-                                    callBackFn={deleteImageCallback}
-                                    images={imgData.images}
-                                    isOpenModal={isOpen}
-                                />
+                                <MultipleFileUpload clearPreview={open} callbackFunc={onChangeImage} />
                             </Grid>
-                        </Grid>
-                    </DialogContentText>
-                </DialogContent>
+                        </Grid >
+                    </DialogContentText >
+                </DialogContent >
+                <Divider />
                 <DialogActions>
                     <Button variant="outlined" onClick={handleClose}>
                         Cancel
@@ -174,7 +165,7 @@ export default function ImageUploadDialog(props: AlertDialogSlideProps) {
                         Upload
                     </Button>
                 </DialogActions>
-            </Dialog>
-        </div>
+            </Dialog >
+        </div >
     );
 }
