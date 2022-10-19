@@ -29,9 +29,9 @@ export const UrlFeApp = {
     },
     PROJECT: {
         SEARCH: '/app/project',
-        CREATE: '/app/project/register',
         EDIT: '/app/project/edit',
         EDIT_HAS_ID: '/app/project/edit/:id',
+        CREATE: '/app/project/register',
     },
     ROLE: {
         INDEX: '/app/role',
@@ -58,6 +58,7 @@ export const UrlServer = {
         GET: `${PREFIX_SERVER_URL}/projects`,
         DELETE: `${PREFIX_SERVER_URL}/projects/delete`,
         UPDATE: `${PREFIX_SERVER_URL}/projects`,
+        CREATE: '/bestwork/api/v1/projects/create',
     },
     ROLE: {
         GET: `${PREFIX_SERVER_URL}/roles`,
