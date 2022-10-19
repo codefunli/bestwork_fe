@@ -35,7 +35,7 @@ export default function ImageManager(props: ImageManager) {
                 closeFunc={closeModal}
                 okFunc={alertOkFunc}
                 title="Preview image"
-                content={{ projectId: '1', comment: '', images: images }}
+                content={{ projectId: 'PRJ001', comment: '', images: images }}
                 noBtn="NO"
                 okBtn="OK"
             />

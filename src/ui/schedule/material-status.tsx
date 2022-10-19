@@ -24,14 +24,14 @@ import EditIcon from '@mui/icons-material/Edit';
 const initialDataImg = {
     comment: '',
     images: [],
-    projectId: '',
+    projectId: 'PRJ001',
 };
 
 const initialValues = [
     {
         comment: '',
         images: [],
-        projectId: '',
+        projectId: 'PRJ001',
     },
 ];
 export default function MaterialSchedule() {
@@ -103,7 +103,7 @@ export default function MaterialSchedule() {
                     </Paper>
                 </Grid>
             </Grid>
-            {imagesData[0].projectId != '' &&
+            {imagesData[0].images.length > 0 &&
                 imagesData.map((data) => (
                     <Grid
                         key={data.projectId}

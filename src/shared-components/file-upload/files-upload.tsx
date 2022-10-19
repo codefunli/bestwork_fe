@@ -1,9 +1,6 @@
-import LocalSeeIcon from '@mui/icons-material/LocalSee';
-import { IconButton } from '@mui/material';
-import { useEffect, useState } from 'react';
-import QuiltedImage from '../images-manager/quilted-image';
-import './file-upload.scss';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
+import { useEffect, useRef, useState } from 'react';
+import './file-upload.scss';
 
 interface FilesUpLoad {
     defaultImages: string[];
@@ -15,6 +12,7 @@ interface FilesUpLoad {
 export default function FilesUpload(props: FilesUpLoad) {
     const { defaultImages, callbackFunc, closeModal, updateImage } = props;
     const [imagesPreview, setImagesPreview] = useState(defaultImages);
+    const inputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         setImagesPreview(updateImage);
@@ -47,6 +45,9 @@ export default function FilesUpload(props: FilesUpLoad) {
 
     useEffect(() => {
         callbackFunc(imagesPreview);
+        if (inputRef.current != null) {
+            inputRef.current.value = '';
+        }
     }, [imagesPreview]);
 
     return (
@@ -54,7 +55,15 @@ export default function FilesUpload(props: FilesUpLoad) {
             <label htmlFor="chosen-image" className="btn btn-outline-primary">
                 <CameraAltIcon />
             </label>
-            <input accept="image/*" id="chosen-image" multiple={true} type="file" hidden onChange={onChangeImage} />
+            <input
+                accept="image/*"
+                id="chosen-image"
+                multiple={true}
+                type="file"
+                ref={inputRef}
+                hidden
+                onChange={onChangeImage}
+            />
         </div>
     );
 }

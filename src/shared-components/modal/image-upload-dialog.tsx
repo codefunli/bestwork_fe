@@ -40,19 +40,13 @@ interface AlertDialogSlideProps {
 const initialDataImg = {
     comment: '',
     images: [],
-    projectId: '',
+    projectId: 'PRJ001',
 };
 
 export default function ImageUploadDialog(props: AlertDialogSlideProps) {
     const { title, content, isOpen, closeFunc, okFunc, noBtn, okBtn } = props;
     const [open, setOpen] = useState(false);
     const [imgData, setImgData] = useState(initialDataImg);
-
-    useEffect(() => {
-        if (isOpen) {
-            setImgData(content);
-        }
-    }, [isOpen]);
 
     const handleOkFunc = () => {
         setOpen(false);

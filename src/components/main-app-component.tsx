@@ -137,7 +137,7 @@ export default function MiniDrawer() {
     useEffect(() => {
         const timer = setInterval(() => {
             setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10));
-        }, 800);
+        }, 1100);
 
         isCheckLogined()
             .then((resp) => {
