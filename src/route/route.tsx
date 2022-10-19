@@ -17,6 +17,7 @@ const UserCreate = lazy(() => import('../ui/user/user-create'));
 const ProjectSearch = lazy(() => import('../ui/project/project-search'));
 const Role = lazy(() => import('../ui/role/role'));
 const Page404NotFound = lazy(() => import('../ui/error-page/404NotFound'));
+const ProjectRegister = lazy(() => import('../ui/project/project-register'));
 
 const listRouter: RouteObject[] = [
     {
@@ -62,6 +63,10 @@ const listRouter: RouteObject[] = [
             {
                 path: UrlFeApp.ROLE.INDEX,
                 element: <Role />,
+            },
+            {
+                path: UrlFeApp.PROJECT.CREATE,
+                element: <ProjectRegister />,
             },
         ],
     },
