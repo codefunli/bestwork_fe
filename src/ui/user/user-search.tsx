@@ -14,7 +14,7 @@ import {
     TextField,
     Typography,
     AlertColor,
-    Grid
+    Grid,
 } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { AlertColorConstants, UrlFeApp, ConfirmConstants } from '../../core/constants/common';
@@ -27,13 +27,13 @@ import { getCompanies } from '../../services/company-service';
 import AlertDialogSlide from '../../shared-components/modal/alert-dialog-slide';
 import MessageShow from '../../shared-components/message/message';
 import { SUCCESS_MSG } from '../../core/constants/message';
-import "./user.scss";
+import './user.scss';
 
 const initialValues = {
     keyword: '',
     companyId: '',
     role: '',
-    enabled: ''
+    enabled: '',
 };
 
 export default function UserSearch() {
@@ -65,10 +65,10 @@ export default function UserSearch() {
             const companies = await getCompanies({});
             if (companies && companies.data && companies.data.content) {
                 setCompanies(companies?.data?.content);
-            };
+            }
         };
         fetchCompanies();
-    }, [])
+    }, []);
 
     useEffect(() => {
         if (data && data.data && data.data.content) {
@@ -93,7 +93,7 @@ export default function UserSearch() {
 
     const handleSubmit = () => {
         fetchData({
-            ...formValues
+            ...formValues,
         });
     };
 
@@ -113,7 +113,7 @@ export default function UserSearch() {
             nameFn: 'Edit',
             acFn: handleEditData,
             iconFn: 'ModeEditIcon',
-        }
+        },
     ];
 
     const handleSearchCallBack = (childData: any) => {
@@ -141,14 +141,16 @@ export default function UserSearch() {
     };
 
     const alertOkFunc = () => {
-        deleteUsers(selectedUserIdList).then((value) => {
-            setIsShowMessage(true);
-            fetchData({
-                ...formValues,
+        deleteUsers(selectedUserIdList)
+            .then((value) => {
+                setIsShowMessage(true);
+                fetchData({
+                    ...formValues,
+                });
+            })
+            .catch((err) => {
+                handleMessage(true, t('message.error'), AlertColorConstants.ERROR);
             });
-        }).catch((err) => {
-            handleMessage(true, t('message.error'), AlertColorConstants.ERROR);
-        });
         setIsOpenModal(false);
     };
 
@@ -163,16 +165,17 @@ export default function UserSearch() {
 
     return (
         <div className="user-search">
-            <Grid
-                container
-                direction="row"
-                spacing={3}
-            >
+            <Grid container direction="row" spacing={3}>
                 <Grid item xs={12} sx={{ mt: 1 }}>
                     <div className="row">
                         <div className="col-sm-12 col-md-6 text-start d-none d-lg-block">
-                            <Typography variant="h5" color="textSecondary" gutterBottom sx={{ textTransform: 'uppercase' }}>
-                                {t("user.search.title")}
+                            <Typography
+                                variant="h5"
+                                color="textSecondary"
+                                gutterBottom
+                                sx={{ textTransform: 'uppercase' }}
+                            >
+                                {t('user.search.title')}
                             </Typography>
                         </div>
                         <div className="col-sm-12 col-md-6 text-end d-none d-lg-block">
@@ -203,7 +206,7 @@ export default function UserSearch() {
                     <Card w-full>
                         <CardHeader
                             avatar={<Avatar aria-label="recipe">SC</Avatar>}
-                            title={t("user.search.subtitle")}
+                            title={t('user.search.subtitle')}
                             subheader={new Date().toLocaleDateString()}
                         />
                         <CardContent>
@@ -217,7 +220,9 @@ export default function UserSearch() {
                             >
                                 <div className="row justify-center m-1">
                                     <div className="col-12 d-block p-1">
-                                        <InputLabel htmlFor="outlined-adornment-amount">{t('user.search.keyword')}</InputLabel>
+                                        <InputLabel htmlFor="outlined-adornment-amount">
+                                            {t('user.search.keyword')}
+                                        </InputLabel>
                                         <TextField
                                             size="small"
                                             fullWidth
@@ -225,7 +230,7 @@ export default function UserSearch() {
                                                 mt: 1,
                                                 mb: 1,
                                                 '& legend': { display: 'none' },
-                                                '& fieldset': { top: 0 }
+                                                '& fieldset': { top: 0 },
                                             }}
                                             name="keyword"
                                             label=""
@@ -235,47 +240,43 @@ export default function UserSearch() {
                                         />
                                     </div>
                                     <div className="col-12 d-block p-1">
-                                        <InputLabel htmlFor="outlined-adornment-amount">{t('user.search.companyName')}</InputLabel>
-                                        <FormControl
-                                            size="small"
-                                            fullWidth
-                                            sx={{ mt: 1, mb: 1 }}
-                                            variant="outlined"
-                                        >
+                                        <InputLabel htmlFor="outlined-adornment-amount">
+                                            {t('user.search.companyName')}
+                                        </InputLabel>
+                                        <FormControl size="small" fullWidth sx={{ mt: 1, mb: 1 }} variant="outlined">
                                             <Select
                                                 name="companyId"
                                                 value={formValues.companyId}
                                                 displayEmpty
                                                 sx={{
                                                     '& legend': { display: 'none' },
-                                                    '& fieldset': { top: 0 }
+                                                    '& fieldset': { top: 0 },
                                                 }}
                                                 onChange={handleInputChange}
                                             >
                                                 <MenuItem value="" selected={true}>
                                                     <em>{t('user.search.selectCompanyName')}</em>
                                                 </MenuItem>
-                                                {companies && companies.length > 0 && companies.map((company: any) => (
-                                                    <MenuItem value={company.companyId}>{company.companyName}</MenuItem>
-                                                ))}
+                                                {companies &&
+                                                    companies.length > 0 &&
+                                                    companies.map((company: any) => (
+                                                        <MenuItem value={company.companyId}>
+                                                            {company.companyName}
+                                                        </MenuItem>
+                                                    ))}
                                             </Select>
                                         </FormControl>
                                     </div>
                                     <div className="col-12 d-block p-1">
-                                        <InputLabel htmlFor="role">{t("user.info.role")}</InputLabel>
-                                        <FormControl
-                                            size="small"
-                                            fullWidth
-                                            sx={{ mt: 1, mb: 1 }}
-                                            variant="outlined"
-                                        >
+                                        <InputLabel htmlFor="role">{t('user.info.role')}</InputLabel>
+                                        <FormControl size="small" fullWidth sx={{ mt: 1, mb: 1 }} variant="outlined">
                                             <Select
                                                 name="role"
                                                 value={formValues.role}
                                                 displayEmpty
                                                 sx={{
                                                     '& legend': { display: 'none' },
-                                                    '& fieldset': { top: 0 }
+                                                    '& fieldset': { top: 0 },
                                                 }}
                                                 onChange={handleInputChange}
                                             >
@@ -289,20 +290,15 @@ export default function UserSearch() {
                                         </FormControl>
                                     </div>
                                     <div className="col-12 d-block p-1">
-                                        <InputLabel htmlFor="isBlocked">{t("user.search.status")}</InputLabel>
-                                        <FormControl
-                                            size="small"
-                                            fullWidth
-                                            sx={{ mt: 1, mb: 1 }}
-                                            variant="outlined"
-                                        >
+                                        <InputLabel htmlFor="isBlocked">{t('user.search.status')}</InputLabel>
+                                        <FormControl size="small" fullWidth sx={{ mt: 1, mb: 1 }} variant="outlined">
                                             <Select
                                                 name="enabled"
                                                 value={formValues.enabled}
                                                 displayEmpty
                                                 sx={{
                                                     '& legend': { display: 'none' },
-                                                    '& fieldset': { top: 0 }
+                                                    '& fieldset': { top: 0 },
                                                 }}
                                                 onChange={handleInputChange}
                                             >

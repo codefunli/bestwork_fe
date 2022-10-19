@@ -1,3 +1,4 @@
+export const STR_EMPTY = '';
 /**
  * check undefined and null of object
  */
