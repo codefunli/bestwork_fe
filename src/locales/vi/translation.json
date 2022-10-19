@@ -74,7 +74,8 @@
         "btnCancel": "Huỷ",
         "btnReset": "Đặt lại",
         "btnResetAll": "Đặt lại tất cả",
-        "btnUpdate": "Cập nhật"
+        "btnUpdate": "Cập nhật",
+        "btnBackToHome": "Quay về trang chủ"
     },
     "common": {
         "placeholder": "Nhập một giá trị mới",
@@ -235,6 +236,13 @@
             "title": "Tạo phân quyền mới",
             "roleName": "Tên phân quyền",
             "description": "Mô tả"
+        }
+    },
+    "error": {
+        "pageNotFound": {
+            "label": "404",
+            "msg_title": "Đáng tiếc! Trang này không tồn tại!",
+            "msg_content": "Trang web bạn muốn tìm kiếm hiện không tồn tại"
         }
     }
 }

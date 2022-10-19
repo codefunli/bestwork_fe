@@ -16,6 +16,7 @@ const UserInfo = lazy(() => import('../ui/user/user-info'));
 const UserCreate = lazy(() => import('../ui/user/user-create'));
 const ProjectSearch = lazy(() => import('../ui/project/project-search'));
 const Role = lazy(() => import('../ui/role/role'));
+const Page404NotFound = lazy(() => import('../ui/error-page/404NotFound'));
 
 const listRouter: RouteObject[] = [
     {
@@ -73,6 +74,10 @@ const listRouter: RouteObject[] = [
                 element: <Login />,
             },
         ],
+    },
+    {
+        path: '/*',
+        element: <Page404NotFound />,
     },
 ];
 export default function RenderRouter() {
