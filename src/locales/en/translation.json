@@ -20,7 +20,8 @@
             "colCpName": "Company Name",
             "colCpAddress": "Address",
             "colCpStartDate": "Start Date",
-            "colCpExpired": "Status"
+            "colCpExpired": "Status",
+            "colCpEmail": "Email"
         }
     },
     "register": {
