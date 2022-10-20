@@ -20,20 +20,19 @@ import {
     TextField,
     Typography,
 } from '@mui/material';
-import { useState } from 'react';
 import cities from 'hanhchinhvn/dist/tinh_tp.json';
+import { useState } from 'react';
 import { District, Ward } from '../../core/types/administrative';
 import { getDistrictsByCityCode, getWardsByDistrictCode } from '../../core/utils/administrative-utils';
 
-import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { validateForm } from '../../core/constants/validate';
-import MessageShow from '../../shared-components/message/message';
-import { postCompany } from '../../services/company-service';
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { AlertColorConstants, StatusCode, UrlFeApp } from '../../core/constants/common';
-import { useTranslation } from 'react-i18next';
-import { useAppSelector } from '../../core/hook/redux';
+import { validateForm } from '../../core/constants/validate';
+import { registerCompany } from '../../services/company-service';
+import MessageShow from '../../shared-components/message/message';
 
 const currentDateTime = new Date().toISOString().substring(0, 11).concat(new Date().toLocaleTimeString());
 
@@ -134,7 +133,7 @@ export default function CompanyRegister() {
     };
 
     const handleAllowLoginChange = (event: any) => {
-        const { name } = event.target;
+        const { name, value } = event.target;
 
         setFormValues({
             ...formValues,
@@ -183,7 +182,36 @@ export default function CompanyRegister() {
     };
 
     const handleSubmitForm = (event: any) => {
-        postCompany(formValues)
+        let objValue: any = {};
+
+        if (formValues.user.enabled) {
+            objValue = {
+                ...formValues,
+                company: {
+                    ...formValues.company,
+                    startDate: `${formValues.company.startDate}:00:000Z`,
+                    expiredDate: `${formValues.company.expiredDate}:00:000Z`,
+                },
+                user: {
+                    ...formValues.user,
+                    enabled: 1,
+                },
+            };
+        } else {
+            objValue = {
+                ...formValues,
+                company: {
+                    ...formValues.company,
+                    startDate: `${formValues.company.startDate}:00:000Z`,
+                    expiredDate: `${formValues.company.expiredDate}:00:000Z`,
+                },
+                user: {
+                    ...formValues.user,
+                    enabled: 0,
+                },
+            };
+        }
+        registerCompany(objValue)
             .then((resp) => {
                 handleResponse(resp);
             })
