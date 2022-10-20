@@ -222,6 +222,17 @@
         "edit": {
             "title": "Edit info of your project",
             "updateDate": "Update date"
+        },
+        "progress": {
+            "title": "Construction progress",
+            "prjName": "Project Name",
+            "progressImg": "Construction images",
+            "date": "Start/end date",
+            "startDate": "Start date",
+            "endDate": "End date",
+            "status": "Status",
+            "report": "Report",
+            "note": "Note"
         }
     },
     "role": {

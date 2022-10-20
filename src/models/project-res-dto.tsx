@@ -12,3 +12,13 @@ export interface ProjectResDTO {
     rating: string;
     comment: string;
 }
+
+export interface ProjectProgressDTO {
+    name: string;
+    images: string[];
+    startDate: string;
+    endDate: string;
+    status: number;
+    report: string;
+    note: string;
+}

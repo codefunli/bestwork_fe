@@ -125,6 +125,8 @@ export default function ProjectSearch() {
         });
     };
 
+    // nativgate('/app/project/detail/1');
+
     // miss pass id with url
     const handleEditData = (e: any, id: number) => {
         e.preventDefault();

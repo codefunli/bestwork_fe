@@ -1,8 +1,7 @@
-import DeleteIcon from '@mui/icons-material/Delete';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { Card, CardHeader, IconButton, ImageList, ImageListItem } from '@mui/material';
 import { useEffect, useState } from 'react';
 import './image-manager.scss';
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 export default function QuiltedImage(props: { images: any[]; callBackFn: Function; isOpenModal: boolean }) {
     const [addNumberLabel, setAddNumberLabel] = useState(0);
@@ -45,7 +44,7 @@ export default function QuiltedImage(props: { images: any[]; callBackFn: Functio
                                     )}
                                     <img
                                         src={item}
-                                        //alt={item.title}
+                                        alt={item}
                                         loading="lazy"
                                         className="imgTag"
                                     />

@@ -1,4 +1,4 @@
-import LocalSeeIcon from '@mui/icons-material/LocalSee';
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {
     Avatar,
@@ -96,14 +96,14 @@ export default function MaterialSchedule() {
                             justifyContent: 'center',
                         }}
                     >
-                        <InputLabel htmlFor="outlined-adornment-amount">Upload image of material products:</InputLabel>
+                        <InputLabel htmlFor="outlined-adornment-amount">Upload image of material products</InputLabel>
                         <IconButton color="primary" sx={{ p: '10px' }} aria-label="directions">
-                            <LocalSeeIcon onClick={openModal} />
+                            <AddPhotoAlternateIcon onClick={openModal} />
                         </IconButton>
                     </Paper>
                 </Grid>
             </Grid>
-            {imagesData[0].projectId != '' &&
+            {imagesData[0].images.length > 0 &&
                 imagesData.map((data) => (
                     <Grid
                         key={data.projectId}

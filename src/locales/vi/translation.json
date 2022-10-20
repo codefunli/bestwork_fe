@@ -221,6 +221,17 @@
         "edit": {
             "title": "Chỉnh sửa thông tin dự án",
             "updateDate": "Ngày cập nhật"
+        },
+        "progress": {
+            "title": "Tiến độ thi công",
+            "prjName": "Tên dự án",
+            "progressImg": "Hình ảnh công trường",
+            "date": "Ngày bắt đầu/kết thúc",
+            "startDate": "Ngày bắt đầu",
+            "endDate": "Ngày kết thúc",
+            "status": "Trạng thái",
+            "report": "Báo cáo",
+            "note": "Ghi chú"
         }
     },
     "role": {
