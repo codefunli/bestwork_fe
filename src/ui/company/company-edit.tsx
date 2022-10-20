@@ -109,9 +109,6 @@ export default function CompanyEdit() {
                             },
                         };
                     }
-
-                    console.log(objValue);
-
                     setFormValues(objValue);
                     setDistricts(getDistrictsByCityCode(value.data.company.city || ''));
                     setWards(getWardsByDistrictCode(value.data.company.district || ''));
@@ -199,19 +196,12 @@ export default function CompanyEdit() {
     };
 
     const handleEdit = () => {
-        console.log(formValues);
         const companyValue = {
             ...formValues.company,
         };
-
-        console.log(companyValue);
-
         updateCompany(companyValue)
             .then((data: any) => {
-                console.log(data);
-
                 handleMessage(true, data.message, 'success');
-
                 if (data.status === 'OK') {
                     setTimeout(() => {
                         navigate(UrlFeApp.COMPANY.SEARCH);
