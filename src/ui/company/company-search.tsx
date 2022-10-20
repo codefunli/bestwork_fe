@@ -40,6 +40,10 @@ const initialValues = {
     sortBy: 'id',
 };
 
+const initialIds = {
+    lstCompanyId: [],
+};
+
 export default function CompanySearch() {
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [isShowMessage, setIsShowMessage] = useState(false);
@@ -49,7 +53,7 @@ export default function CompanySearch() {
     const queryClient = useQueryClient();
     const [state, setState] = useState<any>();
     const { t } = useTranslation();
-    const [ids, setIds] = useState({});
+    const [ids, setIds] = useState<any>(initialIds);
 
     const nativgate = useNavigate();
 
@@ -111,10 +115,14 @@ export default function CompanySearch() {
     };
 
     const handleDeleteCallBack = (childData: any) => {
+        const data = {
+            lstCompanyId: [...childData.ids],
+        };
+
         setTypeCompanyMsg('success');
         setCompanyMsg(SUCCESS_MSG.S01_004);
         setIsOpenModal(true);
-        setIds(childData);
+        setIds(data);
     };
 
     const handleClearData = (e: any) => {
