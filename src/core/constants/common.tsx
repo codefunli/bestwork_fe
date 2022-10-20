@@ -48,8 +48,8 @@ export const UrlServer = {
         GET_COMPANIES: `${PREFIX_SERVER_URL}/companies/list`,
         REGISTER: `${PREFIX_SERVER_URL}/companies/create`,
         DELETE: `${PREFIX_SERVER_URL}/companies/delete`,
-        GET_COMPANY: `${PREFIX_SERVER_URL}/companies`,
-        UPDATE_COMPANY: `${PREFIX_SERVER_URL}/companies/updates`,
+        GET_COMPANY_BY_ID: `${PREFIX_SERVER_URL}/companies`,
+        UPDATE_COMPANY: `${PREFIX_SERVER_URL}/companies/update`,
     },
     USER: {
         USER: `${PREFIX_SERVER_URL}/user`,

@@ -25,7 +25,7 @@ import cities from 'hanhchinhvn/dist/tinh_tp.json';
 import { District, Ward } from '../../core/types/administrative';
 import { getDistrictsByCityCode, getWardsByDistrictCode } from '../../core/utils/administrative-utils';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getCompany, updateCompany } from '../../services/company-service';
+import { getCompanyById, updateCompany } from '../../services/company-service';
 import { useTranslation } from 'react-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { validateEditCompanyForm, validateForm } from '../../core/constants/validate';
@@ -34,7 +34,7 @@ import { AlertColorConstants, UrlFeApp } from '../../core/constants/common';
 import MessageShow from '../../shared-components/message/message';
 
 const initialValues = {
-    tcompany: {
+    company: {
         companyName: '',
         cpEmail: '',
         cpTelNo: '',
@@ -46,7 +46,7 @@ const initialValues = {
         startDate: '',
         expiredDate: '',
     },
-    tuser: {
+    user: {
         userName: '',
         password: '',
         firstNm: '',
@@ -79,11 +79,42 @@ export default function CompanyEdit() {
 
     useEffect(() => {
         if (params.id != undefined) {
-            getCompany(params.id).then((value: any) => {
+            getCompanyById(params.id).then((value: any) => {
                 if (value != undefined && value.data != undefined) {
-                    setFormValues(value.data);
-                    setDistricts(getDistrictsByCityCode(value.data.tcompany.city || ''));
-                    setWards(getWardsByDistrictCode(value.data.tcompany.district || ''));
+                    let objValue: any = {};
+                    if (value.data.user.isEnable === 1) {
+                        objValue = {
+                            ...value.data,
+                            company: {
+                                ...value.data.company,
+                                startDate: `${value.data.company.startDate.substring(0, 16)}`,
+                                expiredDate: `${value.data.company.expiredDate.substring(0, 16)}`,
+                            },
+                            user: {
+                                ...value.data.user,
+                                enabled: true,
+                            },
+                        };
+                    } else if (value.data.user.isEnable === 0) {
+                        objValue = {
+                            ...value.data,
+                            company: {
+                                ...value.data.company,
+                                startDate: `${value.data.company.startDate.substring(0, 16)}`,
+                                expiredDate: `${value.data.company.expiredDate.substring(0, 16)}`,
+                            },
+                            user: {
+                                ...value.data.user,
+                                enabled: false,
+                            },
+                        };
+                    }
+
+                    console.log(objValue);
+
+                    setFormValues(objValue);
+                    setDistricts(getDistrictsByCityCode(value.data.company.city || ''));
+                    setWards(getWardsByDistrictCode(value.data.company.district || ''));
                 }
 
                 reset();
@@ -95,8 +126,8 @@ export default function CompanyEdit() {
         const { name, value } = event.target;
         setFormValues({
             ...formValues,
-            tcompany: {
-                ...formValues.tcompany,
+            company: {
+                ...formValues.company,
                 [name]: value,
             },
         });
@@ -106,8 +137,8 @@ export default function CompanyEdit() {
         const { name, value } = event.target;
         setFormValues({
             ...formValues,
-            tcompany: {
-                ...formValues.tcompany,
+            company: {
+                ...formValues.company,
                 [name]: value,
             },
         });
@@ -119,8 +150,8 @@ export default function CompanyEdit() {
         const { name, value } = event.target;
         setFormValues({
             ...formValues,
-            tcompany: {
-                ...formValues.tcompany,
+            company: {
+                ...formValues.company,
                 [name]: value,
             },
         });
@@ -131,8 +162,8 @@ export default function CompanyEdit() {
         const { name, value } = event.target;
         setFormValues({
             ...formValues,
-            tcompany: {
-                ...formValues.tcompany,
+            company: {
+                ...formValues.company,
                 [name]: value,
             },
         });
@@ -142,9 +173,9 @@ export default function CompanyEdit() {
         const { name } = event.target;
         setFormValues({
             ...formValues,
-            tuser: {
-                ...formValues.tuser,
-                [name]: !formValues.tuser.enable,
+            user: {
+                ...formValues.user,
+                [name]: !formValues.user.enable,
             },
         });
     };
@@ -152,7 +183,7 @@ export default function CompanyEdit() {
     const handleClearCompany = () => {
         setFormValues({
             ...formValues,
-            tcompany: initialValues.tcompany,
+            company: initialValues.company,
         });
         reset();
     };
@@ -169,10 +200,23 @@ export default function CompanyEdit() {
 
     const handleEdit = () => {
         console.log(formValues);
+        const companyValue = {
+            ...formValues.company,
+        };
 
-        updateCompany(formValues)
-            .then(() => {
-                navigate(UrlFeApp.COMPANY.SEARCH);
+        console.log(companyValue);
+
+        updateCompany(companyValue)
+            .then((data: any) => {
+                console.log(data);
+
+                handleMessage(true, data.message, 'success');
+
+                if (data.status === 'OK') {
+                    setTimeout(() => {
+                        navigate(UrlFeApp.COMPANY.SEARCH);
+                    }, 1000);
+                }
             })
             .catch(() => {
                 handleMessage(true, t('message.error'), AlertColorConstants.ERROR);
@@ -225,7 +269,7 @@ export default function CompanyEdit() {
                                                 </InputLabel>
                                                 <TextField
                                                     size="small"
-                                                    value={formValues.tcompany.companyName}
+                                                    value={formValues.company.companyName}
                                                     fullWidth
                                                     sx={{
                                                         mt: 1,
@@ -252,7 +296,7 @@ export default function CompanyEdit() {
                                                 </InputLabel>
                                                 <TextField
                                                     size="small"
-                                                    value={formValues.tcompany.cpEmail}
+                                                    value={formValues.company.cpEmail}
                                                     fullWidth
                                                     sx={{
                                                         mt: 1,
@@ -281,7 +325,7 @@ export default function CompanyEdit() {
                                                 </InputLabel>
                                                 <TextField
                                                     size="small"
-                                                    value={formValues.tcompany.cpTelNo}
+                                                    value={formValues.company.cpTelNo}
                                                     fullWidth
                                                     sx={{
                                                         mt: 1,
@@ -307,7 +351,7 @@ export default function CompanyEdit() {
                                                 </InputLabel>
                                                 <TextField
                                                     size="small"
-                                                    value={formValues.tcompany.taxNo}
+                                                    value={formValues.company.taxNo}
                                                     fullWidth
                                                     sx={{
                                                         mt: 1,
@@ -342,7 +386,7 @@ export default function CompanyEdit() {
                                                         id="demo-simple-select-outlined"
                                                         name="city"
                                                         displayEmpty
-                                                        value={formValues.tcompany.city}
+                                                        value={formValues.company.city}
                                                         onChange={handleCityChange}
                                                     >
                                                         <MenuItem value="" selected={true} disabled>
@@ -369,7 +413,7 @@ export default function CompanyEdit() {
                                                         id="demo-simple-select-outlined"
                                                         name="district"
                                                         displayEmpty
-                                                        value={formValues.tcompany.district}
+                                                        value={formValues.company.district}
                                                         onChange={handleDistrictChange}
                                                     >
                                                         <MenuItem value="" selected={true} disabled>
@@ -398,7 +442,7 @@ export default function CompanyEdit() {
                                                         id="demo-simple-select-outlined"
                                                         name="ward"
                                                         displayEmpty
-                                                        value={formValues.tcompany.ward}
+                                                        value={formValues.company.ward}
                                                         onChange={handleWardChange}
                                                     >
                                                         <MenuItem value="" selected={true} disabled>
@@ -421,7 +465,7 @@ export default function CompanyEdit() {
                                                     id="outlined-required"
                                                     placeholder={t('common.placeholder')}
                                                     name="street"
-                                                    value={formValues.tcompany.street}
+                                                    value={formValues.company.street}
                                                     onChange={handleInputChange}
                                                 />
                                             </div>
@@ -437,7 +481,7 @@ export default function CompanyEdit() {
                                                 <TextField
                                                     fullWidth
                                                     sx={{ mt: 1, mb: 1 }}
-                                                    value={formValues.tcompany.startDate}
+                                                    value={formValues.company.startDate}
                                                     id="dateStart"
                                                     type="datetime-local"
                                                     InputLabelProps={{
@@ -460,7 +504,7 @@ export default function CompanyEdit() {
                                                 <TextField
                                                     fullWidth
                                                     sx={{ mt: 1, mb: 1 }}
-                                                    value={formValues.tcompany.expiredDate}
+                                                    value={formValues.company.expiredDate}
                                                     id="dateEnd"
                                                     type="datetime-local"
                                                     InputLabelProps={{
@@ -501,7 +545,7 @@ export default function CompanyEdit() {
                                                     {t('edit.user.userName')} <span className="input-required">*</span>
                                                 </InputLabel>
                                                 <TextField
-                                                    value={formValues.tuser.userName}
+                                                    value={formValues.user.userName}
                                                     disabled
                                                     size="small"
                                                     fullWidth
@@ -558,7 +602,7 @@ export default function CompanyEdit() {
                                                 </InputLabel>
                                                 <TextField
                                                     name="firstName"
-                                                    value={formValues.tuser.firstNm}
+                                                    value={formValues.user.firstNm}
                                                     disabled
                                                     size="small"
                                                     fullWidth
@@ -579,7 +623,7 @@ export default function CompanyEdit() {
                                                 </InputLabel>
                                                 <TextField
                                                     name="lastName"
-                                                    value={formValues.tuser.lastNm}
+                                                    value={formValues.user.lastNm}
                                                     disabled
                                                     size="small"
                                                     fullWidth
@@ -604,7 +648,7 @@ export default function CompanyEdit() {
                                                     {t('edit.user.telNo')} <span className="input-required">*</span>
                                                 </InputLabel>
                                                 <TextField
-                                                    value={formValues.tuser.uTelNo}
+                                                    value={formValues.user.uTelNo}
                                                     disabled
                                                     size="small"
                                                     fullWidth
@@ -633,7 +677,7 @@ export default function CompanyEdit() {
                                                     {t('edit.user.email')} <span className="input-required">*</span>
                                                 </InputLabel>
                                                 <TextField
-                                                    value={formValues.tuser.uEmail}
+                                                    value={formValues.user.uEmail}
                                                     size="small"
                                                     fullWidth
                                                     disabled
@@ -662,7 +706,7 @@ export default function CompanyEdit() {
                                                     <FormControlLabel
                                                         control={
                                                             <Switch
-                                                                checked={formValues.tuser.enable}
+                                                                checked={formValues.user.enable}
                                                                 disabled
                                                                 name="enable"
                                                                 onChange={handleAllowLoginChange}
@@ -681,7 +725,7 @@ export default function CompanyEdit() {
                                                         row
                                                         aria-label="role"
                                                         name="role"
-                                                        value={formValues.tuser.role}
+                                                        value={formValues.user.role}
                                                         defaultValue="admin"
                                                     >
                                                         <FormControlLabel
