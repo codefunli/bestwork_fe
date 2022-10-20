@@ -45,7 +45,7 @@ export const UrlServer = {
     API_LOGIN_URL: '/bestwork/login',
     COMPANY: {
         GET_COMPANIES: `${PREFIX_SERVER_URL}/companies/list`,
-        POST: `${PREFIX_SERVER_URL}/companies/create`,
+        REGISTER: `${PREFIX_SERVER_URL}/companies/create`,
         DELETE: `${PREFIX_SERVER_URL}/companies/delete`,
         GET_COMPANY: `${PREFIX_SERVER_URL}/companies`,
         UPDATE_COMPANY: `${PREFIX_SERVER_URL}/companies/updates`,

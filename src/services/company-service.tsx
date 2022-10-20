@@ -8,8 +8,8 @@ export const getCompanys = async () => {
     return res.data;
 };
 
-export const postCompany = async (object: any) => {
-    const res = await apiClient.post<PageableDataResSuccess<CompanyResDTO[]>>(UrlServer.COMPANY.POST, object);
+export const registerCompany = async (object: any) => {
+    const res = await apiClient.post<PageableDataResSuccess<CompanyResDTO[]>>(UrlServer.COMPANY.REGISTER, object);
     return res.data;
 };
 
