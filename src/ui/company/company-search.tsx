@@ -30,6 +30,7 @@ import EnhancedTable, { ArrayAction } from '../../shared-components/table-manage
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import { green } from '@mui/material/colors';
+import './company.scss';
 
 const initialValues = {
     keyword: '',
@@ -181,7 +182,7 @@ export default function CompanySearch() {
     ];
 
     return (
-        <Grid container direction="row" spacing={3}>
+        <Grid container direction="row" spacing={3} className="company-search">
             <Grid item xs={12} sx={{ mt: 1 }}>
                 <div className="row">
                     <div className="col-sm-12 col-md-6 text-start d-none d-lg-block">
@@ -191,6 +192,7 @@ export default function CompanySearch() {
                     </div>
                     <div className="col-sm-12 col-md-6 text-end d-none d-lg-block">
                         <Button
+                            className="btn-register"
                             variant="contained"
                             color="primary"
                             component={Link}

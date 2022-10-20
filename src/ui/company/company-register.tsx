@@ -189,8 +189,8 @@ export default function CompanyRegister() {
                 ...formValues,
                 company: {
                     ...formValues.company,
-                    startDate: `${formValues.company.startDate}:00:000Z`,
-                    expiredDate: `${formValues.company.expiredDate}:00:000Z`,
+                    startDate: `${formValues.company.startDate}:000Z`,
+                    expiredDate: `${formValues.company.expiredDate}:000Z`,
                 },
                 user: {
                     ...formValues.user,
@@ -202,8 +202,8 @@ export default function CompanyRegister() {
                 ...formValues,
                 company: {
                     ...formValues.company,
-                    startDate: `${formValues.company.startDate}:00:000Z`,
-                    expiredDate: `${formValues.company.expiredDate}:00:000Z`,
+                    startDate: `${formValues.company.startDate}:000Z`,
+                    expiredDate: `${formValues.company.expiredDate}:000Z`,
                 },
                 user: {
                     ...formValues.user,
