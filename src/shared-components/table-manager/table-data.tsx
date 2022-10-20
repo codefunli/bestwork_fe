@@ -19,6 +19,7 @@ import './table-data.scss';
 import { EnhancedTableToolbar } from './table-toolbar';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
+import { green } from '@mui/material/colors';
 
 export interface ArrayAction {
     nameFn: string;
@@ -52,7 +53,8 @@ export default function EnhancedTable(props: EnhancedTable) {
         props.searchCallBack({
             page: page,
             size: rowsPerPage,
-            sort: `${orderBy}, ${order}`,
+            sortDirection: order.toUpperCase(),
+            sortBy: orderBy,
         });
     }, [rowsPerPage, page, orderBy, order]);
 
@@ -184,21 +186,23 @@ export default function EnhancedTable(props: EnhancedTable) {
                                                         hidden={colValue.id === FieldConstants.ID}
                                                     >
                                                         {colValue.id == 'startDate' ? (
-                                                            row[colValue.id as string].replace('T', ' ')
+                                                            row[colValue.id as string].replace(/[TZ]/g, ' ')
                                                         ) : colValue.id == 'expired' ||
                                                           colValue.id == 'enabled' ||
                                                           colValue.id == 'status' ? (
-                                                            String(row[colValue.id as string]) == 'true' ? (
+                                                            String(row[colValue.id as string]) == '0' ? (
                                                                 <Chip
-                                                                    color="secondary"
+                                                                    sx={{ backgroundColor: green[400] }}
+                                                                    className="btn btn-outline-success"
                                                                     label={t('button.btnActive')}
                                                                     size="small"
-                                                                    icon={<CheckIcon />}
+                                                                    icon={<CheckIcon color="success" />}
                                                                 />
                                                             ) : (
                                                                 <Chip
                                                                     label={t('button.btnPending')}
                                                                     size="small"
+                                                                    className="btn btn-outline-secondary"
                                                                     icon={<CloseIcon />}
                                                                 />
                                                             )
@@ -251,7 +255,7 @@ export default function EnhancedTable(props: EnhancedTable) {
                     <TablePagination
                         rowsPerPageOptions={[5, 10]}
                         component="div"
-                        count={rows.totalElements}
+                        count={rows.metaData.totalElements}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         labelRowsPerPage={t('message.rowsPerPage')}

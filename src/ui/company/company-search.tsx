@@ -27,16 +27,17 @@ import { deleteCompanies, getCompanies } from '../../services/company-service';
 import MessageShow from '../../shared-components/message/message';
 import AlertDialogSlide from '../../shared-components/modal/alert-dialog-slide';
 import EnhancedTable, { ArrayAction } from '../../shared-components/table-manager/table-data';
-import './company.scss';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
+import { green } from '@mui/material/colors';
 
 const initialValues = {
     keyword: '',
     status: '',
     page: 0,
     size: 5,
-    sort: 'id, asc',
+    sortDirection: 'ASC',
+    sortBy: 'id',
 };
 
 export default function CompanySearch() {
@@ -80,8 +81,6 @@ export default function CompanySearch() {
     };
 
     const handleSubmit = async (e: any) => {
-        console.log(formValues);
-
         let data = await getCompanies(formValues);
         if (data && data.data && data.data.content) {
             setState(data.data);
@@ -134,7 +133,7 @@ export default function CompanySearch() {
     };
 
     const handleAddUser = (e: any, id: number) => {
-        alert('Add user function running...');
+        nativgate(`${UrlFeApp.USER.CREATE}/${id}`);
     };
 
     const alertOkFunc = () => {
@@ -229,7 +228,7 @@ export default function CompanySearch() {
                                     >
                                         <div className="row justify-center m-1">
                                             <div className="col-12 d-block p-1">
-                                                <InputLabel htmlFor="outlined-adornment-amount">
+                                                <InputLabel htmlFor="keyword-search">
                                                     {t('company.search.keyword')}
                                                 </InputLabel>
                                                 <TextField
@@ -241,7 +240,7 @@ export default function CompanySearch() {
                                                         '& legend': { display: 'none' },
                                                         '& fieldset': { top: 0 },
                                                     }}
-                                                    id="outlined-required"
+                                                    id="keyword-search"
                                                     placeholder={t('common.placeholder')}
                                                     name="keyword"
                                                     value={formValues.keyword}
@@ -273,20 +272,28 @@ export default function CompanySearch() {
                                                         onChange={handleInputChange}
                                                     >
                                                         <MenuItem value="">
-                                                            <em>{t('message.status')}</em>
-                                                        </MenuItem>
-                                                        <MenuItem value={0}>
-                                                            <Chip
-                                                                color="secondary"
-                                                                label={t('button.btnActive')}
-                                                                size="small"
-                                                                icon={<CheckIcon />}
-                                                            />
+                                                            <em style={{ color: '#bdbdbd', margin: '0 auto' }}>
+                                                                {t('message.status')}
+                                                            </em>
                                                         </MenuItem>
                                                         <MenuItem value={1}>
                                                             <Chip
+                                                                sx={{
+                                                                    backgroundColor: green[400],
+                                                                    width: '100%',
+                                                                }}
+                                                                className="btn btn-outline-success"
+                                                                label={t('button.btnActive')}
+                                                                size="small"
+                                                                icon={<CheckIcon color="success" />}
+                                                            />
+                                                        </MenuItem>
+                                                        <MenuItem value={0}>
+                                                            <Chip
+                                                                sx={{ width: '100%' }}
                                                                 label={t('button.btnPending')}
                                                                 size="small"
+                                                                className="btn btn-outline-secondary"
                                                                 icon={<CloseIcon />}
                                                             />
                                                         </MenuItem>
@@ -305,6 +312,7 @@ export default function CompanySearch() {
                                                         mr: 1,
                                                         textTransform: 'uppercase',
                                                     }}
+                                                    color="primary"
                                                     size="small"
                                                     variant="contained"
                                                     onClick={handleSubmit}

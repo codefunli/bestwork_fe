@@ -14,10 +14,10 @@ export const headCompanyCol: HeadColumn[] = [
         label: 'company.table.colCpName',
     },
     {
-        id: 'detailAddress',
+        id: 'email',
         numeric: false,
         disablePadding: false,
-        label: 'company.table.colCpAddress',
+        label: 'company.table.colCpEmail',
     },
     {
         id: 'startDate',
@@ -26,7 +26,7 @@ export const headCompanyCol: HeadColumn[] = [
         label: 'company.table.colCpStartDate',
     },
     {
-        id: 'expired',
+        id: 'status',
         numeric: false,
         disablePadding: false,
         label: 'company.table.colCpExpired',
