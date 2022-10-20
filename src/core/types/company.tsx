@@ -14,7 +14,7 @@ export const headCompanyCol: HeadColumn[] = [
         label: 'company.table.colCpName',
     },
     {
-        id: 'email',
+        id: 'cpEmail',
         numeric: false,
         disablePadding: false,
         label: 'company.table.colCpEmail',
