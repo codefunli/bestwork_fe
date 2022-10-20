@@ -33,7 +33,7 @@ import { green } from '@mui/material/colors';
 
 const initialValues = {
     keyword: '',
-    status: '',
+    status: '2',
     page: 0,
     size: 5,
     sortDirection: 'ASC',
@@ -271,12 +271,12 @@ export default function CompanySearch() {
                                                         value={formValues.status}
                                                         onChange={handleInputChange}
                                                     >
-                                                        <MenuItem value="">
+                                                        <MenuItem value={2}>
                                                             <em style={{ color: '#bdbdbd', margin: '0 auto' }}>
                                                                 {t('message.status')}
                                                             </em>
                                                         </MenuItem>
-                                                        <MenuItem value={1}>
+                                                        <MenuItem value={0}>
                                                             <Chip
                                                                 sx={{
                                                                     backgroundColor: green[400],
@@ -288,7 +288,7 @@ export default function CompanySearch() {
                                                                 icon={<CheckIcon color="success" />}
                                                             />
                                                         </MenuItem>
-                                                        <MenuItem value={0}>
+                                                        <MenuItem value={1}>
                                                             <Chip
                                                                 sx={{ width: '100%' }}
                                                                 label={t('button.btnPending')}
