@@ -57,7 +57,7 @@ const initialValues = {
         uTelNo: '',
         uEmail: '',
         enabled: false,
-        role: 'admin',
+        role: 'conpanyAdmin',
     },
 };
 
@@ -741,12 +741,12 @@ export default function CompanyRegister() {
                                                         defaultValue="admin"
                                                     >
                                                         <FormControlLabel
-                                                            value="admin"
+                                                            value="conpanyAdmin"
                                                             control={<Radio color="primary" />}
                                                             label={t('radio.admin')}
                                                         />
                                                         <FormControlLabel
-                                                            value="user"
+                                                            value="conpanyUser"
                                                             control={<Radio color="primary" />}
                                                             label={t('radio.user')}
                                                             disabled
