@@ -1,4 +1,5 @@
 import {
+    Button,
     Card,
     CardContent,
     Checkbox,
@@ -12,11 +13,13 @@ import {
     TableHead,
     TableRow,
     Tabs,
+    TextField,
     Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import SearchIcon from '@mui/icons-material/Search';
 import './project.scss';
 
 function a11yProps(id: number) {
@@ -131,116 +134,127 @@ export default function Role(props: Role) {
 
     return (
         <div className="role">
-            <Grid container direction="row" spacing={3}>
-                <Grid item xs={12} sx={{ mt: 1, mb: 1 }}>
-                    <Card w-full="true">
-                        <CardContent>
-                            <Box
-                                component="form"
+            <Box
+                component="form"
+                sx={{
+                    '& > :not(style)': { m: 1 },
+                }}
+                noValidate
+                autoComplete="off"
+                className="content-area"
+            >
+                <div className="row">
+                    <div className="col-xs-12 col-md-5 col-lg-4 col-xl-3">
+                        <div className="search-area mb-3">
+                            <TextField
+                                size="small"
+                                fullWidth
                                 sx={{
-                                    '& > :not(style)': { m: 1 },
+                                    mt: 1,
+                                    mb: 1,
+                                    '& legend': { display: 'none' },
+                                    '& fieldset': { top: 0 }
                                 }}
-                                noValidate
-                                autoComplete="off"
-                            >
-                                <div className="row">
-                                    <div className="col-xl-2 col-12">
-                                        <Typography variant="h6" color="textSecondary" gutterBottom>
-                                            Company
-                                        </Typography>
-                                        <Tabs
-                                            orientation="vertical"
-                                            variant="scrollable"
-                                            value={currentTab}
-                                            onChange={handleChange}
-                                            aria-label=""
-                                            sx={{
-                                                borderRight: 1,
-                                                borderColor: 'divider',
-                                            }}
-                                        >
-                                            {companyList.map((company, index) => (
-                                                <Tab
-                                                    key={index}
-                                                    label={company.companyName}
-                                                    {...a11yProps(company.id)}
-                                                />
-                                            ))}
-                                        </Tabs>
-                                    </div>
+                                name="keyword"
+                                label=""
+                                placeholder={t('common.placeholder')}
+                            // value={searchKeyword}
+                            // onChange={(e) => setSearchKeyword(e.target.value)}
+                            />
+                            <Button variant="contained" color="info">
+                                <SearchIcon />
+                            </Button>
+                        </div>
+                        <Tabs
+                            orientation="vertical"
+                            variant="scrollable"
+                            value={currentTab}
+                            onChange={handleChange}
+                            aria-label=""
+                            className="role-list"
+                            sx={{
+                                borderRight: 1,
+                                borderColor: 'divider',
+                            }}
+                        >
+                            {companyList.map((company, index) => (
+                                <Tab
+                                    key={index}
+                                    label={company.companyName}
+                                    {...a11yProps(company.id)}
+                                />
+                            ))}
+                        </Tabs>
+                    </div>
 
-                                    <div className="col-xl-10 col-12">
-                                        <div className="role-content">
-                                            <TableContainer component={Paper}>
-                                                <Table className="role-table" aria-label={t('role.tab.roleList')}>
-                                                    <TableHead>
-                                                        <TableRow>
-                                                            <TableCell>
-                                                                <b>User</b>
-                                                            </TableCell>
-                                                            <TableCell align="center">All</TableCell>
-                                                            <TableCell align="center">View</TableCell>
-                                                            <TableCell align="center">Edit</TableCell>
-                                                        </TableRow>
-                                                    </TableHead>
-                                                    <TableBody>
-                                                        {currentCompany.userList.map((row, index) => (
-                                                            <TableRow
-                                                                key={row.userId}
-                                                                sx={{
-                                                                    '&:last-child td, &:last-child th': { border: 0 },
-                                                                }}
-                                                            >
-                                                                <TableCell component="th" scope="row">
-                                                                    {row.name}
-                                                                </TableCell>
-                                                                <TableCell align="center">
-                                                                    <Checkbox
-                                                                        checked={row.view && row.edit}
-                                                                        onChange={(e) =>
-                                                                            handleChangeCheckbox(
-                                                                                e,
-                                                                                row.userId,
-                                                                                index,
-                                                                                true,
-                                                                                row.view && row.edit,
-                                                                            )
-                                                                        }
-                                                                        name="all"
-                                                                    />
-                                                                </TableCell>
-                                                                <TableCell align="center">
-                                                                    <Checkbox
-                                                                        checked={row.view}
-                                                                        onChange={(e) =>
-                                                                            handleChangeCheckbox(e, row.userId, index)
-                                                                        }
-                                                                        name="view"
-                                                                    />
-                                                                </TableCell>
-                                                                <TableCell align="center">
-                                                                    <Checkbox
-                                                                        checked={row.edit}
-                                                                        onChange={(e) =>
-                                                                            handleChangeCheckbox(e, row.userId, index)
-                                                                        }
-                                                                        name="edit"
-                                                                        disabled={!row.view}
-                                                                    />
-                                                                </TableCell>
-                                                            </TableRow>
-                                                        ))}
-                                                    </TableBody>
-                                                </Table>
-                                            </TableContainer>
-                                        </div>
-                                    </div>
-                                </div>
-                            </Box>
-                        </CardContent>
-                    </Card>
-                </Grid>
-            </Grid>
+                    <div className="col-xs-12 col-md-7 col-lg-8 col-xl-9">
+                        <div className="role-content">
+                            <TableContainer component={Paper}>
+                                <Table className="role-table" aria-label={t('role.tab.roleList')}>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>
+                                                <b>User</b>
+                                            </TableCell>
+                                            <TableCell align="center">All</TableCell>
+                                            <TableCell align="center">View</TableCell>
+                                            <TableCell align="center">Edit</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {currentCompany.userList.map((row, index) => (
+                                            <TableRow
+                                                key={row.userId}
+                                                sx={{
+                                                    '&:last-child td, &:last-child th': { border: 0 },
+                                                }}
+                                            >
+                                                <TableCell component="th" scope="row">
+                                                    {row.name}
+                                                </TableCell>
+                                                <TableCell align="center">
+                                                    <Checkbox
+                                                        checked={row.view && row.edit}
+                                                        onChange={(e) =>
+                                                            handleChangeCheckbox(
+                                                                e,
+                                                                row.userId,
+                                                                index,
+                                                                true,
+                                                                row.view && row.edit,
+                                                            )
+                                                        }
+                                                        name="all"
+                                                    />
+                                                </TableCell>
+                                                <TableCell align="center">
+                                                    <Checkbox
+                                                        checked={row.view}
+                                                        onChange={(e) =>
+                                                            handleChangeCheckbox(e, row.userId, index)
+                                                        }
+                                                        name="view"
+                                                    />
+                                                </TableCell>
+                                                <TableCell align="center">
+                                                    <Checkbox
+                                                        checked={row.edit}
+                                                        onChange={(e) =>
+                                                            handleChangeCheckbox(e, row.userId, index)
+                                                        }
+                                                        name="edit"
+                                                        disabled={!row.view}
+                                                    />
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </div>
+                    </div>
+                </div>
+            </Box>
         </div>
     );
 }
