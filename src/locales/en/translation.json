@@ -163,7 +163,9 @@
     },
     "tooltip": {
         "edit": "Edit",
-        "addUser": "Add user"
+        "addUser": "Add user",
+        "materialStatus": "Add material status",
+        "projectDetail": "Add construction progress"
     },
     "edit": {
         "title": "Company Edit",

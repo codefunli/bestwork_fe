@@ -77,6 +77,14 @@ const listRouter: RouteObject[] = [
                 path: UrlFeApp.SCHEDULE.MATERIAL_STATUS,
                 element: <MaterialStatus />,
             },
+            {
+                path: UrlFeApp.SCHEDULE.MATERIAL_STATUS_HAS_ID,
+                element: <MaterialStatus />,
+            },
+            {
+                path: UrlFeApp.PROJECT.DETAIL,
+                element: <ProjectDetail />,
+            },
         ],
     },
     {
