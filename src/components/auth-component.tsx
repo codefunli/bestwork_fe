@@ -26,16 +26,17 @@ export default function AuthComponent() {
     const handleCloseMsg = () => {
         setIsShowMessage(false);
     };
+    nativgate(UrlFeApp.MAIN_APP);
+    // useEffect(() => {
+    //     nativgate(UrlFeApp.MAIN_APP);
+    //     // if (!isPageLoading) {
+    //     //     nativgate(UrlFeApp.MAIN_APP);
+    //     // }
 
-    useEffect(() => {
-        if (!isPageLoading) {
-            nativgate(UrlFeApp.MAIN_APP);
-        }
-
-        if (isShowMsgErrLogin) {
-            handleMessage(true, t('message.accessDenied'), AlertColorConstants.ERROR);
-        }
-    }, [isPageLoading]);
+    //     // if (isShowMsgErrLogin) {
+    //     //     handleMessage(true, t('message.accessDenied'), AlertColorConstants.ERROR);
+    //     // }
+    // }, [isPageLoading]);
 
     return (
         <div className="auth-wrapper">

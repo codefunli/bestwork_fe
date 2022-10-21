@@ -27,3 +27,13 @@ export const createProject = async (object: any) => {
     const res = await apiClient.post<PageableDataResSuccess<ProjectResDTO[]>>(UrlServer.PROJECT.CREATE, object);
     return res.data;
 };
+
+export const createProgress = async (object: any) => {
+    const res = await apiClient.post<PageableDataResSuccess<ProjectResDTO[]>>(UrlServer.PROJECT.CREATE_PROGRESS, object);
+    return res.data;
+};
+
+export const updateProgress = async (object: any) => {
+    const res = await apiClient.post<PageableDataResSuccess<ProjectResDTO[]>>(UrlServer.PROJECT.UPDATE_PROGRESS, object);
+    return res.data;
+};

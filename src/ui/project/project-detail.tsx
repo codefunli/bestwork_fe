@@ -15,7 +15,11 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { getProject } from '../../services/project-service';
-import Progress from './progress';
+import IconButton from '@mui/material/IconButton';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import ProgressCreate from './progress-create';
+import ProgressEdit from './progress-edit';
+import { ProjectProgressDTO } from '../../models/project-res-dto';
 import './project.scss';
 
 const initialValues = {
@@ -31,16 +35,22 @@ const initialValues = {
     },
 };
 
-const progressTmp: any = [
-    '30-04-1975',
-    '02-09-1975',
-];
-
 export default function ProjectEdit() {
     const [projectData, setProjectData] = useState(initialValues);
     const { t } = useTranslation();
     const params = useParams();
-    const [isOpenDrawerProgress, setOpenDrawerProgress] = useState(false);
+    const [isOpenCreateProgress, setOpenCreateProgress] = useState(false);
+    const [isOpenEditProgress, setOpenEditProgress] = useState(false);
+    const [selectedProgress, setSelectedProgress] = useState<any>();
+
+    const [progressList, setProgressList] = useState<ProjectProgressDTO[]>([]);
+
+    const progressListFromLocal: any = localStorage.getItem('progressList');
+
+    useEffect(() => {
+        const progressTmp: any = JSON.parse(progressListFromLocal);
+        if (progressTmp) setProgressList(progressTmp);
+    }, [progressListFromLocal]);
 
     useEffect(() => {
         if (params.id !== undefined) {
@@ -55,7 +65,7 @@ export default function ProjectEdit() {
         }
     }, [params.id]);
 
-    const toggleDrawerProgress = (open: boolean) =>
+    const toggleDrawerCreateProgress = (open: boolean) =>
         (event: React.KeyboardEvent | React.MouseEvent) => {
             if (
                 event &&
@@ -64,8 +74,26 @@ export default function ProjectEdit() {
                     (event as React.KeyboardEvent).key === 'Shift')
             ) return;
 
-            setOpenDrawerProgress(open);
+            setOpenCreateProgress(open);
         };
+
+    const toggleDrawerEditProgress = (open: boolean) =>
+        (event: React.KeyboardEvent | React.MouseEvent) => {
+            if (
+                event &&
+                event.type === 'keydown' &&
+                ((event as React.KeyboardEvent).key === 'Tab' ||
+                    (event as React.KeyboardEvent).key === 'Shift')
+            ) return;
+
+            setOpenEditProgress(open);
+        };
+
+    const handleEditProgress = (id: string) => {
+        setOpenEditProgress(true);
+        toggleDrawerEditProgress(true);
+        setSelectedProgress(id);
+    }
 
     return (
         <div className="project-detail">
@@ -287,21 +315,26 @@ export default function ProjectEdit() {
                     </Grid>
                     <Grid item xs={12} md={4} lg={3}>
                         <Card style={{ width: '100%' }}>
-                            <Typography
-                                variant="h6"
-                                className="p-2"
-                                color="textSecondary"
-                                gutterBottom
-                                sx={{ textTransform: 'uppercase', textAlign: 'center', margin: 0 }}
-                            >
-                                {t('project.progress.title')}
-                            </Typography>
+                            <div className="d-flex justify-content-between">
+                                <Typography
+                                    variant="h6"
+                                    className="p-2"
+                                    color="textSecondary"
+                                    gutterBottom
+                                    sx={{ margin: 0 }}
+                                >
+                                    {t('project.progress.title')}
+                                </Typography>
+                                <IconButton color="primary" size="large" onClick={toggleDrawerCreateProgress(true)}>
+                                    <AddCircleIcon fontSize="inherit" />
+                                </IconButton>
+                            </div>
                             <Divider />
                             <List>
-                                {progressTmp.map((text: string, index: number) => (
+                                {progressList.map((progress: ProjectProgressDTO, index: number) => (
                                     <ListItem key={index} disablePadding>
-                                        <ListItemButton onClick={toggleDrawerProgress(true)}>
-                                            <ListItemText primary={text} />
+                                        <ListItemButton onClick={() => handleEditProgress(progress.id)}>
+                                            <ListItemText primary={progress.title} />
                                         </ListItemButton>
                                     </ListItem>
                                 ))}
@@ -311,7 +344,8 @@ export default function ProjectEdit() {
                 </Grid>
             </form>
 
-            <Progress isOpen={isOpenDrawerProgress} setIsOpen={toggleDrawerProgress} />
+            <ProgressCreate isOpen={isOpenCreateProgress} setIsOpen={setOpenCreateProgress} toggleDrawer={toggleDrawerCreateProgress} />
+            <ProgressEdit isOpen={isOpenEditProgress} setIsOpen={setOpenEditProgress} toggleDrawer={toggleDrawerEditProgress} progressId={selectedProgress} />
         </div>
     );
 }
