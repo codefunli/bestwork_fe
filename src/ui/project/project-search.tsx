@@ -30,14 +30,39 @@ import EnhancedTable, { ArrayAction } from '../../shared-components/table-manage
 import './project.scss';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
+import { green } from '@mui/material/colors';
 
 const initialValues = {
+    page: '0',
+    size: '5',
+    sortDirection: 'ASC',
+    sortBy: 'id',
     keyword: '',
-    status: '',
-    page: 0,
-    size: 5,
-    sort: 'id, asc',
+    status: '-1',
 };
+
+const projectStatus = [
+    {
+        value: 0,
+        name: 'NOT_YET_START',
+    },
+    {
+        value: 1,
+        name: 'PROCESSING',
+    },
+    {
+        value: 2,
+        name: 'DONE_AND_WAITING_FOR_CHECKING',
+    },
+    {
+        value: 3,
+        name: 'CHECKED_AND_WAITING_FOR_PAYMENT',
+    },
+    {
+        value: 4,
+        name: 'CANCEL ',
+    },
+];
 
 export default function ProjectSearch() {
     const [isOpenModal, setIsOpenModal] = useState(false);
@@ -48,7 +73,9 @@ export default function ProjectSearch() {
     const queryClient = useQueryClient();
     const [state, setState] = useState<any>();
     const { t } = useTranslation();
-    const [ids, setIds] = useState({});
+    const [id, setId] = useState({
+        id: [],
+    });
 
     const nativgate = useNavigate();
 
@@ -111,9 +138,12 @@ export default function ProjectSearch() {
 
     const handleDeleteCallBack = (childData: any) => {
         setTypeCompanyMsg('success');
-        setCompanyMsg(SUCCESS_MSG.S01_004);
+        setCompanyMsg(t(SUCCESS_MSG.S01_004));
         setIsOpenModal(true);
-        setIds(childData);
+        setId({
+            ...id,
+            ...childData,
+        });
     };
 
     const handleClearData = (e: any) => {
@@ -138,7 +168,7 @@ export default function ProjectSearch() {
     };
 
     const alertOkFunc = () => {
-        deleteProjects(ids)
+        deleteProjects(id)
             .then((value) => {
                 setIsOpenModal(false);
                 setIsShowMessage(true);
@@ -147,7 +177,7 @@ export default function ProjectSearch() {
                 });
             })
             .catch((err) => {
-                handleMessage(true, t('message.someThingWrong'), 'error');
+                handleMessage(true, t('message.error'), 'error');
             });
     };
 
@@ -272,24 +302,18 @@ export default function ProjectSearch() {
                                                         value={formValues.status}
                                                         onChange={handleInputChange}
                                                     >
-                                                        <MenuItem value="">
-                                                            <em>{t('message.status')}</em>
+                                                        <MenuItem value="-1">
+                                                            <em style={{ color: '#bdbdbd' }} className="m-auto">
+                                                                {t('message.status')}
+                                                            </em>
                                                         </MenuItem>
-                                                        <MenuItem value={0}>
-                                                            <Chip
-                                                                color="secondary"
-                                                                label={t('button.btnActive')}
-                                                                size="small"
-                                                                icon={<CheckIcon />}
-                                                            />
-                                                        </MenuItem>
-                                                        <MenuItem value={1}>
-                                                            <Chip
-                                                                label={t('button.btnPending')}
-                                                                size="small"
-                                                                icon={<CloseIcon />}
-                                                            />
-                                                        </MenuItem>
+                                                        {projectStatus.map((data: any) => {
+                                                            return (
+                                                                <MenuItem value={data.value} className="text-center">
+                                                                    <div className="text-center w-100">{data.name}</div>
+                                                                </MenuItem>
+                                                            );
+                                                        })}
                                                     </Select>
                                                 </FormControl>
                                             </div>
