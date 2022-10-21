@@ -109,6 +109,9 @@ export default function CompanyEdit() {
                             },
                         };
                     }
+
+                    console.log(objValue);
+
                     setFormValues(objValue);
                     setDistricts(getDistrictsByCityCode(value.data.company.city || ''));
                     setWards(getWardsByDistrictCode(value.data.company.district || ''));
@@ -716,16 +719,16 @@ export default function CompanyEdit() {
                                                         aria-label="role"
                                                         name="role"
                                                         value={formValues.user.role}
-                                                        defaultValue="admin"
+                                                        defaultValue="companyadmin"
                                                     >
                                                         <FormControlLabel
-                                                            value="admin"
+                                                            value="companyadmin"
                                                             control={<Radio color="primary" />}
                                                             label={t('radio.admin')}
                                                             disabled
                                                         />
                                                         <FormControlLabel
-                                                            value="user"
+                                                            value="companyuser"
                                                             control={<Radio color="primary" />}
                                                             label={t('radio.user')}
                                                             disabled
