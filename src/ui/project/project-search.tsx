@@ -46,7 +46,7 @@ export default function ProjectSearch() {
     const queryClient = useQueryClient();
     const [state, setState] = useState<any>();
     const { t } = useTranslation();
-    const [id, setId] = useState({
+    const [id, setId] = useState<any>({
         id: [],
     });
     const [projectStatus, setProjectStatus] = useState([]);
@@ -121,8 +121,7 @@ export default function ProjectSearch() {
         setCompanyMsg(t(SUCCESS_MSG.S01_004));
         setIsOpenModal(true);
         setId({
-            ...id,
-            ...childData,
+            id: [...childData.ids],
         });
     };
 
