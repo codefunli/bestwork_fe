@@ -103,7 +103,8 @@
         "status": "Trạng thái",
         "statusLabel": "Chọn trạng thái",
         "loginFailed": "Tài khoản và mật khẩu không chính xác",
-        "accessDenied": "Từ chối truy cập, bạn không có quyền truy cập hệ thống"
+        "accessDenied": "Từ chối truy cập, bạn không có quyền truy cập hệ thống",
+        "deleteSuccess": "Xóa dữ liệu thành công"
     },
     "bread_crumbs": {
         "home": "Trang chủ",
@@ -203,7 +204,7 @@
         "table": {
             "colPrjName": "Tên dự án",
             "colPrjType": "Loại dự án",
-            "colTitle": "Tiêu đề",
+            "colCreateDate": "Ngày khởi tạo",
             "colDescription": "Mô tả",
             "colStatus": "Trạng thái"
         },

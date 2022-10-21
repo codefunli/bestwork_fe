@@ -59,7 +59,7 @@ export const UrlServer = {
         IS_LOGINED: `${PREFIX_SERVER_URL}/users/isCheckLogin`,
     },
     PROJECT: {
-        GET: `${PREFIX_SERVER_URL}/projects`,
+        GET: `${PREFIX_SERVER_URL}/projects/list`,
         DELETE: `${PREFIX_SERVER_URL}/projects/delete`,
         UPDATE: `${PREFIX_SERVER_URL}/projects`,
         CREATE: `${PREFIX_SERVER_URL}/projects/create`,

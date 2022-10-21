@@ -4,7 +4,7 @@ export const SUCCESS_MSG = {
     S01_001: 'Retrieve data is successfully',
     S01_002: 'Registration data is successfully',
     S01_003: 'Updating data is successfully',
-    S01_004: 'Deletion data is successfully',
+    S01_004: 'message.deleteSuccess',
 };
 
 export const ERROR_MSG = {

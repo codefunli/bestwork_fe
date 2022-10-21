@@ -185,11 +185,12 @@ export default function EnhancedTable(props: EnhancedTable) {
                                                         align="left"
                                                         hidden={colValue.id === FieldConstants.ID}
                                                     >
-                                                        {colValue.id == 'startDate' ? (
+                                                        {colValue.id == 'startDate' || colValue.id == 'createDate' ? (
                                                             row[colValue.id as string].replace(/[TZ]/g, ' ')
-                                                        ) : colValue.id == 'expired' ||
-                                                          colValue.id == 'enabled' ||
-                                                          colValue.id == 'status' ? (
+                                                        ) : (colValue.id == 'expired' ||
+                                                              colValue.id == 'enabled' ||
+                                                              colValue.id == 'status') &&
+                                                          colValue.label.includes('company') ? (
                                                             String(row[colValue.id as string]) == '0' ? (
                                                                 <Chip
                                                                     sx={{ backgroundColor: green[400] }}
@@ -206,6 +207,8 @@ export default function EnhancedTable(props: EnhancedTable) {
                                                                     icon={<CloseIcon />}
                                                                 />
                                                             )
+                                                        ) : colValue.id == 'projectType' ? (
+                                                            row[colValue.id as string].name
                                                         ) : (
                                                             row[colValue.id as string]
                                                         )}

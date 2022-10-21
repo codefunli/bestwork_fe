@@ -8,22 +8,22 @@ export const headProjectCol: HeadColumn[] = [
         label: 'Id',
     },
     {
-        id: 'prjName',
+        id: 'projectName',
         numeric: false,
         disablePadding: false,
         label: 'project.table.colPrjName',
     },
     {
-        id: 'prjType',
+        id: 'projectType',
         numeric: false,
         disablePadding: false,
         label: 'project.table.colPrjType',
     },
     {
-        id: 'title',
+        id: 'createDate',
         numeric: false,
         disablePadding: false,
-        label: 'project.table.colTitle',
+        label: 'project.table.colCreateDate',
     },
     {
         id: 'description',
