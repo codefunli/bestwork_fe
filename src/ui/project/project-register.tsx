@@ -29,7 +29,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { AlertColorConstants, StatusCode, UrlFeApp } from '../../core/constants/common';
 import { validateProjectRegisterForm } from '../../core/constants/validate';
-import { createProject } from '../../services/project-service';
+import { createProject, getProjectStatus, getProjectTypes } from '../../services/project-service';
 import MessageShow from '../../shared-components/message/message';
 import TabPanel from '../../shared-components/tab-manager/tab-panel';
 import Role from './project-role';
@@ -41,43 +41,12 @@ const initialValues = {
         projectName: '',
         projectType: '',
         description: '',
-        comment: '',
         createDate: currentDateTime,
         notificationFlag: '1',
         isPaid: '0',
         status: '',
     },
 };
-
-const statusValues = [
-    {
-        name: 'Cancel',
-        value: '0',
-    },
-    {
-        name: 'Processing',
-        value: '1',
-    },
-    {
-        name: 'Done and waiting for checking',
-        value: '2',
-    },
-    {
-        name: 'Checked and waiting for payment',
-        value: '3',
-    },
-];
-
-const projectType = [
-    {
-        name: 'Type 1',
-        value: '0',
-    },
-    {
-        name: 'Type 2',
-        value: '1',
-    },
-];
 const initCompanyListValue = [
     {
         companyId: 1,
@@ -129,6 +98,14 @@ const initCompanyListValue = [
     },
 ];
 
+const initProjectTypes = [
+    {
+        id: 0,
+        name: '',
+        description: '',
+    },
+];
+
 export default function ProjectRegister() {
     const [formValues, setFormValues] = useState(initialValues);
     const [isShowMessage, setIsShowMessage] = useState(false);
@@ -138,6 +115,18 @@ export default function ProjectRegister() {
     const { t } = useTranslation();
     const [value, setValue] = useState(0);
     const [roleData, setRoleData] = useState(initCompanyListValue);
+    const [projectTypes, setProjectTypes] = useState(initProjectTypes);
+    const [projectStatus, setProjectStatus] = useState([]);
+
+    useEffect(() => {
+        getProjectTypes().then((types: any) => {
+            setProjectTypes(types);
+        });
+
+        getProjectStatus().then((status: any) => {
+            setProjectStatus(status);
+        });
+    }, []);
 
     const {
         register,
@@ -265,7 +254,7 @@ export default function ProjectRegister() {
                 </Typography>
                 <Grid container direction="row" spacing={3}>
                     <Box sx={{ width: '100%' }}>
-                        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                        <Box sx={{ borderBottom: 1, borderColor: 'divider', p: '0 24px' }}>
                             <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                                 <Tab
                                     label="Register project"
@@ -300,7 +289,7 @@ export default function ProjectRegister() {
                                                 autoComplete="off"
                                             >
                                                 <div className="row justify-center m-1">
-                                                    <div className="col-12 col-sm-6 d-block p-1">
+                                                    <div className="col-12 col-md-6 p-1">
                                                         <InputLabel
                                                             htmlFor="outlined-adornment-amount"
                                                             error={Boolean(errors.projectName)}
@@ -331,37 +320,7 @@ export default function ProjectRegister() {
                                                             })}
                                                         />
                                                     </div>
-                                                    <div className="col-12 col-sm-6 d-block p-1">
-                                                        <InputLabel
-                                                            htmlFor="outlined-adornment-amount"
-                                                            error={Boolean(errors.comment)}
-                                                        >
-                                                            {t('project.register.comment')}
-                                                        </InputLabel>
-                                                        <TextField
-                                                            size="small"
-                                                            value={formValues.project.comment}
-                                                            fullWidth
-                                                            required
-                                                            id="outlined-required"
-                                                            sx={{
-                                                                mt: 1,
-                                                                mb: 1,
-                                                                '& legend': { display: 'none' },
-                                                                '& fieldset': { top: 0 },
-                                                            }}
-                                                            label=""
-                                                            placeholder={t('common.placeholder')}
-                                                            error={Boolean(errors.comment)}
-                                                            helperText={errors.comment?.message?.toString()}
-                                                            {...register('comment', {
-                                                                onChange: (e) => handleInputChange(e),
-                                                            })}
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <div className="row justify-center m-1">
-                                                    <div className="col-12 col-sm-6 d-block p-1">
+                                                    <div className="col-12 col-md-6 p-1">
                                                         <InputLabel
                                                             htmlFor="outlined-adornment-amount"
                                                             error={Boolean(errors.description)}
@@ -391,7 +350,9 @@ export default function ProjectRegister() {
                                                             })}
                                                         />
                                                     </div>
-                                                    <div className="col-12 col-sm-6 p-1">
+                                                </div>
+                                                <div className="row justify-center m-1">
+                                                    <div className="col-12 col-md-6 p-1">
                                                         <InputLabel
                                                             htmlFor="outlined-adornment-amount"
                                                             error={Boolean(errors.createDate)}
@@ -423,9 +384,7 @@ export default function ProjectRegister() {
                                                             })}
                                                         />
                                                     </div>
-                                                </div>
-                                                <div className="row justify-center m-1">
-                                                    <div className="col-12 col-sm-6">
+                                                    <div className="col-12 col-md-6 p-1">
                                                         <InputLabel id="demo-simple-select-outlined-label">
                                                             {t('project.register.status')}{' '}
                                                             <span className="input-required">*</span>
@@ -450,15 +409,19 @@ export default function ProjectRegister() {
                                                                 onChange={handleInputChange}
                                                             >
                                                                 <MenuItem value="" selected={true} disabled>
-                                                                    <em>{t('message.statusLabel')}</em>
+                                                                    <em className="color-label-select-box">
+                                                                        {t('message.statusLabel')}
+                                                                    </em>
                                                                 </MenuItem>
-                                                                {statusValues.map((s) => (
-                                                                    <MenuItem value={s.value}>{s.name}</MenuItem>
+                                                                {projectStatus.map((s: any) => (
+                                                                    <MenuItem value={s}>{s}</MenuItem>
                                                                 ))}
                                                             </Select>
                                                         </FormControl>
                                                     </div>
-                                                    <div className="col-12 col-sm-6">
+                                                </div>
+                                                <div className="row justify-center m-1">
+                                                    <div className="col-12 col-md-6 p-1">
                                                         <InputLabel id="demo-simple-select-outlined-label">
                                                             {t('project.register.type')}{' '}
                                                             <span className="input-required">*</span>
@@ -483,17 +446,17 @@ export default function ProjectRegister() {
                                                                 onChange={handleInputChange}
                                                             >
                                                                 <MenuItem value="" selected={true} disabled>
-                                                                    <em>{t('message.statusLabel')}</em>
+                                                                    <em className="color-label-select-box">
+                                                                        {t('message.statusLabel')}
+                                                                    </em>
                                                                 </MenuItem>
-                                                                {projectType.map((s) => (
-                                                                    <MenuItem value={s.value}>{s.name}</MenuItem>
+                                                                {projectTypes.map((s) => (
+                                                                    <MenuItem value={s.id}>{s.name}</MenuItem>
                                                                 ))}
                                                             </Select>
                                                         </FormControl>
                                                     </div>
-                                                </div>
-                                                <div className="row justify-center m-1">
-                                                    <div className="col-12 col-sm-6 d-block p-1 mt-3">
+                                                    <div className="col-12 col-md-6 p-1 mt-2 text-center">
                                                         <div className="row justify-center m-1">
                                                             <div className="col-12 col-md-6 d-block">
                                                                 <FormControl component="fieldset">
