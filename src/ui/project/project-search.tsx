@@ -194,7 +194,7 @@ export default function ProjectSearch() {
     ];
 
     return (
-        <Grid container direction="row" spacing={3}>
+        <Grid container direction="row" spacing={3} className="project-search">
             <Grid item xs={12} sx={{ mt: 1 }}>
                 <div className="row">
                     <div className="col-sm-12 col-md-6 text-start d-none d-lg-block">
@@ -204,6 +204,7 @@ export default function ProjectSearch() {
                     </div>
                     <div className="col-sm-12 col-md-6 text-end d-none d-lg-block">
                         <Button
+                            className="btn-register"
                             variant="contained"
                             color="primary"
                             component={Link}

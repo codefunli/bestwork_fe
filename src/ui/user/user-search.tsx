@@ -181,6 +181,7 @@ export default function UserSearch() {
                         <div className="col-sm-12 col-md-6 text-end d-none d-lg-block">
                             <Button
                                 variant="contained"
+                                className="btn-register"
                                 color="primary"
                                 component={Link}
                                 to={UrlFeApp.USER.CREATE}

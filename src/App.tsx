@@ -6,17 +6,21 @@ import RootAppComponent from './core/layout/root-app-component';
 import RenderRouter from './route/route';
 import { I18nextProvider } from 'react-i18next';
 import i18n from './transaction/i18n';
+import { ThemeProvider } from '@mui/material';
+import { customTheme } from './customTheme';
 
 const queryClient = new QueryClient();
 function App() {
     //const isLoadingApp = useAppSelector(state => state.app.isAppLoading);
     return (
         <QueryClientProvider client={queryClient}>
-            <Suspense>
-                <RootAppComponent>
-                    <RenderRouter />
-                </RootAppComponent>
-            </Suspense>
+            <ThemeProvider theme={customTheme}>
+                <Suspense>
+                    <RootAppComponent>
+                        <RenderRouter />
+                    </RootAppComponent>
+                </Suspense>
+            </ThemeProvider>
         </QueryClientProvider>
     );
 }

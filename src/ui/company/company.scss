@@ -1,15 +1,21 @@
 .company-search {
-    .btn-register {
+    .particletext {
         position: relative;
-        text-align: center;
-        color: #15f4ee;
-        text-transform: uppercase;
-        cursor: pointer;
-        transition: 1.5s;
+        color: transparent;
+        font-weight: 800;
+        background-color: #df6c4f !important;
+        background-position: 50% 50%;
+        background: url('../../assets/background-title.png') repeat-y;
+        -webkit-background-clip: text;
+        animation: slide 2s linear infinite;
     }
-    .btn-register:hover {
-        letter-spacing: 10px;
-        // box-shadow: 0 5px 50px 0 #15f4ee inset, 0 5px 50px 0 #15f4ee, 0 5px 50px 0 #15f4ee inset, 0 5px 50px 0 #15f4ee;
-        // text-shadow: 0 0 5px orange, 0 0 5px orange;
+
+    @keyframes slide {
+        0% {
+            background-position: 50% 50%;
+        }
+        100% {
+            background-position: 60% 100%;
+        }
     }
 }
