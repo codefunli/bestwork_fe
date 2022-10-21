@@ -18,23 +18,21 @@ import {
     Select,
     Switch,
     TextField,
-    Typography,
+    Typography
 } from '@mui/material';
 import cities from 'hanhchinhvn/dist/tinh_tp.json';
 import { useState } from 'react';
 import { District, Ward } from '../../core/types/administrative';
 import { getDistrictsByCityCode, getWardsByDistrictCode } from '../../core/utils/administrative-utils';
-
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { AlertColorConstants, StatusCode, UrlFeApp } from '../../core/constants/common';
 import { validateForm } from '../../core/constants/validate';
+import { currentDateTime } from '../../core/utils/get-current-datetime';
 import { registerCompany } from '../../services/company-service';
 import MessageShow from '../../shared-components/message/message';
-
-const currentDateTime = new Date().toISOString().substring(0, 11).concat(new Date().toLocaleTimeString());
 
 const initialValues = {
     company: {

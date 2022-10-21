@@ -62,7 +62,9 @@ export const UrlServer = {
         GET: `${PREFIX_SERVER_URL}/projects`,
         DELETE: `${PREFIX_SERVER_URL}/projects/delete`,
         UPDATE: `${PREFIX_SERVER_URL}/projects`,
-        CREATE: '/bestwork/api/v1/projects/create',
+        CREATE: `${PREFIX_SERVER_URL}/projects/create`,
+        CREATE_PROGRESS: `${PREFIX_SERVER_URL}/projects/create-progress`,
+        UPDATE_PROGRESS: `${PREFIX_SERVER_URL}/projects/update-progress`,
     },
     ROLE: {
         GET: `${PREFIX_SERVER_URL}/roles`,
@@ -128,6 +130,8 @@ export const FieldProjectConstants = {
 };
 
 export const FieldProjectProgress = {
+    PROGRESS_TITLE: 'Title',
     START_DATE: 'Start date',
     END_DATE: 'End date',
+    STATUS: 'Status',
 };

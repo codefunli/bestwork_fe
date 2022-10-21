@@ -1,31 +1,36 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
-    Box, Button, Drawer,
-    FormControl, Grid,
+    Box, Button, ButtonGroup, Drawer,
+    FormControl, FormHelperText, Grid,
     InputLabel, MenuItem, Select, TextField,
     Typography
 } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { DefaultImage } from '../../core/constants/common';
-import { ProjectProgressDTO } from '../../models/project-res-dto';
 import { validateProjectProgress } from '../../core/constants/validate';
+import { ProjectProgressDTO } from '../../models/project-res-dto';
+import { createProgress } from '../../services/project-service';
+import { currentDateTime } from '../../core/utils/get-current-datetime';
+import ApiAlert from '../../shared-components/alert/api-alert';
 import MultipleFileUpload from '../../shared-components/file-upload/multiple-file-upload';
 
 const progressInitValues: ProjectProgressDTO = {
-    name: '',
+    id: '',
+    projectId: '',
+    title: '',
     images: [],
-    startDate: '',
-    endDate: '',
-    status: 1,
+    startDate: currentDateTime,
+    endDate: currentDateTime,
+    status: '',
     report: '',
     note: ''
 }
 
 interface Props {
     isOpen: boolean,
-    setIsOpen: Function
+    setIsOpen: Function,
+    toggleDrawer: Function
 }
 
 const progressStatus = [
@@ -51,11 +56,21 @@ const progressStatus = [
     }
 ];
 
-const Progress = (props: Props) => {
-    const { isOpen, setIsOpen } = props;
+const ProgressCreate = (props: Props) => {
+    const { isOpen, setIsOpen, toggleDrawer } = props;
     const { t } = useTranslation();
     const [progressData, setProgressData] = useState(progressInitValues);
-    const [imgData, setImgData] = useState(DefaultImage.USER_AVATAR);
+    const [imgData, setImgData] = useState([]);
+    const [isClearPreview, setIsClearPreview] = useState(false);
+    const [resForHandleMsg, setResForHandleMsg] = useState<any>();
+    const [progressList, setProgressList] = useState<any>([]);
+
+    const progressListFromLocal: any = localStorage.getItem('progressList');
+
+    useEffect(() => {
+        const progressTmp: any = JSON.parse(progressListFromLocal);
+        if (progressTmp) setProgressList(progressTmp);
+    }, [progressListFromLocal]);
 
     const {
         register,
@@ -66,6 +81,15 @@ const Progress = (props: Props) => {
         resolver: yupResolver(validateProjectProgress),
     });
 
+    const handleClear = () => {
+        reset();
+        setIsOpen(false);
+        toggleDrawer(false);
+        setImgData([]);
+        setIsClearPreview(true);
+        setProgressData(progressInitValues);
+    };
+
     const handleInputChange = (e: any) => {
         const { name, value } = e.target;
         setProgressData({
@@ -74,14 +98,30 @@ const Progress = (props: Props) => {
         });
     };
 
-    const handleSubmitForm = (event: any) => {
-        // updateProject(formValues)
-        //     .then((resp: any) => {
-        //         handleResponse(resp);
+    const handleSubmitForm = async () => {
+        // createProgress(progressData)
+        //     .then((res: any) => {
+        //         setResForHandleMsg({
+        //             status: res.status,
+        //             message: res.message,
+        //         });
         //     })
         //     .catch(() => {
-        //         handleMessage(true, t('message.error'), AlertColorConstants.ERROR);
+        //         setResForHandleMsg({
+        //             status: StatusCode.ERROR,
+        //             message: t('message.error'),
+        //         });
         //     });
+
+        localStorage.setItem('progressList', JSON.stringify([
+            ...progressList,
+            {
+                ...progressData,
+                id: progressList.length + 1,
+                images: imgData
+            }
+        ]));
+        handleClear();
     };
 
     return (
@@ -89,23 +129,46 @@ const Progress = (props: Props) => {
             <Drawer
                 anchor="right"
                 open={isOpen}
-                onClose={setIsOpen(false)}
+                onClose={toggleDrawer(false)}
             >
-                <Box sx={{ width: 380 }} className="progress-drawer">
+                <Box sx={{ width: 320 }} className="progress-drawer">
                     <Grid container direction="row" spacing={0}>
                         <Grid item xs={12} className="header">
                             <Typography color="white" variant="h6" gutterBottom sx={{ textTransform: 'uppercase', textAlign: 'center', mt: 9 }}>
-                                {t('project.progress.title')}
+                                {t('project.progress.create')}
                             </Typography>
                         </Grid>
                         <Grid item xs={12} className="item">
-                            <div className="item-header">{t('project.progress.prjName')}</div>
-                            <div className="content">...</div>
+                            <div className="item-header">{t('project.progress.progressTitle')}</div>
+                            <div className="content">
+                                <TextField
+                                    size="small"
+                                    value={progressData.title}
+                                    fullWidth
+                                    required
+                                    sx={{
+                                        mt: 1,
+                                        mb: 1,
+                                        '& legend': { display: 'none' },
+                                        '& fieldset': { top: 0 },
+                                    }}
+                                    label=""
+                                    id="outlined-required"
+                                    placeholder={t('common.placeholder')}
+                                    error={Boolean(errors.title)}
+                                    helperText={t(
+                                        errors.title?.message?.toString() as string,
+                                    )}
+                                    {...register('title', {
+                                        onChange: (e) => handleInputChange(e),
+                                    })}
+                                />
+                            </div>
                         </Grid>
                         <Grid item xs={12} className="item">
                             <div className="item-header">{t('project.progress.progressImg')}</div>
                             <div className="content">
-                                <MultipleFileUpload callbackFunc={setImgData} />
+                                <MultipleFileUpload clearPreview={isClearPreview} callbackFunc={setImgData} />
                             </div>
                         </Grid>
                         <Grid item xs={12} className="item">
@@ -119,16 +182,16 @@ const Progress = (props: Props) => {
                                     <span className="input-required">*</span>
                                 </InputLabel>
                                 <TextField
+                                    size="small"
                                     fullWidth
                                     sx={{
                                         mt: 1,
                                         mb: 1,
                                         '& legend': { display: 'none' },
                                         '& fieldset': { top: 0 },
-                                        '& input': { padding: '8.5px 14px' },
                                     }}
                                     value={progressData.startDate}
-                                    id="dateEnd"
+                                    id="startDate"
                                     type="datetime-local"
                                     InputLabelProps={{
                                         shrink: true,
@@ -147,16 +210,16 @@ const Progress = (props: Props) => {
                                     <span className="input-required">*</span>
                                 </InputLabel>
                                 <TextField
+                                    size="small"
                                     fullWidth
                                     sx={{
                                         mt: 1,
                                         mb: 1,
                                         '& legend': { display: 'none' },
                                         '& fieldset': { top: 0 },
-                                        '& input': { padding: '8.5px 14px' },
                                     }}
                                     value={progressData.endDate}
-                                    id="dateEnd"
+                                    id="endDate"
                                     type="datetime-local"
                                     InputLabelProps={{
                                         shrink: true,
@@ -186,21 +249,27 @@ const Progress = (props: Props) => {
                                     <Select
                                         labelId="demo-simple-select-outlined-label"
                                         id="demo-simple-select-outlined"
-                                        name="status"
                                         displayEmpty
                                         value={progressData.status}
-                                        onChange={handleInputChange}
+                                        error={Boolean(errors.status)}
+                                        {...register('status', {
+                                            onChange: (e) => handleInputChange(e),
+                                        })}
                                     >
                                         <MenuItem value="" selected={true} disabled>
                                             <em>{t('message.statusLabel')}</em>
                                         </MenuItem>
-
                                         {progressStatus.map(status => (
                                             <MenuItem value={status.id} key={status.id}>
                                                 <em>{status.value}</em>
                                             </MenuItem>
                                         ))}
                                     </Select>
+                                    {Boolean(errors.status) &&
+                                        <FormHelperText id="component-error-text">
+                                            <span className="message-required">{errors?.status?.message as string}</span>
+                                        </FormHelperText>
+                                    }
                                 </FormControl>
                             </div>
                         </Grid>
@@ -208,6 +277,7 @@ const Progress = (props: Props) => {
                             <div className="item-header">{t('project.progress.report')}</div>
                             <div className="content">
                                 <TextField
+                                    size="small"
                                     fullWidth
                                     multiline
                                     rows={3}
@@ -217,7 +287,6 @@ const Progress = (props: Props) => {
                                         mb: 1,
                                         '& legend': { display: 'none' },
                                         '& fieldset': { top: 0 },
-                                        '& input': { padding: '8.5px 14px' },
                                     }}
                                     value={progressData.report}
                                     placeholder={t('common.placeholder')}
@@ -232,6 +301,7 @@ const Progress = (props: Props) => {
                             <div className="item-header">{t('project.progress.note')}</div>
                             <div className="content">
                                 <TextField
+                                    size="small"
                                     fullWidth
                                     multiline
                                     rows={3}
@@ -241,7 +311,6 @@ const Progress = (props: Props) => {
                                         mb: 1,
                                         '& legend': { display: 'none' },
                                         '& fieldset': { top: 0 },
-                                        '& input': { padding: '8.5px 14px' },
                                     }}
                                     value={progressData.note}
                                     placeholder={t('common.placeholder')}
@@ -253,15 +322,28 @@ const Progress = (props: Props) => {
                             </div>
                         </Grid>
                         <Grid item xs={12} sm={12} className="text-center" sx={{ mt: 1, mb: 1 }}>
-                            <Button variant="contained" color="primary" onClick={handleSubmit(handleSubmitForm)}>
-                                {t('button.btnSave')}
-                            </Button>
+                            <ButtonGroup
+                                disableElevation
+                                variant="contained"
+                                aria-label="Disabled elevation buttons"
+                            >
+                                <Button onClick={handleClear} variant="outlined">
+                                    {t('button.btnCancel')}
+                                </Button>
+                                <Button variant="contained" color="primary" sx={{ ml: 1 }} onClick={handleSubmit(handleSubmitForm)}>
+                                    {t('button.btnCreate')}
+                                </Button>
+                            </ButtonGroup>
                         </Grid>
                     </Grid>
                 </Box>
             </Drawer>
+
+            <ApiAlert
+                response={resForHandleMsg}
+            />
         </div>
     );
 };
 
-export default Progress;
+export default ProgressCreate;

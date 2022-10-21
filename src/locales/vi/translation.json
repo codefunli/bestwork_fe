@@ -224,7 +224,9 @@
         },
         "progress": {
             "title": "Tiến độ thi công",
-            "prjName": "Tên dự án",
+            "create": "Tạo mới tiến độ",
+            "edit": "Chỉnh sửa tiến độ",
+            "progressTitle": "Tiêu đề",
             "progressImg": "Hình ảnh công trường",
             "date": "Ngày bắt đầu/kết thúc",
             "startDate": "Ngày bắt đầu",

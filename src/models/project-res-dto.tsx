@@ -14,11 +14,13 @@ export interface ProjectResDTO {
 }
 
 export interface ProjectProgressDTO {
-    name: string;
+    id: string;
+    projectId: string;
+    title: string;
     images: string[];
     startDate: string;
     endDate: string;
-    status: number;
+    status: string;
     report: string;
     note: string;
 }

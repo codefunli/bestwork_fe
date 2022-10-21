@@ -115,8 +115,9 @@
         "create": "Create",
         "project": "Project",
         "role": "Role",
-        "material": "material",
-        "status": "status"
+        "material": "Material",
+        "status": "Status",
+        "detail": "Detail"
     },
     "user": {
         "title": "User Information",
@@ -225,7 +226,9 @@
         },
         "progress": {
             "title": "Construction progress",
-            "prjName": "Project Name",
+            "create": "Create new progress",
+            "edit": "Edit progress",
+            "progressTitle": "Title",
             "progressImg": "Construction images",
             "date": "Start/end date",
             "startDate": "Start date",

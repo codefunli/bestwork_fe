@@ -126,16 +126,18 @@ export const validateProjectEditForm = yup.object({
 });
 
 export const validateProjectProgress = yup.object({
+    title: yup
+        .string()
+        .required(getMessage(ERROR_MSG.E01_001, [FieldProjectProgress.PROGRESS_TITLE])),
     startDate: yup
         .date()
         .required(getMessage(ERROR_MSG.E01_001, [FieldProjectProgress.START_DATE]))
-        .max(new Date(), getMessage(ERROR_MSG.E01_009, [FieldProjectProgress.START_DATE]))
         .typeError(getMessage(ERROR_MSG.E01_001, [FieldProjectProgress.START_DATE])),
     endDate: yup
         .date()
         .required(getMessage(ERROR_MSG.E01_001, [FieldProjectProgress.END_DATE]))
-        .max(new Date(), getMessage(ERROR_MSG.E01_009, [FieldProjectProgress.END_DATE]))
         .typeError(getMessage(ERROR_MSG.E01_001, [FieldProjectProgress.END_DATE])),
+    status: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldProjectProgress.STATUS])),
 });
 
 export const validateCreateRoleForm = yup.object({

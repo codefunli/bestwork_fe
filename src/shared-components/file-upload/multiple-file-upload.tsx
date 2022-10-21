@@ -1,31 +1,41 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import './file-upload.scss';
 
 export default function MultipleFileUpload(props: any) {
-    const { clearPreview, callbackFunc } = props;
+    const { clearPreview, callbackFunc, imgData } = props;
     const [images, setImages] = useState<string[]>([]);
-    const [imagePreviews, setImagePreviews] = useState<string[]>([]);
-    const inputRef = useRef<HTMLInputElement>(null);
+    const [imagePreviews, setImagePreviews] = useState<string[]>((imgData && imgData.length > 0) ? imgData : []);
 
     const onChangeImage = (event: any) => {
         setImages([...event.target.files]);
     };
 
     useEffect(() => {
-        setImagePreviews([]);
+        if (imgData && imgData.length > 0) setImagePreviews(imgData);
+    }, [imgData]);
+
+    useEffect(() => {
+        if (clearPreview) setImagePreviews([]);
     }, [clearPreview]);
 
     useEffect(() => {
         if (images.length < 1) return;
         const newImageUrls: any = [];
-        images.forEach((image: any) => newImageUrls.push(URL.createObjectURL(image)));
-        setImagePreviews(imagePreviews.concat(newImageUrls));
-
-        callbackFunc(imagePreviews.concat(newImageUrls));
-        if (inputRef.current !== null) {
-            inputRef.current.value = '';
+        // images.forEach((image: any) => newImageUrls.push(URL.createObjectURL(image)));
+        // setImagePreviews(imagePreviews.concat(newImageUrls));
+        // callbackFunc(imagePreviews.concat(newImageUrls));
+        for (let index = 0; index < images.length; index++) {
+            if (images[index]) {
+                const reader: any = new FileReader();
+                reader.addEventListener('load', () => {
+                    newImageUrls.push(reader.result);
+                    setImagePreviews([...imagePreviews, ...newImageUrls]);
+                    callbackFunc([...imagePreviews, ...newImageUrls]);
+                });
+                reader.readAsDataURL(images[index]);
+            }
         }
     }, [images]);
 
@@ -33,11 +43,7 @@ export default function MultipleFileUpload(props: any) {
         let ImgPreviewTmp = JSON.parse(JSON.stringify(imagePreviews));
         ImgPreviewTmp.splice(index, 1);
         setImagePreviews(ImgPreviewTmp);
-
         callbackFunc(ImgPreviewTmp);
-        if (inputRef.current !== null) {
-            inputRef.current.value = '';
-        }
     };
 
     return (
@@ -47,7 +53,7 @@ export default function MultipleFileUpload(props: any) {
                     <AddPhotoAlternateIcon />
                 </label>
                 <div className="row image-list">
-                    {imagePreviews.length > 0 && imagePreviews.reverse().map((image, index) => (
+                    {(imagePreviews && imagePreviews.length) > 0 && imagePreviews.reverse().map((image, index) => (
                         <div className="col-6 col-lg-4 img-item">
                             <HighlightOffIcon onClick={() => removeImageItem(index)} />
                             <img src={image} alt={image} key={index} />
@@ -59,7 +65,6 @@ export default function MultipleFileUpload(props: any) {
                 accept="image/*"
                 id="chosen-image"
                 type="file"
-                ref={inputRef}
                 multiple
                 hidden
                 onChange={onChangeImage}
