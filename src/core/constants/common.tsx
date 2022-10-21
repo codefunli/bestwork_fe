@@ -33,12 +33,14 @@ export const UrlFeApp = {
         EDIT_HAS_ID: '/app/project/edit/:id',
         CREATE: '/app/project/register',
         DETAIL_HAS_ID: '/app/project/detail/:id',
+        DETAIL: '/app/project/detail',
     },
     ROLE: {
         INDEX: '/app/role',
     },
     SCHEDULE: {
         MATERIAL_STATUS: '/app/material/status',
+        MATERIAL_STATUS_HAS_ID: '/app/material/status/:id',
     },
 };
 

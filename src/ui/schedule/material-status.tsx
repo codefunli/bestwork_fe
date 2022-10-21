@@ -20,6 +20,7 @@ import CommentEl from '../../shared-components/comment/comment';
 import ImageManager from '../../shared-components/images-manager/image-manager';
 import ImageUploadDialog from '../../shared-components/modal/image-upload-dialog';
 import EditIcon from '@mui/icons-material/Edit';
+import { useParams } from 'react-router-dom';
 
 const initialDataImg = {
     comment: '',
@@ -42,6 +43,7 @@ export default function MaterialSchedule() {
     const [isEnabled, setIsEnabled] = useState<boolean>(false);
     const [arrMsg, setArrMsg] = useState<Comment[]>([]);
     const [content, setContent] = useState(initialDataImg);
+    const params = useParams();
 
     const enableComment = () => {
         setIsEnabled(!isEnabled);
