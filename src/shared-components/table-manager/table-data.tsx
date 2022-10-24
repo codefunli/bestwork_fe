@@ -20,6 +20,8 @@ import { EnhancedTableToolbar } from './table-toolbar';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import { green } from '@mui/material/colors';
+import PostAddSharpIcon from '@mui/icons-material/PostAddSharp';
+import ManageHistorySharpIcon from '@mui/icons-material/ManageHistorySharp';
 
 export interface ArrayAction {
     nameFn: string;
@@ -122,6 +124,10 @@ export default function EnhancedTable(props: EnhancedTable) {
                 return <ModeEditIcon />;
             case 'AddUser':
                 return <PersonAddAlt1Icon />;
+            case 'AddMaterialStatus':
+                return <PostAddSharpIcon />;
+            case 'AddProjectDetail':
+                return <ManageHistorySharpIcon />;
             default:
                 break;
         }
@@ -137,7 +143,7 @@ export default function EnhancedTable(props: EnhancedTable) {
                 <TableContainer>
                     <Table
                         style={{
-                            minWidth: 650,
+                            minWidth: 1200,
                         }}
                         stickyHeader
                         sx={{ minWidth: 400 }}

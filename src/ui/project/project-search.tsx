@@ -7,7 +7,6 @@ import {
     Card,
     CardContent,
     CardHeader,
-    Chip,
     FormControl,
     Grid,
     InputLabel,
@@ -23,14 +22,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ConfirmConstants, UrlFeApp } from '../../core/constants/common';
 import { SUCCESS_MSG } from '../../core/constants/message';
 import { headProjectCol } from '../../core/types/project';
-import { deleteProjects, getProjects } from '../../services/project-service';
+import { deleteProjects, getProjects, getProjectStatus } from '../../services/project-service';
 import MessageShow from '../../shared-components/message/message';
 import AlertDialogSlide from '../../shared-components/modal/alert-dialog-slide';
 import EnhancedTable, { ArrayAction } from '../../shared-components/table-manager/table-data';
 import './project.scss';
-import CheckIcon from '@mui/icons-material/Check';
-import CloseIcon from '@mui/icons-material/Close';
-import { green } from '@mui/material/colors';
 
 const initialValues = {
     page: '0',
@@ -41,29 +37,6 @@ const initialValues = {
     status: '-1',
 };
 
-const projectStatus = [
-    {
-        value: 0,
-        name: 'NOT_YET_START',
-    },
-    {
-        value: 1,
-        name: 'PROCESSING',
-    },
-    {
-        value: 2,
-        name: 'DONE_AND_WAITING_FOR_CHECKING',
-    },
-    {
-        value: 3,
-        name: 'CHECKED_AND_WAITING_FOR_PAYMENT',
-    },
-    {
-        value: 4,
-        name: 'CANCEL ',
-    },
-];
-
 export default function ProjectSearch() {
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [isShowMessage, setIsShowMessage] = useState(false);
@@ -73,9 +46,16 @@ export default function ProjectSearch() {
     const queryClient = useQueryClient();
     const [state, setState] = useState<any>();
     const { t } = useTranslation();
-    const [id, setId] = useState({
+    const [id, setId] = useState<any>({
         id: [],
     });
+    const [projectStatus, setProjectStatus] = useState([]);
+
+    useEffect(() => {
+        getProjectStatus().then((status: any) => {
+            setProjectStatus(status);
+        });
+    }, []);
 
     const nativgate = useNavigate();
 
@@ -141,8 +121,7 @@ export default function ProjectSearch() {
         setCompanyMsg(t(SUCCESS_MSG.S01_004));
         setIsOpenModal(true);
         setId({
-            ...id,
-            ...childData,
+            id: [...childData.ids],
         });
     };
 
@@ -155,7 +134,7 @@ export default function ProjectSearch() {
         });
     };
 
-    nativgate('/app/project/detail/1');
+    // nativgate('/app/project/detail/1');
 
     // miss pass id with url
     const handleEditData = (e: any, id: number) => {
@@ -163,8 +142,14 @@ export default function ProjectSearch() {
         nativgate(`${UrlFeApp.PROJECT.EDIT}/${id}`);
     };
 
-    const handleAddUser = (e: any, id: number) => {
-        alert('Add user function running...');
+    const handleAddMaterialStatus = (e: any, id: string) => {
+        e.preventDefault();
+        nativgate(`${UrlFeApp.SCHEDULE.MATERIAL_STATUS}/${id}`);
+    };
+
+    const handleAddProjectDetail = (e: any, id: string) => {
+        e.preventDefault();
+        nativgate(`${UrlFeApp.PROJECT.DETAIL}/${id}`);
     };
 
     const alertOkFunc = () => {
@@ -197,9 +182,14 @@ export default function ProjectSearch() {
             iconFn: 'ModeEditIcon',
         },
         {
-            nameFn: t('tooltip.addUser'),
-            acFn: handleAddUser,
-            iconFn: 'AddUser',
+            nameFn: t('tooltip.materialStatus'),
+            acFn: handleAddMaterialStatus,
+            iconFn: 'AddMaterialStatus',
+        },
+        {
+            nameFn: t('tooltip.projectDetail'),
+            acFn: handleAddProjectDetail,
+            iconFn: 'AddProjectDetail',
         },
     ];
 
@@ -303,14 +293,18 @@ export default function ProjectSearch() {
                                                         onChange={handleInputChange}
                                                     >
                                                         <MenuItem value="-1">
-                                                            <em style={{ color: '#bdbdbd' }} className="m-auto">
+                                                            <em className="m-auto color-label-select-box">
                                                                 {t('message.status')}
                                                             </em>
                                                         </MenuItem>
-                                                        {projectStatus.map((data: any) => {
+                                                        {projectStatus.map((data: any, index: any) => {
                                                             return (
-                                                                <MenuItem value={data.value} className="text-center">
-                                                                    <div className="text-center w-100">{data.name}</div>
+                                                                <MenuItem
+                                                                    key={data}
+                                                                    value={index}
+                                                                    className="text-center"
+                                                                >
+                                                                    <div className="text-center w-100">{data}</div>
                                                                 </MenuItem>
                                                             );
                                                         })}

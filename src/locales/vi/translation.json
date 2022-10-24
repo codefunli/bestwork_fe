@@ -161,7 +161,9 @@
     },
     "tooltip": {
         "edit": "Chỉnh sửa",
-        "addUser": "Thêm người dùng"
+        "addUser": "Thêm người dùng",
+        "materialStatus": "Thêm trạng thái vật tư",
+        "projectDetail": "Thêm tiến độ thi công"
     },
     "edit": {
         "title": "Chỉnh sửa công ty",
