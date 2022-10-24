@@ -18,8 +18,16 @@ export const getProject = async (id: string) => {
     return res.data;
 };
 
+export const getProjectById = async (id: string) => {
+    const res = await apiClient.get<PageableDataResSuccess<ProjectResDTO[]>>(`${UrlServer.PROJECT.GET_BY_ID}/${id}`);
+    return res.data;
+};
+
 export const updateProject = async (object: any) => {
-    const res = await apiClient.put<PageableDataResSuccess<ProjectResDTO[]>>(UrlServer.PROJECT.UPDATE, object);
+    const res = await apiClient.patch<PageableDataResSuccess<ProjectResDTO[]>>(
+        `${UrlServer.PROJECT.UPDATE}/${object.id}`,
+        object,
+    );
     return res.data;
 };
 

@@ -62,8 +62,9 @@ export const UrlServer = {
     },
     PROJECT: {
         GET: `${PREFIX_SERVER_URL}/projects/list`,
+        GET_BY_ID: `${PREFIX_SERVER_URL}/projects`,
         DELETE: `${PREFIX_SERVER_URL}/projects/delete`,
-        UPDATE: `${PREFIX_SERVER_URL}/projects`,
+        UPDATE: `${PREFIX_SERVER_URL}/projects/update`,
         CREATE: `${PREFIX_SERVER_URL}/projects/create`,
         CREATE_PROGRESS: `${PREFIX_SERVER_URL}/projects/create-progress`,
         UPDATE_PROGRESS: `${PREFIX_SERVER_URL}/projects/update-progress`,

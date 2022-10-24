@@ -27,7 +27,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AlertColorConstants, StatusCode, UrlFeApp } from '../../core/constants/common';
 import { validateProjectEditForm } from '../../core/constants/validate';
-import { getProject, updateProject } from '../../services/project-service';
+import { getProjectById, getProjectStatus, getProjectTypes, updateProject } from '../../services/project-service';
 import MessageShow from '../../shared-components/message/message';
 
 const currentDateTime = new Date().toISOString().substring(0, 11).concat(new Date().toLocaleTimeString());
@@ -35,45 +35,14 @@ const currentDateTime = new Date().toISOString().substring(0, 11).concat(new Dat
 const initialValues = {
     project: {
         projectName: '',
-        projectType: '',
+        projectType: 0,
         description: '',
-        comment: '',
         updateDate: currentDateTime,
         notificationFlag: true,
         isPaid: false,
         status: '',
     },
 };
-
-const statusValues = [
-    {
-        name: 'Cancel',
-        value: '0',
-    },
-    {
-        name: 'Processing',
-        value: '1',
-    },
-    {
-        name: 'Done and waiting for checking',
-        value: '2',
-    },
-    {
-        name: 'Checked and waiting for payment',
-        value: '3',
-    },
-];
-
-const projectType = [
-    {
-        name: 'Type 1',
-        value: '0',
-    },
-    {
-        name: 'Type 2',
-        value: '1',
-    },
-];
 
 export default function ProjectEdit() {
     const [formValues, setFormValues] = useState(initialValues);
@@ -83,14 +52,38 @@ export default function ProjectEdit() {
     const navigate = useNavigate();
     const { t } = useTranslation();
     const params = useParams();
+    const [projectStatus, setProjectStatus] = useState([]);
+    const [projectTypes, setProjectType] = useState([]);
+
+    useEffect(() => {
+        getProjectStatus().then((status: any) => {
+            setProjectStatus(status);
+        });
+        getProjectTypes().then((type: any) => {
+            setProjectType(type);
+        });
+    }, []);
 
     useEffect(() => {
         if (params.id != undefined) {
-            getProject(params.id).then((value: any) => {
+            getProjectById(params.id).then((value: any) => {
                 if (value != undefined && value.data != undefined) {
                     const project = {
                         ...value.data,
                     };
+                    if (value.data.isPaid === 0) {
+                        project.isPaid = false;
+                    } else if (value.data.isPaid === 1) {
+                        project.isPaid = true;
+                    }
+                    if (value.data.notificationFlag === 0) {
+                        project.notificationFlag = false;
+                    } else if (value.data.notificationFlag === 1) {
+                        project.notificationFlag = true;
+                    }
+                    project.projectType = value.data.projectType.id;
+                    project.updateDate = currentDateTime;
+
                     setFormValues({ project });
                 }
                 reset();
@@ -252,36 +245,6 @@ export default function ProjectEdit() {
                                             <div className="col-12 col-sm-6 d-block p-1">
                                                 <InputLabel
                                                     htmlFor="outlined-adornment-amount"
-                                                    error={Boolean(errors.comment)}
-                                                >
-                                                    {t('project.register.comment')}
-                                                </InputLabel>
-                                                <TextField
-                                                    size="small"
-                                                    value={formValues.project.comment}
-                                                    fullWidth
-                                                    required
-                                                    id="outlined-required"
-                                                    sx={{
-                                                        mt: 1,
-                                                        mb: 1,
-                                                        '& legend': { display: 'none' },
-                                                        '& fieldset': { top: 0 },
-                                                    }}
-                                                    label=""
-                                                    placeholder={t('common.placeholder')}
-                                                    error={Boolean(errors.comment)}
-                                                    helperText={errors.comment?.message?.toString()}
-                                                    {...register('comment', {
-                                                        onChange: (e) => handleInputChange(e),
-                                                    })}
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="row justify-center m-1">
-                                            <div className="col-12 col-sm-6 d-block p-1">
-                                                <InputLabel
-                                                    htmlFor="outlined-adornment-amount"
                                                     error={Boolean(errors.description)}
                                                 >
                                                     {t('project.register.description')}
@@ -307,6 +270,8 @@ export default function ProjectEdit() {
                                                     })}
                                                 />
                                             </div>
+                                        </div>
+                                        <div className="row justify-center m-1">
                                             <div className="col-12 col-sm-6 p-1" style={{ padding: 0 }}>
                                                 <InputLabel
                                                     htmlFor="outlined-adornment-amount"
@@ -337,8 +302,6 @@ export default function ProjectEdit() {
                                                     })}
                                                 />
                                             </div>
-                                        </div>
-                                        <div className="row justify-center m-1">
                                             <div className="col-12 col-sm-6 d-block p-1">
                                                 <InputLabel id="demo-simple-select-outlined-label">
                                                     {t('project.register.status')}{' '}
@@ -366,12 +329,14 @@ export default function ProjectEdit() {
                                                         <MenuItem value="" selected={true} disabled>
                                                             <em>{t('message.statusLabel')}</em>
                                                         </MenuItem>
-                                                        {statusValues.map((s) => (
-                                                            <MenuItem value={s.value}>{s.name}</MenuItem>
+                                                        {projectStatus.map((s: any) => (
+                                                            <MenuItem value={s}>{s}</MenuItem>
                                                         ))}
                                                     </Select>
                                                 </FormControl>
                                             </div>
+                                        </div>
+                                        <div className="row justify-center m-1">
                                             <div className="col-12 col-sm-6 d-block p-1">
                                                 <InputLabel id="demo-simple-select-outlined-label">
                                                     {t('project.register.type')}{' '}
@@ -399,15 +364,13 @@ export default function ProjectEdit() {
                                                         <MenuItem value="" selected={true} disabled>
                                                             <em>{t('message.statusLabel')}</em>
                                                         </MenuItem>
-                                                        {projectType.map((s) => (
-                                                            <MenuItem value={s.value}>{s.name}</MenuItem>
+                                                        {projectTypes.map((s: any) => (
+                                                            <MenuItem value={s.id}>{s.name}</MenuItem>
                                                         ))}
                                                     </Select>
                                                 </FormControl>
                                             </div>
-                                        </div>
-                                        <div className="row justify-center m-1">
-                                            <div className="col-12 col-sm-6 d-block p-1 mt-3">
+                                            <div className="col-12 col-sm-6 d-block p-1 mt-1">
                                                 <div className="row justify-center m-1">
                                                     <div className="col-12 col-md-6 d-block">
                                                         <FormControl component="fieldset">
