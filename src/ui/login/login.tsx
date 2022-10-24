@@ -102,22 +102,22 @@ export default function Login() {
             setIsErrorPassword(false);
         }
 
-        // if (isStopLogin) {
-        //     return;
-        // } else {
-        //     let objectLogin = {
-        //         username: formValues.userName,
-        //         password: formValues.password,
-        //     };
+        if (isStopLogin) {
+            return;
+        } else {
+            let objectLogin = {
+                username: formValues.userName,
+                password: formValues.password,
+            };
 
-        //     login(objectLogin)
-        //         .then((resp) => {
-        //             handleResponse(resp);
-        //         })
-        //         .catch(() => {
-        //             handleMessage(true, t('message.error'), AlertColorConstants.ERROR);
-        //         });
-        // }
+            login(objectLogin)
+                .then((resp) => {
+                    handleResponse(resp);
+                })
+                .catch(() => {
+                    handleMessage(true, t('message.error'), AlertColorConstants.ERROR);
+                });
+        }
     };
 
     const handleCloseMsg = () => {

@@ -135,31 +135,30 @@ export default function MiniDrawer() {
     };
 
     useEffect(() => {
-        nativgate(UrlFeApp.DASH_BOARD);
-        // const timer = setInterval(() => {
-        //     setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10));
-        // }, 800);
+        const timer = setInterval(() => {
+            setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10));
+        }, 1100);
 
-        // isCheckLogined()
-        //     .then((resp) => {
-        //         if (resp.status === StatusCode.OK) {
-        //             dispatch(userActions.setIsLogined(true));
-        //             dispatch(appAction.setIsShowMsgErrLogin(false));
-        //             clearInterval(timer);
-        //             nativgate(UrlFeApp.DASH_BOARD);
-        //         } else {
-        //             dispatch(appAction.setIsPageLoading(true));
-        //             dispatch(userActions.setIsLogined(false));
-        //             dispatch(appAction.setIsShowMsgErrLogin(true));
-        //             nativgate(UrlFeApp.LOGIN_URL);
-        //         }
-        //     })
-        //     .catch(() => {
-        //         dispatch(appAction.setIsPageLoading(true));
-        //         dispatch(appAction.setIsShowMsgErrLogin(false));
-        //         dispatch(userActions.setIsLogined(false));
-        //         nativgate(UrlFeApp.LOGIN_URL);
-        //     });
+        isCheckLogined()
+            .then((resp) => {
+                if (resp.status === StatusCode.OK) {
+                    dispatch(userActions.setIsLogined(true));
+                    dispatch(appAction.setIsShowMsgErrLogin(false));
+                    clearInterval(timer);
+                    nativgate(UrlFeApp.DASH_BOARD);
+                } else {
+                    dispatch(appAction.setIsPageLoading(true));
+                    dispatch(userActions.setIsLogined(false));
+                    dispatch(appAction.setIsShowMsgErrLogin(true));
+                    nativgate(UrlFeApp.LOGIN_URL);
+                }
+            })
+            .catch(() => {
+                dispatch(appAction.setIsPageLoading(true));
+                dispatch(appAction.setIsShowMsgErrLogin(false));
+                dispatch(userActions.setIsLogined(false));
+                nativgate(UrlFeApp.LOGIN_URL);
+            });
     }, []);
 
     return (
