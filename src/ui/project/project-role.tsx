@@ -31,8 +31,8 @@ function a11yProps(id: number) {
 interface User {
     userId: number;
     name: string;
-    view: boolean;
-    edit: boolean;
+    canView: boolean;
+    canEdit: boolean;
 }
 
 interface Company {
@@ -75,18 +75,18 @@ export default function Role(props: Role) {
             const element = currentCompany.userList[i];
             if (element.userId == userId) {
                 switch (name) {
-                    case 'edit':
-                        element.edit = !element.edit;
+                    case 'canEdit':
+                        element.canEdit = !element.canEdit;
                         break;
-                    case 'view':
-                        element.view = !element.view;
-                        if (!element.view) {
-                            element.edit = false;
+                    case 'canView':
+                        element.canView = !element.canView;
+                        if (!element.canView) {
+                            element.canEdit = false;
                         }
                         break;
                     case 'all':
-                        element.edit = !element.edit;
-                        element.view = !element.view;
+                        element.canEdit = !element.canEdit;
+                        element.canView = !element.canView;
                         break;
                     default:
                         break;
@@ -153,13 +153,13 @@ export default function Role(props: Role) {
                                     mt: 1,
                                     mb: 1,
                                     '& legend': { display: 'none' },
-                                    '& fieldset': { top: 0 }
+                                    '& fieldset': { top: 0 },
                                 }}
                                 name="keyword"
                                 label=""
                                 placeholder={t('common.placeholder')}
-                            // value={searchKeyword}
-                            // onChange={(e) => setSearchKeyword(e.target.value)}
+                                // value={searchKeyword}
+                                // onChange={(e) => setSearchKeyword(e.target.value)}
                             />
                             <Button variant="contained" color="info">
                                 <SearchIcon />
@@ -178,11 +178,7 @@ export default function Role(props: Role) {
                             }}
                         >
                             {companyList.map((company, index) => (
-                                <Tab
-                                    key={index}
-                                    label={company.companyName}
-                                    {...a11yProps(company.id)}
-                                />
+                                <Tab key={index} label={company.companyName} {...a11yProps(company.id)} />
                             ))}
                         </Tabs>
                     </div>
@@ -214,14 +210,14 @@ export default function Role(props: Role) {
                                                 </TableCell>
                                                 <TableCell align="center">
                                                     <Checkbox
-                                                        checked={row.view && row.edit}
+                                                        checked={row.canView && row.canEdit}
                                                         onChange={(e) =>
                                                             handleChangeCheckbox(
                                                                 e,
                                                                 row.userId,
                                                                 index,
                                                                 true,
-                                                                row.view && row.edit,
+                                                                row.canView && row.canEdit,
                                                             )
                                                         }
                                                         name="all"
@@ -229,21 +225,17 @@ export default function Role(props: Role) {
                                                 </TableCell>
                                                 <TableCell align="center">
                                                     <Checkbox
-                                                        checked={row.view}
-                                                        onChange={(e) =>
-                                                            handleChangeCheckbox(e, row.userId, index)
-                                                        }
-                                                        name="view"
+                                                        checked={row.canView}
+                                                        onChange={(e) => handleChangeCheckbox(e, row.userId, index)}
+                                                        name="canView"
                                                     />
                                                 </TableCell>
                                                 <TableCell align="center">
                                                     <Checkbox
-                                                        checked={row.edit}
-                                                        onChange={(e) =>
-                                                            handleChangeCheckbox(e, row.userId, index)
-                                                        }
-                                                        name="edit"
-                                                        disabled={!row.view}
+                                                        checked={row.canEdit}
+                                                        onChange={(e) => handleChangeCheckbox(e, row.userId, index)}
+                                                        name="canEdit"
+                                                        disabled={!row.canView}
                                                     />
                                                 </TableCell>
                                             </TableRow>

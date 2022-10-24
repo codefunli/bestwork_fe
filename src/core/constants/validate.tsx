@@ -104,16 +104,7 @@ export const validateEditCompanyForm = yup.object({
 });
 export const validateProjectRegisterForm = yup.object({
     projectName: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldProjectConstants.PROJECT_NAME])),
-    createDate: yup
-        .date()
-        .required(getMessage(ERROR_MSG.E01_001, [FieldProjectConstants.CREATE_DATE]))
-        .max(new Date(), getMessage(ERROR_MSG.E01_009, [FieldProjectConstants.CREATE_DATE]))
-        .typeError(getMessage(ERROR_MSG.E01_001, [FieldProjectConstants.CREATE_DATE])),
-    updateDate: yup
-        .date()
-        .required(getMessage(ERROR_MSG.E01_001, [FieldProjectConstants.UPDATE_DATE]))
-        .max(new Date(), getMessage(ERROR_MSG.E01_009, [FieldProjectConstants.UPDATE_DATE]))
-        .typeError(getMessage(ERROR_MSG.E01_001, [FieldProjectConstants.UPDATE_DATE])),
+    createDate: yup.date().required(getMessage(ERROR_MSG.E01_001, [FieldProjectConstants.CREATE_DATE])),
 });
 
 export const validateProjectEditForm = yup.object({
@@ -126,9 +117,7 @@ export const validateProjectEditForm = yup.object({
 });
 
 export const validateProjectProgress = yup.object({
-    title: yup
-        .string()
-        .required(getMessage(ERROR_MSG.E01_001, [FieldProjectProgress.PROGRESS_TITLE])),
+    title: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldProjectProgress.PROGRESS_TITLE])),
     startDate: yup
         .date()
         .required(getMessage(ERROR_MSG.E01_001, [FieldProjectProgress.START_DATE]))
@@ -141,10 +130,6 @@ export const validateProjectProgress = yup.object({
 });
 
 export const validateCreateRoleForm = yup.object({
-    roleName: yup
-        .string()
-        .required(getMessage(ERROR_MSG.E01_001, [FieldConstants.ROLE])),
-    description: yup
-        .string()
-        .required(getMessage(ERROR_MSG.E01_001, [FieldConstants.DESCRIPTION]))
+    roleName: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.ROLE])),
+    description: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.DESCRIPTION])),
 });
