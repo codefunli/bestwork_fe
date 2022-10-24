@@ -162,89 +162,99 @@ export default function MiniDrawer() {
     }, []);
 
     return (
-        <React.Fragment>
-            <Box
-                sx={{
-                    display: 'flex',
-                    '&::-webkit-scrollbar': {
-                        width: 20,
-                    },
-                    '&::-webkit-scrollbar-track': {
-                        backgroundColor: 'orange',
-                    },
-                    '&::-webkit-scrollbar-thumb': {
-                        backgroundColor: 'red',
-                        borderRadius: 2,
-                    },
-                }}
-            >
-                <CssBaseline />
-                <AppBar position="fixed" open={open}>
-                    <div className="d-flex justify-content-between">
-                        <Toolbar>
-                            <IconButton
-                                color="inherit"
-                                aria-label="open drawer"
-                                onClick={handleDrawerOpen}
-                                edge="start"
-                                sx={{
-                                    marginRight: 5,
-                                    ...(open && { display: 'none' }),
-                                }}
-                            >
-                                <MenuIcon />
-                            </IconButton>
-                            <CollapsedBreadcrumbs />
-                        </Toolbar>
-                        <Toolbar>
-                            <MLanguage color="inherit" />
-                            <Badge sx={{ mr: 2 }} color="secondary" badgeContent={2}>
-                                <NotificationsNoneIcon />
-                            </Badge>
-                            <Avatar sx={{ bgcolor: deepOrange[500], mr: 2 }}>N</Avatar>
-                        </Toolbar>
-                    </div>
-                </AppBar>
-                <Drawer variant="permanent" open={open}>
-                    <DrawerHeader>
-                        <IconButton onClick={handleDrawerClose}>
-                            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-                        </IconButton>
-                    </DrawerHeader>
-                    <Divider />
-                    <List>
-                        {menuItemLinkData.map((menuItem, index) => (
-                            <ListItem key={menuItem.name} disablePadding sx={{ display: 'block' }}>
-                                <ListItemButton
-                                    sx={{
-                                        minHeight: 48,
-                                        justifyContent: open ? 'initial' : 'center',
-                                        px: 2.5,
-                                    }}
-                                    onClick={(event) => {
-                                        navigateByLink(menuItem.link);
-                                    }}
-                                >
-                                    <ListItemIcon
+        <div className="h-100">
+            {isUserLogged ? (
+                <React.Fragment>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            '&::-webkit-scrollbar': {
+                                width: 20,
+                            },
+                            '&::-webkit-scrollbar-track': {
+                                backgroundColor: 'orange',
+                            },
+                            '&::-webkit-scrollbar-thumb': {
+                                backgroundColor: 'red',
+                                borderRadius: 2,
+                            },
+                        }}
+                    >
+                        <CssBaseline />
+                        <AppBar position="fixed" open={open}>
+                            <div className="d-flex justify-content-between">
+                                <Toolbar>
+                                    <IconButton
+                                        color="inherit"
+                                        aria-label="open drawer"
+                                        onClick={handleDrawerOpen}
+                                        edge="start"
                                         sx={{
-                                            minWidth: 0,
-                                            mr: open ? 3 : 'auto',
-                                            justifyContent: 'center',
+                                            marginRight: 5,
+                                            ...(open && { display: 'none' }),
                                         }}
                                     >
-                                        {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                                    </ListItemIcon>
-                                    <ListItemText primary={menuItem.name} sx={{ opacity: open ? 1 : 0 }} />
-                                </ListItemButton>
-                            </ListItem>
-                        ))}
-                    </List>
-                </Drawer>
-                <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-                    <DrawerHeader />
-                    <Outlet />
-                </Box>
-            </Box>
-        </React.Fragment>
+                                        <MenuIcon />
+                                    </IconButton>
+                                    <CollapsedBreadcrumbs />
+                                </Toolbar>
+                                <Toolbar>
+                                    <MLanguage color="inherit" />
+                                    <Badge sx={{ mr: 2 }} color="secondary" badgeContent={2}>
+                                        <NotificationsNoneIcon />
+                                    </Badge>
+                                    <Avatar sx={{ bgcolor: deepOrange[500], mr: 2 }}>N</Avatar>
+                                </Toolbar>
+                            </div>
+                        </AppBar>
+                        <Drawer variant="permanent" open={open}>
+                            <DrawerHeader>
+                                <IconButton onClick={handleDrawerClose}>
+                                    {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+                                </IconButton>
+                            </DrawerHeader>
+                            <Divider />
+                            <List>
+                                {menuItemLinkData.map((menuItem, index) => (
+                                    <ListItem key={menuItem.name} disablePadding sx={{ display: 'block' }}>
+                                        <ListItemButton
+                                            sx={{
+                                                minHeight: 48,
+                                                justifyContent: open ? 'initial' : 'center',
+                                                px: 2.5,
+                                            }}
+                                            onClick={(event) => {
+                                                navigateByLink(menuItem.link);
+                                            }}
+                                        >
+                                            <ListItemIcon
+                                                sx={{
+                                                    minWidth: 0,
+                                                    mr: open ? 3 : 'auto',
+                                                    justifyContent: 'center',
+                                                }}
+                                            >
+                                                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                                            </ListItemIcon>
+                                            <ListItemText primary={menuItem.name} sx={{ opacity: open ? 1 : 0 }} />
+                                        </ListItemButton>
+                                    </ListItem>
+                                ))}
+                            </List>
+                        </Drawer>
+                        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+                            <DrawerHeader />
+                            <Outlet />
+                        </Box>
+                    </Box>
+                </React.Fragment>
+            ) : (
+                <div className="progress-wrapper">
+                    <Box sx={{ width: '50%', display: 'inherit' }}>
+                        <LinearProgressWithLabel value={progress} color="warning" />
+                    </Box>
+                </div>
+            )}
+        </div>
     );
 }
