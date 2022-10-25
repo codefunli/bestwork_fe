@@ -148,3 +148,20 @@ export const validateCreateRoleForm = yup.object({
         .string()
         .required(getMessage(ERROR_MSG.E01_001, [FieldConstants.DESCRIPTION]))
 });
+
+export const validateForgotPassword = yup.object({
+    email: yup
+        .string()
+        .required(getMessage(ERROR_MSG.E01_001, [FieldConstants.EMAIL]))
+        .matches(pattern.email, getMessage(ERROR_MSG.E01_008, [FieldConstants.EMAIL])),
+});
+
+export const validateResetPassword = yup.object({
+    password: yup
+        .string()
+        .required(getMessage(ERROR_MSG.E01_001, [FieldConstants.PASSWORD]))
+        .matches(pattern.password, getMessage(ERROR_MSG.E01_004, [FieldConstants.NEW_PASSWORD])),
+    confirmPassword: yup
+        .string()
+        .oneOf([yup.ref('password'), null], getMessage(ERROR_MSG.E01_010, [FieldConstants.CONFIRM_PASSWORD])),
+});

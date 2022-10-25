@@ -19,6 +19,8 @@ const Role = lazy(() => import('../ui/role/role'));
 const Page404NotFound = lazy(() => import('../ui/error-page/404NotFound'));
 const ProjectRegister = lazy(() => import('../ui/project/project-register'));
 const MaterialStatus = lazy(() => import('../ui/schedule/material-status'));
+const ForgotPassword = lazy(() => import('../ui/forgot-password/forgot-password'));
+const ResetPassword = lazy(() => import('../ui/forgot-password/reset-password'));
 
 const listRouter: RouteObject[] = [
     {
@@ -100,6 +102,14 @@ const listRouter: RouteObject[] = [
     {
         path: '/*',
         element: <Page404NotFound />,
+    },
+    {
+        path: UrlFeApp.FORGOT_PASSWORD.FORGOT,
+        element: <ForgotPassword />,
+    },
+    {
+        path: `${UrlFeApp.FORGOT_PASSWORD.RESET}/:token`,
+        element: <ResetPassword />,
     },
 ];
 export default function RenderRouter() {
