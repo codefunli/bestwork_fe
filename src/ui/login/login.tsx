@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AlertColorConstants, FieldConstants, HttpStatusCode, UrlFeApp } from '../../core/constants/common';
 import { ERROR_MSG, getMessage } from '../../core/constants/message';
 import { useAppDispatch } from '../../core/hook/redux';
@@ -189,6 +189,13 @@ export default function Login() {
                     </Button>
                 </div>
             </form>
+
+            <div className="forgot-password-btn mt-4">
+                <Link to={UrlFeApp.FORGOT_PASSWORD.FORGOT}>
+                    {t('forgotPassword.title')}?
+                </Link>
+            </div>
+
             <MessageShow
                 message={companyMsg}
                 showMessage={isShowMessage}

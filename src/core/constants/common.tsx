@@ -42,6 +42,10 @@ export const UrlFeApp = {
         MATERIAL_STATUS: '/app/material/status',
         MATERIAL_STATUS_HAS_ID: '/app/material/status/:id',
     },
+    FORGOT_PASSWORD: {
+        FORGOT: '/auth/forgot-password',
+        RESET: '/auth/reset-password'
+    },
 };
 
 export const UrlServer = {
@@ -76,6 +80,10 @@ export const UrlServer = {
         UPDATE: `${PREFIX_SERVER_URL}/roles/update`,
         DELETE: `${PREFIX_SERVER_URL}/roles/delete`,
     },
+    AUTH: {
+        FORGOT_PASSWORD: `${PREFIX_SERVER_URL}/auth/forgot-password`,
+        RESET_PASSWORD: `${PREFIX_SERVER_URL}/auth/reset-password`
+    }
 };
 
 export const FieldConstants = {
@@ -92,6 +100,8 @@ export const FieldConstants = {
     LAST_NAME: 'Last Name',
     ROLE: 'Role',
     DESCRIPTION: 'Description',
+    NEW_PASSWORD: 'New Password',
+    CONFIRM_PASSWORD: 'Confirm Password'
 };
 
 export const ConfirmConstants = {

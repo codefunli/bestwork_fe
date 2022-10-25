@@ -5,5 +5,5 @@ export const pattern = {
     telNo: new RegExp(/(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/),
     taxNo: new RegExp(/^\d+$/),
     userName: new RegExp(/^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/),
-    password: new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/),
+    password: new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,100}$/),
 };

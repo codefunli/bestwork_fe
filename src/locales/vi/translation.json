@@ -261,5 +261,15 @@
             "msg_title": "Đáng tiếc! Trang này không tồn tại!",
             "msg_content": "Trang web bạn muốn tìm kiếm hiện không tồn tại"
         }
+    },
+    "forgotPassword": {
+        "title": "Quên mật khẩu",
+        "resetTitle": "Đặt lại mật khẩu",
+        "description": "Vui lòng nhập địa chỉ email được liên kết với tài khoản của bạn và Chúng tôi sẽ gửi cho bạn một liên kết qua email để đặt lại mật khẩu của bạn.",
+        "email": "Thư điện tử",
+        "password": "Mật khẩu",
+        "confirmPassword": "Xác nhận mật khẩu",
+        "btnSend": "Gửi yêu cầu",
+        "btnConfirm": "Xác nhận"
     }
 }

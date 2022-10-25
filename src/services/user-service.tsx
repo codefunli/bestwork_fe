@@ -32,3 +32,13 @@ export const isCheckLogined = async () => {
     const res = await apiClient.get(`${UrlServer.USER.IS_LOGINED}`);
     return res.data;
 };
+
+export const forgotPassword = async (email: any) => {
+    const res = await apiClient.post(`${UrlServer.AUTH.FORGOT_PASSWORD}`, email);
+    return res.data;
+};
+
+export const resetPassword = async (object: any, token: string) => {
+    const res = await apiClient.post(`${UrlServer.AUTH.RESET_PASSWORD}/${token}`, object);
+    return res.data;
+};
