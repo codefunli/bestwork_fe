@@ -159,3 +159,23 @@
 .color-label-select-box {
     color: #bdbdbd !important ;
 }
+
+.project-detail {
+    .progress-item {
+        display: block;
+        padding: 1rem;
+        border-radius: 1rem;
+        color: rgba(0, 0, 0, 0.6);
+        font-style: italic;
+        word-wrap: break-word;
+        cursor: pointer;
+
+        .progress-item-report {
+            font-weight: bold;
+        }
+    }
+
+    .progress-item:hover {
+        background-color: #d49699;
+    }
+}

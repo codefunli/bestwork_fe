@@ -1,25 +1,31 @@
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import Timeline from '@mui/lab/Timeline';
+import TimelineConnector from '@mui/lab/TimelineConnector';
+import TimelineContent, { timelineContentClasses } from '@mui/lab/TimelineContent';
+import TimelineDot from '@mui/lab/TimelineDot';
+import TimelineItem from '@mui/lab/TimelineItem';
+import TimelineSeparator from '@mui/lab/TimelineSeparator';
+import TimelineOppositeContent, { timelineOppositeContentClasses } from '@mui/lab/TimelineOppositeContent';
 import {
     Avatar,
-    Box, Button, Card,
+    Card,
+    CardActionArea,
     CardContent,
     CardHeader,
-    Divider, FormControl,
-    FormControlLabel,
-    FormLabel,
+    CardMedia,
+    Chip,
+    Divider,
     Grid,
-    InputLabel, List, ListItem, ListItemButton, ListItemText, Radio,
-    RadioGroup, TextField,
-    Typography
+    Typography,
 } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import { ProjectProgressDTO } from '../../models/project-res-dto';
 import { getProject } from '../../services/project-service';
-import IconButton from '@mui/material/IconButton';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
 import ProgressCreate from './progress-create';
 import ProgressEdit from './progress-edit';
-import { ProjectProgressDTO } from '../../models/project-res-dto';
 import './project.scss';
 
 const initialValues = {
@@ -65,287 +71,118 @@ export default function ProjectEdit() {
         }
     }, [params.id]);
 
-    const toggleDrawerCreateProgress = (open: boolean) =>
-        (event: React.KeyboardEvent | React.MouseEvent) => {
-            if (
-                event &&
-                event.type === 'keydown' &&
-                ((event as React.KeyboardEvent).key === 'Tab' ||
-                    (event as React.KeyboardEvent).key === 'Shift')
-            ) return;
+    const toggleDrawerCreateProgress = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+        if (
+            event &&
+            event.type === 'keydown' &&
+            ((event as React.KeyboardEvent).key === 'Tab' || (event as React.KeyboardEvent).key === 'Shift')
+        )
+            return;
 
-            setOpenCreateProgress(open);
-        };
+        setOpenCreateProgress(open);
+    };
 
-    const toggleDrawerEditProgress = (open: boolean) =>
-        (event: React.KeyboardEvent | React.MouseEvent) => {
-            if (
-                event &&
-                event.type === 'keydown' &&
-                ((event as React.KeyboardEvent).key === 'Tab' ||
-                    (event as React.KeyboardEvent).key === 'Shift')
-            ) return;
+    const toggleDrawerEditProgress = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+        if (
+            event &&
+            event.type === 'keydown' &&
+            ((event as React.KeyboardEvent).key === 'Tab' || (event as React.KeyboardEvent).key === 'Shift')
+        )
+            return;
 
-            setOpenEditProgress(open);
-        };
+        setOpenEditProgress(open);
+    };
 
     const handleEditProgress = (id: string) => {
         setOpenEditProgress(true);
         toggleDrawerEditProgress(true);
         setSelectedProgress(id);
-    }
+    };
 
     return (
         <div className="project-detail">
             <form>
-                <Typography
-                    variant="h5"
-                    className="mb-4"
-                    color="textSecondary"
-                    gutterBottom
-                    sx={{ textTransform: 'uppercase' }}
-                >
-                    {t('project.editTitle')}
-                    <Divider />
-                </Typography>
-                <Grid container spacing={3}>
-                    <Grid item xs={12} md={8} lg={9}>
-                        <Card style={{ width: '100%' }}>
-                            <Grid container spacing={3}>
-                                <Grid item xs={12}>
-                                    <CardHeader
-                                        avatar={<Avatar aria-label="recipe">C</Avatar>}
-                                        title={t('project.progress.title')}
-                                        subheader={new Date().toLocaleDateString()}
-                                    />
-                                    <CardContent>
-                                        <Box
-                                            component="form"
-                                            sx={{
-                                                '& > :not(style)': { m: 1 },
-                                            }}
-                                            noValidate
-                                            autoComplete="off"
-                                        >
-                                            <div className="row justify-center m-1">
-                                                <div className="col-12 col-sm-6 d-block p-1">
-                                                    <InputLabel
-                                                        htmlFor="outlined-adornment-amount"
-                                                    >
-                                                        {t('project.register.name')}
-                                                    </InputLabel>
-                                                    <TextField
-                                                        size="small"
-                                                        value={projectData.project.projectName}
-                                                        fullWidth
-                                                        required
-                                                        sx={{
-                                                            mt: 1,
-                                                            mb: 1,
-                                                            '& legend': { display: 'none' },
-                                                            '& fieldset': { top: 0 },
-                                                        }}
-                                                        disabled
-                                                    />
-                                                </div>
-                                                <div className="col-12 col-sm-6 d-block p-1">
-                                                    <InputLabel
-                                                        htmlFor="outlined-adornment-amount"
-                                                    >
-                                                        {t('project.register.comment')}
-                                                    </InputLabel>
-                                                    <TextField
-                                                        size="small"
-                                                        value={projectData.project.comment}
-                                                        fullWidth
-                                                        required
-                                                        id="outlined-required"
-                                                        sx={{
-                                                            mt: 1,
-                                                            mb: 1,
-                                                            '& legend': { display: 'none' },
-                                                            '& fieldset': { top: 0 },
-                                                        }}
-                                                        disabled
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="row justify-center m-1">
-                                                <div className="col-12 col-sm-6 d-block p-1">
-                                                    <InputLabel
-                                                        htmlFor="outlined-adornment-amount"
-                                                    >
-                                                        {t('project.register.description')}
-                                                    </InputLabel>
-                                                    <TextField
-                                                        size="small"
-                                                        value={projectData.project.description}
-                                                        fullWidth
-                                                        required
-                                                        sx={{
-                                                            mt: 1,
-                                                            mb: 1,
-                                                            '& legend': { display: 'none' },
-                                                            '& fieldset': { top: 0 },
-                                                        }}
-                                                        disabled
-                                                    />
-                                                </div>
-                                                <div className="col-12 col-sm-6 p-1" style={{ padding: 0 }}>
-                                                    <InputLabel
-                                                        htmlFor="outlined-adornment-amount"
-                                                    >
-                                                        {t('project.edit.updateDate')}
-                                                    </InputLabel>
-                                                    <TextField
-                                                        fullWidth
-                                                        sx={{
-                                                            mt: 1,
-                                                            mb: 1,
-                                                            '& legend': { display: 'none' },
-                                                            '& fieldset': { top: 0 },
-                                                            '& input': { padding: '8.5px 14px' },
-                                                        }}
-                                                        value={projectData.project.updateDate}
-                                                        disabled
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="row justify-center m-1">
-                                                <div className="col-12 col-sm-6 d-block p-1">
-                                                    <InputLabel id="demo-simple-select-outlined-label">
-                                                        {t('project.register.status')}
-                                                    </InputLabel>
-                                                    <TextField
-                                                        fullWidth
-                                                        sx={{
-                                                            mt: 1,
-                                                            mb: 1,
-                                                            '& legend': { display: 'none' },
-                                                            '& fieldset': { top: 0 },
-                                                            '& input': { padding: '8.5px 14px' },
-                                                        }}
-                                                        value={projectData.project.status}
-                                                        disabled
-                                                    />
-                                                </div>
-                                                <div className="col-12 col-sm-6 d-block p-1">
-                                                    <InputLabel id="demo-simple-select-outlined-label">
-                                                        {t('project.register.type')}
-                                                    </InputLabel>
-                                                    <TextField
-                                                        fullWidth
-                                                        sx={{
-                                                            mt: 1,
-                                                            mb: 1,
-                                                            '& legend': { display: 'none' },
-                                                            '& fieldset': { top: 0 },
-                                                            '& input': { padding: '8.5px 14px' },
-                                                        }}
-                                                        value={projectData.project.projectType}
-                                                        disabled
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="row justify-center m-1">
-                                                <div className="col-12 col-sm-6 d-block p-1 mt-3">
-                                                    <div className="row justify-center m-1">
-                                                        <div className="col-12 col-md-6 d-block">
-                                                            <FormControl component="fieldset">
-                                                                <FormLabel component="legend">
-                                                                    {t('project.register.notificationFlag')}
-                                                                </FormLabel>
-                                                                <RadioGroup
-                                                                    row
-                                                                    aria-label="notificationFlag"
-                                                                    name="notificationFlag"
-                                                                    value={projectData.project.notificationFlag}
-                                                                    defaultValue="1"
-                                                                >
-                                                                    <FormControlLabel
-                                                                        value="true"
-                                                                        control={<Radio color="primary" />}
-                                                                        label={t('radio.accept')}
-                                                                        disabled
-                                                                    />
-                                                                    <FormControlLabel
-                                                                        value="false"
-                                                                        control={<Radio color="primary" />}
-                                                                        label={t('radio.deny')}
-                                                                        disabled
-                                                                    />
-                                                                </RadioGroup>
-                                                            </FormControl>
-                                                        </div>
-                                                        <div className="col-12 col-md-6 d-block">
-                                                            <FormControl component="fieldset">
-                                                                <FormLabel component="legend">
-                                                                    {t('project.register.isPaid')}
-                                                                </FormLabel>
-                                                                <RadioGroup
-                                                                    row
-                                                                    aria-label="isPaid"
-                                                                    name="isPaid"
-                                                                    value={projectData.project.isPaid}
-                                                                    defaultValue="1"
-                                                                >
-                                                                    <FormControlLabel
-                                                                        value="true"
-                                                                        control={<Radio color="primary" />}
-                                                                        label={t('radio.paid')}
-                                                                        disabled
-                                                                    />
-                                                                    <FormControlLabel
-                                                                        value="false"
-                                                                        control={<Radio color="primary" />}
-                                                                        label={t('radio.unPaid')}
-                                                                        disabled
-                                                                    />
-                                                                </RadioGroup>
-                                                            </FormControl>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </Box>
-                                    </CardContent>
-                                </Grid>
-                            </Grid>
+                <Grid container spacing={3} justifyContent="center">
+                    <Grid item xs={12} md={4} lg={4}>
+                        <Card>
+                            <CardActionArea>
+                                <CardMedia
+                                    component="img"
+                                    height="140"
+                                    image="https://cdn.pixabay.com/photo/2016/03/29/08/48/project-1287781__340.jpg"
+                                    alt="green iguana"
+                                />
+                                <CardContent>
+                                    <Typography gutterBottom variant="h5" component="div">
+                                        Đặt cược F88
+                                    </Typography>
+                                    <Typography variant="body2" color="text.secondary">
+                                        Nhà cái tới từ Châu âu, thay đổi, lắp đặt kích thước, tranh ảnh, điện trần nhà
+                                    </Typography>
+                                </CardContent>
+                            </CardActionArea>
                         </Card>
                     </Grid>
-                    <Grid item xs={12} md={4} lg={3}>
+                    <Grid item xs={12} md={4} lg={4}>
                         <Card style={{ width: '100%' }}>
-                            <div className="d-flex justify-content-between">
-                                <Typography
-                                    variant="h6"
-                                    className="p-2"
-                                    color="textSecondary"
-                                    gutterBottom
-                                    sx={{ margin: 0 }}
-                                >
-                                    {t('project.progress.title')}
-                                </Typography>
-                                <IconButton color="primary" size="large" onClick={toggleDrawerCreateProgress(true)}>
-                                    <AddCircleIcon fontSize="inherit" />
-                                </IconButton>
-                            </div>
+                            <CardHeader
+                                avatar={<Avatar aria-label="recipe">PR</Avatar>}
+                                title="Progress daily"
+                                subheader={new Date().toLocaleDateString()}
+                                action={
+                                    <IconButton color="primary" size="large" onClick={toggleDrawerCreateProgress(true)}>
+                                        <AddCircleIcon fontSize="inherit" />
+                                    </IconButton>
+                                }
+                            />
                             <Divider />
-                            <List>
+                            <Timeline
+                                sx={{
+                                    [`& .${timelineOppositeContentClasses.root}`]: {
+                                        flex: 0.2,
+                                    },
+                                }}
+                            >
                                 {progressList.map((progress: ProjectProgressDTO, index: number) => (
-                                    <ListItem key={index} disablePadding>
-                                        <ListItemButton onClick={() => handleEditProgress(progress.id)}>
-                                            <ListItemText primary={progress.title} />
-                                        </ListItemButton>
-                                    </ListItem>
+                                    <div>
+                                        <TimelineItem>
+                                            <TimelineOppositeContent color="textSecondary">
+                                                {progress.startDate}
+                                            </TimelineOppositeContent>
+                                            <TimelineSeparator className="h-40">
+                                                <TimelineDot />
+                                                <TimelineConnector />
+                                            </TimelineSeparator>
+                                            <TimelineContent>
+                                                <div
+                                                    className="mb-4 progress-item"
+                                                    onClick={() => handleEditProgress(progress.id)}
+                                                >
+                                                    <div className="progress-item-title">{progress.title}</div>
+                                                    <div className="progress-item-report">{progress.report}</div>
+                                                    <Chip label="pedding" color="secondary" />
+                                                </div>
+                                            </TimelineContent>
+                                        </TimelineItem>
+                                    </div>
                                 ))}
-                            </List>
+                            </Timeline>
                         </Card>
                     </Grid>
                 </Grid>
             </form>
 
-            <ProgressCreate isOpen={isOpenCreateProgress} setIsOpen={setOpenCreateProgress} toggleDrawer={toggleDrawerCreateProgress} />
-            <ProgressEdit isOpen={isOpenEditProgress} setIsOpen={setOpenEditProgress} toggleDrawer={toggleDrawerEditProgress} progressId={selectedProgress} />
+            <ProgressCreate
+                isOpen={isOpenCreateProgress}
+                setIsOpen={setOpenCreateProgress}
+                toggleDrawer={toggleDrawerCreateProgress}
+            />
+            <ProgressEdit
+                isOpen={isOpenEditProgress}
+                setIsOpen={setOpenEditProgress}
+                toggleDrawer={toggleDrawerEditProgress}
+                progressId={selectedProgress}
+            />
         </div>
     );
 }
