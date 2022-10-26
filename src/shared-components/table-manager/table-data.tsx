@@ -215,6 +215,13 @@ export default function EnhancedTable(props: EnhancedTable) {
                                                             )
                                                         ) : colValue.id == 'projectType' ? (
                                                             row[colValue.id as string].name
+                                                        ) : colValue.id == 'enable' &&
+                                                          colValue.label.includes('user') ? (
+                                                            row[colValue.id as string] === 1 ? (
+                                                                t('user.search.enabled')
+                                                            ) : (
+                                                                t('user.search.notEnabled')
+                                                            )
                                                         ) : (
                                                             row[colValue.id as string]
                                                         )}
