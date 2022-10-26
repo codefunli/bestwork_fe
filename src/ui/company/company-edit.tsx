@@ -1,3 +1,4 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import {
     AlertColor,
     Avatar,
@@ -20,17 +21,16 @@ import {
     TextField,
     Typography,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
 import cities from 'hanhchinhvn/dist/tinh_tp.json';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
+import { AlertColorConstants, UrlFeApp } from '../../core/constants/common';
+import { validateEditCompanyForm } from '../../core/constants/validate';
 import { District, Ward } from '../../core/types/administrative';
 import { getDistrictsByCityCode, getWardsByDistrictCode } from '../../core/utils/administrative-utils';
-import { useNavigate, useParams } from 'react-router-dom';
 import { getCompanyById, updateCompany } from '../../services/company-service';
-import { useTranslation } from 'react-i18next';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { validateEditCompanyForm, validateForm } from '../../core/constants/validate';
-import { useForm } from 'react-hook-form';
-import { AlertColorConstants, UrlFeApp } from '../../core/constants/common';
 import MessageShow from '../../shared-components/message/message';
 
 const initialValues = {

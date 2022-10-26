@@ -1,6 +1,6 @@
-import { Avatar, Button, InputLabel } from '@mui/material';
+import { Avatar, Button } from '@mui/material';
 import { deepOrange } from '@mui/material/colors';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Comment } from '../../core/types/base';
 import './comment.scss';
 

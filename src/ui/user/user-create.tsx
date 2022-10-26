@@ -1,25 +1,43 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button, ButtonGroup, Card, CardContent, FormControlLabel, Grid, InputLabel, Radio, RadioGroup, Switch, TextField, Typography, AlertColor, FormControl, Select, MenuItem, FormHelperText } from '@mui/material';
-import { Box } from '@mui/system';
-import { useTranslation } from 'react-i18next';
-import { createUsers } from '../../services/user-service';
-import { AlertColorConstants, StatusCode, UrlFeApp, DefaultImage } from '../../core/constants/common';
 import { yupResolver } from '@hookform/resolvers/yup';
+import {
+    AlertColor,
+    Button,
+    ButtonGroup,
+    Card,
+    CardContent,
+    FormControl,
+    FormControlLabel,
+    FormHelperText,
+    Grid,
+    InputLabel,
+    MenuItem,
+    Radio,
+    RadioGroup,
+    Select,
+    Switch,
+    TextField,
+    Typography,
+} from '@mui/material';
+import { Box } from '@mui/system';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { AlertColorConstants, DefaultImage, StatusCode, UrlFeApp } from '../../core/constants/common';
 import { validateCreateUserForm } from '../../core/constants/validate';
-import MessageShow from '../../shared-components/message/message';
 import { getCompanies } from '../../services/company-service';
+import { createUsers } from '../../services/user-service';
 import FileUpload from '../../shared-components/file-upload/file-upload';
-import "./user.scss";
+import MessageShow from '../../shared-components/message/message';
+import './user.scss';
 
 const initialValues: any = {
-    userNm: "",
-    companyId: "",
-    role: "ADMIN",
-    email: "",
-    firstNm: "",
-    lastNm: "",
+    userNm: '',
+    companyId: '',
+    role: 'ADMIN',
+    email: '',
+    firstNm: '',
+    lastNm: '',
     enabled: false,
 };
 
@@ -48,10 +66,10 @@ export default function UserAdd() {
             const companies = await getCompanies({});
             if (companies && companies.data && companies.data.content) {
                 setCompanies(companies?.data?.content);
-            };
+            }
         };
         fetchCompanies();
-    }, [])
+    }, []);
 
     const handleClearForm = () => {
         setFormValues(initialValues);
@@ -96,11 +114,13 @@ export default function UserAdd() {
     };
 
     const handleSubmitForm = () => {
-        createUsers(formValues).then((res) => {
-            handleResponse(res);
-        }).catch((err) => {
-            handleMessage(true, err.message, AlertColorConstants.ERROR);
-        });
+        createUsers(formValues)
+            .then((res) => {
+                handleResponse(res);
+            })
+            .catch((err) => {
+                handleMessage(true, err.message, AlertColorConstants.ERROR);
+            });
     };
 
     const onChangeAvatar = (event: any) => {
@@ -113,7 +133,7 @@ export default function UserAdd() {
 
     return (
         <div className="user-info">
-            <div className='row'>
+            <div className="row">
                 <div className="col-sm-12 col-md-6">
                     <Typography variant="h5">
                         <span className="font-weight-bold text-uppercase">{t('user.create.title')}</span>
@@ -121,11 +141,7 @@ export default function UserAdd() {
                 </div>
             </div>
             <form>
-                <Grid
-                    container
-                    direction="row"
-                    spacing={3}
-                >
+                <Grid container direction="row" spacing={3}>
                     <Grid item xs={12} md={5} lg={3} sx={{ mt: 1, mb: 1 }}>
                         <Card className="general-info">
                             <FileUpload defaultImage={DefaultImage.USER_AVATAR} callbackFunc={onChangeAvatar} />
@@ -150,9 +166,11 @@ export default function UserAdd() {
                                     noValidate
                                     autoComplete="off"
                                 >
-                                    <div className='row justify-center m-1'>
-                                        <div className='col-12 col-sm-6 d-block p-1'>
-                                            <InputLabel htmlFor="userNm" error={Boolean(errors.userNm)}>{t("user.info.userName")} <span className="input-required">*</span></InputLabel>
+                                    <div className="row justify-center m-1">
+                                        <div className="col-12 col-sm-6 d-block p-1">
+                                            <InputLabel htmlFor="userNm" error={Boolean(errors.userNm)}>
+                                                {t('user.info.userName')} <span className="input-required">*</span>
+                                            </InputLabel>
                                             <TextField
                                                 size="small"
                                                 fullWidth
@@ -160,7 +178,7 @@ export default function UserAdd() {
                                                     mt: 1,
                                                     mb: 1,
                                                     '& legend': { display: 'none' },
-                                                    '& fieldset': { top: 0 }
+                                                    '& fieldset': { top: 0 },
                                                 }}
                                                 required
                                                 id="userNm"
@@ -174,8 +192,10 @@ export default function UserAdd() {
                                                 })}
                                             />
                                         </div>
-                                        <div className='col-12 col-sm-6 d-block p-1'>
-                                            <InputLabel htmlFor="email" error={Boolean(errors.email)}>{t("user.info.email")} <span className="input-required">*</span></InputLabel>
+                                        <div className="col-12 col-sm-6 d-block p-1">
+                                            <InputLabel htmlFor="email" error={Boolean(errors.email)}>
+                                                {t('user.info.email')} <span className="input-required">*</span>
+                                            </InputLabel>
                                             <TextField
                                                 size="small"
                                                 fullWidth
@@ -183,7 +203,7 @@ export default function UserAdd() {
                                                     mt: 1,
                                                     mb: 1,
                                                     '& legend': { display: 'none' },
-                                                    '& fieldset': { top: 0 }
+                                                    '& fieldset': { top: 0 },
                                                 }}
                                                 required
                                                 id="email"
@@ -198,9 +218,11 @@ export default function UserAdd() {
                                             />
                                         </div>
                                     </div>
-                                    <div className='row justify-center m-1'>
-                                        <div className='col-12 col-sm-6 d-block p-1'>
-                                            <InputLabel htmlFor="firstNm" error={Boolean(errors.firstNm)}>{t("user.info.firstName")} <span className="input-required">*</span></InputLabel>
+                                    <div className="row justify-center m-1">
+                                        <div className="col-12 col-sm-6 d-block p-1">
+                                            <InputLabel htmlFor="firstNm" error={Boolean(errors.firstNm)}>
+                                                {t('user.info.firstName')} <span className="input-required">*</span>
+                                            </InputLabel>
                                             <TextField
                                                 size="small"
                                                 fullWidth
@@ -208,7 +230,7 @@ export default function UserAdd() {
                                                     mt: 1,
                                                     mb: 1,
                                                     '& legend': { display: 'none' },
-                                                    '& fieldset': { top: 0 }
+                                                    '& fieldset': { top: 0 },
                                                 }}
                                                 required
                                                 id="firstNm"
@@ -222,8 +244,10 @@ export default function UserAdd() {
                                                 })}
                                             />
                                         </div>
-                                        <div className='col-12 col-sm-6 d-block p-1'>
-                                            <InputLabel htmlFor="lastNm" error={Boolean(errors.lastNm)}>{t("user.info.lastName")} <span className="input-required">*</span></InputLabel>
+                                        <div className="col-12 col-sm-6 d-block p-1">
+                                            <InputLabel htmlFor="lastNm" error={Boolean(errors.lastNm)}>
+                                                {t('user.info.lastName')} <span className="input-required">*</span>
+                                            </InputLabel>
                                             <TextField
                                                 size="small"
                                                 fullWidth
@@ -231,7 +255,7 @@ export default function UserAdd() {
                                                     mt: 1,
                                                     mb: 1,
                                                     '& legend': { display: 'none' },
-                                                    '& fieldset': { top: 0 }
+                                                    '& fieldset': { top: 0 },
                                                 }}
                                                 required
                                                 id="lastNm"
@@ -246,9 +270,11 @@ export default function UserAdd() {
                                             />
                                         </div>
                                     </div>
-                                    <div className='row justify-center m-1'>
-                                        <div className='col-12 col-sm-6 d-block p-1'>
-                                            <InputLabel htmlFor="companyId" error={Boolean(errors.companyId)}>{t("user.info.company")} <span className="input-required">*</span></InputLabel>
+                                    <div className="row justify-center m-1">
+                                        <div className="col-12 col-sm-6 d-block p-1">
+                                            <InputLabel htmlFor="companyId" error={Boolean(errors.companyId)}>
+                                                {t('user.info.company')} <span className="input-required">*</span>
+                                            </InputLabel>
                                             <FormControl
                                                 size="small"
                                                 fullWidth
@@ -261,7 +287,7 @@ export default function UserAdd() {
                                                     displayEmpty
                                                     sx={{
                                                         '& legend': { display: 'none' },
-                                                        '& fieldset': { top: 0 }
+                                                        '& fieldset': { top: 0 },
                                                     }}
                                                     error={Boolean(errors.companyId)}
                                                     {...register('companyId', {
@@ -271,27 +297,35 @@ export default function UserAdd() {
                                                     <MenuItem value="" selected={true} disabled>
                                                         <em>{t('user.search.selectCompanyName')}</em>
                                                     </MenuItem>
-                                                    {companies && companies.length > 0 && companies.map((company: any) => (
-                                                        <MenuItem value={company.companyId}>{company.companyName}</MenuItem>
-                                                    ))}
+                                                    {companies &&
+                                                        companies.length > 0 &&
+                                                        companies.map((company: any) => (
+                                                            <MenuItem value={company.companyId}>
+                                                                {company.companyName}
+                                                            </MenuItem>
+                                                        ))}
                                                 </Select>
-                                                {Boolean(errors.companyId) &&
-                                                    <FormHelperText id="component-error-text">{errors?.companyId?.message as string}</FormHelperText>
-                                                }
+                                                {Boolean(errors.companyId) && (
+                                                    <FormHelperText id="component-error-text">
+                                                        {errors?.companyId?.message as string}
+                                                    </FormHelperText>
+                                                )}
                                             </FormControl>
                                         </div>
                                     </div>
-                                    <div className='row justify-center m-1'>
-                                        <div className='col-12 col-sm-6 d-block p-1'>
-                                            <InputLabel htmlFor="enabled">{t("user.info.enabled")}</InputLabel>
+                                    <div className="row justify-center m-1">
+                                        <div className="col-12 col-sm-6 d-block p-1">
+                                            <InputLabel htmlFor="enabled">{t('user.info.enabled')}</InputLabel>
                                             <Switch
                                                 checked={formValues.enabled}
                                                 name="enabled"
                                                 onChange={handleSwitchChange}
                                             />
                                         </div>
-                                        <div className='col-12 col-sm-6 d-block p-1'>
-                                            <InputLabel htmlFor="role">{t("user.info.role")} <span className="input-required">*</span></InputLabel>
+                                        <div className="col-12 col-sm-6 d-block p-1">
+                                            <InputLabel htmlFor="role">
+                                                {t('user.info.role')} <span className="input-required">*</span>
+                                            </InputLabel>
                                             <RadioGroup
                                                 row
                                                 aria-label="role"
@@ -314,7 +348,7 @@ export default function UserAdd() {
                                             </RadioGroup>
                                         </div>
                                     </div>
-                                    <div className='text-center justify-center mt-4'>
+                                    <div className="text-center justify-center mt-4">
                                         <ButtonGroup
                                             disableElevation
                                             variant="contained"
@@ -327,13 +361,10 @@ export default function UserAdd() {
                                                 disabled={isSubmitting}
                                                 onClick={handleSubmit(handleSubmitForm)}
                                             >
-                                                {t("button.btnCreate")}
+                                                {t('button.btnCreate')}
                                             </Button>
-                                            <Button
-                                                onClick={handleClearForm}
-                                                variant="outlined"
-                                            >
-                                                {t("button.btnClear")}
+                                            <Button onClick={handleClearForm} variant="outlined">
+                                                {t('button.btnClear')}
                                             </Button>
                                         </ButtonGroup>
                                     </div>
@@ -343,12 +374,7 @@ export default function UserAdd() {
                     </Grid>
                 </Grid>
             </form>
-            <MessageShow
-                message={userMsg}
-                showMessage={isShowMsg}
-                type={userMsgType}
-                handleCloseMsg={handleCloseMsg}
-            />
+            <MessageShow message={userMsg} showMessage={isShowMsg} type={userMsgType} handleCloseMsg={handleCloseMsg} />
         </div>
     );
-};
+}

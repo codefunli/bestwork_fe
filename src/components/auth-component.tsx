@@ -3,13 +3,13 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { AlertColorConstants, UrlFeApp } from '../core/constants/common';
-import { useAppDispatch, useAppSelector } from '../core/hook/redux';
+import { useAppSelector } from '../core/hook/redux';
 import MLanguage from '../shared-components/language/m-language';
 import MessageShow from '../shared-components/message/message';
 import './auth.scss';
 
 export default function AuthComponent() {
-    const nativgate = useNavigate();
+    const navigate = useNavigate();
     const [isShowMessage, setIsShowMessage] = useState(false);
     const [loginMsg, setLoginMsg] = useState('');
     const [typeLoginMsg, setTypeLoginMsg] = useState<AlertColor>('success');
@@ -28,9 +28,9 @@ export default function AuthComponent() {
     };
 
     useEffect(() => {
-        nativgate(UrlFeApp.MAIN_APP);
+        navigate(UrlFeApp.MAIN_APP);
         if (!isPageLoading) {
-            nativgate(UrlFeApp.MAIN_APP);
+            navigate(UrlFeApp.MAIN_APP);
         }
 
         if (isShowMsgErrLogin) {

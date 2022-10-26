@@ -1,5 +1,5 @@
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import EditIcon from '@mui/icons-material/Edit';
 import {
     Avatar,
     Button,
@@ -15,13 +15,12 @@ import {
     Typography,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { Comment } from '../../core/types/base';
+import { getPostByProjectId } from '../../services/material-service';
 import CommentEl from '../../shared-components/comment/comment';
 import ImageManager from '../../shared-components/images-manager/image-manager';
 import ImageUploadDialog from '../../shared-components/modal/image-upload-dialog';
-import EditIcon from '@mui/icons-material/Edit';
-import { useParams } from 'react-router-dom';
-import { getPostByProjectId } from '../../services/material-service';
 
 const initialDataImg = {
     description: '',

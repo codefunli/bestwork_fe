@@ -9,17 +9,16 @@ interface CreateRoleModalProps {
     isOpen: boolean;
     toggleOpen: Function;
     handleCreateNewRole: Function;
-};
+}
 
 const initialValues: any = {
     roleName: '',
-    description: ''
+    description: '',
 };
 
 export default function CreateRoleModal(props: CreateRoleModalProps) {
     const { t } = useTranslation();
     const { isOpen, toggleOpen, handleCreateNewRole } = props;
-
     const [formValues, setFormValues] = useState(initialValues);
 
     const {
@@ -54,21 +53,12 @@ export default function CreateRoleModal(props: CreateRoleModalProps) {
 
     return (
         <form>
-            <Dialog
-                open={isOpen}
-                onClose={handleCancel}
-                keepMounted
-                fullWidth
-                maxWidth="sm"
-            >
+            <Dialog open={isOpen} onClose={handleCancel} keepMounted fullWidth maxWidth="sm">
                 <DialogTitle>{t('role.modal.title')}</DialogTitle>
                 <DialogContent>
                     <div>
-                        <InputLabel
-                            htmlFor="roleName"
-                            error={Boolean(errors.roleName)}
-                        >
-                            {t("role.modal.roleName")} <span className="input-required">*</span>
+                        <InputLabel htmlFor="roleName" error={Boolean(errors.roleName)}>
+                            {t('role.modal.roleName')} <span className="input-required">*</span>
                         </InputLabel>
                         <TextField
                             size="small"
@@ -77,7 +67,7 @@ export default function CreateRoleModal(props: CreateRoleModalProps) {
                                 mt: 1,
                                 mb: 1,
                                 '& legend': { display: 'none' },
-                                '& fieldset': { top: 0 }
+                                '& fieldset': { top: 0 },
                             }}
                             required
                             id="roleName"
@@ -92,11 +82,8 @@ export default function CreateRoleModal(props: CreateRoleModalProps) {
                         />
                     </div>
                     <div>
-                        <InputLabel
-                            htmlFor="description"
-                            error={Boolean(errors.description)}
-                        >
-                            {t("role.modal.description")} <span className="input-required">*</span>
+                        <InputLabel htmlFor="description" error={Boolean(errors.description)}>
+                            {t('role.modal.description')} <span className="input-required">*</span>
                         </InputLabel>
                         <TextField
                             size="small"
@@ -105,7 +92,7 @@ export default function CreateRoleModal(props: CreateRoleModalProps) {
                                 mt: 1,
                                 mb: 1,
                                 '& legend': { display: 'none' },
-                                '& fieldset': { top: 0 }
+                                '& fieldset': { top: 0 },
                             }}
                             required
                             id="description"

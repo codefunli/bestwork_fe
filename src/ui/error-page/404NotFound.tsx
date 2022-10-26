@@ -1,10 +1,10 @@
-import './error.scss';
 import ReportIcon from '@mui/icons-material/Report';
-import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
-import { UrlFeApp } from '../../core/constants/common';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
+import { UrlFeApp } from '../../core/constants/common';
 import MLanguage from '../../shared-components/language/m-language';
+import './error.scss';
 
 export default function Page404NotFound() {
     const { t } = useTranslation();

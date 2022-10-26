@@ -1,8 +1,13 @@
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
+import ManageHistorySharpIcon from '@mui/icons-material/ManageHistorySharp';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import PostAddSharpIcon from '@mui/icons-material/PostAddSharp';
 import { Chip, IconButton, Tooltip } from '@mui/material';
 import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
+import { green } from '@mui/material/colors';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -17,11 +22,6 @@ import { HeadColumn } from '../../core/types/base';
 import { EnhancedTableHead, Order } from './table-columns';
 import './table-data.scss';
 import { EnhancedTableToolbar } from './table-toolbar';
-import CheckIcon from '@mui/icons-material/Check';
-import CloseIcon from '@mui/icons-material/Close';
-import { green } from '@mui/material/colors';
-import PostAddSharpIcon from '@mui/icons-material/PostAddSharp';
-import ManageHistorySharpIcon from '@mui/icons-material/ManageHistorySharp';
 
 export interface ArrayAction {
     nameFn: string;

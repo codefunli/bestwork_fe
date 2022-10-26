@@ -1,17 +1,24 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
-    Box, Button, ButtonGroup, Drawer,
-    FormControl, FormHelperText, Grid,
-    InputLabel, MenuItem, Select, TextField,
-    Typography
+    Box,
+    Button,
+    ButtonGroup,
+    Drawer,
+    FormControl,
+    FormHelperText,
+    Grid,
+    InputLabel,
+    MenuItem,
+    Select,
+    TextField,
+    Typography,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { validateProjectProgress } from '../../core/constants/validate';
-import { ProjectProgressDTO } from '../../models/project-res-dto';
-import { createProgress } from '../../services/project-service';
 import { currentDateTime } from '../../core/utils/get-current-datetime';
+import { ProjectProgressDTO } from '../../models/project-res-dto';
 import ApiAlert from '../../shared-components/alert/api-alert';
 import MultipleFileUpload from '../../shared-components/file-upload/multiple-file-upload';
 
@@ -24,36 +31,36 @@ const progressInitValues: ProjectProgressDTO = {
     endDate: currentDateTime,
     status: '',
     report: '',
-    note: ''
-}
+    note: '',
+};
 
 interface Props {
-    isOpen: boolean,
-    setIsOpen: Function,
-    toggleDrawer: Function
+    isOpen: boolean;
+    setIsOpen: Function;
+    toggleDrawer: Function;
 }
 
 const progressStatus = [
     {
         id: 1,
-        value: 'Todo'
+        value: 'Todo',
     },
     {
         id: 2,
-        value: 'Inprogress'
+        value: 'Inprogress',
     },
     {
         id: 3,
-        value: 'Pending'
+        value: 'Pending',
     },
     {
         id: 4,
-        value: 'Review'
+        value: 'Review',
     },
     {
         id: 5,
-        value: 'Done'
-    }
+        value: 'Done',
+    },
 ];
 
 const ProgressCreate = (props: Props) => {
@@ -113,28 +120,32 @@ const ProgressCreate = (props: Props) => {
         //         });
         //     });
 
-        localStorage.setItem('progressList', JSON.stringify([
-            ...progressList,
-            {
-                ...progressData,
-                id: progressList.length + 1,
-                images: imgData
-            }
-        ]));
+        localStorage.setItem(
+            'progressList',
+            JSON.stringify([
+                ...progressList,
+                {
+                    ...progressData,
+                    id: progressList.length + 1,
+                    images: imgData,
+                },
+            ]),
+        );
         handleClear();
     };
 
     return (
         <div>
-            <Drawer
-                anchor="right"
-                open={isOpen}
-                onClose={toggleDrawer(false)}
-            >
+            <Drawer anchor="right" open={isOpen} onClose={toggleDrawer(false)}>
                 <Box sx={{ width: 320 }} className="progress-drawer">
                     <Grid container direction="row" spacing={0}>
                         <Grid item xs={12} className="header">
-                            <Typography color="white" variant="h6" gutterBottom sx={{ textTransform: 'uppercase', textAlign: 'center', mt: 9 }}>
+                            <Typography
+                                color="white"
+                                variant="h6"
+                                gutterBottom
+                                sx={{ textTransform: 'uppercase', textAlign: 'center', mt: 9 }}
+                            >
                                 {t('project.progress.create')}
                             </Typography>
                         </Grid>
@@ -156,9 +167,7 @@ const ProgressCreate = (props: Props) => {
                                     id="outlined-required"
                                     placeholder={t('common.placeholder')}
                                     error={Boolean(errors.title)}
-                                    helperText={t(
-                                        errors.title?.message?.toString() as string,
-                                    )}
+                                    helperText={t(errors.title?.message?.toString() as string)}
                                     {...register('title', {
                                         onChange: (e) => handleInputChange(e),
                                     })}
@@ -174,12 +183,8 @@ const ProgressCreate = (props: Props) => {
                         <Grid item xs={12} className="item">
                             <div className="item-header">{t('project.progress.date')}</div>
                             <div className="content">
-                                <InputLabel
-                                    htmlFor="outlined-adornment-amount"
-                                    error={Boolean(errors.startDate)}
-                                >
-                                    {t('project.progress.startDate')}{' '}
-                                    <span className="input-required">*</span>
+                                <InputLabel htmlFor="outlined-adornment-amount" error={Boolean(errors.startDate)}>
+                                    {t('project.progress.startDate')} <span className="input-required">*</span>
                                 </InputLabel>
                                 <TextField
                                     size="small"
@@ -202,12 +207,8 @@ const ProgressCreate = (props: Props) => {
                                         onChange: (e) => handleInputChange(e),
                                     })}
                                 />
-                                <InputLabel
-                                    htmlFor="outlined-adornment-amount"
-                                    error={Boolean(errors.endDate)}
-                                >
-                                    {t('project.progress.endDate')}{' '}
-                                    <span className="input-required">*</span>
+                                <InputLabel htmlFor="outlined-adornment-amount" error={Boolean(errors.endDate)}>
+                                    {t('project.progress.endDate')} <span className="input-required">*</span>
                                 </InputLabel>
                                 <TextField
                                     size="small"
@@ -259,17 +260,19 @@ const ProgressCreate = (props: Props) => {
                                         <MenuItem value="" selected={true} disabled>
                                             <em>{t('message.statusLabel')}</em>
                                         </MenuItem>
-                                        {progressStatus.map(status => (
+                                        {progressStatus.map((status) => (
                                             <MenuItem value={status.id} key={status.id}>
                                                 <em>{status.value}</em>
                                             </MenuItem>
                                         ))}
                                     </Select>
-                                    {Boolean(errors.status) &&
+                                    {Boolean(errors.status) && (
                                         <FormHelperText id="component-error-text">
-                                            <span className="message-required">{errors?.status?.message as string}</span>
+                                            <span className="message-required">
+                                                {errors?.status?.message as string}
+                                            </span>
                                         </FormHelperText>
-                                    }
+                                    )}
                                 </FormControl>
                             </div>
                         </Grid>
@@ -322,15 +325,16 @@ const ProgressCreate = (props: Props) => {
                             </div>
                         </Grid>
                         <Grid item xs={12} sm={12} className="text-center" sx={{ mt: 1, mb: 1 }}>
-                            <ButtonGroup
-                                disableElevation
-                                variant="contained"
-                                aria-label="Disabled elevation buttons"
-                            >
+                            <ButtonGroup disableElevation variant="contained" aria-label="Disabled elevation buttons">
                                 <Button onClick={handleClear} variant="outlined">
                                     {t('button.btnCancel')}
                                 </Button>
-                                <Button variant="contained" color="primary" sx={{ ml: 1 }} onClick={handleSubmit(handleSubmitForm)}>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    sx={{ ml: 1 }}
+                                    onClick={handleSubmit(handleSubmitForm)}
+                                >
                                     {t('button.btnCreate')}
                                 </Button>
                             </ButtonGroup>
@@ -339,9 +343,7 @@ const ProgressCreate = (props: Props) => {
                 </Box>
             </Drawer>
 
-            <ApiAlert
-                response={resForHandleMsg}
-            />
+            <ApiAlert response={resForHandleMsg} />
         </div>
     );
 };

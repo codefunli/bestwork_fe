@@ -66,7 +66,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     alignItems: 'center',
     justifyContent: 'flex-end',
     padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
     ...theme.mixins.toolbar,
 }));
 
@@ -114,7 +113,6 @@ export default function MiniDrawer() {
     const { t } = useTranslation();
     const isUserLogged = useAppSelector((state) => state.user.isLogined);
     const isPageLoading = useAppSelector((state) => state.app.isPageLoading);
-    const nativgate = useNavigate();
     const dispatch = useAppDispatch();
     const [progress, setProgress] = React.useState(10);
 
@@ -145,19 +143,19 @@ export default function MiniDrawer() {
                     dispatch(userActions.setIsLogined(true));
                     dispatch(appAction.setIsShowMsgErrLogin(false));
                     clearInterval(timer);
-                    nativgate(UrlFeApp.DASH_BOARD);
+                    navigate(UrlFeApp.DASH_BOARD);
                 } else {
                     dispatch(appAction.setIsPageLoading(true));
                     dispatch(userActions.setIsLogined(false));
                     dispatch(appAction.setIsShowMsgErrLogin(true));
-                    nativgate(UrlFeApp.LOGIN_URL);
+                    navigate(UrlFeApp.LOGIN_URL);
                 }
             })
             .catch(() => {
                 dispatch(appAction.setIsPageLoading(true));
                 dispatch(appAction.setIsShowMsgErrLogin(false));
                 dispatch(userActions.setIsLogined(false));
-                nativgate(UrlFeApp.LOGIN_URL);
+                navigate(UrlFeApp.LOGIN_URL);
             });
     }, []);
 

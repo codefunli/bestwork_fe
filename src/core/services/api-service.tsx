@@ -24,12 +24,3 @@ apiClient.interceptors.response.use(
 );
 
 export default apiClient;
-
-export const get = (url: string, param?: any) => {
-    axios
-        .get(url, param)
-        .then((res) => {
-            return res;
-        })
-        .catch((error) => console.log(error));
-};

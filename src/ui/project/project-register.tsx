@@ -1,13 +1,11 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import {
     AlertColor,
-    Avatar,
     Box,
     Button,
     ButtonGroup,
     Card,
     CardContent,
-    CardHeader,
-    Divider,
     FormControl,
     FormControlLabel,
     FormLabel,
@@ -23,8 +21,6 @@ import {
     Typography,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
-
-import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -245,7 +241,7 @@ export default function ProjectRegister() {
         };
     }
 
-    const handleResetProjectRole = () => { };
+    const handleResetProjectRole = () => {};
 
     const callBackProjectRole = (roleData: any) => {
         setRoleData(roleData);
@@ -294,7 +290,7 @@ export default function ProjectRegister() {
                                                 <Box
                                                     component="form"
                                                     sx={{
-                                                        '& > :not(style)': { m: 1 }
+                                                        '& > :not(style)': { m: 1 },
                                                     }}
                                                     noValidate
                                                     autoComplete="off"
@@ -550,13 +546,18 @@ export default function ProjectRegister() {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div className='text-center justify-center mt-4'>
+                                                    <div className="text-center justify-center mt-4">
                                                         <ButtonGroup
                                                             disableElevation
                                                             variant="contained"
                                                             aria-label="Disabled elevation buttons"
                                                         >
-                                                            <Button variant="contained" color="primary" sx={{ mr: 1 }} onClick={handleSubmit(handleSubmitForm)}>
+                                                            <Button
+                                                                variant="contained"
+                                                                color="primary"
+                                                                sx={{ mr: 1 }}
+                                                                onClick={handleSubmit(handleSubmitForm)}
+                                                            >
                                                                 {t('button.btnSave')}
                                                             </Button>
                                                             <Button variant="outlined" onClick={handleClearCompany}>
@@ -574,14 +575,22 @@ export default function ProjectRegister() {
                                     <Card w-full="true">
                                         <TabPanel value={value} index={1}>
                                             <CardContent>
-                                                <Role companyList={initCompanyListValue} callBackFn={callBackProjectRole} />
-                                                <div className='text-center justify-center mt-4'>
+                                                <Role
+                                                    companyList={initCompanyListValue}
+                                                    callBackFn={callBackProjectRole}
+                                                />
+                                                <div className="text-center justify-center mt-4">
                                                     <ButtonGroup
                                                         disableElevation
                                                         variant="contained"
                                                         aria-label="Disabled elevation buttons"
                                                     >
-                                                        <Button variant="contained" color="primary" sx={{ mr: 1 }} onClick={handleSubmit(handleSubmitForm)}>
+                                                        <Button
+                                                            variant="contained"
+                                                            color="primary"
+                                                            sx={{ mr: 1 }}
+                                                            onClick={handleSubmit(handleSubmitForm)}
+                                                        >
                                                             {t('button.btnSave')}
                                                         </Button>
                                                         <Button variant="outlined" onClick={handleResetProjectRole}>
