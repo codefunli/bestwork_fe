@@ -23,28 +23,30 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { AlertColorConstants, DefaultImage, StatusCode, UrlFeApp } from '../../core/constants/common';
+import { AlertColorConstants, DefaultImage, UrlFeApp } from '../../core/constants/common';
 import { validateCreateUserForm } from '../../core/constants/validate';
-import { getCompanies } from '../../services/company-service';
+import { getCompaniesByUser } from '../../services/company-service';
 import { createUsers } from '../../services/user-service';
 import FileUpload from '../../shared-components/file-upload/file-upload';
 import MessageShow from '../../shared-components/message/message';
 import './user.scss';
 
 const initialValues: any = {
-    userNm: '',
-    companyId: '',
-    role: 'ADMIN',
-    email: '',
-    firstNm: '',
-    lastNm: '',
-    enabled: false,
+    userName: '',
+    password: '',
+    firstName: '',
+    lastName: '',
+    uEmail: '',
+    uTelNo: '',
+    company: '',
+    enabled: 1,
+    role: '3',
+    avatar: '',
 };
 
 export default function UserAdd() {
     const navigate = useNavigate();
     const { t } = useTranslation();
-
     const [formValues, setFormValues] = useState(initialValues);
     const [imgData, setImgData] = useState(DefaultImage.USER_AVATAR);
     const [companies, setCompanies] = useState<any>();
@@ -63,9 +65,9 @@ export default function UserAdd() {
 
     useEffect(() => {
         const fetchCompanies = async () => {
-            const companies = await getCompanies({});
-            if (companies && companies.data && companies.data.content) {
-                setCompanies(companies?.data?.content);
+            const companies = await getCompaniesByUser();
+            if (companies) {
+                setCompanies(companies);
             }
         };
         fetchCompanies();
@@ -82,21 +84,6 @@ export default function UserAdd() {
         setUserMsgType(type);
     };
 
-    const handleResponse = (resp: any) => {
-        switch (resp.status) {
-            case StatusCode.OK:
-                handleMessage(true, resp.message, AlertColorConstants.SUCCESS);
-                navigate(UrlFeApp.USER.SEARCH);
-                break;
-            case StatusCode:
-                handleMessage(true, resp.message, AlertColorConstants.ERROR);
-                break;
-            default:
-                handleMessage(true, resp.message, AlertColorConstants.WARNING);
-                break;
-        }
-    };
-
     const handleInputChange = (e: any) => {
         const { name, value } = e.target;
         setFormValues({
@@ -109,14 +96,20 @@ export default function UserAdd() {
         const { name, checked } = e.target;
         setFormValues({
             ...formValues,
-            [name]: checked,
+            [name]: checked ? 1 : 0,
         });
     };
-
     const handleSubmitForm = () => {
         createUsers(formValues)
-            .then((res) => {
-                handleResponse(res);
+            .then((res: any) => {
+                if (res.status === 'OK') {
+                    handleMessage(true, res.message, AlertColorConstants.SUCCESS);
+                    setTimeout(() => {
+                        navigate(UrlFeApp.USER.SEARCH);
+                    }, 1000);
+                } else {
+                    handleMessage(true, res.data[0].defaultMessage, AlertColorConstants.ERROR);
+                }
             })
             .catch((err) => {
                 handleMessage(true, err.message, AlertColorConstants.ERROR);
@@ -125,6 +118,16 @@ export default function UserAdd() {
 
     const onChangeAvatar = (event: any) => {
         setImgData(event.target.files[0]);
+        if (event.target.files[0]) {
+            const reader: any = new FileReader();
+            reader.addEventListener('load', () => {
+                setFormValues({
+                    ...formValues,
+                    avatar: reader.result,
+                });
+            });
+            reader.readAsDataURL(event.target.files[0]);
+        }
     };
 
     const handleCloseMsg = () => {
@@ -147,10 +150,10 @@ export default function UserAdd() {
                             <FileUpload defaultImage={DefaultImage.USER_AVATAR} callbackFunc={onChangeAvatar} />
                             <CardContent className="info">
                                 <Typography gutterBottom variant="h5" component="div">
-                                    {formValues.firstNm} {formValues.lastNm}
+                                    {formValues.firstName} {formValues.lastName}
                                 </Typography>
                                 <Typography variant="body1" color="text.secondary">
-                                    {formValues.userNm}
+                                    {formValues.userName}
                                 </Typography>
                             </CardContent>
                         </Card>
@@ -168,7 +171,7 @@ export default function UserAdd() {
                                 >
                                     <div className="row justify-center m-1">
                                         <div className="col-12 col-sm-6 d-block p-1">
-                                            <InputLabel htmlFor="userNm" error={Boolean(errors.userNm)}>
+                                            <InputLabel htmlFor="userName" error={Boolean(errors.userName)}>
                                                 {t('user.info.userName')} <span className="input-required">*</span>
                                             </InputLabel>
                                             <TextField
@@ -181,19 +184,45 @@ export default function UserAdd() {
                                                     '& fieldset': { top: 0 },
                                                 }}
                                                 required
-                                                id="userNm"
+                                                id="userName"
                                                 label=""
                                                 placeholder={t('common.placeholder')}
-                                                value={formValues.userNm}
-                                                error={Boolean(errors.userNm)}
-                                                helperText={t(errors.userNm?.message?.toString() as string)}
-                                                {...register('userNm', {
+                                                value={formValues.userName}
+                                                error={Boolean(errors.userName)}
+                                                helperText={t(errors.userName?.message?.toString() as string)}
+                                                {...register('userName', {
                                                     onChange: (e) => handleInputChange(e),
                                                 })}
                                             />
                                         </div>
                                         <div className="col-12 col-sm-6 d-block p-1">
-                                            <InputLabel htmlFor="email" error={Boolean(errors.email)}>
+                                            <InputLabel htmlFor="userName" error={Boolean(errors.password)}>
+                                                {t('login.password')} <span className="input-required">*</span>
+                                            </InputLabel>
+                                            <TextField
+                                                size="small"
+                                                fullWidth
+                                                sx={{
+                                                    mt: 1,
+                                                    mb: 1,
+                                                    '& legend': { display: 'none' },
+                                                    '& fieldset': { top: 0 },
+                                                }}
+                                                required
+                                                id="password"
+                                                type="password"
+                                                label=""
+                                                placeholder={t('common.placeholder')}
+                                                value={formValues.password}
+                                                error={Boolean(errors.password)}
+                                                helperText={t(errors.password?.message?.toString() as string)}
+                                                {...register('password', {
+                                                    onChange: (e) => handleInputChange(e),
+                                                })}
+                                            />
+                                        </div>
+                                        <div className="col-12 col-sm-6 d-block p-1">
+                                            <InputLabel htmlFor="uEmail" error={Boolean(errors.uEmail)}>
                                                 {t('user.info.email')} <span className="input-required">*</span>
                                             </InputLabel>
                                             <TextField
@@ -206,13 +235,38 @@ export default function UserAdd() {
                                                     '& fieldset': { top: 0 },
                                                 }}
                                                 required
-                                                id="email"
+                                                id="uEmail"
                                                 label=""
                                                 placeholder={t('common.placeholder')}
-                                                value={formValues.email}
-                                                error={Boolean(errors.email)}
-                                                helperText={t(errors.email?.message?.toString() as string)}
-                                                {...register('email', {
+                                                value={formValues.uEmail}
+                                                error={Boolean(errors.uEmail)}
+                                                helperText={t(errors.uEmail?.message?.toString() as string)}
+                                                {...register('uEmail', {
+                                                    onChange: (e) => handleInputChange(e),
+                                                })}
+                                            />
+                                        </div>
+                                        <div className="col-12 col-sm-6 d-block p-1">
+                                            <InputLabel htmlFor="uTelNo" error={Boolean(errors.uTelNo)}>
+                                                {t('company.search.telNo')} <span className="input-required">*</span>
+                                            </InputLabel>
+                                            <TextField
+                                                size="small"
+                                                fullWidth
+                                                sx={{
+                                                    mt: 1,
+                                                    mb: 1,
+                                                    '& legend': { display: 'none' },
+                                                    '& fieldset': { top: 0 },
+                                                }}
+                                                required
+                                                id="uTelNo"
+                                                label=""
+                                                placeholder={t('common.placeholder')}
+                                                value={formValues.uTelNo}
+                                                error={Boolean(errors.uTelNo)}
+                                                helperText={t(errors.uTelNo?.message?.toString() as string)}
+                                                {...register('uTelNo', {
                                                     onChange: (e) => handleInputChange(e),
                                                 })}
                                             />
@@ -220,7 +274,7 @@ export default function UserAdd() {
                                     </div>
                                     <div className="row justify-center m-1">
                                         <div className="col-12 col-sm-6 d-block p-1">
-                                            <InputLabel htmlFor="firstNm" error={Boolean(errors.firstNm)}>
+                                            <InputLabel htmlFor="firstName" error={Boolean(errors.firstName)}>
                                                 {t('user.info.firstName')} <span className="input-required">*</span>
                                             </InputLabel>
                                             <TextField
@@ -233,19 +287,19 @@ export default function UserAdd() {
                                                     '& fieldset': { top: 0 },
                                                 }}
                                                 required
-                                                id="firstNm"
+                                                id="firstName"
                                                 label=""
                                                 placeholder={t('common.placeholder')}
-                                                value={formValues.firstNm}
-                                                error={Boolean(errors.firstNm)}
-                                                helperText={t(errors.firstNm?.message?.toString() as string)}
-                                                {...register('firstNm', {
+                                                value={formValues.firstName}
+                                                error={Boolean(errors.firstName)}
+                                                helperText={t(errors.firstName?.message?.toString() as string)}
+                                                {...register('firstName', {
                                                     onChange: (e) => handleInputChange(e),
                                                 })}
                                             />
                                         </div>
                                         <div className="col-12 col-sm-6 d-block p-1">
-                                            <InputLabel htmlFor="lastNm" error={Boolean(errors.lastNm)}>
+                                            <InputLabel htmlFor="lastName" error={Boolean(errors.lastName)}>
                                                 {t('user.info.lastName')} <span className="input-required">*</span>
                                             </InputLabel>
                                             <TextField
@@ -258,13 +312,13 @@ export default function UserAdd() {
                                                     '& fieldset': { top: 0 },
                                                 }}
                                                 required
-                                                id="lastNm"
+                                                id="lastName"
                                                 label=""
                                                 placeholder={t('common.placeholder')}
-                                                value={formValues.lastNm}
-                                                error={Boolean(errors.lastNm)}
-                                                helperText={t(errors.lastNm?.message?.toString() as string)}
-                                                {...register('lastNm', {
+                                                value={formValues.lastName}
+                                                error={Boolean(errors.lastName)}
+                                                helperText={t(errors.lastName?.message?.toString() as string)}
+                                                {...register('lastName', {
                                                     onChange: (e) => handleInputChange(e),
                                                 })}
                                             />
@@ -272,7 +326,7 @@ export default function UserAdd() {
                                     </div>
                                     <div className="row justify-center m-1">
                                         <div className="col-12 col-sm-6 d-block p-1">
-                                            <InputLabel htmlFor="companyId" error={Boolean(errors.companyId)}>
+                                            <InputLabel htmlFor="company" error={Boolean(errors.company)}>
                                                 {t('user.info.company')} <span className="input-required">*</span>
                                             </InputLabel>
                                             <FormControl
@@ -283,14 +337,14 @@ export default function UserAdd() {
                                                 error
                                             >
                                                 <Select
-                                                    value={formValues.companyId}
+                                                    value={formValues.company}
                                                     displayEmpty
                                                     sx={{
                                                         '& legend': { display: 'none' },
                                                         '& fieldset': { top: 0 },
                                                     }}
-                                                    error={Boolean(errors.companyId)}
-                                                    {...register('companyId', {
+                                                    error={Boolean(errors.company)}
+                                                    {...register('company', {
                                                         onChange: (e) => handleInputChange(e),
                                                     })}
                                                 >
@@ -300,14 +354,14 @@ export default function UserAdd() {
                                                     {companies &&
                                                         companies.length > 0 &&
                                                         companies.map((company: any) => (
-                                                            <MenuItem value={company.companyId}>
+                                                            <MenuItem value={company.id}>
                                                                 {company.companyName}
                                                             </MenuItem>
                                                         ))}
                                                 </Select>
-                                                {Boolean(errors.companyId) && (
+                                                {Boolean(errors.company) && (
                                                     <FormHelperText id="component-error-text">
-                                                        {errors?.companyId?.message as string}
+                                                        {errors?.company?.message as string}
                                                     </FormHelperText>
                                                 )}
                                             </FormControl>
@@ -330,18 +384,18 @@ export default function UserAdd() {
                                                 row
                                                 aria-label="role"
                                                 value={formValues.role}
-                                                defaultValue="ADMIN"
+                                                defaultValue="3"
                                                 {...register('role', {
                                                     onChange: (e) => handleInputChange(e),
                                                 })}
                                             >
                                                 <FormControlLabel
-                                                    value="ADMIN"
+                                                    value="2"
                                                     control={<Radio color="primary" />}
                                                     label={t('radio.admin')}
                                                 />
                                                 <FormControlLabel
-                                                    value="USER"
+                                                    value="3"
                                                     control={<Radio color="primary" />}
                                                     label={t('radio.user')}
                                                 />

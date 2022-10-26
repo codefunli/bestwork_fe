@@ -56,6 +56,7 @@ export const UrlServer = {
         DELETE: `${PREFIX_SERVER_URL}/companies/delete`,
         GET_COMPANY_BY_ID: `${PREFIX_SERVER_URL}/companies`,
         UPDATE_COMPANY: `${PREFIX_SERVER_URL}/companies/update`,
+        GET_COMPANIES_BY_USER: `${PREFIX_SERVER_URL}/users/companies`,
     },
     USER: {
         USER: `${PREFIX_SERVER_URL}/user`,
