@@ -1,0 +1,38 @@
+.msg-wrapper-left {
+    display: flex;
+    .msg-content-wrapper {
+        padding: 0.5rem;
+        word-wrap: break-word;
+
+        .msg-content-detail {
+            background: rgba(229, 229, 236, 0.695);
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            font-size: small;
+            width: 100%;
+        }
+
+        .msg-content-time {
+            text-align: end;
+            font-style: italic;
+        }
+    }
+
+    .sub-msg-wrapper {
+        word-break: break-word;
+        margin-left: 2rem;
+        margin-top: 0.5rem;
+
+        .sub-msg-content {
+            display: flex;
+        }
+    }
+}
+
+.msg-height-15rem {
+    height: 15rem;
+}
+
+.msg-wrapper-scroll {
+    overflow-x: hidden;
+}

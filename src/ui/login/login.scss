@@ -1,33 +1,28 @@
-$min_width:10rem;
-$max_width:26rem;
-$min_height:22rem;
+$min_width: 10rem;
+$max_width: 26rem;
+$min_height: 22rem;
 
 .login-wrapper {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
-    background: {
-        image:url('../../assets/background.png');
-        repeat: no-repeat;
-        size:cover;
-    };
-    
+    height: 90%;
+
     .login-form-wrapper {
         background-color: white;
         border-radius: 1rem;
         color: black;
         display: flex;
-        justify-content:center;
-        align-items:center;
-        // width: $max_width;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
         min-width: $min_width;
         min-height: $min_height;
-        opacity: 0.8;
+        opacity: 0.9;
         padding: 1rem;
 
         a {
-            color:white !important;
+            color: white !important;
         }
 
         .login-form {
@@ -38,6 +33,12 @@ $min_height:22rem;
                 display: flex;
                 align-items: center;
                 margin-bottom: 1.5rem;
+            }
+        }
+
+        .forgot-password-btn {
+            a {
+                color: var(--bs-link-color) !important;
             }
         }
     }

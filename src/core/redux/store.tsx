@@ -3,10 +3,10 @@ import appSlice from './app-slice';
 import userSlice from './user-slice';
 
 export const store = configureStore({
-	reducer: {
-		app: appSlice,
-		user: userSlice
-	},
+    reducer: {
+        app: appSlice,
+        user: userSlice,
+    },
 });
 
 export type RootState = ReturnType<typeof store.getState>;

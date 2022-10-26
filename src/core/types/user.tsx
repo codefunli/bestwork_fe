@@ -1,22 +1,52 @@
+import { HeadColumn } from './base';
 
 export enum RoleUser {
-	SYS_ADMIN = 'SYS_ADMIN',
-	ORG_ADMIN = 'ADMIN',
-	ORG_USER = 'USER',
+    SYS_ADMIN = 'SYS_ADMIN',
+    ORG_ADMIN = 'ADMIN',
+    ORG_USER = 'USER',
 }
 
-export type UserInfoRes = {
-	id: number;
-	userId: string;
-	current_org_id: number;
-	user_nm: string;
-	role: RoleUser;
-	email: string;
-	first_nm: string;
-	last_nm: string;
-	is_deleted: boolean;
-	created_dt: string;
-	created_prg_id: string;
-	updated_dt: string;
-	updated_prg_id: string;
-};
+export const headUserCol: HeadColumn[] = [
+    {
+        id: 'id',
+        numeric: false,
+        disablePadding: false,
+        label: 'Id',
+    },
+    {
+        id: 'userName',
+        numeric: false,
+        disablePadding: false,
+        label: 'user.table.userName',
+    },
+    {
+        id: 'uEmail',
+        numeric: false,
+        disablePadding: false,
+        label: 'user.table.email',
+    },
+    {
+        id: 'firstName',
+        numeric: false,
+        disablePadding: false,
+        label: 'user.table.firstName',
+    },
+    {
+        id: 'lastName',
+        numeric: false,
+        disablePadding: false,
+        label: 'user.table.lastName',
+    },
+    {
+        id: 'uTelNo',
+        numeric: false,
+        disablePadding: false,
+        label: 'user.table.telNo',
+    },
+    {
+        id: 'enable',
+        numeric: false,
+        disablePadding: false,
+        label: 'user.table.status',
+    },
+];

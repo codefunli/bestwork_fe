@@ -1,30 +1,35 @@
 import axios from 'axios';
-import { CharacterConstants } from '../constants/common';
+import { stringify } from 'qs';
+import { BASE_API_PATH } from '../constants/urls';
 
-export const get = (url:string, param:any) => {
-    axios.get(url, param).then(res => {
-        return res;
-    }).catch(error => console.log(error));
-}
+const apiClient = axios.create({
+    baseURL: BASE_API_PATH,
+    withCredentials: true,
+    headers: {
+        'content-type': 'application/json',
+        prefix: 'Bearer',
+    },
+    paramsSerializer(params: any) {
+        return stringify(params);
+    },
+});
 
-export const post = (url:string, data: any) => {
-    axios.post(url, data)
-    .then(res => {
+apiClient.interceptors.response.use(
+    (res) => {
         return res;
-    }).catch(error => console.log(error));
-}
+    },
+    (err) => {
+        return Promise.reject(err);
+    },
+);
 
-export const put = (url:string, data: any) => {
-    axios.put(url, data)
-    .then(res => {
-        return res;
-    }).catch(error => console.log(error));
-}
+export default apiClient;
 
-export const deleteById = (url:string, id:number) => {
-    var urlDelete = url + CharacterConstants.SLASH + id;
-    axios.delete(urlDelete)
-    .then(res => {
-        return res;
-    }).catch(error => console.log(error));
-}
+export const get = (url: string, param?: any) => {
+    axios
+        .get(url, param)
+        .then((res) => {
+            return res;
+        })
+        .catch((error) => console.log(error));
+};
