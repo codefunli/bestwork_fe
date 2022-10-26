@@ -20,22 +20,15 @@ export default function ImageManager(props: ImageManager) {
     };
     return (
         <>
-            <div
-                onClick={showModal}
-                style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                }}
-            >
-                <QuiltedImage callBackFn={() => { }} images={images} isOpenModal={false} />
-            </div>
+            <button onClick={showModal} className="border-0 bg-white d-flex align-items-center justify-content-center">
+                <QuiltedImage callBackFn={() => {}} images={images} isOpenModal={false} />
+            </button>
             <ShowImage
                 isOpen={isShowModal}
                 closeFunc={closeModal}
                 okFunc={alertOkFunc}
                 title="Preview image"
-                content={{ projectId: '1', comment: '', images: images }}
+                content={{ images: images }}
                 noBtn="NO"
                 okBtn="OK"
             />

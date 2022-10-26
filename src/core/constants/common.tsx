@@ -44,7 +44,7 @@ export const UrlFeApp = {
     },
     FORGOT_PASSWORD: {
         FORGOT: '/auth/forgot-password',
-        RESET: '/auth/reset-password'
+        RESET: '/auth/reset-password',
     },
 };
 
@@ -83,8 +83,12 @@ export const UrlServer = {
     },
     AUTH: {
         FORGOT_PASSWORD: `${PREFIX_SERVER_URL}/auth/forgot-password`,
-        RESET_PASSWORD: `${PREFIX_SERVER_URL}/auth/reset-password`
-    }
+        RESET_PASSWORD: `${PREFIX_SERVER_URL}/auth/reset-password`,
+    },
+    MATERIAL: {
+        POST_STATUS: `${PREFIX_SERVER_URL}/post/create`,
+        GET_POST_BY_PROJECT_ID: `${PREFIX_SERVER_URL}/post`,
+    },
 };
 
 export const FieldConstants = {
@@ -102,7 +106,7 @@ export const FieldConstants = {
     ROLE: 'Role',
     DESCRIPTION: 'Description',
     NEW_PASSWORD: 'New Password',
-    CONFIRM_PASSWORD: 'Confirm Password'
+    CONFIRM_PASSWORD: 'Confirm Password',
 };
 
 export const ConfirmConstants = {

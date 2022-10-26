@@ -1,11 +1,4 @@
-import {
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle, Slide
-} from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
 import { forwardRef, useEffect, useState } from 'react';
 
@@ -21,8 +14,6 @@ const Transition = forwardRef(function Transition(
 interface AlertDialogSlideProps {
     title: string;
     content: {
-        projectId: string;
-        comment: string;
         images: any;
     };
     noBtn: string;
@@ -67,7 +58,7 @@ export default function ShowImage(props: AlertDialogSlideProps) {
                     <DialogContentText id="alert-dialog-slide-description" width={500} height={'auto'}>
                         {content.images.map((image: any, index: any) => (
                             <div key={index}>
-                                <img src={image} alt="" className="w-100 border" />
+                                <img src={image.data} alt="" className="w-100 border" />
                             </div>
                         ))}
                     </DialogContentText>

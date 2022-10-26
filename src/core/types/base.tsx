@@ -57,8 +57,9 @@ export type HeadColumn = {
 
 export type Comment = {
     id: string;
-    user: string;
+    commentUser: any;
     comment: string;
+    isShowSubComment?: boolean;
     dateTime: string;
     isLastSub: boolean;
     subComment: Comment[];

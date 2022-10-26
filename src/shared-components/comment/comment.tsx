@@ -11,10 +11,11 @@ import { v4 as uuidv4 } from 'uuid';
 interface CommentProps {
     arrMsg: Comment[];
     isEnabled: boolean;
+    pId: string;
 }
 
 export default function CommentEl(props: CommentProps) {
-    const { arrMsg, isEnabled } = props;
+    const { arrMsg, isEnabled, pId } = props;
     const [arrMsgIn, setArrMsgIn] = useState<Comment[]>(arrMsg);
     const [newMsg, setNewMsg] = useState('');
     const [replyLabel, setReplyLabel] = useState('');
@@ -42,7 +43,11 @@ export default function CommentEl(props: CommentProps) {
             if ('ADD' === type) {
                 arrMsgIn.push({
                     id: uuidv4(),
-                    user: 'current user',
+                    commentUser: {
+                        id: 0,
+                        name: 'Nam đế',
+                        avatar: 'https://i.pinimg.com/474x/dc/fb/42/dcfb427e747a56047d46df17d621ed4b.jpg',
+                    },
                     comment: newMsg,
                     dateTime: new Date().toISOString().substring(0, 16),
                     isLastSub: false,
@@ -53,7 +58,11 @@ export default function CommentEl(props: CommentProps) {
                     if (cmt.id === currentId) {
                         cmt.subComment.push({
                             id: uuidv4(),
-                            user: 'current user',
+                            commentUser: {
+                                id: 0,
+                                name: 'Nam đế',
+                                avatar: 'https://i.pinimg.com/474x/dc/fb/42/dcfb427e747a56047d46df17d621ed4b.jpg',
+                            },
                             comment: newMsg,
                             dateTime: new Date().toISOString().substring(0, 16),
                             isLastSub: false,
@@ -65,7 +74,11 @@ export default function CommentEl(props: CommentProps) {
                             if (subCmt.id === currentId) {
                                 subCmt.subComment.push({
                                     id: uuidv4(),
-                                    user: 'current user',
+                                    commentUser: {
+                                        id: 0,
+                                        name: 'Nam đế',
+                                        avatar: 'https://saostyle.vn/wp-content/uploads/2020/10/Hermione-Granger-Emma-Watson.jpg',
+                                    },
                                     comment: newMsg,
                                     dateTime: new Date().toISOString().substring(0, 16),
                                     isLastSub: true,
@@ -78,24 +91,26 @@ export default function CommentEl(props: CommentProps) {
                 });
             }
         }
-
-        //save to database
-        localStorage.removeItem('comment_pr_1');
-        localStorage.setItem('comment_pr_1', JSON.stringify(arrMsgIn)); //dummy
         handleClear();
         setNewMsg(STR_EMPTY);
         setArrMsgIn(arrMsgIn);
+
+        const repObj = {
+            postId: pId,
+            comment: JSON.stringify(arrMsgIn),
+        };
+
+        console.log(repObj);
     };
 
     return (
         <div className="mb-2">
-            <div className={` msg-wrapper-scroll pt-1 ${arrMsgIn.length > 0 ? 'msg-height-15rem' : ''}`}>
-                {arrMsgIn.map((item: any) => (
-                    <CommentLeft msg={item} reply={doReplyLabel} />
-                ))}
+            <div className={` msg-wrapper-scroll pt-1 ${isEnabled && arrMsgIn.length > 0 ? 'msg-height-15rem' : ''}`}>
+                {isEnabled &&
+                    arrMsgIn.map((item: any) => <CommentLeft key={item.id} msg={item} reply={doReplyLabel} />)}
             </div>
             <div>
-                {(arrMsgIn.length > 0 || isEnabled == true) && (
+                {isEnabled && (
                     <form>
                         <Paper
                             w-fullWidth
