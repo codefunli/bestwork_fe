@@ -62,18 +62,25 @@ export const validateUserForm = yup.object({
 });
 
 export const validateCreateUserForm = yup.object({
-    userNm: yup
+    userName: yup
         .string()
         .required(getMessage(ERROR_MSG.E01_001, [FieldConstants.USER_NAME]))
         .matches(pattern.userName, getMessage(ERROR_MSG.E01_005, [FieldConstants.USER_NAME])),
-    email: yup
+    uEmail: yup
         .string()
         .required(getMessage(ERROR_MSG.E01_001, [FieldConstants.EMAIL]))
         .matches(pattern.email, getMessage(ERROR_MSG.E01_008, [FieldConstants.EMAIL])),
-    firstNm: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.FIRST_NAME])),
-    lastNm: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.LAST_NAME])),
-    companyId: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.COMPANY_NAME])),
-    role: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.ROLE])),
+    firstName: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.FIRST_NAME])),
+    lastName: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.LAST_NAME])),
+    company: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.COMPANY_NAME])),
+    password: yup
+        .string()
+        .required(getMessage(ERROR_MSG.E01_001, [FieldConstants.PASSWORD]))
+        .matches(pattern.password, getMessage(ERROR_MSG.E01_004, [FieldConstants.NEW_PASSWORD])),
+    uTelNo: yup
+        .string()
+        .required(getMessage(ERROR_MSG.E01_001, [FieldConstants.TEL_NO]))
+        .matches(pattern.telNo, getMessage(ERROR_MSG.E01_006, [FieldConstants.TEL_NO])),
 });
 export const validateEditCompanyForm = yup.object({
     companyName: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.COMPANY_NAME])),
@@ -126,9 +133,7 @@ export const validateProjectEditForm = yup.object({
 });
 
 export const validateProjectProgress = yup.object({
-    title: yup
-        .string()
-        .required(getMessage(ERROR_MSG.E01_001, [FieldProjectProgress.PROGRESS_TITLE])),
+    title: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldProjectProgress.PROGRESS_TITLE])),
     startDate: yup
         .date()
         .required(getMessage(ERROR_MSG.E01_001, [FieldProjectProgress.START_DATE]))
@@ -141,12 +146,8 @@ export const validateProjectProgress = yup.object({
 });
 
 export const validateCreateRoleForm = yup.object({
-    roleName: yup
-        .string()
-        .required(getMessage(ERROR_MSG.E01_001, [FieldConstants.ROLE])),
-    description: yup
-        .string()
-        .required(getMessage(ERROR_MSG.E01_001, [FieldConstants.DESCRIPTION]))
+    roleName: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.ROLE])),
+    description: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.DESCRIPTION])),
 });
 
 export const validateForgotPassword = yup.object({

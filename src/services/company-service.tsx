@@ -31,3 +31,8 @@ export const updateCompany = async (Object: any) => {
     );
     return res.data;
 };
+
+export const getCompaniesByUser = async () => {
+    const res = await apiClient.get<any>(UrlServer.COMPANY.GET_COMPANIES_BY_USER);
+    return res.data;
+};
