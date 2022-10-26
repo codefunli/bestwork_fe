@@ -80,6 +80,7 @@
     },
     "common": {
         "placeholder": "Please input a new value",
+        "label": "Not required",
         "nonRequired": "non-required",
         "required": "required",
         "action": "Action",
@@ -272,6 +273,10 @@
         "password": "Password",
         "confirmPassword": "Confirm Password",
         "btnSend": "Send request",
-        "btnConfirm": "Confirm"
+        "btnConfirm": "Confirm",
+        "sentEmail": "Please check your email",
+        "notReceive": "You did not receive the email",
+        "btnResend": "Resend",
+        "success": "Password reset successful"
     }
 }

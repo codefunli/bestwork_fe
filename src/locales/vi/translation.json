@@ -116,7 +116,10 @@
         "info": "Thông tin",
         "create": "Tạo mới",
         "project": "Dự án",
-        "role": "Phân quyền"
+        "role": "Phân quyền",
+        "material": "Vật liệu",
+        "status": "Trạng thái",
+        "detail": "Chi tiết"
     },
     "user": {
         "title": "Thông tin người dùng",
@@ -270,6 +273,10 @@
         "password": "Mật khẩu",
         "confirmPassword": "Xác nhận mật khẩu",
         "btnSend": "Gửi yêu cầu",
-        "btnConfirm": "Xác nhận"
+        "btnConfirm": "Xác nhận",
+        "sentEmail": "Vui lòng kiểm tra thư điện tử của bạn",
+        "notReceive": "Bạn không nhận được thư điện tử",
+        "btnResend": "Gửi lại",
+        "success": "Đặt lại mật khẩu thành công"
     }
 }
