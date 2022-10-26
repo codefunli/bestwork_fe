@@ -9,17 +9,19 @@ import {
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { StatusCode } from '../../core/constants/common';
+import { StatusCode, UrlFeApp } from '../../core/constants/common';
 import { validateForgotPassword } from '../../core/constants/validate';
 import { forgotPassword } from '../../services/user-service';
 import { yupResolver } from '@hookform/resolvers/yup';
 import ApiAlert from '../../shared-components/alert/api-alert';
 import './forgot-password.scss';
+import { Link } from 'react-router-dom';
 
 export default function ForgotPassword() {
+    const { t } = useTranslation();
     const [email, setEmail] = useState('');
     const [resForHandleMsg, setResForHandleMsg] = useState<any>();
-    const { t } = useTranslation();
+    const [isSentEmail, setIsSentEmail] = useState(false);
 
     const {
         register,
@@ -41,6 +43,7 @@ export default function ForgotPassword() {
                     status: res.status,
                     message: res.message,
                 });
+                if (res.status === StatusCode.OK) setIsSentEmail(true);
             })
             .catch(() => {
                 setResForHandleMsg({
@@ -63,36 +66,50 @@ export default function ForgotPassword() {
                             >
                                 {t('forgotPassword.title')}
                             </Typography>
-                            {t('forgotPassword.description')}
-                            <div className="form-field">
-                                <FormControl variant="outlined">
-                                    <InputLabel required htmlFor="outlined-adornment-password">
-                                        {t('forgotPassword.email')}
-                                    </InputLabel>
-                                    <OutlinedInput
-                                        id="outlined-adornment-password"
-                                        type="email"
-                                        value={email}
-                                        autoComplete="false"
-                                        label={t('forgotPassword.email')}
-                                        error={Boolean(errors.email)}
-                                        {...register('email', {
-                                            onChange: (e) => handleChangeValue(e),
-                                        })}
-                                    />
-                                    {errors?.email && <FormHelperText error>{t(errors.email?.message?.toString() as string)}</FormHelperText>}
-                                </FormControl>
-                            </div>
-                            <Button variant="outlined" className="justify-center" onClick={handleSubmit(handleSend)} >
-                                {t('forgotPassword.btnSend')}
-                            </Button>
+                            {!isSentEmail ?
+                                <div>
+                                    {t('forgotPassword.description')}
+                                    <div className="form-field">
+                                        <FormControl variant="outlined">
+                                            <InputLabel required htmlFor="outlined-adornment-password">
+                                                {t('forgotPassword.email')}
+                                            </InputLabel>
+                                            <OutlinedInput
+                                                id="outlined-adornment-password"
+                                                type="email"
+                                                value={email}
+                                                autoComplete="false"
+                                                label={t('forgotPassword.email')}
+                                                error={Boolean(errors.email)}
+                                                {...register('email', {
+                                                    onChange: (e) => handleChangeValue(e),
+                                                })}
+                                            />
+                                            {errors?.email && <FormHelperText error>{t(errors.email?.message?.toString() as string)}</FormHelperText>}
+                                        </FormControl>
+                                    </div>
+                                    <Button variant="outlined" className="justify-center" onClick={handleSubmit(handleSend)} >
+                                        {t('forgotPassword.btnSend')}
+                                    </Button>
+                                </div>
+                                :
+                                <div className="sent-email">
+                                    <p>{t('forgotPassword.sentEmail')}.</p>
+                                    <Link to={UrlFeApp.LOGIN_URL}>
+                                        {t('login.title')}
+                                    </Link>
+                                    <p className="mt-4">
+                                        {t('forgotPassword.notReceive')}? <span className="btn-resend" onClick={handleSubmit(handleSend)}>{t('forgotPassword.btnResend')}</span>
+                                    </p>
+                                </div>
+                            }
                         </div>
                     </form>
                 </div>
-            </div>
+            </div >
             <ApiAlert
                 response={resForHandleMsg}
             />
-        </div>
+        </div >
     );
 }
