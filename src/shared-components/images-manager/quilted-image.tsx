@@ -42,12 +42,7 @@ export default function QuiltedImage(props: { images: any[]; callBackFn: Functio
                                             }
                                         />
                                     )}
-                                    <img
-                                        src={item}
-                                        alt={item}
-                                        loading="lazy"
-                                        className="imgTag"
-                                    />
+                                    <img src={item.data} alt={item.data} loading="lazy" className="imgTag" />
                                 </Card>
                             </ImageListItem>
                         );

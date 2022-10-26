@@ -8,10 +8,11 @@ import {
     Divider,
     Grid,
     Slide,
-    TextField
+    TextField,
 } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
 import { forwardRef, useEffect, useState } from 'react';
+import { postMaterialStatus } from '../../services/material-service';
 import MultipleFileUpload from '../file-upload/multiple-file-upload';
 
 const Transition = forwardRef(function Transition(
@@ -27,8 +28,10 @@ interface AlertDialogSlideProps {
     title: string;
     content: {
         projectId: string;
-        comment: string;
+        description: string;
         images: any;
+        isOpenComment: boolean;
+        postUser: any;
     };
     noBtn: string;
     okBtn: string;
@@ -37,9 +40,14 @@ interface AlertDialogSlideProps {
     okFunc: Function;
 }
 const initialDataImg = {
-    comment: '',
+    description: '',
     images: [],
     projectId: '',
+    isOpenComment: false,
+    postUser: {
+        id: 0,
+        name: 'Đông Tà',
+    },
 };
 
 export default function ImageUploadDialog(props: AlertDialogSlideProps) {
@@ -54,15 +62,11 @@ export default function ImageUploadDialog(props: AlertDialogSlideProps) {
     }, [isOpen]);
 
     const handleOkFunc = () => {
-        setOpen(false);
-        okFunc();
-        let imgArr = [];
-        const ls = localStorage.getItem('imgDatas');
-        if (ls != null) {
-            imgArr = JSON.parse(ls);
-        }
-        imgArr.push(imgData);
-        localStorage.setItem('imgDatas', JSON.stringify(imgArr));
+        postMaterialStatus(imgData).then((data: any) => {
+            setOpen(false);
+            okFunc();
+        });
+
         setImgData(content);
     };
 
@@ -136,7 +140,7 @@ export default function ImageUploadDialog(props: AlertDialogSlideProps) {
                                         fullWidth
                                         multiline
                                         rows={3}
-                                        value={imgData.comment}
+                                        value={imgData.description}
                                         sx={{
                                             mt: 1,
                                             mb: 1,
@@ -144,18 +148,18 @@ export default function ImageUploadDialog(props: AlertDialogSlideProps) {
                                             '& fieldset': { top: 0 },
                                         }}
                                         id="outlined-required"
-                                        placeholder="Comment..."
-                                        name="comment"
+                                        placeholder="Description..."
+                                        name="description"
                                         onChange={handleInputChange}
                                     />
                                 </div>
-                            </Grid >
+                            </Grid>
                             <Grid item xs={12} lg={12}>
                                 <MultipleFileUpload clearPreview={open} callbackFunc={onChangeImage} />
                             </Grid>
-                        </Grid >
-                    </DialogContentText >
-                </DialogContent >
+                        </Grid>
+                    </DialogContentText>
+                </DialogContent>
                 <Divider />
                 <DialogActions>
                     <Button variant="outlined" onClick={handleClose}>
@@ -165,7 +169,7 @@ export default function ImageUploadDialog(props: AlertDialogSlideProps) {
                         Upload
                     </Button>
                 </DialogActions>
-            </Dialog >
-        </div >
+            </Dialog>
+        </div>
     );
 }

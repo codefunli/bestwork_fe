@@ -21,32 +21,107 @@ import ImageManager from '../../shared-components/images-manager/image-manager';
 import ImageUploadDialog from '../../shared-components/modal/image-upload-dialog';
 import EditIcon from '@mui/icons-material/Edit';
 import { useParams } from 'react-router-dom';
+import { getPostByProjectId } from '../../services/material-service';
 
 const initialDataImg = {
-    comment: '',
+    description: '',
     images: [],
     projectId: '',
-};
-
-const initialValues = [
-    {
-        comment: '',
-        images: [],
-        projectId: '',
+    isOpenComment: false,
+    comment: [
+        {
+            id: '',
+            commentUser: {
+                id: 0,
+                name: 'Quách Tĩnh',
+                avatar: '',
+            },
+            comment: '',
+            dateTime: '',
+            isLastSub: false,
+            subComment: {},
+        },
+    ],
+    postUser: {
+        id: '0',
+        name: 'Đông Tà',
     },
-];
+};
 export default function MaterialSchedule() {
-    //const [arrMsg, setArrMsg] = useState<Comment[]>([]);
     const [isOpenModal, setIsOpenModal] = useState(false);
-    const [imagesData, setImagesData] = useState(initialValues);
-    const imgDatas = localStorage.getItem('imgDatas');
-    const [isEnabled, setIsEnabled] = useState<boolean>(false);
+    const [imagesData, setImagesData] = useState<any>([]);
     const [arrMsg, setArrMsg] = useState<Comment[]>([]);
     const [content, setContent] = useState(initialDataImg);
     const params = useParams();
 
-    const enableComment = () => {
-        setIsEnabled(!isEnabled);
+    useEffect(() => {
+        fetchData();
+    }, [params.id]);
+
+    const fetchData = () => {
+        if (params.id) {
+            setContent({
+                ...content,
+                projectId: params.id,
+            });
+            getPostByProjectId(params.id).then((posts) => {
+                const convertData = posts.map((post: any) => {
+                    post.isShowSubComment = false;
+                    post.comment = JSON.stringify([
+                        {
+                            id: '85d14a15-836c-4e30-af5f-869b408e044c',
+                            postId: '995d3dfd-a27e-4e5e-8824-2cf40e232d02',
+                            commentUser: {
+                                id: 0,
+                                name: 'Quách Tĩnh',
+                                avatar: 'https://asset-a.grid.id/crop/0x0:0x0/945x630/photo/grid/original/145453_hermione-granger.JPG',
+                            },
+                            comment: 'hallo',
+                            dateTime: '2022-10-24T07:21',
+                            isLastSub: false,
+                            subComment: [],
+                            isOpenComment: false,
+                        },
+                        {
+                            id: '2e931741-99fc-4997-9054-9eb0487e6cb8',
+                            postId: '995d3dfd-a27e-4e5e-8824-2cf40e232d02',
+                            commentUser: {
+                                id: 0,
+                                name: 'Quách Tĩnh',
+                                avatar: 'https://asset-a.grid.id/crop/0x0:0x0/945x630/photo/grid/original/145453_hermione-granger.JPG',
+                            },
+                            comment: 'asd',
+                            dateTime: '2022-10-24T07:22',
+                            isLastSub: false,
+                            subComment: [],
+                            isOpenComment: false,
+                        },
+                    ]);
+                    if (post.comment) {
+                        post.comment = JSON.parse(post.comment);
+                    } else {
+                        post.comment = [];
+                    }
+                    post.postUser = {
+                        id: 0,
+                        name: 'Đông Tà',
+                    };
+                    return post;
+                });
+
+                setImagesData([...convertData]);
+            });
+        }
+    };
+
+    const enableComment = (data: any) => {
+        const convertData = imagesData.map((post: any) => {
+            if (post.id === data.id) {
+                post.isOpenComment = !post.isOpenComment;
+            }
+            return post;
+        });
+        setImagesData([...convertData]);
     };
 
     const closeModal = () => {
@@ -58,15 +133,9 @@ export default function MaterialSchedule() {
     };
 
     const alertOkFunc = () => {
+        fetchData();
         setIsOpenModal(false);
     };
-
-    useEffect(() => {
-        if (imgDatas != null) {
-            const datas = JSON.parse(imgDatas);
-            setImagesData(datas);
-        }
-    }, [imgDatas]);
 
     useEffect(() => {
         let comment = localStorage.getItem('comment_pr_1');
@@ -77,9 +146,10 @@ export default function MaterialSchedule() {
     }, [arrMsg]);
 
     const handleEditImage = (data: any) => {
+        console.log(data);
+
         setIsOpenModal(true);
     };
-
     return (
         <div>
             <Typography variant="h5" className="mb-4" color="textSecondary" gutterBottom>
@@ -105,10 +175,10 @@ export default function MaterialSchedule() {
                     </Paper>
                 </Grid>
             </Grid>
-            {imagesData[0].images.length > 0 &&
-                imagesData.map((data) => (
+            {imagesData.length > 0 &&
+                imagesData.map((data: any) => (
                     <Grid
-                        key={data.projectId}
+                        key={data.id}
                         container
                         spacing={3}
                         direction="row"
@@ -120,8 +190,8 @@ export default function MaterialSchedule() {
                                 <Card w-full>
                                     <CardHeader
                                         avatar={<Avatar aria-label="recipe">MS</Avatar>}
-                                        title="Nguyen Thi Mien"
-                                        subheader={new Date().toLocaleDateString()}
+                                        title={data.postUser.name}
+                                        subheader={data.createDate.substring(0, 19)}
                                         action={
                                             <IconButton
                                                 color="primary"
@@ -134,23 +204,22 @@ export default function MaterialSchedule() {
                                         }
                                     />
                                     <CardContent>
-                                        <p>{data.comment}</p>
-                                        <ImageManager images={data.images} />
+                                        <p>{data.description}</p>
+                                        <ImageManager images={data.fileStorages} />
                                     </CardContent>
                                     <CardActions>
-                                        <Button size="small" onClick={enableComment}>
+                                        <Button size="small" onClick={() => enableComment(data)}>
                                             COMMENT
                                         </Button>
                                     </CardActions>
                                 </Card>
                             </div>
                             <div>
-                                <CommentEl arrMsg={arrMsg} isEnabled={isEnabled} />
+                                <CommentEl arrMsg={data.comment} pId={data.id} isEnabled={data.isOpenComment} />
                             </div>
                         </Grid>
                     </Grid>
                 ))}
-
             <ImageUploadDialog
                 isOpen={isOpenModal}
                 closeFunc={closeModal}
