@@ -22,18 +22,20 @@ import { useQuery, useQueryClient } from 'react-query';
 import EnhancedTable, { ArrayAction } from '../../shared-components/table-manager/table-data';
 import { headUserCol, RoleUser } from '../../core/types/user';
 import { useTranslation } from 'react-i18next';
-import { getUsers, deleteUsers } from '../../services/user-service';
-import { getCompanies } from '../../services/company-service';
+import { getUsers, deleteUsers, getRoles } from '../../services/user-service';
 import AlertDialogSlide from '../../shared-components/modal/alert-dialog-slide';
 import MessageShow from '../../shared-components/message/message';
 import { SUCCESS_MSG } from '../../core/constants/message';
 import './user.scss';
 
 const initialValues = {
+    page: '0',
+    size: '5',
+    sortDirection: 'ASC',
+    sortBy: 'id',
     keyword: '',
-    companyId: '',
     role: '',
-    enabled: '',
+    status: '',
 };
 
 export default function UserSearch() {
@@ -41,12 +43,12 @@ export default function UserSearch() {
     const [formValues, setFormValues] = useState(initialValues);
     const queryClient = useQueryClient();
     const [state, setState] = useState<any>();
-    const [companies, setCompanies] = useState<any>();
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [isShowMessage, setIsShowMessage] = useState(false);
     const [userMsg, setUserMsg] = useState('');
     const [typeUserMsg, setTypeUserMsg] = useState<AlertColor>(AlertColorConstants.SUCCESS);
-    const [selectedUserIdList, setSelectedUserIdList] = useState([]);
+    const [selectedUserIdList, setSelectedUserIdList] = useState({});
+    const [roles, setRoles] = useState([]);
 
     const navigate = useNavigate();
 
@@ -61,13 +63,9 @@ export default function UserSearch() {
     });
 
     useEffect(() => {
-        const fetchCompanies = async () => {
-            const companies = await getCompanies({});
-            if (companies && companies.data && companies.data.content) {
-                setCompanies(companies?.data?.content);
-            }
-        };
-        fetchCompanies();
+        getRoles().then((data: any) => {
+            setRoles(data);
+        });
     }, []);
 
     useEffect(() => {
@@ -99,6 +97,9 @@ export default function UserSearch() {
 
     const handleClearData = () => {
         setFormValues({
+            ...initialValues,
+        });
+        fetchData({
             ...initialValues,
         });
     };
@@ -137,16 +138,23 @@ export default function UserSearch() {
         setUserMsg(SUCCESS_MSG.S01_004);
         setTypeUserMsg(AlertColorConstants.SUCCESS);
         setIsOpenModal(true);
-        setSelectedUserIdList(userIdList);
+        setSelectedUserIdList({
+            userIdList: [...userIdList.ids],
+        });
     };
 
     const alertOkFunc = () => {
+        console.log(selectedUserIdList);
+
         deleteUsers(selectedUserIdList)
             .then((value) => {
-                setIsShowMessage(true);
-                fetchData({
-                    ...formValues,
-                });
+                console.log(value);
+                if (value.status === 'OK') {
+                    handleMessage(true, value.message, AlertColorConstants.SUCCESS);
+                    fetchData({
+                        ...formValues,
+                    });
+                }
             })
             .catch((err) => {
                 handleMessage(true, t('message.error'), AlertColorConstants.ERROR);
@@ -240,34 +248,6 @@ export default function UserSearch() {
                                         />
                                     </div>
                                     <div className="col-12 d-block p-1">
-                                        <InputLabel htmlFor="outlined-adornment-amount">
-                                            {t('user.search.companyName')}
-                                        </InputLabel>
-                                        <FormControl size="small" fullWidth sx={{ mt: 1, mb: 1 }} variant="outlined">
-                                            <Select
-                                                name="companyId"
-                                                value={formValues.companyId}
-                                                displayEmpty
-                                                sx={{
-                                                    '& legend': { display: 'none' },
-                                                    '& fieldset': { top: 0 },
-                                                }}
-                                                onChange={handleInputChange}
-                                            >
-                                                <MenuItem value="" selected={true}>
-                                                    <em>{t('user.search.selectCompanyName')}</em>
-                                                </MenuItem>
-                                                {companies &&
-                                                    companies.length > 0 &&
-                                                    companies.map((company: any) => (
-                                                        <MenuItem value={company.companyId}>
-                                                            {company.companyName}
-                                                        </MenuItem>
-                                                    ))}
-                                            </Select>
-                                        </FormControl>
-                                    </div>
-                                    <div className="col-12 d-block p-1">
                                         <InputLabel htmlFor="role">{t('user.info.role')}</InputLabel>
                                         <FormControl size="small" fullWidth sx={{ mt: 1, mb: 1 }} variant="outlined">
                                             <Select
@@ -283,8 +263,8 @@ export default function UserSearch() {
                                                 <MenuItem value="" selected={true}>
                                                     <em>{t('user.search.selectRole')}</em>
                                                 </MenuItem>
-                                                {Object.values(RoleUser).map((role) => (
-                                                    <MenuItem value={role}>{role}</MenuItem>
+                                                {roles.map((role: any) => (
+                                                    <MenuItem value={role.id}>{role.roleName}</MenuItem>
                                                 ))}
                                             </Select>
                                         </FormControl>
@@ -293,8 +273,8 @@ export default function UserSearch() {
                                         <InputLabel htmlFor="isBlocked">{t('user.search.status')}</InputLabel>
                                         <FormControl size="small" fullWidth sx={{ mt: 1, mb: 1 }} variant="outlined">
                                             <Select
-                                                name="enabled"
-                                                value={formValues.enabled}
+                                                name="status"
+                                                value={formValues.status}
                                                 displayEmpty
                                                 sx={{
                                                     '& legend': { display: 'none' },
@@ -305,10 +285,10 @@ export default function UserSearch() {
                                                 <MenuItem value="" selected={true}>
                                                     <em>{t('user.search.selectStatus')}</em>
                                                 </MenuItem>
-                                                <MenuItem value="true">
+                                                <MenuItem value="1">
                                                     <em>{t('user.search.enabled')}</em>
                                                 </MenuItem>
-                                                <MenuItem value="false">
+                                                <MenuItem value="0">
                                                     <em>{t('user.search.notEnabled')}</em>
                                                 </MenuItem>
                                             </Select>

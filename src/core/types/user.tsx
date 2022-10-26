@@ -26,13 +26,13 @@ export const headUserCol: HeadColumn[] = [
         label: 'user.table.email',
     },
     {
-        id: 'firstNm',
+        id: 'firstName',
         numeric: false,
         disablePadding: false,
         label: 'user.table.firstName',
     },
     {
-        id: 'lastNm',
+        id: 'lastName',
         numeric: false,
         disablePadding: false,
         label: 'user.table.lastName',
@@ -44,9 +44,9 @@ export const headUserCol: HeadColumn[] = [
         label: 'user.table.telNo',
     },
     {
-        id: 'enabled',
+        id: 'enable',
         numeric: false,
         disablePadding: false,
         label: 'user.table.status',
-    }
+    },
 ];

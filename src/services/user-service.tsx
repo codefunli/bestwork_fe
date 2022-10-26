@@ -40,5 +40,9 @@ export const forgotPassword = async (email: any) => {
 
 export const resetPassword = async (object: any, token: string) => {
     const res = await apiClient.post(`${UrlServer.AUTH.RESET_PASSWORD}/${token}`, object);
+};
+
+export const getRoles = async () => {
+    const res = await apiClient.get<any>(UrlServer.USER.ROLES);
     return res.data;
 };
