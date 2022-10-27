@@ -64,3 +64,7 @@ export const getProgressByProjectId = async (projectId: any) => {
     );
     return res.data;
 };
+export const getProgressStatus = async () => {
+    const res = await apiClient.get<any>(`${UrlServer.PROJECT.GET_PROGRESS_STATUS}`);
+    return res.data;
+};

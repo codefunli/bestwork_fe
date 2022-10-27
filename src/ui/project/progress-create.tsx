@@ -21,7 +21,7 @@ import { StatusCode } from '../../core/constants/common';
 import { validateProjectProgress } from '../../core/constants/validate';
 import { currentDateTime } from '../../core/utils/get-current-datetime';
 import { ProjectProgressDTO } from '../../models/project-res-dto';
-import { createProgress } from '../../services/project-service';
+import { createProgress, getProgressStatus } from '../../services/project-service';
 import ApiAlert from '../../shared-components/alert/api-alert';
 import MultipleFileUpload from '../../shared-components/file-upload/multiple-file-upload';
 
@@ -41,41 +41,17 @@ interface Props {
     isOpen: boolean;
     setIsOpen: Function;
     toggleDrawer: Function;
+    callBackFn: Function;
 }
 
-const progressStatus = [
-    {
-        id: 1,
-        value: 'Todo',
-    },
-    {
-        id: 2,
-        value: 'Inprogress',
-    },
-    {
-        id: 3,
-        value: 'Pending',
-    },
-    {
-        id: 4,
-        value: 'Review',
-    },
-    {
-        id: 5,
-        value: 'Done',
-    },
-];
-
 const ProgressCreate = (props: Props) => {
-    const { isOpen, setIsOpen, toggleDrawer } = props;
+    const { isOpen, setIsOpen, toggleDrawer, callBackFn } = props;
     const { t } = useTranslation();
     const [progressData, setProgressData] = useState(progressInitValues);
     const [isClearPreview, setIsClearPreview] = useState(false);
     const [resForHandleMsg, setResForHandleMsg] = useState<any>();
-    const [progressList, setProgressList] = useState<any>([]);
     const params = useParams();
-
-    const progressListFromLocal: any = localStorage.getItem('progressList');
+    const [progressStatus, setProgressStatus] = useState([]);
 
     useEffect(() => {
         if (params.id) {
@@ -84,12 +60,12 @@ const ProgressCreate = (props: Props) => {
                 projectId: params.id,
             });
         }
-    }, [params.id]);
-
-    useEffect(() => {
-        const progressTmp: any = JSON.parse(progressListFromLocal);
-        if (progressTmp) setProgressList(progressTmp);
-    }, [progressListFromLocal]);
+        getProgressStatus().then((value: any) => {
+            if (value && value.data) {
+                setProgressStatus(value.data);
+            }
+        });
+    }, []);
 
     const {
         register,
@@ -105,7 +81,12 @@ const ProgressCreate = (props: Props) => {
         setIsOpen(false);
         toggleDrawer(false);
         setIsClearPreview(true);
-        setProgressData(progressInitValues);
+        if (params.id) {
+            setProgressData({
+                ...progressInitValues,
+                projectId: params.id,
+            });
+        }
     };
 
     const handleInputChange = (e: any) => {
@@ -134,6 +115,7 @@ const ProgressCreate = (props: Props) => {
                     status: res.status,
                     message: res.message,
                 });
+                callBackFn();
             })
             .catch(() => {
                 setResForHandleMsg({
@@ -270,9 +252,9 @@ const ProgressCreate = (props: Props) => {
                                         <MenuItem value="" selected={true} disabled>
                                             <em>{t('message.statusLabel')}</em>
                                         </MenuItem>
-                                        {progressStatus.map((status) => (
-                                            <MenuItem value={status.id} key={status.id}>
-                                                <em>{status.value}</em>
+                                        {progressStatus.map((status: any) => (
+                                            <MenuItem value={status.status} key={status.id}>
+                                                <em>{status.status}</em>
                                             </MenuItem>
                                         ))}
                                     </Select>
