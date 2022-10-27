@@ -40,23 +40,26 @@ export default function ProjectEdit() {
 
     useEffect(() => {
         if (params.id) {
-            getProgressByProjectId(params.id).then((value: any) => {
-                if (value && value.data) {
-                    setProjectData(value.data.project);
-                    setProgressList(value.data.progress);
-                }
-            });
+            fetchData();
         }
     }, [params.id]);
+
+    const fetchData = async () => {
+        const value: any = await getProgressByProjectId(params.id);
+        if (value && value.data) {
+            setProjectData(value.data.project);
+            setProgressList(value.data.progress);
+        }
+    };
 
     const toggleDrawerCreateProgress = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
         if (
             event &&
             event.type === 'keydown' &&
             ((event as React.KeyboardEvent).key === 'Tab' || (event as React.KeyboardEvent).key === 'Shift')
-        )
+        ) {
             return;
-
+        }
         setOpenCreateProgress(open);
     };
 
@@ -188,6 +191,7 @@ export default function ProjectEdit() {
                 isOpen={isOpenCreateProgress}
                 setIsOpen={setOpenCreateProgress}
                 toggleDrawer={toggleDrawerCreateProgress}
+                callBackFn={fetchData}
             />
             <ProgressEdit
                 isOpen={isOpenEditProgress}
