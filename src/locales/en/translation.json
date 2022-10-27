@@ -102,6 +102,7 @@
         "wardLabel": "Please choose a ward/township",
         "status": "Status",
         "statusLabel": "Please choose status",
+        "typeLabel": "Please choose type",
         "loginFailed": "The Username or Password is Incorrect",
         "accessDenied": "Access denied, you don't have permission to access on this server",
         "deleteSuccess": "Deletion data is successfully"
@@ -199,6 +200,10 @@
         "title": "Project Search",
         "registerTitle": "Project Register",
         "editTitle": "Edit Project",
+        "tab": {
+            "register": "Register Project",
+            "assign": "Assign User"
+        },
         "search": {
             "title": "Search info of your project",
             "prjName": "Project Name",

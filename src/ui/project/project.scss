@@ -50,11 +50,6 @@
             .MuiBox-root {
                 padding: 0 !important;
             }
-
-            // .MuiGrid-item {
-            //     margin: 0;
-            //     padding: 0;
-            // }
         }
 
         .role {
@@ -84,8 +79,15 @@
                     }
                 }
 
-                .role-list {
+                .company-list {
                     height: 49vh;
+                }
+
+                .custom-tab-item {
+                    width: 100%;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
                 }
 
                 .MuiCard-root {

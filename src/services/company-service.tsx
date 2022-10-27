@@ -1,4 +1,3 @@
-import { object } from 'yup';
 import { UrlServer } from '../core/constants/common';
 import apiClient from '../core/services/api-service';
 import { DataResSuccess, PageableDataResSuccess } from '../core/types/base';
@@ -34,5 +33,10 @@ export const updateCompany = async (Object: any) => {
 
 export const getCompaniesByUser = async () => {
     const res = await apiClient.get<any>(UrlServer.COMPANY.GET_COMPANIES_BY_USER);
+    return res.data;
+};
+
+export const getAllCompanies = async () => {
+    const res = await apiClient.get<PageableDataResSuccess<CompanyResDTO[]>>(UrlServer.COMPANY.GET_ALL);
     return res.data;
 };

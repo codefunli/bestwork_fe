@@ -8,6 +8,7 @@ import {
     CardContent,
     FormControl,
     FormControlLabel,
+    FormHelperText,
     FormLabel,
     Grid,
     InputLabel,
@@ -18,7 +19,7 @@ import {
     Tab,
     Tabs,
     TextField,
-    Typography,
+    Typography
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -26,115 +27,81 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { AlertColorConstants, StatusCode, UrlFeApp } from '../../core/constants/common';
 import { validateProjectRegisterForm } from '../../core/constants/validate';
-import { createProject } from '../../services/project-service';
+import { isArrayEmpty, isObjectEmpty } from '../../core/utils/object-utils';
+import { Company } from '../../models/project-req-dto';
+import { ProjectTypeDTO } from '../../models/project-res-dto';
+import { getAllCompanies } from '../../services/company-service';
+import { createProject, getProjectStatus, getProjectTypes } from '../../services/project-service';
 import MessageShow from '../../shared-components/message/message';
 import TabPanel from '../../shared-components/tab-manager/tab-panel';
 import Role from './project-role';
 
-const currentDateTime = new Date().toISOString().substring(0, 11).concat(new Date().toLocaleTimeString());
-
-const initialValues = {
+const initialValues: any = {
     project: {
         projectName: '',
         projectType: '',
         description: '',
         comment: '',
-        createDate: currentDateTime,
-        notificationFlag: '1',
-        isPaid: '0',
+        createDate: new Date(),
+        notificationFlag: true,
+        isPaid: false,
         status: '',
     },
 };
 
-const statusValues = [
+const initProjectStatus = [
     {
-        name: 'Cancel',
-        value: '0',
+        id: 1,
+        name: 'Not yet start'
     },
     {
-        name: 'Processing',
-        value: '1',
+        id: 2,
+        name: 'Processing'
     },
     {
-        name: 'Done and waiting for checking',
-        value: '2',
+        id: 3,
+        name: 'Done'
     },
     {
-        name: 'Checked and waiting for payment',
-        value: '3',
-    },
-];
-
-const projectType = [
-    {
-        name: 'Type 1',
-        value: '0',
+        id: 4,
+        name: 'Paymenting'
     },
     {
-        name: 'Type 2',
-        value: '1',
-    },
-];
-const initCompanyListValue = [
-    {
-        companyId: 1,
-        companyName: 'Ỷ Thiên Đồ Long Ký',
-        userList: [
-            {
-                userId: 1,
-                name: 'Trương Vô Kỵ',
-                view: false,
-                edit: false,
-            },
-            {
-                userId: 2,
-                name: 'Thiết Bất Đắc',
-                view: false,
-                edit: false,
-            },
-            {
-                userId: 3,
-                name: 'Bạch Mi Ưng Vương',
-                view: false,
-                edit: false,
-            },
-        ],
+        id: 5,
+        name: 'Is Paid'
     },
     {
-        companyId: 1,
-        companyName: 'Thần Điêu Đại Bịp',
-        userList: [
-            {
-                userId: 1,
-                name: 'Dương Quá',
-                view: false,
-                edit: false,
-            },
-            {
-                userId: 2,
-                name: 'Tiểu Long Nữ',
-                view: false,
-                edit: false,
-            },
-            {
-                userId: 3,
-                name: 'Hoàng Dược Sư',
-                view: false,
-                edit: false,
-            },
-        ],
-    },
-];
+        id: 6,
+        name: 'Cancel'
+    }
+]
 
 export default function ProjectRegister() {
+    const { t } = useTranslation();
+    const navigate = useNavigate();
     const [formValues, setFormValues] = useState(initialValues);
     const [isShowMessage, setIsShowMessage] = useState(false);
     const [companyMsg, setCompanyMsg] = useState('');
     const [typeCompanyMsg, setTypeCompanyMsg] = useState<AlertColor>('success');
-    const navigate = useNavigate();
-    const { t } = useTranslation();
     const [value, setValue] = useState(0);
-    const [roleData, setRoleData] = useState(initCompanyListValue);
+    const [roleData, setRoleData] = useState<Company[]>([]);
+    const [projectStatus, setProjectStatus] = useState<any>(initProjectStatus);
+    const [projectType, setProjectType] = useState<ProjectTypeDTO[]>([]);
+    const [companyList, setCompanyList] = useState<any>([]);
+
+    useEffect(() => {
+        getProjectStatus().then(status => {
+            if (status && status.data) setProjectStatus(status);
+        });
+
+        getProjectTypes().then((type: any) => {
+            if (type) setProjectType(type);
+        });
+
+        getAllCompanies().then(companies => {
+            if (companies && companies.data) setCompanyList(companies?.data);
+        });
+    }, []);
 
     const {
         register,
@@ -213,11 +180,35 @@ export default function ProjectRegister() {
         }
     };
 
-    const handleSubmitForm = (event: any) => {
-        createProject({
+    const handleSubmitForm = async (event: any) => {
+        let req: any = {
             ...formValues,
-            roleData,
-        })
+            project: {
+                ...formValues.project,
+                createDate: (new Date(formValues.project.createDate)).toISOString().replaceAll('.', ':')
+            },
+        };
+
+        if (!isObjectEmpty(roleData) && !isArrayEmpty(roleData)) {
+            const reFormatRoleData = await roleData.map((role: any) => {
+                const reFormatUserList = role.userList.map((user: any) => {
+                    return {
+                        userId: user.userId,
+                        canView: user.canView,
+                        canEdit: user.canEdit
+                    };
+                });
+
+                return {
+                    companyId: role.companyId,
+                    userList: reFormatUserList
+                };
+            });
+
+            req.roleData = reFormatRoleData;
+        };
+
+        await createProject(req)
             .then((resp) => {
                 handleResponse(resp);
             })
@@ -240,12 +231,6 @@ export default function ProjectRegister() {
             'aria-controls': `simple-tabpanel-${index}`,
         };
     }
-
-    const handleResetProjectRole = () => {};
-
-    const callBackProjectRole = (roleData: any) => {
-        setRoleData(roleData);
-    };
 
     return (
         <div className="project">
@@ -270,13 +255,13 @@ export default function ProjectRegister() {
                             <Grid item xs={12}>
                                 <Tabs value={value} onChange={handleChange} aria-label="" className="custom-tab">
                                     <Tab
-                                        label="Register project"
+                                        label={t('project.tab.register')}
                                         {...a11yProps(0)}
                                         tabIndex={0}
                                         onFocus={() => setValue(0)}
                                     />
                                     <Tab
-                                        label="Assign user"
+                                        label={t('project.tab.assign')}
                                         {...a11yProps(1)}
                                         tabIndex={1}
                                         onFocus={() => setValue(0)}
@@ -440,18 +425,24 @@ export default function ProjectRegister() {
                                                                 <Select
                                                                     labelId="demo-simple-select-outlined-label"
                                                                     id="demo-simple-select-outlined"
-                                                                    name="status"
                                                                     displayEmpty
                                                                     value={formValues.project.status}
-                                                                    onChange={handleInputChange}
+                                                                    {...register('status', {
+                                                                        onChange: (e) => handleInputChange(e),
+                                                                    })}
                                                                 >
                                                                     <MenuItem value="" selected={true} disabled>
                                                                         <em>{t('message.statusLabel')}</em>
                                                                     </MenuItem>
-                                                                    {statusValues.map((s) => (
-                                                                        <MenuItem value={s.value}>{s.name}</MenuItem>
+                                                                    {(projectStatus && projectStatus.length > 0) && projectStatus.map((status: any) => (
+                                                                        <MenuItem value={status.id}>{status.name}</MenuItem>
                                                                     ))}
                                                                 </Select>
+                                                                {Boolean(errors.status) && (
+                                                                    <FormHelperText id="component-error-text">
+                                                                        {errors?.status?.message as string}
+                                                                    </FormHelperText>
+                                                                )}
                                                             </FormControl>
                                                         </div>
                                                         <div className="col-12 col-sm-6 d-block p-1">
@@ -473,18 +464,24 @@ export default function ProjectRegister() {
                                                                 <Select
                                                                     labelId="demo-simple-select-outlined-label"
                                                                     id="demo-simple-select-outlined"
-                                                                    name="projectType"
                                                                     displayEmpty
                                                                     value={formValues.project.projectType}
-                                                                    onChange={handleInputChange}
+                                                                    {...register('projectType', {
+                                                                        onChange: (e) => handleInputChange(e),
+                                                                    })}
                                                                 >
                                                                     <MenuItem value="" selected={true} disabled>
-                                                                        <em>{t('message.statusLabel')}</em>
+                                                                        <em>{t('message.typeLabel')}</em>
                                                                     </MenuItem>
-                                                                    {projectType.map((s) => (
-                                                                        <MenuItem value={s.value}>{s.name}</MenuItem>
+                                                                    {(projectType && projectType.length > 0) && projectType.map((type: ProjectTypeDTO) => (
+                                                                        <MenuItem value={type.id}>{type.name}</MenuItem>
                                                                     ))}
                                                                 </Select>
+                                                                {Boolean(errors.projectType) && (
+                                                                    <FormHelperText id="component-error-text">
+                                                                        {errors?.projectType?.message as string}
+                                                                    </FormHelperText>
+                                                                )}
                                                             </FormControl>
                                                         </div>
                                                     </div>
@@ -502,15 +499,15 @@ export default function ProjectRegister() {
                                                                             name="notificationFlag"
                                                                             value={formValues.project.notificationFlag}
                                                                             onChange={handleNotificationFlagChange}
-                                                                            defaultValue="1"
+                                                                            defaultValue={true}
                                                                         >
                                                                             <FormControlLabel
-                                                                                value="1"
+                                                                                value={true}
                                                                                 control={<Radio color="primary" />}
                                                                                 label={t('radio.accept')}
                                                                             />
                                                                             <FormControlLabel
-                                                                                value="0"
+                                                                                value={false}
                                                                                 control={<Radio color="primary" />}
                                                                                 label={t('radio.deny')}
                                                                             />
@@ -528,15 +525,15 @@ export default function ProjectRegister() {
                                                                             name="isPaid"
                                                                             value={formValues.project.isPaid}
                                                                             onChange={handleIsPaidChange}
-                                                                            defaultValue="1"
+                                                                            defaultValue={true}
                                                                         >
                                                                             <FormControlLabel
-                                                                                value="1"
+                                                                                value={true}
                                                                                 control={<Radio color="primary" />}
                                                                                 label={t('radio.paid')}
                                                                             />
                                                                             <FormControlLabel
-                                                                                value="0"
+                                                                                value={false}
                                                                                 control={<Radio color="primary" />}
                                                                                 label={t('radio.unPaid')}
                                                                             />
@@ -552,60 +549,33 @@ export default function ProjectRegister() {
                                                             variant="contained"
                                                             aria-label="Disabled elevation buttons"
                                                         >
-                                                            <Button
-                                                                variant="contained"
-                                                                color="primary"
-                                                                sx={{ mr: 1 }}
-                                                                onClick={handleSubmit(handleSubmitForm)}
-                                                            >
-                                                                {t('button.btnSave')}
+                                                            <Button variant="contained" color="primary" sx={{ mr: 1 }} onClick={handleSubmit(handleSubmitForm)}>
+                                                                {t('button.btnCreate')}
                                                             </Button>
                                                             <Button variant="outlined" onClick={handleClearCompany}>
                                                                 {t('button.btnClear')}
                                                             </Button>
                                                         </ButtonGroup>
-                                                    </div>
-                                                </Box>
-                                            </CardContent>
-                                        </TabPanel>
-                                    </Card>
-                                </div>
+                                                    </div >
+                                                </Box >
+                                            </CardContent >
+                                        </TabPanel >
+                                    </Card >
+                                </div >
 
                                 <div className="assign-user-tab">
                                     <Card w-full="true">
                                         <TabPanel value={value} index={1}>
                                             <CardContent>
-                                                <Role
-                                                    companyList={initCompanyListValue}
-                                                    callBackFn={callBackProjectRole}
-                                                />
-                                                <div className="text-center justify-center mt-4">
-                                                    <ButtonGroup
-                                                        disableElevation
-                                                        variant="contained"
-                                                        aria-label="Disabled elevation buttons"
-                                                    >
-                                                        <Button
-                                                            variant="contained"
-                                                            color="primary"
-                                                            sx={{ mr: 1 }}
-                                                            onClick={handleSubmit(handleSubmitForm)}
-                                                        >
-                                                            {t('button.btnSave')}
-                                                        </Button>
-                                                        <Button variant="outlined" onClick={handleResetProjectRole}>
-                                                            {t('button.btnReset')}
-                                                        </Button>
-                                                    </ButtonGroup>
-                                                </div>
-                                            </CardContent>
-                                        </TabPanel>
-                                    </Card>
-                                </div>
-                            </Grid>
-                        </Grid>
-                    </form>
-                </Grid>
+                                                <Role defaultCompanyList={companyList} defaultRoleData={roleData} setRoleData={setRoleData} />
+                                            </CardContent >
+                                        </TabPanel >
+                                    </Card >
+                                </div >
+                            </Grid >
+                        </Grid >
+                    </form >
+                </Grid >
 
                 <MessageShow
                     message={companyMsg}
@@ -613,7 +583,7 @@ export default function ProjectRegister() {
                     type={typeCompanyMsg}
                     handleCloseMsg={handleCloseMsg}
                 />
-            </Grid>
-        </div>
+            </Grid >
+        </div >
     );
 }

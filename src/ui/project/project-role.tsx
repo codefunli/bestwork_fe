@@ -1,10 +1,6 @@
+import SearchIcon from '@mui/icons-material/Search';
 import {
-    Button,
-    Card,
-    CardContent,
-    Checkbox,
-    Grid,
-    Paper,
+    Button, Checkbox, Paper,
     Tab,
     Table,
     TableBody,
@@ -13,123 +9,153 @@ import {
     TableHead,
     TableRow,
     Tabs,
-    TextField,
-    Typography,
+    TextField
 } from '@mui/material';
 import { Box } from '@mui/system';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import SearchIcon from '@mui/icons-material/Search';
+import { getUsersAssignList } from '../../services/project-service';
+import { User, Company } from '../../models/project-req-dto';
 import './project.scss';
 
-function a11yProps(id: number) {
-    return {
-        id: `vertical-tab-${id}`,
-        'aria-controls': `vertical-tabpanel-${id}`,
-    };
-}
-interface User {
-    userId: number;
-    name: string;
-    view: boolean;
-    edit: boolean;
+type Role = {
+    defaultCompanyList: Company[];
+    defaultRoleData: any;
+    setRoleData: Function;
 }
 
-interface Company {
-    companyId: number;
-    companyName: string;
-    userList: User[];
-}
-
-interface Role {
-    companyList: Company[];
-    callBackFn: Function;
-}
 export default function Role(props: Role) {
+    const { defaultCompanyList, defaultRoleData, setRoleData } = props;
+
     const { t } = useTranslation();
-    const [companyList, setCompanyList] = useState<any[]>(props.companyList);
+    const [companyList, setCompanyList] = useState<Company[]>(defaultCompanyList);
     const [currentTab, setCurrentTab] = useState(0);
-    const [currentCompany, setCurrentCompany] = useState(props.companyList[0]);
+    const [selectedCompanyId, setSelectedCompanyId] = useState<number>(defaultCompanyList[0].id);
+    const [currentCompany, setCurrentCompany] = useState<Company>(defaultCompanyList[0]);
+    const [searchKeyword, setSearchKeyword] = useState('');
+    const [currentUserAssignList, setCurrentUserAssignList] = useState<User[]>([]);
+
+    useEffect(() => {
+        if ((currentCompany && currentCompany.id)) {
+            getUsersAssignList({
+                companyId: currentCompany.id,
+                projectId: "",
+            }).then(res => {
+                if (res && res.data) {
+                    setCurrentUserAssignList(res.data);
+
+                    setCurrentCompany({
+                        ...currentCompany,
+                        userList: res.data
+                    });
+
+                    // If the user assign list of selected company is already exist
+                    const alreadyExistCompany = defaultRoleData.find((company: any) => company.companyId.toString() === selectedCompanyId.toString());
+                    if (alreadyExistCompany && alreadyExistCompany.userList) {
+                        setCurrentUserAssignList(alreadyExistCompany.userList);
+                    }
+                };
+            });
+        };
+    }, [selectedCompanyId]);
 
     const handleChange = (event: React.SyntheticEvent, companyId: number) => {
         setCurrentTab(companyId);
         setCurrentCompany(companyList[companyId]);
+        setSelectedCompanyId(companyList[companyId].id);
     };
-
-    useEffect(() => {
-        props.callBackFn(companyList);
-    }, [companyList]);
 
     const handleChangeCheckbox = (
         event: React.ChangeEvent<HTMLInputElement>,
-        userId: any,
+        user: User,
         index: number,
         activeAll?: boolean,
-        allStatus?: boolean,
+        allStatus?: boolean
     ) => {
-        let selectedScreen = currentCompany.userList.find((user) => user.userId === parseInt(userId));
-        let tempPermission: any;
-        const { name, value } = event.target;
+        let selectedUser: User | {} | undefined = currentCompany.userList ? currentCompany.userList.find(userItem => userItem.userId === user.userId) : {};
+        let tempPermission: User | {};
 
-        for (let i = 0; i < currentCompany.userList.length; i++) {
-            const element = currentCompany.userList[i];
-            if (element.userId == userId) {
-                switch (name) {
-                    case 'edit':
-                        element.edit = !element.edit;
-                        break;
-                    case 'view':
-                        element.view = !element.view;
-                        if (!element.view) {
-                            element.edit = false;
-                        }
-                        break;
-                    case 'all':
-                        element.edit = !element.edit;
-                        element.view = !element.view;
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-        companyList[currentTab] = currentCompany;
+        // If select all permissions
         if (activeAll) {
             if (allStatus) {
                 tempPermission = {
-                    ...selectedScreen,
-                    view: false,
-                    edit: false,
+                    ...selectedUser,
+                    canView: false,
+                    canEdit: false
                 };
             } else {
                 tempPermission = {
-                    ...selectedScreen,
-                    view: true,
-                    edit: true,
+                    ...selectedUser,
+                    canView: true,
+                    canEdit: true
                 };
-            }
+            };
         } else {
             tempPermission = {
-                ...selectedScreen,
-                [name]: event.target.checked,
+                ...selectedUser,
+                [event.target.name]: event.target.checked,
             };
 
-            if (name === 'view' && event.target.checked === false) {
+            if (event.target.name === 'canView' && event.target.checked === false) {
                 tempPermission = {
-                    ...tempPermission,
-                    view: false,
-                    edit: false,
-                };
+                    ...selectedUser,
+                    canView: false,
+                    canEdit: false
+                }
             }
-        }
+        };
 
-        let userList: any = [...currentCompany.userList];
-        userList[index] = tempPermission;
-
+        // Update permissions (assign list) of selected company
+        let permissions: any = currentUserAssignList ? [...currentUserAssignList] : [];
+        permissions[index] = tempPermission;
         setCurrentCompany({
             ...currentCompany,
-            userList,
+            userList: permissions
         });
+
+        // Update current permissions (assign list) of selected company
+        setCurrentUserAssignList(permissions);
+
+        // Check selected company is already exist assign user or not
+        let valueExist = false;
+
+        for (let i = 0; i < permissions.length; ++i) {
+            if (permissions[i].canView) {
+                valueExist = true;
+                break;
+            };
+            if (permissions[i].canEdit) {
+                valueExist = true;
+                break;
+            };
+        };
+
+        let tmpAssignData = JSON.parse(JSON.stringify(defaultRoleData));
+        // Index of selected company assign user list in assignData
+        let assignListIndex: number = tmpAssignData.length;
+        tmpAssignData.map((assign: any, index: number) => {
+            if (assign.companyId.toString() === selectedCompanyId.toString()) assignListIndex = index;
+        });
+
+        // Update assign data (if selected company is already exist assign user)
+        if (valueExist) {
+            tmpAssignData[assignListIndex] = {
+                companyId: currentCompany.id,
+                userList: permissions
+            }
+            setRoleData(tmpAssignData);
+        } else {
+            // Else remove assign list of selected company
+            if (assignListIndex > -1) tmpAssignData.splice(assignListIndex, 1);
+            setRoleData(tmpAssignData);
+        }
+    };
+
+    const handleSearch = () => {
+        const filterItems = () => {
+            return defaultCompanyList.filter(company => company.companyName.toLowerCase().indexOf(searchKeyword.toLowerCase()) !== -1);
+        }
+        setCompanyList(filterItems);
     };
 
     return (
@@ -158,10 +184,10 @@ export default function Role(props: Role) {
                                 name="keyword"
                                 label=""
                                 placeholder={t('common.placeholder')}
-                            // value={searchKeyword}
-                            // onChange={(e) => setSearchKeyword(e.target.value)}
+                                value={searchKeyword}
+                                onChange={(e) => setSearchKeyword(e.target.value)}
                             />
-                            <Button variant="contained" color="info">
+                            <Button variant="contained" onClick={handleSearch} color="info">
                                 <SearchIcon />
                             </Button>
                         </div>
@@ -171,17 +197,22 @@ export default function Role(props: Role) {
                             value={currentTab}
                             onChange={handleChange}
                             aria-label=""
-                            className="role-list"
+                            className="company-list"
                             sx={{
                                 borderRight: 1,
                                 borderColor: 'divider',
                             }}
                         >
-                            {companyList.map((company, index) => (
+                            {(companyList && companyList.length > 0) && companyList.map((company, index) => (
                                 <Tab
                                     key={index}
-                                    label={company.companyName}
-                                    {...a11yProps(company.id)}
+                                    label={
+                                        <React.Fragment>
+                                            <div className="custom-tab-item">
+                                                <span>{company.companyName}</span>
+                                            </div>
+                                        </React.Fragment>
+                                    }
                                 />
                             ))}
                         </Tabs>
@@ -202,48 +233,55 @@ export default function Role(props: Role) {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {currentCompany.userList.map((row, index) => (
+                                        {(currentUserAssignList && currentUserAssignList.length > 0) && currentUserAssignList.map((user: User, index: number) => (
                                             <TableRow
-                                                key={row.userId}
+                                                key={user.userId}
                                                 sx={{
                                                     '&:last-child td, &:last-child th': { border: 0 },
                                                 }}
                                             >
                                                 <TableCell component="th" scope="row">
-                                                    {row.name}
+                                                    {user.name}
                                                 </TableCell>
                                                 <TableCell align="center">
                                                     <Checkbox
-                                                        checked={row.view && row.edit}
+                                                        checked={user.canView && user.canEdit}
                                                         onChange={(e) =>
                                                             handleChangeCheckbox(
                                                                 e,
-                                                                row.userId,
+                                                                user,
                                                                 index,
                                                                 true,
-                                                                row.view && row.edit,
+                                                                user.canView && user.canEdit
                                                             )
                                                         }
-                                                        name="all"
                                                     />
                                                 </TableCell>
                                                 <TableCell align="center">
                                                     <Checkbox
-                                                        checked={row.view}
+                                                        checked={user.canView}
                                                         onChange={(e) =>
-                                                            handleChangeCheckbox(e, row.userId, index)
+                                                            handleChangeCheckbox(
+                                                                e,
+                                                                user,
+                                                                index
+                                                            )
                                                         }
-                                                        name="view"
+                                                        name="canView"
                                                     />
                                                 </TableCell>
                                                 <TableCell align="center">
                                                     <Checkbox
-                                                        checked={row.edit}
+                                                        checked={user.canEdit}
                                                         onChange={(e) =>
-                                                            handleChangeCheckbox(e, row.userId, index)
+                                                            handleChangeCheckbox(
+                                                                e,
+                                                                user,
+                                                                index
+                                                            )
                                                         }
-                                                        name="edit"
-                                                        disabled={!row.view}
+                                                        name="canEdit"
+                                                        disabled={!user.canView}
                                                     />
                                                 </TableCell>
                                             </TableRow>

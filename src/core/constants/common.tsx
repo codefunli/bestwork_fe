@@ -57,6 +57,7 @@ export const UrlServer = {
         GET_COMPANY_BY_ID: `${PREFIX_SERVER_URL}/companies`,
         UPDATE_COMPANY: `${PREFIX_SERVER_URL}/companies/update`,
         GET_COMPANIES_BY_USER: `${PREFIX_SERVER_URL}/users/companies`,
+        GET_ALL: `${PREFIX_SERVER_URL}/companies/all`
     },
     USER: {
         USER: `${PREFIX_SERVER_URL}/users`,
@@ -71,11 +72,12 @@ export const UrlServer = {
         GET: `${PREFIX_SERVER_URL}/projects/list`,
         DELETE: `${PREFIX_SERVER_URL}/projects/delete`,
         UPDATE: `${PREFIX_SERVER_URL}/projects`,
-        CREATE: `${PREFIX_SERVER_URL}/projects/create`,
-        CREATE_PROGRESS: `${PREFIX_SERVER_URL}/progress/create`,
+        CREATE: `${PREFIX_SERVER_URL}/projects/regist`,
+        CREATE_PROGRESS: `${PREFIX_SERVER_URL}/projects/create-progress`,
         UPDATE_PROGRESS: `${PREFIX_SERVER_URL}/projects/update-progress`,
         GET_TYPE: `${PREFIX_SERVER_URL}/projects/types`,
         GET_STATUS: `${PREFIX_SERVER_URL}/projects/status`,
+        GET_USER_ASSIGN: `${PREFIX_SERVER_URL}/projects/assign-list`
     },
     ROLE: {
         GET: `${PREFIX_SERVER_URL}/roles`,
@@ -155,4 +157,5 @@ export const FieldProjectProgress = {
     START_DATE: 'Start date',
     END_DATE: 'End date',
     STATUS: 'Status',
+    PROJECT_TYPE: 'Project type'
 };
