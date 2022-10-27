@@ -446,7 +446,7 @@ export default function UserInfo() {
                                         </div>
                                         <div className="col-12 col-sm-6 d-block p-1">
                                             <InputLabel htmlFor="role" error={Boolean(errors.role)}>
-                                                {t('user.info.company')} <span className="input-required">*</span>
+                                                {t('user.info.role')} <span className="input-required">*</span>
                                             </InputLabel>
                                             <FormControl
                                                 size="small"
@@ -468,7 +468,7 @@ export default function UserInfo() {
                                                     })}
                                                 >
                                                     <MenuItem value="" disabled>
-                                                        <em>{t('user.search.selectCompanyName')}</em>
+                                                        <em>{t('user.search.selectRole')}</em>
                                                     </MenuItem>
                                                     {roles &&
                                                         roles.length > 0 &&
