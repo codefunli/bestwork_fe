@@ -16,9 +16,12 @@ import {
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
+import { StatusCode } from '../../core/constants/common';
 import { validateProjectProgress } from '../../core/constants/validate';
 import { currentDateTime } from '../../core/utils/get-current-datetime';
 import { ProjectProgressDTO } from '../../models/project-res-dto';
+import { createProgress } from '../../services/project-service';
 import ApiAlert from '../../shared-components/alert/api-alert';
 import MultipleFileUpload from '../../shared-components/file-upload/multiple-file-upload';
 
@@ -67,12 +70,21 @@ const ProgressCreate = (props: Props) => {
     const { isOpen, setIsOpen, toggleDrawer } = props;
     const { t } = useTranslation();
     const [progressData, setProgressData] = useState(progressInitValues);
-    const [imgData, setImgData] = useState([]);
     const [isClearPreview, setIsClearPreview] = useState(false);
     const [resForHandleMsg, setResForHandleMsg] = useState<any>();
     const [progressList, setProgressList] = useState<any>([]);
+    const params = useParams();
 
     const progressListFromLocal: any = localStorage.getItem('progressList');
+
+    useEffect(() => {
+        if (params.id) {
+            setProgressData({
+                ...progressData,
+                projectId: params.id,
+            });
+        }
+    }, [params.id]);
 
     useEffect(() => {
         const progressTmp: any = JSON.parse(progressListFromLocal);
@@ -92,7 +104,6 @@ const ProgressCreate = (props: Props) => {
         reset();
         setIsOpen(false);
         toggleDrawer(false);
-        setImgData([]);
         setIsClearPreview(true);
         setProgressData(progressInitValues);
     };
@@ -105,32 +116,31 @@ const ProgressCreate = (props: Props) => {
         });
     };
 
-    const handleSubmitForm = async () => {
-        // createProgress(progressData)
-        //     .then((res: any) => {
-        //         setResForHandleMsg({
-        //             status: res.status,
-        //             message: res.message,
-        //         });
-        //     })
-        //     .catch(() => {
-        //         setResForHandleMsg({
-        //             status: StatusCode.ERROR,
-        //             message: t('message.error'),
-        //         });
-        //     });
+    const handleImageChange = (data: any) => {
+        setProgressData({
+            ...progressData,
+            images: data,
+        });
+    };
 
-        localStorage.setItem(
-            'progressList',
-            JSON.stringify([
-                ...progressList,
-                {
-                    ...progressData,
-                    id: progressList.length + 1,
-                    images: imgData,
-                },
-            ]),
-        );
+    const handleSubmitForm = async () => {
+        createProgress({
+            ...progressData,
+            startDate: `${progressData.startDate}:000Z`,
+            endDate: `${progressData.endDate}:000Z`,
+        })
+            .then((res: any) => {
+                setResForHandleMsg({
+                    status: res.status,
+                    message: res.message,
+                });
+            })
+            .catch(() => {
+                setResForHandleMsg({
+                    status: StatusCode.ERROR,
+                    message: t('message.error'),
+                });
+            });
         handleClear();
     };
 
@@ -177,7 +187,7 @@ const ProgressCreate = (props: Props) => {
                         <Grid item xs={12} className="item">
                             <div className="item-header">{t('project.progress.progressImg')}</div>
                             <div className="content">
-                                <MultipleFileUpload clearPreview={isClearPreview} callbackFunc={setImgData} />
+                                <MultipleFileUpload clearPreview={isClearPreview} callbackFunc={handleImageChange} />
                             </div>
                         </Grid>
                         <Grid item xs={12} className="item">
@@ -326,9 +336,6 @@ const ProgressCreate = (props: Props) => {
                         </Grid>
                         <Grid item xs={12} sm={12} className="text-center" sx={{ mt: 1, mb: 1 }}>
                             <ButtonGroup disableElevation variant="contained" aria-label="Disabled elevation buttons">
-                                <Button onClick={handleClear} variant="outlined">
-                                    {t('button.btnCancel')}
-                                </Button>
                                 <Button
                                     variant="contained"
                                     color="primary"
@@ -336,6 +343,9 @@ const ProgressCreate = (props: Props) => {
                                     onClick={handleSubmit(handleSubmitForm)}
                                 >
                                     {t('button.btnCreate')}
+                                </Button>
+                                <Button onClick={handleClear} variant="outlined">
+                                    {t('button.btnCancel')}
                                 </Button>
                             </ButtonGroup>
                         </Grid>
