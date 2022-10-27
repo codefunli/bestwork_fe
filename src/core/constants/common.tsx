@@ -57,7 +57,7 @@ export const UrlServer = {
         GET_COMPANY_BY_ID: `${PREFIX_SERVER_URL}/companies`,
         UPDATE_COMPANY: `${PREFIX_SERVER_URL}/companies/update`,
         GET_COMPANIES_BY_USER: `${PREFIX_SERVER_URL}/users/companies`,
-        GET_ALL: `${PREFIX_SERVER_URL}/companies/all`
+        GET_ALL: `${PREFIX_SERVER_URL}/companies/all`,
     },
     USER: {
         USER: `${PREFIX_SERVER_URL}/users`,
@@ -77,7 +77,8 @@ export const UrlServer = {
         UPDATE_PROGRESS: `${PREFIX_SERVER_URL}/projects/update-progress`,
         GET_TYPE: `${PREFIX_SERVER_URL}/projects/types`,
         GET_STATUS: `${PREFIX_SERVER_URL}/projects/status`,
-        GET_USER_ASSIGN: `${PREFIX_SERVER_URL}/projects/assign-list`
+        GET_USER_ASSIGN: `${PREFIX_SERVER_URL}/projects/assign-list`,
+        GET_PROGRESS_BY_PROJECT_ID: `${PREFIX_SERVER_URL}/progress/by/project`,
     },
     ROLE: {
         GET: `${PREFIX_SERVER_URL}/roles`,
@@ -157,5 +158,5 @@ export const FieldProjectProgress = {
     START_DATE: 'Start date',
     END_DATE: 'End date',
     STATUS: 'Status',
-    PROJECT_TYPE: 'Project type'
+    PROJECT_TYPE: 'Project type',
 };

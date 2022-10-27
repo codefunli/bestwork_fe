@@ -57,4 +57,10 @@ export const getProjectStatus = async () => {
 export const getUsersAssignList = async (object: any) => {
     const res = await apiClient.post(`${UrlServer.PROJECT.GET_USER_ASSIGN}`, object);
     return res.data;
-}
+};
+export const getProgressByProjectId = async (projectId: any) => {
+    const res = await apiClient.get<PageableDataResSuccess<ProjectResDTO[]>>(
+        `${UrlServer.PROJECT.GET_PROGRESS_BY_PROJECT_ID}/${projectId}`,
+    );
+    return res.data;
+};
