@@ -59,12 +59,13 @@ export const UrlServer = {
         GET_COMPANIES_BY_USER: `${PREFIX_SERVER_URL}/users/companies`,
     },
     USER: {
-        USER: `${PREFIX_SERVER_URL}/user`,
+        USER: `${PREFIX_SERVER_URL}/users`,
         USERS: `${PREFIX_SERVER_URL}/users/list`,
         DELETE_USERS: `${PREFIX_SERVER_URL}/users/delete`,
         CREATE: `${PREFIX_SERVER_URL}/users/create`,
         IS_LOGINED: `${PREFIX_SERVER_URL}/users/isCheckLogin`,
         ROLES: `${PREFIX_SERVER_URL}/users/roles`,
+        UPDATE: `${PREFIX_SERVER_URL}/users/update`,
     },
     PROJECT: {
         GET: `${PREFIX_SERVER_URL}/projects/list`,

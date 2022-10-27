@@ -48,17 +48,17 @@ export const validateForm = yup.object({
 });
 
 export const validateUserForm = yup.object({
-    userNm: yup
+    userName: yup
         .string()
         .required(getMessage(ERROR_MSG.E01_001, [FieldConstants.USER_NAME]))
         .matches(pattern.userName, getMessage(ERROR_MSG.E01_005, [FieldConstants.USER_NAME])),
-    email: yup
+    uEmail: yup
         .string()
         .required(getMessage(ERROR_MSG.E01_001, [FieldConstants.EMAIL]))
         .matches(pattern.email, getMessage(ERROR_MSG.E01_008, [FieldConstants.EMAIL])),
-    firstNm: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.FIRST_NAME])),
-    lastNm: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.LAST_NAME])),
-    currentCompanyId: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.COMPANY_NAME])),
+    firstName: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.FIRST_NAME])),
+    lastName: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.LAST_NAME])),
+    company: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.COMPANY_NAME])),
 });
 
 export const validateCreateUserForm = yup.object({
