@@ -64,7 +64,7 @@
         "btnRegister": "Đăng kí",
         "btnSearch": "Tìm kiếm",
         "btnClear": "Xóa thông tin",
-        "btnSave": "Cập nhật",
+        "btnSave": "Lưu",
         "btnDelete": "Xóa",
         "btnNo": "Hủy",
         "btnOk": "Đồng ý",
@@ -102,6 +102,7 @@
         "wardLabel": "Chọn phường/xã",
         "status": "Trạng thái",
         "statusLabel": "Chọn trạng thái",
+        "typeLabel": "Chọn kiểu",
         "loginFailed": "Tài khoản và mật khẩu không chính xác",
         "accessDenied": "Từ chối truy cập, bạn không có quyền truy cập hệ thống",
         "deleteSuccess": "Xóa dữ liệu thành công"
@@ -199,6 +200,10 @@
         "title": "Tìm kiếm dự án",
         "registerTitle": "Tạo dự án",
         "editTitle": "Chỉnh sửa dự án",
+        "tab": {
+            "register": "Đăng ký dự án",
+            "assign": "Chỉ định người dùng"
+        },
         "search": {
             "title": "Tìm kiếm thông tin về dự án của bạn",
             "prjName": "Tên dự án",

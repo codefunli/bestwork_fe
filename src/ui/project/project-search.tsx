@@ -13,7 +13,7 @@ import {
     MenuItem,
     Select,
     TextField,
-    Typography,
+    Typography
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -53,7 +53,7 @@ export default function ProjectSearch() {
 
     useEffect(() => {
         getProjectStatus().then((status: any) => {
-            setProjectStatus(status);
+            if (status && status.data) setProjectStatus(status);
         });
     }, []);
 
@@ -295,7 +295,7 @@ export default function ProjectSearch() {
                                                                 {t('message.status')}
                                                             </em>
                                                         </MenuItem>
-                                                        {projectStatus.map((data: any, index: any) => {
+                                                        {(projectStatus && projectStatus.length > 0) && projectStatus.map((data: any, index: any) => {
                                                             return (
                                                                 <MenuItem
                                                                     key={data}

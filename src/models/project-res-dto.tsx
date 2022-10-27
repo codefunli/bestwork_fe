@@ -24,3 +24,9 @@ export interface ProjectProgressDTO {
     report: string;
     note: string;
 }
+
+export interface ProjectTypeDTO {
+    id: number;
+    name: string;
+    description: string;
+}
