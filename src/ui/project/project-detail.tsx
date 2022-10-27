@@ -85,14 +85,27 @@ export default function ProjectEdit() {
     };
 
     const renderStatusChip = (data: string) => {
-        return <Chip label={data} color="secondary" />;
+        switch (data) {
+            case 'Todo':
+                return <Chip label={data} color="secondary" />;
+            case 'In progress':
+                return <Chip label={data} color="primary" />;
+            case 'Pending':
+                return <Chip label={data} color="error" />;
+            case 'Review':
+                return <Chip label={data} color="info" />;
+            case 'Done':
+                return <Chip label={data} color="success" />;
+            default:
+                return data;
+        }
     };
 
     return (
         <div className="project-detail">
             <form>
                 <Grid container spacing={3} justifyContent="center">
-                    <Grid item xs={12} md={4} lg={4}>
+                    <Grid item lg={12} xl={4}>
                         <Card>
                             <CardActionArea>
                                 <CardMedia
@@ -134,7 +147,7 @@ export default function ProjectEdit() {
                             </CardActionArea>
                         </Card>
                     </Grid>
-                    <Grid item xs={12} md={4} lg={4}>
+                    <Grid item lg={12} xl={6}>
                         <Card style={{ width: '100%' }}>
                             <CardHeader
                                 avatar={<Avatar aria-label="recipe">PR</Avatar>}
@@ -158,7 +171,9 @@ export default function ProjectEdit() {
                                     <div key={index}>
                                         <TimelineItem>
                                             <TimelineOppositeContent color="textSecondary">
-                                                {progress.startDate.replace(/[TZ]/g, ' ')}
+                                                <div style={{ minWidth: '200px' }}>
+                                                    {progress.startDate.replace(/[TZ]/g, ' ')}
+                                                </div>
                                             </TimelineOppositeContent>
                                             <TimelineSeparator className="h-40">
                                                 <TimelineDot />
