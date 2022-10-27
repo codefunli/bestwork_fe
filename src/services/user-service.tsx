@@ -14,7 +14,7 @@ export const getUsers = async (object: any) => {
 };
 
 export const putUser = async (id: any, user: any) => {
-    const res = await apiClient.put<DataResSuccess<UserResDto[]>>(`${UrlServer.USER.USER}/${id}`, user);
+    const res = await apiClient.put<DataResSuccess<UserResDto[]>>(`${UrlServer.USER.UPDATE}/${id}`, user);
     return res.data;
 };
 
