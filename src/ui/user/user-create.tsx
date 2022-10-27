@@ -5,6 +5,7 @@ import {
     ButtonGroup,
     Card,
     CardContent,
+    CardHeader,
     FormControl,
     FormControlLabel,
     FormHelperText,
@@ -26,7 +27,7 @@ import { useNavigate } from 'react-router-dom';
 import { AlertColorConstants, DefaultImage, UrlFeApp } from '../../core/constants/common';
 import { validateCreateUserForm } from '../../core/constants/validate';
 import { getCompaniesByUser } from '../../services/company-service';
-import { createUsers } from '../../services/user-service';
+import { createUsers, getRoles } from '../../services/user-service';
 import FileUpload from '../../shared-components/file-upload/file-upload';
 import MessageShow from '../../shared-components/message/message';
 import './user.scss';
@@ -38,9 +39,13 @@ const initialValues: any = {
     lastName: '',
     uEmail: '',
     uTelNo: '',
-    company: '',
+    company: {
+        id: '',
+    },
     enabled: 1,
-    role: '3',
+    role: {
+        id: '',
+    },
     avatar: '',
 };
 
@@ -53,6 +58,7 @@ export default function UserAdd() {
     const [userMsg, setUserMsg] = useState('');
     const [userMsgType, setUserMsgType] = useState<AlertColor>(AlertColorConstants.SUCCESS);
     const [isShowMsg, setIsShowMsg] = useState(false);
+    const [roles, setRoles] = useState([]);
 
     const {
         register,
@@ -73,6 +79,12 @@ export default function UserAdd() {
         fetchCompanies();
     }, []);
 
+    useEffect(() => {
+        getRoles().then((data: any) => {
+            setRoles(data);
+        });
+    }, []);
+
     const handleClearForm = () => {
         setFormValues(initialValues);
         reset();
@@ -86,10 +98,26 @@ export default function UserAdd() {
 
     const handleInputChange = (e: any) => {
         const { name, value } = e.target;
-        setFormValues({
-            ...formValues,
-            [name]: value,
-        });
+        if (name === 'role') {
+            setFormValues({
+                ...formValues,
+                [name]: {
+                    id: value,
+                },
+            });
+        } else if (name === 'company') {
+            setFormValues({
+                ...formValues,
+                [name]: {
+                    id: value,
+                },
+            });
+        } else {
+            setFormValues({
+                ...formValues,
+                [name]: value,
+            });
+        }
     };
 
     const handleSwitchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -134,6 +162,10 @@ export default function UserAdd() {
         setIsShowMsg(false);
     };
 
+    const handleCancelChange = () => {
+        navigate(`${UrlFeApp.USER.SEARCH}`);
+    };
+
     return (
         <div className="user-info">
             <div className="row">
@@ -160,6 +192,14 @@ export default function UserAdd() {
                     </Grid>
                     <Grid item xs={12} md={7} lg={9} sx={{ mt: 1, mb: 1 }}>
                         <Card>
+                            <CardHeader
+                                action={
+                                    <Button onClick={handleClearForm} variant="outlined">
+                                        {t('button.btnClear')}
+                                    </Button>
+                                }
+                            ></CardHeader>
+
                             <CardContent>
                                 <Box
                                     component="form"
@@ -337,7 +377,7 @@ export default function UserAdd() {
                                                 error
                                             >
                                                 <Select
-                                                    value={formValues.company}
+                                                    value={formValues.company.id}
                                                     displayEmpty
                                                     sx={{
                                                         '& legend': { display: 'none' },
@@ -349,7 +389,9 @@ export default function UserAdd() {
                                                     })}
                                                 >
                                                     <MenuItem value="" selected={true} disabled>
-                                                        <em>{t('user.search.selectCompanyName')}</em>
+                                                        <em style={{ color: '#bdbdbd', margin: '0 auto' }}>
+                                                            {t('user.search.selectCompanyName')}
+                                                        </em>
                                                     </MenuItem>
                                                     {companies &&
                                                         companies.length > 0 &&
@@ -366,6 +408,51 @@ export default function UserAdd() {
                                                 )}
                                             </FormControl>
                                         </div>
+                                        <div className="col-12 col-sm-6 d-block p-1">
+                                            <InputLabel htmlFor="role" error={Boolean(errors.role)}>
+                                                {t('user.info.role')} <span className="input-required">*</span>
+                                            </InputLabel>
+                                            <FormControl
+                                                size="small"
+                                                fullWidth
+                                                sx={{ mt: 1, mb: 1 }}
+                                                variant="outlined"
+                                                error
+                                            >
+                                                <Select
+                                                    value={formValues.role.id}
+                                                    displayEmpty
+                                                    sx={{
+                                                        '& legend': { display: 'none' },
+                                                        '& fieldset': { top: 0 },
+                                                    }}
+                                                    error={Boolean(errors.role)}
+                                                    {...register('role', {
+                                                        onChange: (e) => handleInputChange(e),
+                                                    })}
+                                                >
+                                                    <MenuItem value="" disabled>
+                                                        <em style={{ color: '#bdbdbd', margin: '0 auto' }}>
+                                                            {t('user.search.selectRole')}
+                                                        </em>
+                                                    </MenuItem>
+                                                    {roles &&
+                                                        roles.length > 0 &&
+                                                        roles.map((role: any) => {
+                                                            return (
+                                                                <MenuItem value={role.id} selected={true}>
+                                                                    <em>{role.roleName}</em>
+                                                                </MenuItem>
+                                                            );
+                                                        })}
+                                                </Select>
+                                                {Boolean(errors.role) && (
+                                                    <FormHelperText id="component-error-text">
+                                                        {errors?.role?.message as string}
+                                                    </FormHelperText>
+                                                )}
+                                            </FormControl>
+                                        </div>
                                     </div>
                                     <div className="row justify-center m-1">
                                         <div className="col-12 col-sm-6 d-block p-1">
@@ -375,31 +462,6 @@ export default function UserAdd() {
                                                 name="enabled"
                                                 onChange={handleSwitchChange}
                                             />
-                                        </div>
-                                        <div className="col-12 col-sm-6 d-block p-1">
-                                            <InputLabel htmlFor="role">
-                                                {t('user.info.role')} <span className="input-required">*</span>
-                                            </InputLabel>
-                                            <RadioGroup
-                                                row
-                                                aria-label="role"
-                                                value={formValues.role}
-                                                defaultValue="3"
-                                                {...register('role', {
-                                                    onChange: (e) => handleInputChange(e),
-                                                })}
-                                            >
-                                                <FormControlLabel
-                                                    value="2"
-                                                    control={<Radio color="primary" />}
-                                                    label={t('radio.admin')}
-                                                />
-                                                <FormControlLabel
-                                                    value="3"
-                                                    control={<Radio color="primary" />}
-                                                    label={t('radio.user')}
-                                                />
-                                            </RadioGroup>
                                         </div>
                                     </div>
                                     <div className="text-center justify-center mt-4">
@@ -417,8 +479,8 @@ export default function UserAdd() {
                                             >
                                                 {t('button.btnCreate')}
                                             </Button>
-                                            <Button onClick={handleClearForm} variant="outlined">
-                                                {t('button.btnClear')}
+                                            <Button onClick={handleCancelChange} variant="outlined">
+                                                {t('button.btnBack')}
                                             </Button>
                                         </ButtonGroup>
                                     </div>
