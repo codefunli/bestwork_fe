@@ -65,6 +65,8 @@ export const UrlServer = {
         DELETE_USERS: `${PREFIX_SERVER_URL}/users/delete`,
         CREATE: `${PREFIX_SERVER_URL}/users/create`,
         IS_LOGINED: `${PREFIX_SERVER_URL}/users/isCheckLogin`,
+        FORGOT_PASSWORD: `${PREFIX_SERVER_URL}/auth/forgot_password`,
+        RESET_PASSWORD: `${PREFIX_SERVER_URL}/auth/reset_password`,
         ROLES: `${PREFIX_SERVER_URL}/users/roles`,
         UPDATE: `${PREFIX_SERVER_URL}/users/update`,
     },

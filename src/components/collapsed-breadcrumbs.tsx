@@ -12,10 +12,10 @@ const CollapsedBreadcrumbs = () => {
         .filter((x) => x)
         .splice(1);
     const { t } = useTranslation();
-    const lastChar = pathNames[pathNames.length -1];
-    if(!isNaN(+lastChar)){
-        pathNames.pop();
-    }
+    const lastChar = pathNames[pathNames.length - 1];
+    const lastCharArr = lastChar.split('');
+    if (!isNaN(+lastChar)) pathNames.pop();
+    if (!isNaN(+lastCharArr[lastCharArr.length - 1])) pathNames.pop();
 
     return (
         <div role="presentation" className="d-none d-lg-block">
