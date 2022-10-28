@@ -17,9 +17,10 @@ import {
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Comment } from '../../core/types/base';
-import { getPostByProjectId } from '../../services/material-service';
+import { getPostByPostId, getPostByProjectId, postComment } from '../../services/material-service';
 import CommentEl from '../../shared-components/comment/comment';
 import ImageManager from '../../shared-components/images-manager/image-manager';
+import EditMaterialModal from '../../shared-components/modal/edit-material-modal';
 import ImageUploadDialog from '../../shared-components/modal/image-upload-dialog';
 
 const initialDataImg = {
@@ -47,10 +48,12 @@ const initialDataImg = {
     },
 };
 export default function MaterialSchedule() {
-    const [isOpenModal, setIsOpenModal] = useState(false);
+    const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);
+    const [isOpenEditModal, setIsOpenEditModal] = useState(false);
     const [imagesData, setImagesData] = useState<any>([]);
     const [arrMsg, setArrMsg] = useState<Comment[]>([]);
-    const [content, setContent] = useState(initialDataImg);
+    const [contentCreate, setContentCreate] = useState(initialDataImg);
+    const [contentEdit, setContentEdit] = useState<any>({});
     const params = useParams();
 
     useEffect(() => {
@@ -59,43 +62,14 @@ export default function MaterialSchedule() {
 
     const fetchData = () => {
         if (params.id) {
-            setContent({
-                ...content,
+            setContentCreate({
+                ...contentCreate,
                 projectId: params.id,
             });
+
             getPostByProjectId(params.id).then((posts) => {
                 const convertData = posts.map((post: any) => {
                     post.isShowSubComment = false;
-                    post.comment = JSON.stringify([
-                        {
-                            id: '85d14a15-836c-4e30-af5f-869b408e044c',
-                            postId: '995d3dfd-a27e-4e5e-8824-2cf40e232d02',
-                            commentUser: {
-                                id: 0,
-                                name: 'Quách Tĩnh',
-                                avatar: 'https://asset-a.grid.id/crop/0x0:0x0/945x630/photo/grid/original/145453_hermione-granger.JPG',
-                            },
-                            comment: 'hallo',
-                            dateTime: '2022-10-24T07:21',
-                            isLastSub: false,
-                            subComment: [],
-                            isOpenComment: false,
-                        },
-                        {
-                            id: '2e931741-99fc-4997-9054-9eb0487e6cb8',
-                            postId: '995d3dfd-a27e-4e5e-8824-2cf40e232d02',
-                            commentUser: {
-                                id: 0,
-                                name: 'Quách Tĩnh',
-                                avatar: 'https://asset-a.grid.id/crop/0x0:0x0/945x630/photo/grid/original/145453_hermione-granger.JPG',
-                            },
-                            comment: 'asd',
-                            dateTime: '2022-10-24T07:22',
-                            isLastSub: false,
-                            subComment: [],
-                            isOpenComment: false,
-                        },
-                    ]);
                     if (post.comment) {
                         post.comment = JSON.parse(post.comment);
                     } else {
@@ -124,16 +98,18 @@ export default function MaterialSchedule() {
     };
 
     const closeModal = () => {
-        setIsOpenModal(false);
+        setIsOpenCreateModal(false);
+        setIsOpenEditModal(false);
     };
 
     const openModal = () => {
-        setIsOpenModal(true);
+        setIsOpenCreateModal(true);
     };
 
     const alertOkFunc = () => {
         fetchData();
-        setIsOpenModal(false);
+        setIsOpenCreateModal(false);
+        setIsOpenEditModal(false);
     };
 
     useEffect(() => {
@@ -145,9 +121,13 @@ export default function MaterialSchedule() {
     }, [arrMsg]);
 
     const handleEditImage = (data: any) => {
-        console.log(data);
-
-        setIsOpenModal(true);
+        setContentEdit(() => {
+            return {
+                projectId: params.id,
+                postId: data.id,
+            };
+        });
+        setIsOpenEditModal(() => true);
     };
     return (
         <div>
@@ -214,20 +194,34 @@ export default function MaterialSchedule() {
                                 </Card>
                             </div>
                             <div>
-                                <CommentEl arrMsg={data.comment} pId={data.id} isEnabled={data.isOpenComment} />
+                                <CommentEl
+                                    arrMsg={data.comment}
+                                    pId={data.id}
+                                    isEnabled={data.isOpenComment}
+                                    projectId={params.id}
+                                />
                             </div>
                         </Grid>
                     </Grid>
                 ))}
             <ImageUploadDialog
-                isOpen={isOpenModal}
+                isOpen={isOpenCreateModal}
                 closeFunc={closeModal}
                 okFunc={alertOkFunc}
                 title="Upload image for material products"
-                content={content}
+                content={contentCreate}
                 noBtn="NO"
                 okBtn="OK"
             />
+            <EditMaterialModal
+                isOpen={isOpenEditModal}
+                closeFunc={closeModal}
+                okFunc={alertOkFunc}
+                title="Edit for material products"
+                content={contentEdit}
+                noBtn="NO"
+                okBtn="OK"
+            ></EditMaterialModal>
         </div>
     );
 }

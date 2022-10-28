@@ -7,15 +7,17 @@ import CommentLeft from './comment-left';
 import { STR_EMPTY } from '../../core/utils/object-utils';
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
 import { v4 as uuidv4 } from 'uuid';
+import { postComment } from '../../services/material-service';
 
 interface CommentProps {
     arrMsg: Comment[];
     isEnabled: boolean;
     pId: string;
+    projectId: any;
 }
 
 export default function CommentEl(props: CommentProps) {
-    const { arrMsg, isEnabled, pId } = props;
+    const { arrMsg, isEnabled, pId, projectId } = props;
     const [arrMsgIn, setArrMsgIn] = useState<Comment[]>(arrMsg);
     const [newMsg, setNewMsg] = useState('');
     const [replyLabel, setReplyLabel] = useState('');
@@ -26,6 +28,13 @@ export default function CommentEl(props: CommentProps) {
         setReplyLabel(replyLabel);
         setCurrentId(id);
         setType('REPLY');
+    };
+
+    const doEditLabel = (editLabel: string, id: string, comment: string) => {
+        setReplyLabel(editLabel);
+        setCurrentId(id);
+        setType('EDIT');
+        setNewMsg(comment);
     };
 
     const handleInputChange = (e: any) => {
@@ -49,7 +58,7 @@ export default function CommentEl(props: CommentProps) {
                         avatar: 'https://i.pinimg.com/474x/dc/fb/42/dcfb427e747a56047d46df17d621ed4b.jpg',
                     },
                     comment: newMsg,
-                    dateTime: new Date().toISOString().substring(0, 16),
+                    dateTime: `${new Date().toISOString()}`,
                     isLastSub: false,
                     subComment: [],
                 });
@@ -64,7 +73,7 @@ export default function CommentEl(props: CommentProps) {
                                 avatar: 'https://i.pinimg.com/474x/dc/fb/42/dcfb427e747a56047d46df17d621ed4b.jpg',
                             },
                             comment: newMsg,
-                            dateTime: new Date().toISOString().substring(0, 16),
+                            dateTime: `${new Date().toISOString()}`,
                             isLastSub: false,
                             subComment: [],
                         });
@@ -80,7 +89,7 @@ export default function CommentEl(props: CommentProps) {
                                         avatar: 'https://saostyle.vn/wp-content/uploads/2020/10/Hermione-Granger-Emma-Watson.jpg',
                                     },
                                     comment: newMsg,
-                                    dateTime: new Date().toISOString().substring(0, 16),
+                                    dateTime: `${new Date().toISOString()}`,
                                     isLastSub: true,
                                     subComment: [],
                                 });
@@ -89,25 +98,48 @@ export default function CommentEl(props: CommentProps) {
                         });
                     }
                 });
+            } else if ('EDIT' === type) {
+                arrMsgIn.map((cmt) => {
+                    if (cmt.id === currentId) {
+                        cmt.comment = newMsg;
+                    } else {
+                        cmt.subComment.map((subCmt: any) => {
+                            if (subCmt.id === currentId) {
+                                subCmt.comment = newMsg;
+                            } else {
+                                subCmt.subComment.map((subSubCmt: any) => {
+                                    if (subSubCmt.id === currentId) {
+                                        subSubCmt.comment = newMsg;
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
             }
         }
+
         handleClear();
         setNewMsg(STR_EMPTY);
-        setArrMsgIn(arrMsgIn);
 
         const repObj = {
-            postId: pId,
             comment: JSON.stringify(arrMsgIn),
         };
 
-        console.log(repObj);
+        setArrMsgIn((prev) => {
+            return [...prev];
+        });
+
+        postComment(pId, projectId, repObj).then((data: any) => {});
     };
 
     return (
         <div className="mb-2">
             <div className={` msg-wrapper-scroll pt-1 ${isEnabled && arrMsgIn.length > 0 ? 'msg-height-15rem' : ''}`}>
                 {isEnabled &&
-                    arrMsgIn.map((item: any) => <CommentLeft key={item.id} msg={item} reply={doReplyLabel} />)}
+                    arrMsgIn.map((item: any) => {
+                        return <CommentLeft key={item.id} msg={item} reply={doReplyLabel} edit={doEditLabel} />;
+                    })}
             </div>
             <div>
                 {isEnabled && (
