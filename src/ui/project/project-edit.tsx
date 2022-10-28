@@ -1,14 +1,14 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import {
     AlertColor,
-    Avatar,
     Box,
     Button,
+    ButtonGroup,
     Card,
     CardContent,
-    CardHeader,
-    Divider,
     FormControl,
     FormControlLabel,
+    FormHelperText,
     FormLabel,
     Grid,
     InputLabel,
@@ -16,86 +16,102 @@ import {
     Radio,
     RadioGroup,
     Select,
+    Tab,
+    Tabs,
     TextField,
-    Typography,
+    Typography
 } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import { AlertColorConstants, StatusCode, UrlFeApp } from '../../core/constants/common';
-import { validateProjectEditForm } from '../../core/constants/validate';
-import { getProject, updateProject } from '../../services/project-service';
-import MessageShow from '../../shared-components/message/message';
+import { StatusCode, UrlFeApp } from '../../core/constants/common';
+import { validateProjectRegisterForm } from '../../core/constants/validate';
+import { isArrayEmpty, isObjectEmpty } from '../../core/utils/object-utils';
+import { Company } from '../../models/project-req-dto';
+import { ProjectTypeDTO } from '../../models/project-res-dto';
+import { getAllCompanies } from '../../services/company-service';
+import { getProject, getProjectStatus, getProjectTypes, updateProject, getUsersAssignListUpdate } from '../../services/project-service';
+import ApiAlert from '../../shared-components/alert/api-alert';
+import TabPanel from '../../shared-components/tab-manager/tab-panel';
+import Role from './project-role';
 
-const currentDateTime = new Date().toISOString().substring(0, 11).concat(new Date().toLocaleTimeString());
-
-const initialValues = {
+const initialValues: any = {
     project: {
         projectName: '',
         projectType: '',
         description: '',
         comment: '',
-        updateDate: currentDateTime,
+        createDate: '',
         notificationFlag: true,
         isPaid: false,
         status: '',
     },
 };
 
-const statusValues = [
-    {
-        name: 'Cancel',
-        value: '0',
-    },
-    {
-        name: 'Processing',
-        value: '1',
-    },
-    {
-        name: 'Done and waiting for checking',
-        value: '2',
-    },
-    {
-        name: 'Checked and waiting for payment',
-        value: '3',
-    },
-];
-
-const projectType = [
-    {
-        name: 'Type 1',
-        value: '0',
-    },
-    {
-        name: 'Type 2',
-        value: '1',
-    },
-];
-
-export default function ProjectEdit() {
-    const [formValues, setFormValues] = useState(initialValues);
-    const [isShowMessage, setIsShowMessage] = useState(false);
-    const [companyMsg, setCompanyMsg] = useState('');
-    const [typeCompanyMsg, setTypeCompanyMsg] = useState<AlertColor>('success');
-    const navigate = useNavigate();
+export default function ProjectRegister() {
     const { t } = useTranslation();
     const params = useParams();
+    const navigate = useNavigate();
+    const [formValues, setFormValues] = useState(initialValues);
+    const [value, setValue] = useState(0);
+    const [roleData, setRoleData] = useState<Company[]>([]);
+    const [projectStatus, setProjectStatus] = useState<any>([]);
+    const [projectType, setProjectType] = useState<ProjectTypeDTO[]>([]);
+    const [companyList, setCompanyList] = useState<any>([]);
+    const [resForHandleMsg, setResForHandleMsg] = useState<any>();
 
     useEffect(() => {
-        if (params.id != undefined) {
+        if (params.id) {
             getProject(params.id).then((value: any) => {
-                if (value != undefined && value.data != undefined) {
-                    const project = {
-                        ...value.data,
-                    };
-                    setFormValues({ project });
-                }
-                reset();
+                if (value && value.data) {
+                    setFormValues({
+                        project: {
+                            ...value.data,
+                            projectType: value.data.projectType.id,
+                            createDate: new Date(value.data.createDate).toISOString().substring(0, 16)
+                        }
+                    });
+                    reset();
+                };
             });
-        }
+
+            getUsersAssignListUpdate({
+                companyId: "",
+                projectId: params.id,
+            }).then(res => {
+                const companyIdRoleDataList: any = Object.keys(res.data);
+                const companyValueRoleDataList: any = Object.values(res.data);
+
+                let tmpRoleData: any = [];
+
+                companyIdRoleDataList.map((companyId: any, index: number) => {
+                    if (companyValueRoleDataList[index][0].companyId.toString() === companyId.toString()) {
+                        tmpRoleData.push({
+                            companyId: companyId,
+                            userList: companyValueRoleDataList[index]
+                        });
+                    };
+                });
+
+                setRoleData(tmpRoleData);
+            });
+        };
     }, [params.id]);
+
+    useEffect(() => {
+        getProjectStatus().then(status => {
+            if (status && status.data) setProjectStatus(status.data);
+        });
+
+        getProjectTypes().then((type: any) => {
+            if (type) setProjectType(type);
+        });
+
+        getAllCompanies().then(companies => {
+            if (companies && companies.data) setCompanyList(companies?.data);
+        });
+    }, []);
 
     const {
         register,
@@ -103,7 +119,7 @@ export default function ProjectEdit() {
         reset,
         formState: { errors },
     } = useForm({
-        resolver: yupResolver(validateProjectEditForm),
+        resolver: yupResolver(validateProjectRegisterForm),
     });
 
     const handleInputChange = (event: any) => {
@@ -117,13 +133,19 @@ export default function ProjectEdit() {
         });
     };
 
+    useEffect(() => {
+        if (Object.keys(errors).length > 0) {
+            setValue(0);
+        }
+    }, [errors]);
+
     const handleIsPaidChange = (event: any) => {
         const { name, value } = event.target;
         setFormValues({
             ...formValues,
             project: {
                 ...formValues.project,
-                [name]: !formValues.project.isPaid,
+                [name]: value,
             },
         });
     };
@@ -134,353 +156,409 @@ export default function ProjectEdit() {
             ...formValues,
             project: {
                 ...formValues.project,
-                [name]: !formValues.project.notificationFlag,
+                [name]: value,
             },
         });
     };
 
-    const handleClearCompany = () => {
-        setFormValues({
+    const handleBack = () => {
+        navigate(UrlFeApp.PROJECT.SEARCH);
+    };
+
+    const handleSubmitForm = async (event: any) => {
+        let req: any = {
             ...formValues,
-            project: initialValues.project,
-        });
-        reset();
-    };
+            project: {
+                ...formValues.project,
+                createDate: (new Date(formValues.project.createDate)).toISOString().replaceAll('.', ':')
+            },
+        };
 
-    const handleMessage = (showMsg: boolean, msg: string, type: AlertColor) => {
-        setIsShowMessage(showMsg);
-        setCompanyMsg(msg);
-        setTypeCompanyMsg(type);
-    };
+        if (!isObjectEmpty(roleData) && !isArrayEmpty(roleData)) {
+            const reFormatRoleData = await roleData.map((role: any) => {
+                const reFormatUserList = role.userList.map((user: any) => {
+                    return {
+                        userId: user.userId,
+                        canView: user.canView,
+                        canEdit: user.canEdit
+                    };
+                });
 
-    const handleResponse = (resp: any) => {
-        switch (resp.status) {
-            case StatusCode.OK:
-                handleMessage(true, resp.message, AlertColorConstants.SUCCESS);
+                return {
+                    companyId: role.companyId,
+                    userList: reFormatUserList
+                };
+            });
+
+            req.roleData = reFormatRoleData;
+        };
+
+        await updateProject(req, params.id)
+            .then((res) => {
+                setResForHandleMsg({
+                    status: res.status,
+                    message: res.message,
+                });
+
                 navigate(UrlFeApp.PROJECT.SEARCH);
-                break;
-            case StatusCode:
-                handleMessage(true, resp.message, AlertColorConstants.ERROR);
-                break;
-            default:
-                handleMessage(true, resp.message, AlertColorConstants.WARNING);
-                break;
-        }
-    };
-
-    const handleSubmitForm = (event: any) => {
-        updateProject(formValues)
-            .then((resp: any) => {
-                handleResponse(resp);
             })
             .catch(() => {
-                handleMessage(true, t('message.error'), AlertColorConstants.ERROR);
+                setResForHandleMsg({
+                    status: StatusCode.ERROR,
+                    message: t('message.error'),
+                });
             });
     };
 
-    const handleCloseMsg = () => {
-        setIsShowMessage(false);
+    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+        setValue(newValue);
     };
 
     return (
         <div className="project">
-            <form onSubmit={handleSubmitForm}>
-                <Typography
-                    variant="h5"
-                    className="mb-4"
-                    color="textSecondary"
-                    gutterBottom
-                    sx={{ textTransform: 'uppercase' }}
-                >
-                    {t('project.editTitle')}
-                    <Divider />
-                </Typography>
-                <Grid container>
-                    <Card style={{ width: '100%' }}>
-                        <Grid container spacing={3}>
-                            <Grid item xs={12}>
-                                <CardHeader
-                                    avatar={<Avatar aria-label="recipe">C</Avatar>}
-                                    title={t('project.edit.title')}
-                                    subheader={new Date().toLocaleDateString()}
-                                    action={
-                                        <Button variant="outlined" onClick={handleClearCompany}>
-                                            {t('button.btnClear')}
-                                        </Button>
-                                    }
-                                />
-                                <CardContent>
-                                    <Box
-                                        component="form"
-                                        sx={{
-                                            '& > :not(style)': { m: 1 },
-                                        }}
-                                        noValidate
-                                        autoComplete="off"
-                                    >
-                                        <div className="row justify-center m-1">
-                                            <div className="col-12 col-sm-6 d-block p-1">
-                                                <InputLabel
-                                                    htmlFor="outlined-adornment-amount"
-                                                    error={Boolean(errors.projectName)}
-                                                >
-                                                    {t('project.register.name')}{' '}
-                                                    <span className="input-required">*</span>
-                                                </InputLabel>
-                                                <TextField
-                                                    size="small"
-                                                    value={formValues.project.projectName}
-                                                    fullWidth
-                                                    required
-                                                    sx={{
-                                                        mt: 1,
-                                                        mb: 1,
-                                                        '& legend': { display: 'none' },
-                                                        '& fieldset': { top: 0 },
-                                                    }}
-                                                    label=""
-                                                    id="outlined-required"
-                                                    placeholder={t('common.placeholder')}
-                                                    error={Boolean(errors.projectName)}
-                                                    helperText={t(errors.projectName?.message?.toString() as string)}
-                                                    {...register('projectName', {
-                                                        onChange: (e) => handleInputChange(e),
-                                                    })}
-                                                />
-                                            </div>
-                                            <div className="col-12 col-sm-6 d-block p-1">
-                                                <InputLabel
-                                                    htmlFor="outlined-adornment-amount"
-                                                    error={Boolean(errors.comment)}
-                                                >
-                                                    {t('project.register.comment')}
-                                                </InputLabel>
-                                                <TextField
-                                                    size="small"
-                                                    value={formValues.project.comment}
-                                                    fullWidth
-                                                    required
-                                                    id="outlined-required"
-                                                    sx={{
-                                                        mt: 1,
-                                                        mb: 1,
-                                                        '& legend': { display: 'none' },
-                                                        '& fieldset': { top: 0 },
-                                                    }}
-                                                    label=""
-                                                    placeholder={t('common.placeholder')}
-                                                    error={Boolean(errors.comment)}
-                                                    helperText={errors.comment?.message?.toString()}
-                                                    {...register('comment', {
-                                                        onChange: (e) => handleInputChange(e),
-                                                    })}
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="row justify-center m-1">
-                                            <div className="col-12 col-sm-6 d-block p-1">
-                                                <InputLabel
-                                                    htmlFor="outlined-adornment-amount"
-                                                    error={Boolean(errors.description)}
-                                                >
-                                                    {t('project.register.description')}
-                                                </InputLabel>
-                                                <TextField
-                                                    size="small"
-                                                    value={formValues.project.description}
-                                                    fullWidth
-                                                    required
-                                                    sx={{
-                                                        mt: 1,
-                                                        mb: 1,
-                                                        '& legend': { display: 'none' },
-                                                        '& fieldset': { top: 0 },
-                                                    }}
-                                                    label=""
-                                                    id="outlined-required"
-                                                    placeholder={t('common.placeholder')}
-                                                    error={Boolean(errors.description)}
-                                                    helperText={t(errors.description?.message?.toString() as string)}
-                                                    {...register('description', {
-                                                        onChange: (e) => handleInputChange(e),
-                                                    })}
-                                                />
-                                            </div>
-                                            <div className="col-12 col-sm-6 p-1" style={{ padding: 0 }}>
-                                                <InputLabel
-                                                    htmlFor="outlined-adornment-amount"
-                                                    error={Boolean(errors.updateDate)}
-                                                >
-                                                    {t('project.edit.updateDate')}{' '}
-                                                    <span className="input-required">*</span>
-                                                </InputLabel>
-                                                <TextField
-                                                    fullWidth
-                                                    sx={{
-                                                        mt: 1,
-                                                        mb: 1,
-                                                        '& legend': { display: 'none' },
-                                                        '& fieldset': { top: 0 },
-                                                        '& input': { padding: '8.5px 14px' },
-                                                    }}
-                                                    value={formValues.project.updateDate}
-                                                    id="dateEnd"
-                                                    type="datetime-local"
-                                                    InputLabelProps={{
-                                                        shrink: true,
-                                                    }}
-                                                    error={Boolean(errors.updateDate)}
-                                                    helperText={t(errors.updateDate?.message?.toString() as string)}
-                                                    {...register('updateDate', {
-                                                        onChange: (e) => handleInputChange(e),
-                                                    })}
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="row justify-center m-1">
-                                            <div className="col-12 col-sm-6 d-block p-1">
-                                                <InputLabel id="demo-simple-select-outlined-label">
-                                                    {t('project.register.status')}{' '}
-                                                    <span className="input-required">*</span>
-                                                </InputLabel>
-                                                <FormControl
-                                                    size="small"
-                                                    fullWidth
-                                                    sx={{
-                                                        mt: 1,
-                                                        mb: 1,
-                                                        '& legend': { display: 'none' },
-                                                        '& fieldset': { top: 0 },
-                                                    }}
-                                                    variant="outlined"
-                                                >
-                                                    <Select
-                                                        labelId="demo-simple-select-outlined-label"
-                                                        id="demo-simple-select-outlined"
-                                                        name="status"
-                                                        displayEmpty
-                                                        value={formValues.project.status}
-                                                        onChange={handleInputChange}
-                                                    >
-                                                        <MenuItem value="" selected={true} disabled>
-                                                            <em>{t('message.statusLabel')}</em>
-                                                        </MenuItem>
-                                                        {statusValues.map((s) => (
-                                                            <MenuItem value={s.value}>{s.name}</MenuItem>
-                                                        ))}
-                                                    </Select>
-                                                </FormControl>
-                                            </div>
-                                            <div className="col-12 col-sm-6 d-block p-1">
-                                                <InputLabel id="demo-simple-select-outlined-label">
-                                                    {t('project.register.type')}{' '}
-                                                    <span className="input-required">*</span>
-                                                </InputLabel>
-                                                <FormControl
-                                                    size="small"
-                                                    fullWidth
-                                                    sx={{
-                                                        mt: 1,
-                                                        mb: 1,
-                                                        '& legend': { display: 'none' },
-                                                        '& fieldset': { top: 0 },
-                                                    }}
-                                                    variant="outlined"
-                                                >
-                                                    <Select
-                                                        labelId="demo-simple-select-outlined-label"
-                                                        id="demo-simple-select-outlined"
-                                                        name="projectType"
-                                                        displayEmpty
-                                                        value={formValues.project.projectType}
-                                                        onChange={handleInputChange}
-                                                    >
-                                                        <MenuItem value="" selected={true} disabled>
-                                                            <em>{t('message.statusLabel')}</em>
-                                                        </MenuItem>
-                                                        {projectType.map((s) => (
-                                                            <MenuItem value={s.value}>{s.name}</MenuItem>
-                                                        ))}
-                                                    </Select>
-                                                </FormControl>
-                                            </div>
-                                        </div>
-                                        <div className="row justify-center m-1">
-                                            <div className="col-12 col-sm-6 d-block p-1 mt-3">
-                                                <div className="row justify-center m-1">
-                                                    <div className="col-12 col-md-6 d-block">
-                                                        <FormControl component="fieldset">
-                                                            <FormLabel component="legend">
-                                                                {t('project.register.notificationFlag')}
-                                                            </FormLabel>
-                                                            <RadioGroup
-                                                                row
-                                                                aria-label="notificationFlag"
-                                                                name="notificationFlag"
-                                                                value={formValues.project.notificationFlag}
-                                                                onChange={handleNotificationFlagChange}
-                                                                defaultValue="1"
-                                                            >
-                                                                <FormControlLabel
-                                                                    value="true"
-                                                                    control={<Radio color="primary" />}
-                                                                    label={t('radio.accept')}
-                                                                />
-                                                                <FormControlLabel
-                                                                    value="false"
-                                                                    control={<Radio color="primary" />}
-                                                                    label={t('radio.deny')}
-                                                                />
-                                                            </RadioGroup>
-                                                        </FormControl>
-                                                    </div>
-                                                    <div className="col-12 col-md-6 d-block">
-                                                        <FormControl component="fieldset">
-                                                            <FormLabel component="legend">
-                                                                {t('project.register.isPaid')}
-                                                            </FormLabel>
-                                                            <RadioGroup
-                                                                row
-                                                                aria-label="isPaid"
-                                                                name="isPaid"
-                                                                value={formValues.project.isPaid}
-                                                                onChange={handleIsPaidChange}
-                                                                defaultValue="1"
-                                                            >
-                                                                <FormControlLabel
-                                                                    value="true"
-                                                                    control={<Radio color="primary" />}
-                                                                    label={t('radio.paid')}
-                                                                />
-                                                                <FormControlLabel
-                                                                    value="false"
-                                                                    control={<Radio color="primary" />}
-                                                                    label={t('radio.unPaid')}
-                                                                />
-                                                            </RadioGroup>
-                                                        </FormControl>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </Box>
-                                </CardContent>
-                            </Grid>
-                        </Grid>
-                    </Card>
-                    <Grid item xs={12} sm={12} className="text-center" marginTop={3}>
-                        <Button variant="contained" color="primary" onClick={handleSubmit(handleSubmitForm)}>
-                            {t('button.btnSave')}
-                        </Button>
-                    </Grid>
+            <Grid container direction="row" spacing={3} className="project-register">
+                <Grid item xs={12} sx={{ mt: 1 }}>
+                    <div className="row">
+                        <div className="col-12">
+                            <Typography
+                                variant="h5"
+                                color="textSecondary"
+                                gutterBottom
+                                sx={{ textTransform: 'uppercase' }}
+                            >
+                                {t('project.registerTitle')}
+                            </Typography>
+                        </div>
+                    </div>
                 </Grid>
-            </form>
-            <MessageShow
-                message={companyMsg}
-                showMessage={isShowMessage}
-                type={typeCompanyMsg}
-                handleCloseMsg={handleCloseMsg}
-            />
-        </div>
+                <Grid item xs={12}>
+                    <form onSubmit={handleSubmitForm}>
+                        <Grid container direction="row" alignItems="center">
+                            <Grid item xs={12}>
+                                <Tabs value={value} onChange={handleChange} aria-label="" className="custom-tab">
+                                    <Tab
+                                        label={t('project.tab.register')}
+                                        tabIndex={0}
+                                        onFocus={() => setValue(0)}
+                                    />
+                                    <Tab
+                                        label={t('project.tab.assign')}
+                                        tabIndex={1}
+                                        onFocus={() => setValue(0)}
+                                    />
+                                </Tabs>
+
+                                <div className="custom-tab">
+                                    <Card w-full="true">
+                                        <TabPanel value={value} index={0}>
+                                            <CardContent>
+                                                <Box
+                                                    component="form"
+                                                    sx={{
+                                                        '& > :not(style)': { m: 1 },
+                                                    }}
+                                                    noValidate
+                                                    autoComplete="off"
+                                                >
+                                                    <div className="row justify-center m-1">
+                                                        <div className="col-12 col-sm-6 d-block p-1">
+                                                            <InputLabel
+                                                                htmlFor="outlined-adornment-amount"
+                                                                error={Boolean(errors.projectName)}
+                                                            >
+                                                                {t('project.register.name')}{' '}
+                                                                <span className="input-required">*</span>
+                                                            </InputLabel>
+                                                            <TextField
+                                                                size="small"
+                                                                value={formValues.project.projectName}
+                                                                fullWidth
+                                                                required
+                                                                sx={{
+                                                                    mt: 1,
+                                                                    mb: 1,
+                                                                    '& legend': { display: 'none' },
+                                                                    '& fieldset': { top: 0 },
+                                                                }}
+                                                                label=""
+                                                                id="outlined-required"
+                                                                placeholder={t('common.placeholder')}
+                                                                error={Boolean(errors.projectName)}
+                                                                helperText={t(
+                                                                    errors.projectName?.message?.toString() as string,
+                                                                )}
+                                                                {...register('projectName', {
+                                                                    onChange: (e) => handleInputChange(e),
+                                                                })}
+                                                            />
+                                                        </div>
+                                                        <div className="col-12 col-sm-6 d-block p-1">
+                                                            <InputLabel
+                                                                htmlFor="outlined-adornment-amount"
+                                                                error={Boolean(errors.comment)}
+                                                            >
+                                                                {t('project.register.comment')}
+                                                            </InputLabel>
+                                                            <TextField
+                                                                size="small"
+                                                                value={formValues.project.comment}
+                                                                fullWidth
+                                                                required
+                                                                id="outlined-required"
+                                                                sx={{
+                                                                    mt: 1,
+                                                                    mb: 1,
+                                                                    '& legend': { display: 'none' },
+                                                                    '& fieldset': { top: 0 },
+                                                                }}
+                                                                label=""
+                                                                placeholder={t('common.placeholder')}
+                                                                error={Boolean(errors.comment)}
+                                                                helperText={errors.comment?.message?.toString()}
+                                                                {...register('comment', {
+                                                                    onChange: (e) => handleInputChange(e),
+                                                                })}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <div className="row justify-center m-1">
+                                                        <div className="col-12 col-sm-6 d-block p-1">
+                                                            <InputLabel
+                                                                htmlFor="outlined-adornment-amount"
+                                                                error={Boolean(errors.description)}
+                                                            >
+                                                                {t('project.register.description')}
+                                                            </InputLabel>
+                                                            <TextField
+                                                                size="small"
+                                                                value={formValues.project.description}
+                                                                fullWidth
+                                                                required
+                                                                sx={{
+                                                                    mt: 1,
+                                                                    mb: 1,
+                                                                    '& legend': { display: 'none' },
+                                                                    '& fieldset': { top: 0 },
+                                                                }}
+                                                                label=""
+                                                                id="outlined-required"
+                                                                placeholder={t('common.placeholder')}
+                                                                error={Boolean(errors.description)}
+                                                                helperText={t(
+                                                                    errors.description?.message?.toString() as string,
+                                                                )}
+                                                                {...register('description', {
+                                                                    onChange: (e) => handleInputChange(e),
+                                                                })}
+                                                            />
+                                                        </div>
+                                                        <div className="col-12 col-sm-6 p-1">
+                                                            <InputLabel
+                                                                htmlFor="outlined-adornment-amount"
+                                                                error={Boolean(errors.createDate)}
+                                                            >
+                                                                {t('project.register.createDate')}{' '}
+                                                                <span className="input-required">*</span>
+                                                            </InputLabel>
+                                                            <TextField
+                                                                fullWidth
+                                                                sx={{
+                                                                    mt: 1,
+                                                                    mb: 1,
+                                                                    '& legend': { display: 'none' },
+                                                                    '& fieldset': { top: 0 },
+                                                                    '& input': { padding: '8.5px 14px' },
+                                                                }}
+                                                                value={formValues.project.createDate}
+                                                                id="dateEnd"
+                                                                type="datetime-local"
+                                                                InputLabelProps={{
+                                                                    shrink: true,
+                                                                }}
+                                                                error={Boolean(errors.createDate)}
+                                                                helperText={t(
+                                                                    errors.createDate?.message?.toString() as string,
+                                                                )}
+                                                                {...register('createDate', {
+                                                                    onChange: (e) => handleInputChange(e),
+                                                                })}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <div className="row justify-center m-1">
+                                                        <div className="col-12 col-sm-6 d-block p-1">
+                                                            <InputLabel id="demo-simple-select-outlined-label">
+                                                                {t('project.register.status')}{' '}
+                                                                <span className="input-required">*</span>
+                                                            </InputLabel>
+                                                            <FormControl
+                                                                size="small"
+                                                                fullWidth
+                                                                sx={{
+                                                                    mt: 1,
+                                                                    mb: 1,
+                                                                    '& legend': { display: 'none' },
+                                                                    '& fieldset': { top: 0 },
+                                                                }}
+                                                                variant="outlined"
+                                                            >
+                                                                <Select
+                                                                    labelId="demo-simple-select-outlined-label"
+                                                                    id="demo-simple-select-outlined"
+                                                                    displayEmpty
+                                                                    value={formValues.project.status}
+                                                                    {...register('status', {
+                                                                        onChange: (e) => handleInputChange(e),
+                                                                    })}
+                                                                >
+                                                                    <MenuItem value="" selected={true} disabled>
+                                                                        <em>{t('message.statusLabel')}</em>
+                                                                    </MenuItem>
+                                                                    {(projectStatus && projectStatus.length > 0) && projectStatus.map((item: any) => (
+                                                                        <MenuItem value={item.id}>{item.status}</MenuItem>
+                                                                    ))}
+                                                                </Select>
+                                                                {Boolean(errors.status) && (
+                                                                    <FormHelperText id="component-error-text">
+                                                                        {errors?.status?.message as string}
+                                                                    </FormHelperText>
+                                                                )}
+                                                            </FormControl>
+                                                        </div>
+                                                        <div className="col-12 col-sm-6 d-block p-1">
+                                                            <InputLabel id="demo-simple-select-outlined-label">
+                                                                {t('project.register.type')}{' '}
+                                                                <span className="input-required">*</span>
+                                                            </InputLabel>
+                                                            <FormControl
+                                                                size="small"
+                                                                fullWidth
+                                                                sx={{
+                                                                    mt: 1,
+                                                                    mb: 1,
+                                                                    '& legend': { display: 'none' },
+                                                                    '& fieldset': { top: 0 },
+                                                                }}
+                                                                variant="outlined"
+                                                            >
+                                                                <Select
+                                                                    labelId="demo-simple-select-outlined-label"
+                                                                    id="demo-simple-select-outlined"
+                                                                    displayEmpty
+                                                                    value={formValues.project.projectType}
+                                                                    {...register('projectType', {
+                                                                        onChange: (e) => handleInputChange(e),
+                                                                    })}
+                                                                >
+                                                                    <MenuItem value="" selected={true} disabled>
+                                                                        <em>{t('message.typeLabel')}</em>
+                                                                    </MenuItem>
+                                                                    {(projectType && projectType.length > 0) && projectType.map((type: ProjectTypeDTO) => (
+                                                                        <MenuItem value={type.id}>{type.name}</MenuItem>
+                                                                    ))}
+                                                                </Select>
+                                                                {Boolean(errors.projectType) && (
+                                                                    <FormHelperText id="component-error-text">
+                                                                        {errors?.projectType?.message as string}
+                                                                    </FormHelperText>
+                                                                )}
+                                                            </FormControl>
+                                                        </div>
+                                                    </div>
+                                                    <div className="row justify-center m-1">
+                                                        <div className="col-12 col-sm-6 d-block p-1 mt-3">
+                                                            <div className="row justify-center m-1">
+                                                                <div className="col-12 col-md-6 d-block">
+                                                                    <FormControl component="fieldset">
+                                                                        <FormLabel component="legend">
+                                                                            {t('project.register.notificationFlag')}
+                                                                        </FormLabel>
+                                                                        <RadioGroup
+                                                                            row
+                                                                            aria-label="notificationFlag"
+                                                                            name="notificationFlag"
+                                                                            value={formValues.project.notificationFlag}
+                                                                            onChange={handleNotificationFlagChange}
+                                                                            defaultValue={true}
+                                                                        >
+                                                                            <FormControlLabel
+                                                                                value={true}
+                                                                                control={<Radio color="primary" />}
+                                                                                label={t('radio.accept')}
+                                                                            />
+                                                                            <FormControlLabel
+                                                                                value={false}
+                                                                                control={<Radio color="primary" />}
+                                                                                label={t('radio.deny')}
+                                                                            />
+                                                                        </RadioGroup>
+                                                                    </FormControl>
+                                                                </div>
+                                                                <div className="col-12 col-md-6 d-block">
+                                                                    <FormControl component="fieldset">
+                                                                        <FormLabel component="legend">
+                                                                            {t('project.register.isPaid')}
+                                                                        </FormLabel>
+                                                                        <RadioGroup
+                                                                            row
+                                                                            aria-label="isPaid"
+                                                                            name="isPaid"
+                                                                            value={formValues.project.isPaid}
+                                                                            onChange={handleIsPaidChange}
+                                                                            defaultValue={true}
+                                                                        >
+                                                                            <FormControlLabel
+                                                                                value={true}
+                                                                                control={<Radio color="primary" />}
+                                                                                label={t('radio.paid')}
+                                                                            />
+                                                                            <FormControlLabel
+                                                                                value={false}
+                                                                                control={<Radio color="primary" />}
+                                                                                label={t('radio.unPaid')}
+                                                                            />
+                                                                        </RadioGroup>
+                                                                    </FormControl>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="text-center justify-center mt-4">
+                                                        <ButtonGroup
+                                                            disableElevation
+                                                            variant="contained"
+                                                            aria-label="Disabled elevation buttons"
+                                                        >
+                                                            <Button variant="contained" color="primary" sx={{ mr: 1 }} onClick={handleSubmit(handleSubmitForm)}>
+                                                                {t('button.btnUpdate')}
+                                                            </Button>
+                                                            <Button variant="outlined" onClick={handleBack}>
+                                                                {t('button.btnBack')}
+                                                            </Button>
+                                                        </ButtonGroup>
+                                                    </div >
+                                                </Box >
+                                            </CardContent >
+                                        </TabPanel >
+                                    </Card >
+                                </div >
+
+                                <div className="assign-user-tab">
+                                    <Card w-full="true">
+                                        <TabPanel value={value} index={1}>
+                                            <CardContent>
+                                                <Role defaultCompanyList={companyList} defaultRoleData={roleData} setRoleData={setRoleData} />
+                                            </CardContent >
+                                        </TabPanel >
+                                    </Card >
+                                </div >
+                            </Grid >
+                        </Grid >
+                    </form >
+                </Grid >
+
+                <ApiAlert response={resForHandleMsg} />
+            </Grid >
+        </div >
     );
 }

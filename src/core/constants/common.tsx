@@ -71,9 +71,10 @@ export const UrlServer = {
         UPDATE: `${PREFIX_SERVER_URL}/users/update`,
     },
     PROJECT: {
-        GET: `${PREFIX_SERVER_URL}/projects/list`,
+        GET_LIST: `${PREFIX_SERVER_URL}/projects/list`,
+        GET_DETAIL: `${PREFIX_SERVER_URL}/projects`,
         DELETE: `${PREFIX_SERVER_URL}/projects/delete`,
-        UPDATE: `${PREFIX_SERVER_URL}/projects`,
+        UPDATE: `${PREFIX_SERVER_URL}/projects/update`,
         CREATE: `${PREFIX_SERVER_URL}/projects/regist`,
         CREATE_PROGRESS: `${PREFIX_SERVER_URL}/progress/create`,
         UPDATE_PROGRESS: `${PREFIX_SERVER_URL}/projects/update-progress`,
@@ -82,6 +83,8 @@ export const UrlServer = {
         GET_USER_ASSIGN: `${PREFIX_SERVER_URL}/projects/assign-list`,
         GET_PROGRESS_BY_PROJECT_ID: `${PREFIX_SERVER_URL}/progress/by/project`,
         GET_PROGRESS_STATUS: `${PREFIX_SERVER_URL}/progress/status`,
+        GET_USER_ASSIGN_CREATE: `${PREFIX_SERVER_URL}/projects/assign-list-create`,
+        GET_USER_ASSIGN_UPDATE: `${PREFIX_SERVER_URL}/projects/assign-list-edit`
     },
     ROLE: {
         GET: `${PREFIX_SERVER_URL}/roles`,

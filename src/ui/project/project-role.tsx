@@ -14,7 +14,7 @@ import {
 import { Box } from '@mui/system';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getUsersAssignList } from '../../services/project-service';
+import { getUsersAssignListCreate } from '../../services/project-service';
 import { User, Company } from '../../models/project-req-dto';
 import './project.scss';
 
@@ -37,9 +37,9 @@ export default function Role(props: Role) {
 
     useEffect(() => {
         if ((currentCompany && currentCompany.id)) {
-            getUsersAssignList({
+            getUsersAssignListCreate({
                 companyId: currentCompany.id,
-                projectId: "",
+                projectId: '',
             }).then(res => {
                 if (res && res.data) {
                     setCurrentUserAssignList(res.data);
