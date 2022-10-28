@@ -65,6 +65,7 @@ export default function MLanguage(props: Props) {
                             size="small"
                             color={color}
                             aria-label="change other language"
+                            className="select-language-btn"
                             onClick={handleToggle}
                         >
                             <LanguageIcon />
