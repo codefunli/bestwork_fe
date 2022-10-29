@@ -36,6 +36,7 @@ import { isCheckLogined } from '../services/user-service';
 import MLanguage from '../shared-components/language/m-language';
 import LinearProgressWithLabel from '../shared-components/progress/LinearProgressWithLabel';
 import CollapsedBreadcrumbs from './collapsed-breadcrumbs';
+import Notification from '../shared-components/notification/notification';
 import './main-app.scss';
 
 const drawerWidth = 240;
@@ -198,9 +199,7 @@ export default function MiniDrawer() {
                                 </Toolbar>
                                 <Toolbar>
                                     <MLanguage color="inherit" />
-                                    <Badge sx={{ mr: 2 }} color="secondary" badgeContent={2}>
-                                        <NotificationsNoneIcon />
-                                    </Badge>
+                                    <Notification />
                                     <Avatar sx={{ bgcolor: deepOrange[500], mr: 2 }}>N</Avatar>
                                 </Toolbar>
                             </div>
