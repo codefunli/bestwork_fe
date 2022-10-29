@@ -1,6 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
-    AlertColor,
     Box,
     Button,
     ButtonGroup,
@@ -25,14 +24,14 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { AlertColorConstants, StatusCode, UrlFeApp } from '../../core/constants/common';
+import { StatusCode, UrlFeApp } from '../../core/constants/common';
 import { validateProjectRegisterForm } from '../../core/constants/validate';
 import { isArrayEmpty, isObjectEmpty } from '../../core/utils/object-utils';
 import { Company } from '../../models/project-req-dto';
 import { ProjectTypeDTO } from '../../models/project-res-dto';
 import { getAllCompanies } from '../../services/company-service';
 import { createProject, getProjectStatus, getProjectTypes } from '../../services/project-service';
-import MessageShow from '../../shared-components/message/message';
+import ApiAlert from '../../shared-components/alert/api-alert';
 import TabPanel from '../../shared-components/tab-manager/tab-panel';
 import Role from './project-role';
 
@@ -49,49 +48,20 @@ const initialValues: any = {
     },
 };
 
-const initProjectStatus = [
-    {
-        id: 1,
-        name: 'Not yet start'
-    },
-    {
-        id: 2,
-        name: 'Processing'
-    },
-    {
-        id: 3,
-        name: 'Done'
-    },
-    {
-        id: 4,
-        name: 'Paymenting'
-    },
-    {
-        id: 5,
-        name: 'Is Paid'
-    },
-    {
-        id: 6,
-        name: 'Cancel'
-    }
-]
-
 export default function ProjectRegister() {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const [formValues, setFormValues] = useState(initialValues);
-    const [isShowMessage, setIsShowMessage] = useState(false);
-    const [companyMsg, setCompanyMsg] = useState('');
-    const [typeCompanyMsg, setTypeCompanyMsg] = useState<AlertColor>('success');
     const [value, setValue] = useState(0);
     const [roleData, setRoleData] = useState<Company[]>([]);
-    const [projectStatus, setProjectStatus] = useState<any>(initProjectStatus);
+    const [projectStatus, setProjectStatus] = useState<any>([]);
     const [projectType, setProjectType] = useState<ProjectTypeDTO[]>([]);
     const [companyList, setCompanyList] = useState<any>([]);
+    const [resForHandleMsg, setResForHandleMsg] = useState<any>();
 
     useEffect(() => {
         getProjectStatus().then(status => {
-            if (status && status.data) setProjectStatus(status);
+            if (status && status.data) setProjectStatus(status.data);
         });
 
         getProjectTypes().then((type: any) => {
@@ -159,27 +129,6 @@ export default function ProjectRegister() {
         reset();
     };
 
-    const handleMessage = (showMsg: boolean, msg: string, type: AlertColor) => {
-        setIsShowMessage(showMsg);
-        setCompanyMsg(msg);
-        setTypeCompanyMsg(type);
-    };
-
-    const handleResponse = (resp: any) => {
-        switch (resp.status) {
-            case StatusCode.OK:
-                handleMessage(true, resp.message, AlertColorConstants.SUCCESS);
-                navigate(UrlFeApp.PROJECT.SEARCH);
-                break;
-            case StatusCode:
-                handleMessage(true, resp.message, AlertColorConstants.ERROR);
-                break;
-            default:
-                handleMessage(true, resp.message, AlertColorConstants.WARNING);
-                break;
-        }
-    };
-
     const handleSubmitForm = async (event: any) => {
         let req: any = {
             ...formValues,
@@ -209,28 +158,25 @@ export default function ProjectRegister() {
         };
 
         await createProject(req)
-            .then((resp) => {
-                handleResponse(resp);
+            .then((res) => {
+                setResForHandleMsg({
+                    status: res.status,
+                    message: res.message,
+                });
+
+                navigate(UrlFeApp.PROJECT.SEARCH);
             })
             .catch(() => {
-                handleMessage(true, t('message.error'), AlertColorConstants.ERROR);
+                setResForHandleMsg({
+                    status: StatusCode.ERROR,
+                    message: t('message.error'),
+                });
             });
-    };
-
-    const handleCloseMsg = () => {
-        setIsShowMessage(false);
     };
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
     };
-
-    function a11yProps(index: number) {
-        return {
-            id: `simple-tab-${index}`,
-            'aria-controls': `simple-tabpanel-${index}`,
-        };
-    }
 
     return (
         <div className="project">
@@ -256,13 +202,11 @@ export default function ProjectRegister() {
                                 <Tabs value={value} onChange={handleChange} aria-label="" className="custom-tab">
                                     <Tab
                                         label={t('project.tab.register')}
-                                        {...a11yProps(0)}
                                         tabIndex={0}
                                         onFocus={() => setValue(0)}
                                     />
                                     <Tab
                                         label={t('project.tab.assign')}
-                                        {...a11yProps(1)}
                                         tabIndex={1}
                                         onFocus={() => setValue(0)}
                                     />
@@ -434,8 +378,8 @@ export default function ProjectRegister() {
                                                                     <MenuItem value="" selected={true} disabled>
                                                                         <em>{t('message.statusLabel')}</em>
                                                                     </MenuItem>
-                                                                    {(projectStatus && projectStatus.length > 0) && projectStatus.map((status: any) => (
-                                                                        <MenuItem value={status.id}>{status.name}</MenuItem>
+                                                                    {(projectStatus && projectStatus.length > 0) && projectStatus.map((item: any) => (
+                                                                        <MenuItem value={item.id}>{item.status}</MenuItem>
                                                                     ))}
                                                                 </Select>
                                                                 {Boolean(errors.status) && (
@@ -577,12 +521,7 @@ export default function ProjectRegister() {
                     </form >
                 </Grid >
 
-                <MessageShow
-                    message={companyMsg}
-                    showMessage={isShowMessage}
-                    type={typeCompanyMsg}
-                    handleCloseMsg={handleCloseMsg}
-                />
+                <ApiAlert response={resForHandleMsg} />
             </Grid >
         </div >
     );

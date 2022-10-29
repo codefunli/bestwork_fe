@@ -4,7 +4,7 @@ import { PageableDataResSuccess } from '../core/types/base';
 import { ProjectResDTO } from '../models/project-res-dto';
 
 export const getProjects = async (object: any) => {
-    const res = await apiClient.post<PageableDataResSuccess<ProjectResDTO[]>>(UrlServer.PROJECT.GET, object);
+    const res = await apiClient.post<PageableDataResSuccess<ProjectResDTO[]>>(UrlServer.PROJECT.GET_LIST, object);
     return res.data;
 };
 
@@ -14,12 +14,12 @@ export const deleteProjects = async (object: any) => {
 };
 
 export const getProject = async (id: string) => {
-    const res = await apiClient.get<PageableDataResSuccess<ProjectResDTO[]>>(`${UrlServer.PROJECT.GET}/${id}`);
+    const res = await apiClient.get<PageableDataResSuccess<ProjectResDTO[]>>(`${UrlServer.PROJECT.GET_DETAIL}/${id}`);
     return res.data;
 };
 
-export const updateProject = async (object: any) => {
-    const res = await apiClient.put<PageableDataResSuccess<ProjectResDTO[]>>(UrlServer.PROJECT.UPDATE, object);
+export const updateProject = async (object: any, projectId: any) => {
+    const res = await apiClient.post<PageableDataResSuccess<ProjectResDTO[]>>(`${UrlServer.PROJECT.UPDATE}/${projectId}`, object);
     return res.data;
 };
 
@@ -54,8 +54,8 @@ export const getProjectStatus = async () => {
     return res.data;
 };
 
-export const getUsersAssignList = async (object: any) => {
-    const res = await apiClient.post(`${UrlServer.PROJECT.GET_USER_ASSIGN}`, object);
+export const getUsersAssignListCreate = async (object: any) => {
+    const res = await apiClient.post(`${UrlServer.PROJECT.GET_USER_ASSIGN_CREATE}`, object);
     return res.data;
 };
 export const getProgressByProjectId = async (projectId: any) => {
@@ -64,6 +64,12 @@ export const getProgressByProjectId = async (projectId: any) => {
     );
     return res.data;
 };
+
+export const getUsersAssignListUpdate = async (object: any) => {
+    const res = await apiClient.post(`${UrlServer.PROJECT.GET_USER_ASSIGN_UPDATE}`, object);
+    return res.data;
+};
+
 export const getProgressStatus = async () => {
     const res = await apiClient.get<any>(`${UrlServer.PROJECT.GET_PROGRESS_STATUS}`);
     return res.data;
