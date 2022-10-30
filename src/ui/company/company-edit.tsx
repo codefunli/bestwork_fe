@@ -54,7 +54,9 @@ const initialValues = {
         uTelNo: '',
         uEmail: '',
         enable: false,
-        role: 'admin',
+        role: {
+            id: 1,
+        },
     },
 };
 export default function CompanyEdit() {
@@ -82,7 +84,7 @@ export default function CompanyEdit() {
             getCompanyById(params.id).then((value: any) => {
                 if (value != undefined && value.data != undefined) {
                     let objValue: any = {};
-                    if (value.data.user.isEnable === 1) {
+                    if (value.data.user.enabled === 1) {
                         objValue = {
                             ...value.data,
                             company: {
@@ -95,7 +97,7 @@ export default function CompanyEdit() {
                                 enabled: true,
                             },
                         };
-                    } else if (value.data.user.isEnable === 0) {
+                    } else if (value.data.user.enabled === 0) {
                         objValue = {
                             ...value.data,
                             company: {
@@ -718,17 +720,16 @@ export default function CompanyEdit() {
                                                         row
                                                         aria-label="role"
                                                         name="role"
-                                                        value={formValues.user.role}
-                                                        defaultValue="companyadmin"
+                                                        value={formValues.user.role.id}
                                                     >
                                                         <FormControlLabel
-                                                            value="companyadmin"
+                                                            value="2"
                                                             control={<Radio color="primary" />}
                                                             label={t('radio.admin')}
                                                             disabled
                                                         />
                                                         <FormControlLabel
-                                                            value="companyuser"
+                                                            value="1"
                                                             control={<Radio color="primary" />}
                                                             label={t('radio.user')}
                                                             disabled
