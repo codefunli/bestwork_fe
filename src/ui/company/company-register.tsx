@@ -18,7 +18,7 @@ import {
     Select,
     Switch,
     TextField,
-    Typography
+    Typography,
 } from '@mui/material';
 import cities from 'hanhchinhvn/dist/tinh_tp.json';
 import { useState } from 'react';
@@ -55,7 +55,9 @@ const initialValues = {
         uTelNo: '',
         uEmail: '',
         enabled: false,
-        role: 'conpanyAdmin',
+        role: {
+            id: 1,
+        },
     },
 };
 
@@ -735,16 +737,16 @@ export default function CompanyRegister() {
                                                         row
                                                         aria-label="role"
                                                         name="role"
-                                                        value={formValues.user.role}
-                                                        defaultValue="admin"
+                                                        value={formValues.user.role.id}
+                                                        defaultValue="1"
                                                     >
                                                         <FormControlLabel
-                                                            value="conpanyAdmin"
+                                                            value="1"
                                                             control={<Radio color="primary" />}
                                                             label={t('radio.admin')}
                                                         />
                                                         <FormControlLabel
-                                                            value="conpanyUser"
+                                                            value="2"
                                                             control={<Radio color="primary" />}
                                                             label={t('radio.user')}
                                                             disabled
