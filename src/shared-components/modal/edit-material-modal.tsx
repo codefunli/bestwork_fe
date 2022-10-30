@@ -82,12 +82,7 @@ export default function EditMaterialModal(props: AlertDialogSlideProps) {
             images: imgData,
         };
 
-        console.log(postData);
-
-        console.log('resObj', resObj);
-
         updatePost(content.postId, content.projectId, resObj).then((resp: any) => {
-            console.log('resp', resp);
             closeFunc();
             setOpen(false);
             setPostData(() => resp.data);
