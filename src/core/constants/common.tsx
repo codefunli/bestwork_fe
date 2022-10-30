@@ -99,6 +99,8 @@ export const UrlServer = {
     MATERIAL: {
         POST_STATUS: `${PREFIX_SERVER_URL}/post/create`,
         GET_POST_BY_PROJECT_ID: `${PREFIX_SERVER_URL}/post`,
+        POST_COMMENT: `${PREFIX_SERVER_URL}/post`,
+        UPDATE_POST: `${PREFIX_SERVER_URL}/post`,
     },
 };
 
