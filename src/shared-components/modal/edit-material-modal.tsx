@@ -67,11 +67,11 @@ export default function EditMaterialModal(props: AlertDialogSlideProps) {
         getPostByPostId(content.postId, content.projectId).then((value: any) => {
             if (value && value.data) {
                 setPostData(value.data);
+                const imgs = value.data.fileStorages.map((val: any) => {
+                    return val.data;
+                });
+                setImgData(imgs);
             }
-            const imgs = value.data.fileStorages.map((val: any) => {
-                return val.data;
-            });
-            setImgData(imgs);
         });
     };
 
@@ -86,12 +86,12 @@ export default function EditMaterialModal(props: AlertDialogSlideProps) {
 
         console.log('resObj', resObj);
 
-        updatePost(content.postId, content.projectId, resObj).then((resp: any) => {
-            console.log('resp', resp);
-            closeFunc();
-            setOpen(false);
-            setPostData(() => resp.data);
-        });
+        // updatePost(content.postId, content.projectId, resObj).then((resp: any) => {
+        //     console.log('resp', resp);
+        //     closeFunc();
+        //     setOpen(false);
+        //     setPostData(() => resp.data);
+        // });
     };
 
     const handleClose = () => {
