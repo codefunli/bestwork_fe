@@ -67,11 +67,11 @@ export default function EditMaterialModal(props: AlertDialogSlideProps) {
         getPostByPostId(content.postId, content.projectId).then((value: any) => {
             if (value && value.data) {
                 setPostData(value.data);
+                const imgs = value.data.fileStorages.map((val: any) => {
+                    return val.data;
+                });
+                setImgData(imgs);
             }
-            const imgs = value.data.fileStorages.map((val: any) => {
-                return val.data;
-            });
-            setImgData(imgs);
         });
     };
 
