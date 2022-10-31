@@ -32,6 +32,7 @@ import { Company } from '../../models/project-req-dto';
 import { ProjectTypeDTO } from '../../models/project-res-dto';
 import { getAllCompanies } from '../../services/company-service';
 import { getProject, getProjectStatus, getProjectTypes, updateProject, getUsersAssignListUpdate } from '../../services/project-service';
+import { currentDateTime, formatDateTime } from '../../core/utils/get-current-datetime';
 import ApiAlert from '../../shared-components/alert/api-alert';
 import TabPanel from '../../shared-components/tab-manager/tab-panel';
 import Role from './project-role';
@@ -42,7 +43,7 @@ const initialValues: any = {
         projectType: '',
         description: '',
         comment: '',
-        createDate: '',
+        createDate: currentDateTime,
         notificationFlag: true,
         isPaid: false,
         status: '',
@@ -69,7 +70,7 @@ export default function ProjectRegister() {
                         project: {
                             ...value.data,
                             projectType: value.data.projectType.id,
-                            createDate: new Date(value.data.createDate).toISOString().substring(0, 16)
+                            createDate: formatDateTime(value.data.createDate)
                         }
                     });
                     reset();

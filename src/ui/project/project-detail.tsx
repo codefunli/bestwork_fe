@@ -24,7 +24,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { ProjectProgressDTO } from '../../models/project-res-dto';
-import { getProgressByProjectId, getProject } from '../../services/project-service';
+import { getProgressByProjectId, getProgressStatus } from '../../services/project-service';
 import ProgressCreate from './progress-create';
 import ProgressEdit from './progress-edit';
 import './project.scss';
@@ -37,11 +37,18 @@ export default function ProjectEdit() {
     const [isOpenEditProgress, setOpenEditProgress] = useState(false);
     const [selectedProgress, setSelectedProgress] = useState<any>();
     const [progressList, setProgressList] = useState<ProjectProgressDTO[]>([]);
+    const [progressStatus, setProgressStatus] = useState([]);
 
     useEffect(() => {
         if (params.id) {
             fetchData();
         }
+
+        getProgressStatus().then((value: any) => {
+            if (value && value.data) {
+                setProgressStatus(value.data);
+            }
+        });
     }, [params.id]);
 
     const fetchData = async () => {
@@ -51,6 +58,10 @@ export default function ProjectEdit() {
             setProgressList(value.data.progress);
         }
     };
+
+    useEffect(() => {
+        fetchData();
+    }, [isOpenEditProgress]);
 
     const toggleDrawerCreateProgress = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
         if (
@@ -74,30 +85,38 @@ export default function ProjectEdit() {
         setOpenEditProgress(open);
     };
 
-    const handleEditProgress = (id: string) => {
+    const handleEditProgress = (progress: any) => {
         setOpenEditProgress(true);
         toggleDrawerEditProgress(true);
-        setSelectedProgress(id);
+        const tmpSelectedProgress: any = progressList.find((prg: any) => prg.id === progress.id);
+        setSelectedProgress(tmpSelectedProgress);
     };
 
     const handleCloseProject = (project: any) => {
         console.log(project);
     };
 
-    const renderStatusChip = (data: string) => {
-        switch (data) {
-            case 'Todo':
-                return <Chip label={data} color="secondary" />;
-            case 'In progress':
-                return <Chip label={data} color="primary" />;
-            case 'Pending':
-                return <Chip label={data} color="error" />;
-            case 'Review':
-                return <Chip label={data} color="info" />;
-            case 'Done':
-                return <Chip label={data} color="success" />;
+    const renderStatusChip = (statusId: string) => {
+        let status: string = '';
+        progressStatus.forEach((value: any) => {
+            if (statusId.toString() === value.id.toString()) {
+                status = value.status
+            }
+        });
+
+        switch (statusId) {
+            case '0':
+                return <Chip label={status} color="secondary" />;
+            case '1':
+                return <Chip label={status} color="primary" />;
+            case '2':
+                return <Chip label={status} color="error" />;
+            case '3':
+                return <Chip label={status} color="info" />;
+            case '4':
+                return <Chip label={status} color="success" />;
             default:
-                return data;
+                return status;
         }
     };
 
@@ -105,7 +124,7 @@ export default function ProjectEdit() {
         <div className="project-detail">
             <form>
                 <Grid container spacing={3} justifyContent="center">
-                    <Grid item lg={12} xl={4}>
+                    <Grid item md={12} lg={4}>
                         <Card>
                             <CardActionArea>
                                 <CardMedia
@@ -147,7 +166,7 @@ export default function ProjectEdit() {
                             </CardActionArea>
                         </Card>
                     </Grid>
-                    <Grid item lg={12} xl={6}>
+                    <Grid item md={12} lg={8}>
                         <Card style={{ width: '100%' }}>
                             <CardHeader
                                 avatar={<Avatar aria-label="recipe">PR</Avatar>}
@@ -167,7 +186,7 @@ export default function ProjectEdit() {
                                     },
                                 }}
                             >
-                                {progressList.map((progress: ProjectProgressDTO, index: number) => (
+                                {progressList.map((progress: ProjectProgressDTO | any, index: number) => (
                                     <div key={index}>
                                         <TimelineItem>
                                             <TimelineOppositeContent color="textSecondary">
@@ -182,7 +201,7 @@ export default function ProjectEdit() {
                                             <TimelineContent>
                                                 <div
                                                     className="mb-4 progress-item pb-2"
-                                                    onClick={() => handleEditProgress(progress.id)}
+                                                    onClick={() => handleEditProgress(progress)}
                                                 >
                                                     <div className="progress-item-title pb-2 h4 fw-bold">
                                                         {progress.title}
@@ -212,7 +231,7 @@ export default function ProjectEdit() {
                 isOpen={isOpenEditProgress}
                 setIsOpen={setOpenEditProgress}
                 toggleDrawer={toggleDrawerEditProgress}
-                progressId={selectedProgress}
+                progress={selectedProgress}
             />
         </div>
     );

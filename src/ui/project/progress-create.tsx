@@ -19,17 +19,16 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { StatusCode } from '../../core/constants/common';
 import { validateProjectProgress } from '../../core/constants/validate';
-import { currentDateTime } from '../../core/utils/get-current-datetime';
+import { currentDateTime, formatDateTime } from '../../core/utils/get-current-datetime';
 import { ProjectProgressDTO } from '../../models/project-res-dto';
 import { createProgress, getProgressStatus } from '../../services/project-service';
 import ApiAlert from '../../shared-components/alert/api-alert';
 import MultipleFileUpload from '../../shared-components/file-upload/multiple-file-upload';
 
 const progressInitValues: ProjectProgressDTO = {
-    id: '',
     projectId: '',
     title: '',
-    images: [],
+    fileStorages: [],
     startDate: currentDateTime,
     endDate: currentDateTime,
     status: '',
@@ -47,10 +46,10 @@ interface Props {
 const ProgressCreate = (props: Props) => {
     const { isOpen, setIsOpen, toggleDrawer, callBackFn } = props;
     const { t } = useTranslation();
+    const params = useParams();
     const [progressData, setProgressData] = useState(progressInitValues);
     const [isClearPreview, setIsClearPreview] = useState(false);
     const [resForHandleMsg, setResForHandleMsg] = useState<any>();
-    const params = useParams();
     const [progressStatus, setProgressStatus] = useState([]);
 
     useEffect(() => {
@@ -98,17 +97,21 @@ const ProgressCreate = (props: Props) => {
     };
 
     const handleImageChange = (data: any) => {
+        const convertedImages = data.map((image: any) => {
+            return { data: image }
+        });
+
         setProgressData({
             ...progressData,
-            images: data,
+            fileStorages: convertedImages,
         });
     };
 
     const handleSubmitForm = async () => {
         createProgress({
             ...progressData,
-            startDate: `${progressData.startDate}:000Z`,
-            endDate: `${progressData.endDate}:000Z`,
+            startDate: formatDateTime(progressData.startDate),
+            endDate: formatDateTime(progressData.endDate),
         })
             .then((res: any) => {
                 setResForHandleMsg({
@@ -252,8 +255,8 @@ const ProgressCreate = (props: Props) => {
                                         <MenuItem value="" selected={true} disabled>
                                             <em>{t('message.statusLabel')}</em>
                                         </MenuItem>
-                                        {progressStatus.map((status: any) => (
-                                            <MenuItem value={status.status} key={status.id}>
+                                        {(progressStatus && progressStatus.length > 0) && progressStatus.map((status: any) => (
+                                            <MenuItem value={status.id} key={status.id}>
                                                 <em>{status.status}</em>
                                             </MenuItem>
                                         ))}
