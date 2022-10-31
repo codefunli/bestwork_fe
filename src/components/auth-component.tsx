@@ -40,7 +40,9 @@ export default function AuthComponent() {
 
     return (
         <div className="auth-wrapper">
-            <MLanguage color="primary" />
+            <div className="top-area">
+                <MLanguage color="primary" />
+            </div>
             {isPageLoading && (
                 <div className="login-wrapper">
                     <div>

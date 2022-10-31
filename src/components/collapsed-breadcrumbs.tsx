@@ -13,7 +13,7 @@ const CollapsedBreadcrumbs = () => {
         .splice(1);
     const { t } = useTranslation();
     const lastChar = pathNames[pathNames.length - 1];
-    const lastCharArr = lastChar.split('');
+    const lastCharArr = lastChar ? lastChar.split('') : [];
     if (!isNaN(+lastChar)) pathNames.pop();
     if (!isNaN(+lastCharArr[lastCharArr.length - 1])) pathNames.pop();
 

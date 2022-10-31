@@ -50,6 +50,7 @@ export const UrlFeApp = {
 
 export const UrlServer = {
     API_LOGIN_URL: '/bestwork/login',
+    API_LOGOUT_URL: '/bestwork/logout',
     COMPANY: {
         GET_COMPANIES: `${PREFIX_SERVER_URL}/companies/list`,
         REGISTER: `${PREFIX_SERVER_URL}/companies/create`,

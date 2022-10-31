@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react';
-import { Avatar, Badge, ClickAwayListener, Grid, Grow, List, ListItem, ListItemAvatar, ListItemText, MenuItem, MenuList, Paper, Popper, Typography } from '@mui/material';
+import { Avatar, Badge, ClickAwayListener, Grid, Grow, List, ListItem, ListItemAvatar, ListItemText, Paper, Popper, Tooltip, Typography } from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { useTranslation } from 'react-i18next';
-import './notification.scss';
 import { Link } from 'react-router-dom';
+import './notification.scss';
 
 type Noti = {
     title: string;
@@ -48,14 +48,16 @@ const Notification = () => {
         <div className="notification">
             <Grid container direction="column" alignItems="end">
                 <Grid item xs={12}>
-                    <Badge
-                        sx={{ mr: 3 }}
-                        color="secondary"
-                        badgeContent={notiList.length}
-                        onClick={handleToggle}
-                    >
-                        <NotificationsIcon />
-                    </Badge>
+                    <Tooltip title={t('common.notification')} placement="bottom-start" ref={anchorRef}>
+                        <Badge
+                            sx={{ mr: 2 }}
+                            color="secondary"
+                            badgeContent={notiList.length}
+                            onClick={handleToggle}
+                        >
+                            <NotificationsIcon />
+                        </Badge>
+                    </Tooltip>
                 </Grid>
             </Grid>
 
@@ -73,15 +75,19 @@ const Notification = () => {
                         {...TransitionProps}
                         style={{
                             transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
+                            marginTop: '1.5rem',
+                            marginRight: '0.4rem',
+                            width: '20vw',
+                            minWidth: '18rem'
                         }}
                     >
                         <Paper>
                             <div className="top-area">
                                 <div>
-                                    <b>Notifications</b>
+                                    <b>{t('common.notification')}</b>
                                 </div>
                                 <div className="btn-clear">
-                                    Clear all
+                                    {t('common.clearAll')}
                                 </div>
                             </div>
                             <ClickAwayListener onClickAway={handleClose}>
@@ -119,14 +125,14 @@ const Notification = () => {
                                         </ListItem>
                                     )) :
                                         <div className="empty-data">
-                                            <span>No notification</span>
+                                            <span>{t('common.noNotification')}</span>
                                         </div>
                                     }
                                 </List>
                             </ClickAwayListener>
                             <div className="view-all">
                                 <Link to="/app/notification/all">
-                                    View all
+                                    {t('common.viewAll')}
                                 </Link>
                             </div>
                         </Paper>
