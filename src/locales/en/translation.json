@@ -290,5 +290,11 @@
         "notReceive": "You did not receive the email",
         "btnResend": "Resend",
         "success": "Password reset successful"
+    },
+    "changePassword": {
+        "title": "Change password",
+        "currentPassword": "Current password",
+        "newPassword": "New password",
+        "confirmPassword": "Confirm password"
     }
 }

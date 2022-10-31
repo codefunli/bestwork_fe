@@ -7,7 +7,8 @@ import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { UrlFeApp } from '../../core/constants/common';
-import { logout } from '../../services/login-service';
+import { logout } from '../../services/auth-service';
+import ChangePassword from '../change-password/change-password';
 import './user-dropdown.scss';
 
 const UserDropdown = () => {
@@ -15,6 +16,9 @@ const UserDropdown = () => {
     const [open, setOpen] = useState(false);
     const { t } = useTranslation();
     const navigate = useNavigate();
+
+    const [isOpenChangePasswordModal, setIsOpenChangePasswordModal] = useState(false);
+    const toggleChangePasswordModal = (value: boolean) => setIsOpenChangePasswordModal(value);
 
     const handleClose = (event: any) => {
         if (anchorRef.current && anchorRef.current.contains(event.target)) return;
@@ -32,7 +36,7 @@ const UserDropdown = () => {
     };
 
     return (
-        <div className="change-password">
+        <div className="user-dropdown">
             <Grid container direction="column" alignItems="end">
                 <Grid item xs={12}>
                     <Tooltip title="" placement="bottom-start" ref={anchorRef}>
@@ -74,7 +78,7 @@ const UserDropdown = () => {
                                     <MenuItem>
                                         <PersonIcon /> <span>{t('common.profile')}</span>
                                     </MenuItem>
-                                    <MenuItem>
+                                    <MenuItem onClick={() => toggleChangePasswordModal(true)}>
                                         <SettingsIcon /> <span>{t('common.changePassword')}</span>
                                     </MenuItem>
                                     <MenuItem onClick={handleLogout}>
@@ -86,6 +90,11 @@ const UserDropdown = () => {
                     </Grow>
                 )}
             </Popper>
+
+            <ChangePassword
+                isOpen={isOpenChangePasswordModal}
+                toggleOpen={toggleChangePasswordModal}
+            />
         </div>
     );
 };

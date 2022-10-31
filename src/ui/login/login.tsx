@@ -18,7 +18,7 @@ import { ERROR_MSG, getMessage } from '../../core/constants/message';
 import { useAppDispatch } from '../../core/hook/redux';
 import { userActions } from '../../core/redux/user-slice';
 import { isObjectEmpty } from '../../core/utils/object-utils';
-import { login } from '../../services/login-service';
+import { login } from '../../services/auth-service';
 import MessageShow from '../../shared-components/message/message';
 import './login.scss';
 

@@ -163,3 +163,16 @@ export const validateResetPassword = yup.object({
         .string()
         .oneOf([yup.ref('password'), null], getMessage(ERROR_MSG.E01_010, [FieldConstants.CONFIRM_PASSWORD])),
 });
+
+export const validateChangePassword = yup.object({
+    currentPassword: yup
+        .string()
+        .required(getMessage(ERROR_MSG.E01_001, [FieldConstants.PASSWORD])),
+    newPassword: yup
+        .string()
+        .required(getMessage(ERROR_MSG.E01_001, [FieldConstants.PASSWORD]))
+        .matches(pattern.password, getMessage(ERROR_MSG.E01_004, [FieldConstants.NEW_PASSWORD])),
+    confirmPassword: yup
+        .string()
+        .oneOf([yup.ref('newPassword'), null], getMessage(ERROR_MSG.E01_010, [FieldConstants.CONFIRM_PASSWORD])),
+});
