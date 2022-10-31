@@ -53,6 +53,7 @@ export const UrlFeApp = {
 export const UrlServer = {
     API_LOGIN_URL: '/bestwork/login',
     API_LOGOUT_URL: '/bestwork/logout',
+    API_CHANGE_PASSWORD_URL: `${PREFIX_SERVER_URL}/change-password`,
     COMPANY: {
         GET_COMPANIES: `${PREFIX_SERVER_URL}/companies/list`,
         REGISTER: `${PREFIX_SERVER_URL}/companies/create`,
@@ -98,7 +99,6 @@ export const UrlServer = {
     AUTH: {
         FORGOT_PASSWORD: `${PREFIX_SERVER_URL}/auth/forgot-password`,
         RESET_PASSWORD: `${PREFIX_SERVER_URL}/auth/reset-password`,
-        CHANGE_PASSWORD: `${PREFIX_SERVER_URL}/auth/change-password`,
     },
     MATERIAL: {
         POST_STATUS: `${PREFIX_SERVER_URL}/post/create`,
