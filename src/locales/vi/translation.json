@@ -290,5 +290,11 @@
         "notReceive": "Bạn không nhận được thư điện tử",
         "btnResend": "Gửi lại",
         "success": "Đặt lại mật khẩu thành công"
+    },
+    "changePassword": {
+        "title": "Đổi mật khẩu",
+        "currentPassword": "Mật khẩu hiện tại",
+        "newPassword": "Mật khẩu mới",
+        "confirmPassword": "Xác nhận mật khẩu"
     }
 }

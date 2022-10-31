@@ -96,6 +96,7 @@ export const UrlServer = {
     AUTH: {
         FORGOT_PASSWORD: `${PREFIX_SERVER_URL}/auth/forgot-password`,
         RESET_PASSWORD: `${PREFIX_SERVER_URL}/auth/reset-password`,
+        CHANGE_PASSWORD: `${PREFIX_SERVER_URL}/auth/change-password`,
     },
     MATERIAL: {
         POST_STATUS: `${PREFIX_SERVER_URL}/post/create`,
@@ -107,20 +108,20 @@ export const UrlServer = {
 
 export const FieldConstants = {
     ID: 'id',
-    USER_NAME: 'User Name',
+    USER_NAME: 'User name',
     PASSWORD: 'Password',
     COMPANY_NAME: 'Company name',
     EMAIL: 'Email',
     TEL_NO: 'Tel-No',
     TAX_NO: 'Tax-No',
     START_DATE: 'Start date',
-    EXPIRED_DATE: 'Expired Date',
-    FIRST_NAME: 'First Name',
-    LAST_NAME: 'Last Name',
+    EXPIRED_DATE: 'Expired date',
+    FIRST_NAME: 'First name',
+    LAST_NAME: 'Last name',
     ROLE: 'Role',
     DESCRIPTION: 'Description',
-    NEW_PASSWORD: 'New Password',
-    CONFIRM_PASSWORD: 'Confirm Password',
+    NEW_PASSWORD: 'New password',
+    CONFIRM_PASSWORD: 'Confirm password',
 };
 
 export const ConfirmConstants = {
