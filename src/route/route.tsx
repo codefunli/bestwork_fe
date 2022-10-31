@@ -56,6 +56,10 @@ const listRouter: RouteObject[] = [
                 element: <UserCreate />,
             },
             {
+                path: UrlFeApp.USER.CREATE_WITH_COMPANY_ID,
+                element: <UserCreate />,
+            },
+            {
                 path: UrlFeApp.PROJECT.SEARCH,
                 element: <ProjectSearch />,
             },
@@ -104,13 +108,13 @@ const listRouter: RouteObject[] = [
             {
                 path: `${UrlFeApp.FORGOT_PASSWORD.RESET}/:token`,
                 element: <ResetPassword />,
-            }
+            },
         ],
     },
     {
         path: '/*',
         element: <Page404NotFound />,
-    }
+    },
 ];
 export default function RenderRouter() {
     let element = useRoutes(listRouter);

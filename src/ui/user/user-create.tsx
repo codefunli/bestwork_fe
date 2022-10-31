@@ -23,7 +23,7 @@ import { Box } from '@mui/system';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { AlertColorConstants, DefaultImage, UrlFeApp } from '../../core/constants/common';
 import { validateCreateUserForm } from '../../core/constants/validate';
 import { getCompaniesByUser } from '../../services/company-service';
@@ -59,6 +59,7 @@ export default function UserAdd() {
     const [userMsgType, setUserMsgType] = useState<AlertColor>(AlertColorConstants.SUCCESS);
     const [isShowMsg, setIsShowMsg] = useState(false);
     const [roles, setRoles] = useState([]);
+    const params = useParams();
 
     const {
         register,
@@ -68,6 +69,17 @@ export default function UserAdd() {
     } = useForm({
         resolver: yupResolver(validateCreateUserForm),
     });
+
+    useEffect(() => {
+        if (params.id) {
+            setFormValues({
+                ...formValues,
+                company: {
+                    id: params.id,
+                },
+            });
+        }
+    }, [params]);
 
     useEffect(() => {
         const fetchCompanies = async () => {

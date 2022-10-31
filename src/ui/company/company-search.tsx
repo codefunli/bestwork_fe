@@ -142,7 +142,7 @@ export default function CompanySearch() {
     };
 
     const handleAddUser = (e: any, id: number) => {
-        nativgate(`${UrlFeApp.USER.CREATE}/${id}`);
+        nativgate(`${UrlFeApp.USER.CREATE_WITH_COMPANY}/${id}`);
     };
 
     const alertOkFunc = () => {
