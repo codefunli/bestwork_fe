@@ -87,7 +87,14 @@
         "none": "None",
         "start": "Start",
         "end": "End",
-        "selectLanguage": "Select language"
+        "selectLanguage": "Select language",
+        "notification": "Notification",
+        "noNotification": "No notification",
+        "clearAll": "Clear all",
+        "viewAll": "View all",
+        "profile": "Profile",
+        "changePassword": "Change password",
+        "logout": "Logout"
     },
     "message": {
         "required": "is required.",

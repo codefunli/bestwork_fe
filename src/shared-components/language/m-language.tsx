@@ -1,4 +1,4 @@
-import { ClickAwayListener, Grid, Grow, IconButton, MenuItem, MenuList, Paper, Popper, Tooltip } from '@mui/material';
+import { Badge, ClickAwayListener, Grid, Grow, IconButton, MenuItem, MenuList, Paper, Popper, Tooltip } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import LanguageIcon from '@mui/icons-material/Language';
 import React from 'react';
@@ -61,15 +61,24 @@ export default function MLanguage(props: Props) {
             <Grid container direction="column" alignItems="end">
                 <Grid item xs={12}>
                     <Tooltip title={t('common.selectLanguage')} placement="bottom-start" ref={anchorRef}>
-                        <IconButton
-                            size="small"
-                            color={color}
-                            aria-label="change other language"
+                        <Badge
+                            sx={{ mr: 2 }}
+                            color="default"
                             className="select-language-btn"
+                            badgeContent={
+                                <React.Fragment>
+                                    <img
+                                        className="language-icon"
+                                        src={options[selectedIndex].icon}
+                                        alt={options[selectedIndex].name}
+                                        title={options[selectedIndex].name}
+                                    />
+                                </React.Fragment>
+                            }
                             onClick={handleToggle}
                         >
                             <LanguageIcon />
-                        </IconButton>
+                        </Badge>
                     </Tooltip>
                 </Grid>
             </Grid>
@@ -90,6 +99,7 @@ export default function MLanguage(props: Props) {
                         {...TransitionProps}
                         style={{
                             transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
+                            marginTop: '1.5rem'
                         }}
                     >
                         <Paper>

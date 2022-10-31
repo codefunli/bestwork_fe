@@ -1,16 +1,6 @@
 .notification {
     cursor: pointer;
 
-    .MuiPopperUnstyled-root {
-        position: absolute !important;
-        transform: translate3d(-120px, 70px, 0px);
-        top: 0px;
-        left: 0px;
-        will-change: transform;
-        width: 300px !important;
-        cursor: auto;
-    }
-
     .top-area {
         padding: 1rem;
         display: flex;

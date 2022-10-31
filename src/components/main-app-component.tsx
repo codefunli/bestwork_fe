@@ -19,7 +19,6 @@ import {
 } from '@mui/material';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import { deepOrange } from '@mui/material/colors';
 import MuiDrawer from '@mui/material/Drawer';
 import { CSSObject, styled, Theme, useTheme } from '@mui/material/styles';
 import * as React from 'react';
@@ -36,7 +35,8 @@ import { isCheckLogined } from '../services/user-service';
 import MLanguage from '../shared-components/language/m-language';
 import LinearProgressWithLabel from '../shared-components/progress/LinearProgressWithLabel';
 import CollapsedBreadcrumbs from './collapsed-breadcrumbs';
-import Notification from '../shared-components/notification/notification';
+import Notification from '../ui/notification/notification';
+import UserDropdown from '../ui/user-dropdown/user-dropdown';
 import './main-app.scss';
 
 const drawerWidth = 240;
@@ -198,9 +198,9 @@ export default function MiniDrawer() {
                                     <CollapsedBreadcrumbs />
                                 </Toolbar>
                                 <Toolbar>
-                                    <MLanguage color="inherit" />
+                                    <MLanguage />
                                     <Notification />
-                                    <Avatar sx={{ bgcolor: deepOrange[500], mr: 2 }}>N</Avatar>
+                                    <UserDropdown />
                                 </Toolbar>
                             </div>
                         </AppBar>

@@ -87,7 +87,14 @@
         "none": "Không có giá trị",
         "start": "Bắt đầu",
         "end": "Kết thúc",
-        "selectLanguage": "Chọn ngôn ngữ"
+        "selectLanguage": "Chọn ngôn ngữ",
+        "notification": "Thông báo",
+        "noNotification": "Không có thông báo",
+        "clearAll": "Dọn tất cả",
+        "viewAll": "Xem tất cả",
+        "profile": "Hồ sơ",
+        "changePassword": "Đổi mật khẩu",
+        "logout": "Đăng xuất"
     },
     "message": {
         "required": "là bắt buộc.",
