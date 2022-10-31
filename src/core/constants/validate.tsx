@@ -114,7 +114,6 @@ export const validateProjectRegisterForm = yup.object({
     createDate: yup
         .date()
         .required(getMessage(ERROR_MSG.E01_001, [FieldProjectConstants.CREATE_DATE]))
-        .max(new Date(), getMessage(ERROR_MSG.E01_009, [FieldProjectConstants.CREATE_DATE]))
         .typeError(getMessage(ERROR_MSG.E01_001, [FieldProjectConstants.CREATE_DATE])),
     status: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldProjectProgress.STATUS])),
     projectType: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldProjectProgress.PROJECT_TYPE])),

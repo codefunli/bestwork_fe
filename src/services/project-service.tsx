@@ -36,9 +36,9 @@ export const createProgress = async (object: any) => {
     return res.data;
 };
 
-export const updateProgress = async (object: any) => {
+export const updateProgress = async (object: any, progressId: any) => {
     const res = await apiClient.post<PageableDataResSuccess<ProjectResDTO[]>>(
-        UrlServer.PROJECT.UPDATE_PROGRESS,
+        `${UrlServer.PROJECT.UPDATE_PROGRESS}/${progressId}`,
         object,
     );
     return res.data;

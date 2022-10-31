@@ -4,13 +4,18 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import './file-upload.scss';
 
 export default function MultipleFileUpload(props: any) {
-    const { clearPreview, callbackFunc, imgData } = props;
+    const { clearPreview, callbackFunc, imgData, isEditUpload } = props;
     const [images, setImages] = useState<string[]>([]);
     const [imagePreviews, setImagePreviews] = useState<string[]>((imgData && imgData.length > 0) ? imgData : []);
+    const [isEdit, setIsEdit] = useState(false);
 
     const onChangeImage = (event: any) => {
         setImages([...event.target.files]);
     };
+
+    useEffect(() => {
+        setIsEdit(isEditUpload);
+    }, [isEditUpload]);
 
     useEffect(() => {
         if (imgData && imgData.length > 0) setImagePreviews(imgData);
@@ -23,16 +28,26 @@ export default function MultipleFileUpload(props: any) {
     useEffect(() => {
         if (images.length < 1) return;
         const newImageUrls: any = [];
-        // images.forEach((image: any) => newImageUrls.push(URL.createObjectURL(image)));
-        // setImagePreviews(imagePreviews.concat(newImageUrls));
-        // callbackFunc(imagePreviews.concat(newImageUrls));
         for (let index = 0; index < images.length; index++) {
             if (images[index]) {
                 const reader: any = new FileReader();
                 reader.addEventListener('load', () => {
                     newImageUrls.push(reader.result);
-                    setImagePreviews([...imagePreviews, ...newImageUrls]);
-                    callbackFunc([...imagePreviews, ...newImageUrls]);
+
+                    let tmpNewImageUrls: any = [];
+
+                    if (isEdit) {
+                        tmpNewImageUrls = newImageUrls.map((url: any) => {
+                            return {
+                                data: url
+                            };
+                        })
+                    } else {
+                        tmpNewImageUrls = [...newImageUrls];
+                    };
+
+                    setImagePreviews([...imagePreviews, ...tmpNewImageUrls]);
+                    callbackFunc([...imagePreviews, ...tmpNewImageUrls]);
                 });
                 reader.readAsDataURL(images[index]);
             }
@@ -53,10 +68,14 @@ export default function MultipleFileUpload(props: any) {
                     <AddPhotoAlternateIcon />
                 </label>
                 <div className="row image-list">
-                    {(imagePreviews && imagePreviews.length) > 0 && imagePreviews.reverse().map((image, index) => (
-                        <div className="col-6 col-lg-4 img-item">
+                    {(imagePreviews && imagePreviews.length) > 0 && imagePreviews.reverse().map((image: any, index: number) => (
+                        <div className="col-6 col-lg-4 img-item" key={index}>
                             <HighlightOffIcon onClick={() => removeImageItem(index)} />
-                            <img src={image} alt={image} key={index} />
+                            {isEdit ?
+                                <img src={image.data} alt={image.id} key={index} />
+                                :
+                                <img src={image} alt={image} key={index} />
+                            }
                         </div>
                     ))}
                 </div>

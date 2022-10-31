@@ -13,11 +13,16 @@ export interface ProjectResDTO {
     comment: string;
 }
 
+export interface ImageToUpload {
+    id?: string;
+    data: string;
+}
+
 export interface ProjectProgressDTO {
-    id: string;
+    id?: string;
     projectId: string;
     title: string;
-    images: string[];
+    fileStorages: ImageToUpload[];
     startDate: string;
     endDate: string;
     status: string;

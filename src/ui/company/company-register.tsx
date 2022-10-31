@@ -30,7 +30,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { AlertColorConstants, StatusCode, UrlFeApp } from '../../core/constants/common';
 import { validateForm } from '../../core/constants/validate';
-import { currentDateTime } from '../../core/utils/get-current-datetime';
+import { currentDateTime, formatDateTime } from '../../core/utils/get-current-datetime';
 import { registerCompany } from '../../services/company-service';
 import MessageShow from '../../shared-components/message/message';
 
@@ -80,18 +80,27 @@ export default function CompanyRegister() {
         resolver: yupResolver(validateForm),
     });
 
-    const handleInputChange = (event: any) => {
+    const handleInputChangeCompany = (event: any) => {
         const { name, value } = event.target;
+        console.log({ name, value })
         setFormValues({
             ...formValues,
             company: {
                 ...formValues.company,
                 [name]: value,
-            },
+            }
+        });
+    };
+
+    const handleInputChangeUser = (event: any) => {
+        const { name, value } = event.target;
+        console.log({ name, value })
+        setFormValues({
+            ...formValues,
             user: {
                 ...formValues.user,
                 [name]: value,
-            },
+            }
         });
     };
 
@@ -181,16 +190,15 @@ export default function CompanyRegister() {
         }
     };
 
-    const handleSubmitForm = (event: any) => {
+    const handleSubmitForm = () => {
         let objValue: any = {};
 
         if (formValues.user.enabled) {
             objValue = {
-                ...formValues,
                 company: {
                     ...formValues.company,
-                    startDate: `${formValues.company.startDate}:000Z`,
-                    expiredDate: `${formValues.company.expiredDate}:000Z`,
+                    startDate: formatDateTime(formValues.company.startDate),
+                    expiredDate: formatDateTime(formValues.company.expiredDate),
                 },
                 user: {
                     ...formValues.user,
@@ -199,11 +207,10 @@ export default function CompanyRegister() {
             };
         } else {
             objValue = {
-                ...formValues,
                 company: {
                     ...formValues.company,
-                    startDate: `${formValues.company.startDate}:000Z`,
-                    expiredDate: `${formValues.company.expiredDate}:000Z`,
+                    startDate: formatDateTime(formValues.company.startDate),
+                    expiredDate: formatDateTime(formValues.company.expiredDate),
                 },
                 user: {
                     ...formValues.user,
@@ -211,6 +218,7 @@ export default function CompanyRegister() {
                 },
             };
         }
+
         registerCompany(objValue)
             .then((resp) => {
                 handleResponse(resp);
@@ -286,7 +294,7 @@ export default function CompanyRegister() {
                                                     error={Boolean(errors.companyName)}
                                                     helperText={t(errors.companyName?.message?.toString() as string)}
                                                     {...register('companyName', {
-                                                        onChange: (e) => handleInputChange(e),
+                                                        onChange: (e) => handleInputChangeCompany(e),
                                                     })}
                                                 />
                                             </div>
@@ -315,7 +323,7 @@ export default function CompanyRegister() {
                                                     error={Boolean(errors.cpEmail)}
                                                     helperText={errors.cpEmail?.message?.toString()}
                                                     {...register('cpEmail', {
-                                                        onChange: (e) => handleInputChange(e),
+                                                        onChange: (e) => handleInputChangeCompany(e),
                                                     })}
                                                 />
                                             </div>
@@ -346,7 +354,7 @@ export default function CompanyRegister() {
                                                     error={Boolean(errors.cpTelNo)}
                                                     helperText={errors.cpTelNo?.message?.toString()}
                                                     {...register('cpTelNo', {
-                                                        onChange: (e) => handleInputChange(e),
+                                                        onChange: (e) => handleInputChangeCompany(e),
                                                     })}
                                                 />
                                             </div>
@@ -375,7 +383,7 @@ export default function CompanyRegister() {
                                                     error={Boolean(errors.taxNo)}
                                                     helperText={errors.taxNo?.message?.toString()}
                                                     {...register('taxNo', {
-                                                        onChange: (e) => handleInputChange(e),
+                                                        onChange: (e) => handleInputChangeCompany(e),
                                                     })}
                                                 />
                                             </div>
@@ -453,7 +461,7 @@ export default function CompanyRegister() {
                                                         name="ward"
                                                         displayEmpty
                                                         value={formValues.company.ward}
-                                                        onChange={handleWardChange}
+                                                        onChange={handleInputChangeCompany}
                                                     >
                                                         <MenuItem value="">
                                                             <em>{t('message.wardLabel')}</em>
@@ -475,7 +483,7 @@ export default function CompanyRegister() {
                                                     sx={{ mt: 1, mb: 1 }}
                                                     id="outlined-required"
                                                     placeholder={t('common.placeholder')}
-                                                    onChange={handleInputChange}
+                                                    onChange={handleInputChangeCompany}
                                                 />
                                             </div>
                                         </div>
@@ -500,7 +508,7 @@ export default function CompanyRegister() {
                                                     error={Boolean(errors.startDate)}
                                                     helperText={errors.startDate?.message?.toString()}
                                                     {...register('startDate', {
-                                                        onChange: (e) => handleInputChange(e),
+                                                        onChange: (e) => handleInputChangeCompany(e),
                                                     })}
                                                 />
                                             </div>
@@ -524,7 +532,7 @@ export default function CompanyRegister() {
                                                     error={Boolean(errors.expiredDate)}
                                                     helperText={errors.expiredDate?.message?.toString()}
                                                     {...register('expiredDate', {
-                                                        onChange: (e) => handleInputChange(e),
+                                                        onChange: (e) => handleInputChangeCompany(e),
                                                     })}
                                                 />
                                             </div>
@@ -577,7 +585,7 @@ export default function CompanyRegister() {
                                                     error={Boolean(errors.userName)}
                                                     helperText={errors.userName?.message?.toString()}
                                                     {...register('userName', {
-                                                        onChange: (e) => handleInputChange(e),
+                                                        onChange: (e) => handleInputChangeUser(e),
                                                     })}
                                                 />
                                             </div>
@@ -606,7 +614,7 @@ export default function CompanyRegister() {
                                                     error={Boolean(errors.password)}
                                                     helperText={errors.password?.message?.toString()}
                                                     {...register('password', {
-                                                        onChange: (e) => handleInputChange(e),
+                                                        onChange: (e) => handleInputChangeUser(e),
                                                     })}
                                                 />
                                             </div>
@@ -629,7 +637,7 @@ export default function CompanyRegister() {
                                                     }}
                                                     id="outlined-required"
                                                     placeholder={t('common.placeholder')}
-                                                    onChange={handleInputChange}
+                                                    onChange={handleInputChangeUser}
                                                 />
                                             </div>
                                             <div className="col-12 col-sm-6 d-block p-1">
@@ -649,7 +657,7 @@ export default function CompanyRegister() {
                                                     }}
                                                     id="outlined-required"
                                                     placeholder={t('common.placeholder')}
-                                                    onChange={handleInputChange}
+                                                    onChange={handleInputChangeUser}
                                                 />
                                             </div>
                                         </div>
@@ -677,7 +685,7 @@ export default function CompanyRegister() {
                                                     error={Boolean(errors.uTelNo)}
                                                     helperText={errors.uTelNo?.message?.toString()}
                                                     {...register('uTelNo', {
-                                                        onChange: (e) => handleInputChange(e),
+                                                        onChange: (e) => handleInputChangeUser(e),
                                                     })}
                                                 />
                                             </div>
@@ -705,7 +713,7 @@ export default function CompanyRegister() {
                                                     error={Boolean(errors.uEmail)}
                                                     helperText={errors.uEmail?.message?.toString()}
                                                     {...register('uEmail', {
-                                                        onChange: (e) => handleInputChange(e),
+                                                        onChange: (e) => handleInputChangeUser(e),
                                                     })}
                                                 />
                                             </div>
