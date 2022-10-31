@@ -26,6 +26,8 @@ export const UrlFeApp = {
         SEARCH: '/app/user',
         INFO: '/app/user/info',
         CREATE: '/app/user/create',
+        CREATE_WITH_COMPANY: '/app/user/create/with/company',
+        CREATE_WITH_COMPANY_ID: '/app/user/create/with/company/:id',
     },
     PROJECT: {
         SEARCH: '/app/project',
@@ -85,7 +87,7 @@ export const UrlServer = {
         GET_PROGRESS_BY_PROJECT_ID: `${PREFIX_SERVER_URL}/progress/by/project`,
         GET_PROGRESS_STATUS: `${PREFIX_SERVER_URL}/progress/status`,
         GET_USER_ASSIGN_CREATE: `${PREFIX_SERVER_URL}/projects/assign-list-create`,
-        GET_USER_ASSIGN_UPDATE: `${PREFIX_SERVER_URL}/projects/assign-list-edit`
+        GET_USER_ASSIGN_UPDATE: `${PREFIX_SERVER_URL}/projects/assign-list-edit`,
     },
     ROLE: {
         GET: `${PREFIX_SERVER_URL}/roles`,

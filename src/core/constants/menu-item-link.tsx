@@ -26,18 +26,6 @@ const menuItemLinkData: MenuItemLink[] = [
         name: 'Role',
         link: UrlFeApp.ROLE.INDEX,
     },
-    {
-        name: 'Schedule',
-        link: UrlFeApp.SCHEDULE.MATERIAL_STATUS,
-    },
-    {
-        name: 'Forgot Password',
-        link: UrlFeApp.FORGOT_PASSWORD.FORGOT,
-    },
-    {
-        name: 'Reset Password',
-        link: UrlFeApp.FORGOT_PASSWORD.RESET,
-    },
 ];
 
 export default menuItemLinkData;
