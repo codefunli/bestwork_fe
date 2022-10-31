@@ -24,7 +24,7 @@ export interface CreateProjectDTO {
 
 export interface User {
     userId: number;
-    name: string;
+    userName: string;
     canView: boolean;
     canEdit: boolean;
 }
