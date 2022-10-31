@@ -295,36 +295,6 @@ export default function ProjectRegister() {
                                                         <div className="col-12 col-sm-6 d-block p-1">
                                                             <InputLabel
                                                                 htmlFor="outlined-adornment-amount"
-                                                                error={Boolean(errors.comment)}
-                                                            >
-                                                                {t('project.register.comment')}
-                                                            </InputLabel>
-                                                            <TextField
-                                                                size="small"
-                                                                value={formValues.project.comment}
-                                                                fullWidth
-                                                                required
-                                                                id="outlined-required"
-                                                                sx={{
-                                                                    mt: 1,
-                                                                    mb: 1,
-                                                                    '& legend': { display: 'none' },
-                                                                    '& fieldset': { top: 0 },
-                                                                }}
-                                                                label=""
-                                                                placeholder={t('common.placeholder')}
-                                                                error={Boolean(errors.comment)}
-                                                                helperText={errors.comment?.message?.toString()}
-                                                                {...register('comment', {
-                                                                    onChange: (e) => handleInputChange(e),
-                                                                })}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    <div className="row justify-center m-1">
-                                                        <div className="col-12 col-sm-6 d-block p-1">
-                                                            <InputLabel
-                                                                htmlFor="outlined-adornment-amount"
                                                                 error={Boolean(errors.description)}
                                                             >
                                                                 {t('project.register.description')}
@@ -352,7 +322,9 @@ export default function ProjectRegister() {
                                                                 })}
                                                             />
                                                         </div>
-                                                        <div className="col-12 col-sm-6 p-1">
+                                                    </div>
+                                                    <div className="row justify-center m-1">
+                                                        <div className="col-12 col-sm-6 d-block p-1">
                                                             <InputLabel
                                                                 htmlFor="outlined-adornment-amount"
                                                                 error={Boolean(errors.createDate)}
@@ -384,9 +356,7 @@ export default function ProjectRegister() {
                                                                 })}
                                                             />
                                                         </div>
-                                                    </div>
-                                                    <div className="row justify-center m-1">
-                                                        <div className="col-12 col-sm-6 d-block p-1">
+                                                        <div className="col-12 col-sm-6 p-1">
                                                             <InputLabel id="demo-simple-select-outlined-label">
                                                                 {t('project.register.status')}{' '}
                                                                 <span className="input-required">*</span>
@@ -425,6 +395,8 @@ export default function ProjectRegister() {
                                                                 )}
                                                             </FormControl>
                                                         </div>
+                                                    </div>
+                                                    <div className="row justify-center m-1">
                                                         <div className="col-12 col-sm-6 d-block p-1">
                                                             <InputLabel id="demo-simple-select-outlined-label">
                                                                 {t('project.register.type')}{' '}
@@ -464,9 +436,7 @@ export default function ProjectRegister() {
                                                                 )}
                                                             </FormControl>
                                                         </div>
-                                                    </div>
-                                                    <div className="row justify-center m-1">
-                                                        <div className="col-12 col-sm-6 d-block p-1 mt-3">
+                                                        <div className="col-12 col-sm-6 d-block p-1">
                                                             <div className="row justify-center m-1">
                                                                 <div className="col-12 col-md-6 d-block">
                                                                     <FormControl component="fieldset">

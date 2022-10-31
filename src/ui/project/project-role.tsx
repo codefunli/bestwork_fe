@@ -241,7 +241,7 @@ export default function Role(props: Role) {
                                                 }}
                                             >
                                                 <TableCell component="th" scope="row">
-                                                    {user.name}
+                                                    {user.userName}
                                                 </TableCell>
                                                 <TableCell align="center">
                                                     <Checkbox
