@@ -506,7 +506,6 @@ export default function UserInfo() {
                                         >
                                             <Button
                                                 sx={{ mr: 1 }}
-                                                size="small"
                                                 variant="contained"
                                                 disabled={isSubmitting}
                                                 onClick={handleSubmit(handleSubmitForm)}

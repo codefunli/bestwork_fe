@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { StatusCode } from '../../core/constants/common';
 import { validateProjectProgress } from '../../core/constants/validate';
 import { ProjectProgressDTO } from '../../models/project-res-dto';
-import { currentDateTime, formatDateTime, formatDateTimeRes } from '../../core/utils/get-current-datetime';
+import { currentDateTime, formatDateTimeReq, formatDateTimeRes } from '../../core/utils/get-current-datetime';
 import ApiAlert from '../../shared-components/alert/api-alert';
 import MultipleFileUpload from '../../shared-components/file-upload/multiple-file-upload';
 import { updateProgress, getProgressStatus } from '../../services/project-service';
@@ -76,8 +76,8 @@ const ProgressEdit = (props: Props) => {
             {
                 ...progressData,
                 fileStorages: imgData,
-                startDate: formatDateTime(progressData.startDate),
-                endDate: formatDateTime(progressData.endDate),
+                startDate: formatDateTimeReq(progressData.startDate),
+                endDate: formatDateTimeReq(progressData.endDate),
             },
             progressData.id
         )

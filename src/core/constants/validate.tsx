@@ -111,7 +111,7 @@ export const validateEditCompanyForm = yup.object({
 });
 export const validateProjectRegisterForm = yup.object({
     projectName: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldProjectConstants.PROJECT_NAME])),
-    createDate: yup
+    startDate: yup
         .date()
         .required(getMessage(ERROR_MSG.E01_001, [FieldProjectConstants.CREATE_DATE]))
         .typeError(getMessage(ERROR_MSG.E01_001, [FieldProjectConstants.CREATE_DATE])),

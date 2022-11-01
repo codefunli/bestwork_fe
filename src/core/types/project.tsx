@@ -20,10 +20,10 @@ export const headProjectCol: HeadColumn[] = [
         label: 'project.table.colPrjType',
     },
     {
-        id: 'createDate',
+        id: 'startDate',
         numeric: false,
         disablePadding: false,
-        label: 'project.table.colCreateDate',
+        label: 'project.table.colStartDate',
     },
     {
         id: 'description',

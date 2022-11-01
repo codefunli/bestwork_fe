@@ -1,13 +1,10 @@
-import CheckIcon from '@mui/icons-material/Check';
-import CloseIcon from '@mui/icons-material/Close';
 import ManageHistorySharpIcon from '@mui/icons-material/ManageHistorySharp';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import PostAddSharpIcon from '@mui/icons-material/PostAddSharp';
-import { Chip, IconButton, Tooltip } from '@mui/material';
+import { IconButton, Tooltip } from '@mui/material';
 import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
-import { green } from '@mui/material/colors';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -22,6 +19,9 @@ import { HeadColumn } from '../../core/types/base';
 import { EnhancedTableHead, Order } from './table-columns';
 import './table-data.scss';
 import { EnhancedTableToolbar } from './table-toolbar';
+import { formatDateTimeResList } from '../../core/utils/get-current-datetime';
+import HandleProjectStatus from '../status-handle/project-status-handle';
+import HandleCompanyStatus from '../status-handle/company-status-handle';
 
 export interface ArrayAction {
     nameFn: string;
@@ -36,16 +36,17 @@ interface EnhancedTable {
     arrButton: ArrayAction[];
     searchCallBack: Function;
     deleteCallBack: Function;
+    projectStatus?: any;
 }
 
 export default function EnhancedTable(props: EnhancedTable) {
-    const { headCells, rows, isLoading, arrButton } = props;
+    const { headCells, rows, isLoading, arrButton, projectStatus } = props;
+    const { t } = useTranslation();
     const [order, setOrder] = React.useState<Order>('asc');
     const [orderBy, setOrderBy] = React.useState<string>('id');
     const [selected, setSelected] = React.useState<readonly string[]>([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
-    const { t } = useTranslation();
 
     React.useEffect(() => {
         setSelected([]);
@@ -182,7 +183,7 @@ export default function EnhancedTable(props: EnhancedTable) {
                                                 onClick={(event) => handleClick(event, row.id as string)}
                                             />
                                         </TableCell>
-                                        {headCells != undefined &&
+                                        {headCells !== undefined &&
                                             headCells.map((colValue) => {
                                                 return (
                                                     <TableCell
@@ -191,40 +192,36 @@ export default function EnhancedTable(props: EnhancedTable) {
                                                         align="left"
                                                         hidden={colValue.id === FieldConstants.ID}
                                                     >
-                                                        {colValue.id == 'startDate' || colValue.id == 'createDate' ? (
-                                                            row[colValue.id as string].replace(/[TZ]/g, ' ')
-                                                        ) : (colValue.id == 'expired' ||
-                                                              colValue.id == 'enabled' ||
-                                                              colValue.id == 'status') &&
-                                                          colValue.label.includes('company') ? (
-                                                            String(row[colValue.id as string]) == '0' ? (
-                                                                <Chip
-                                                                    sx={{ backgroundColor: green[400] }}
-                                                                    className="btn btn-outline-success"
-                                                                    label={t('button.btnActive')}
-                                                                    size="small"
-                                                                    icon={<CheckIcon color="success" />}
-                                                                />
+                                                        {colValue.id === 'startDate' || colValue.id === 'createDate' ? (
+                                                            formatDateTimeResList(row[colValue.id])
+                                                        ) : (colValue.id === 'expired' ||
+                                                            colValue.id === 'enabled' ||
+                                                            colValue.id === 'status') ?
+                                                            (
+                                                                (colValue.label.includes('company')) ? (
+                                                                    <HandleCompanyStatus
+                                                                        statusId={row[colValue.id].toString()}
+                                                                    />
+                                                                ) : (
+                                                                    (colValue.label.includes('project')) ? (
+                                                                        <HandleProjectStatus
+                                                                            statusList={(projectStatus && projectStatus.length > 0) ? projectStatus : []}
+                                                                            statusId={row[colValue.id]}
+                                                                        />
+                                                                    ) : ('')
+                                                                )
+                                                            ) : colValue.id === 'projectType' ? (
+                                                                row[colValue.id as string].name
+                                                            ) : colValue.id === 'enabled' &&
+                                                                colValue.label.includes('user') ? (
+                                                                row[colValue.id as string] === 1 ? (
+                                                                    t('user.search.enabled')
+                                                                ) : (
+                                                                    t('user.search.notEnabled')
+                                                                )
                                                             ) : (
-                                                                <Chip
-                                                                    label={t('button.btnPending')}
-                                                                    size="small"
-                                                                    className="btn btn-outline-secondary"
-                                                                    icon={<CloseIcon />}
-                                                                />
-                                                            )
-                                                        ) : colValue.id == 'projectType' ? (
-                                                            row[colValue.id as string].name
-                                                        ) : colValue.id == 'enabled' &&
-                                                          colValue.label.includes('user') ? (
-                                                            row[colValue.id as string] === 1 ? (
-                                                                t('user.search.enabled')
-                                                            ) : (
-                                                                t('user.search.notEnabled')
-                                                            )
-                                                        ) : (
-                                                            row[colValue.id as string]
-                                                        )}
+                                                                row[colValue.id as string]
+                                                            )}
                                                     </TableCell>
                                                 );
                                             })}
@@ -267,7 +264,7 @@ export default function EnhancedTable(props: EnhancedTable) {
                         </TableBody>
                     </Table>
                 </TableContainer>
-                {rows != undefined && rows.content != undefined && rows.content.length > 0 && (
+                {rows !== undefined && rows.content !== undefined && rows.content.length > 0 && (
                     <TablePagination
                         rowsPerPageOptions={[5, 10]}
                         component="div"

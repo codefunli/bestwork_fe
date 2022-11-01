@@ -32,7 +32,7 @@ import { Company } from '../../models/project-req-dto';
 import { ProjectTypeDTO } from '../../models/project-res-dto';
 import { getAllCompanies } from '../../services/company-service';
 import { getProject, getProjectStatus, getProjectTypes, updateProject, getUsersAssignListUpdate } from '../../services/project-service';
-import { currentDateTime, formatDateTime } from '../../core/utils/get-current-datetime';
+import { currentDateTime, formatDateTimeReq, formatDateTimeResNoneSuffixes } from '../../core/utils/get-current-datetime';
 import ApiAlert from '../../shared-components/alert/api-alert';
 import TabPanel from '../../shared-components/tab-manager/tab-panel';
 import Role from './project-role';
@@ -43,7 +43,7 @@ const initialValues: any = {
         projectType: '',
         description: '',
         comment: '',
-        createDate: currentDateTime,
+        startDate: currentDateTime,
         notificationFlag: true,
         isPaid: false,
         status: '',
@@ -70,7 +70,7 @@ export default function ProjectRegister() {
                         project: {
                             ...value.data,
                             projectType: value.data.projectType.id,
-                            createDate: formatDateTime(value.data.createDate)
+                            startDate: formatDateTimeResNoneSuffixes(value.data.startDate)
                         }
                     });
                     reset();
@@ -171,7 +171,7 @@ export default function ProjectRegister() {
             ...formValues,
             project: {
                 ...formValues.project,
-                createDate: (new Date(formValues.project.createDate)).toISOString().replaceAll('.', ':')
+                startDate: formatDateTimeReq(formValues.project.startDate)
             },
         };
 
@@ -328,9 +328,9 @@ export default function ProjectRegister() {
                                                         <div className="col-12 col-sm-6 d-block p-1">
                                                             <InputLabel
                                                                 htmlFor="outlined-adornment-amount"
-                                                                error={Boolean(errors.createDate)}
+                                                                error={Boolean(errors.startDate)}
                                                             >
-                                                                {t('project.register.createDate')}{' '}
+                                                                {t('project.register.startDate')}{' '}
                                                                 <span className="input-required">*</span>
                                                             </InputLabel>
                                                             <TextField
@@ -342,17 +342,17 @@ export default function ProjectRegister() {
                                                                     '& fieldset': { top: 0 },
                                                                     '& input': { padding: '8.5px 14px' },
                                                                 }}
-                                                                value={formValues.project.createDate}
+                                                                value={formValues.project.startDate}
                                                                 id="dateEnd"
                                                                 type="datetime-local"
                                                                 InputLabelProps={{
                                                                     shrink: true,
                                                                 }}
-                                                                error={Boolean(errors.createDate)}
+                                                                error={Boolean(errors.startDate)}
                                                                 helperText={t(
-                                                                    errors.createDate?.message?.toString() as string,
+                                                                    errors.startDate?.message?.toString() as string,
                                                                 )}
-                                                                {...register('createDate', {
+                                                                {...register('startDate', {
                                                                     onChange: (e) => handleInputChange(e),
                                                                 })}
                                                             />

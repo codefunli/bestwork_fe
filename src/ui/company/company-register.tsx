@@ -30,7 +30,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { AlertColorConstants, Item, StatusCode, UrlFeApp } from '../../core/constants/common';
 import { validateForm } from '../../core/constants/validate';
-import { currentDateTime, formatDateTime } from '../../core/utils/get-current-datetime';
+import { currentDateTime, formatDateTimeReq } from '../../core/utils/get-current-datetime';
 import { registerCompany } from '../../services/company-service';
 import MessageShow from '../../shared-components/message/message';
 import { SUCCESS_MSG } from '../../core/constants/message';
@@ -198,8 +198,8 @@ export default function CompanyRegister() {
             objValue = {
                 company: {
                     ...formValues.company,
-                    startDate: formatDateTime(formValues.company.startDate),
-                    expiredDate: formatDateTime(formValues.company.expiredDate),
+                    startDate: formatDateTimeReq(formValues.company.startDate),
+                    expiredDate: formatDateTimeReq(formValues.company.expiredDate),
                 },
                 user: {
                     ...formValues.user,
@@ -210,8 +210,8 @@ export default function CompanyRegister() {
             objValue = {
                 company: {
                     ...formValues.company,
-                    startDate: formatDateTime(formValues.company.startDate),
-                    expiredDate: formatDateTime(formValues.company.expiredDate),
+                    startDate: formatDateTimeReq(formValues.company.startDate),
+                    expiredDate: formatDateTimeReq(formValues.company.expiredDate),
                 },
                 user: {
                     ...formValues.user,
