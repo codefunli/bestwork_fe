@@ -22,6 +22,20 @@
             "colCpStartDate": "Ngày bắt đầu",
             "colCpExpired": "Trạng thái",
             "colCpEmail": "Thư điện tử"
+        },
+        "register": {
+            "title": "Đăng Ký Công Ty",
+            "title_card": "Đăng ký công ty mới",
+            "name": "Tên công ty",
+            "email": "Thư điện tử",
+            "telNo": "Số điện thoại",
+            "taxNo": "Mã số thuế",
+            "city": "Tỉnh/Thành phố",
+            "district": "Quận/Huyện",
+            "ward": "Phường/Xã",
+            "street": "Tên đường",
+            "startDate": "Ngày bắt đầu/Thời gian (UTC)",
+            "endDate": "Ngày kết thúc/Thời gian (UTC)"
         }
     },
     "register": {
@@ -94,7 +108,8 @@
         "viewAll": "Xem tất cả",
         "profile": "Hồ sơ",
         "changePassword": "Đổi mật khẩu",
-        "logout": "Đăng xuất"
+        "logout": "Đăng xuất",
+        "status": "Trạng thái"
     },
     "message": {
         "required": "là bắt buộc.",
@@ -112,7 +127,10 @@
         "typeLabel": "Chọn kiểu",
         "loginFailed": "Tài khoản và mật khẩu không chính xác",
         "accessDenied": "Từ chối truy cập, bạn không có quyền truy cập hệ thống",
-        "deleteSuccess": "Xóa dữ liệu thành công"
+        "deleteSuccess": "Xóa dữ liệu thành công",
+        "retriveSuccess": "Lấy dữ liệu thành công",
+        "registrationSuccess": "Đăng kí dữ liệu thành công",
+        "updateSuccess": "Cập nhật dữ liệu thành công"
     },
     "bread_crumbs": {
         "home": "Trang chủ",
@@ -165,6 +183,18 @@
         },
         "create": {
             "title": "Tạo mới người dùng"
+        },
+        "register": {
+            "title": "Tạo mới người dùng",
+            "title_card": "Đăng ký tài khoản quản trị viên mới",
+            "userName": "Tên tài khoản",
+            "password": "Mật khẩu",
+            "firstName": "Tên",
+            "lastName": "Họ",
+            "telNo": "Số điện thoại",
+            "email": "Thư điện tử",
+            "allowLogin": "Chấp nhận đăng nhập",
+            "roleAssigned": "Vai trò"
         }
     },
     "title": {

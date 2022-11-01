@@ -1,5 +1,6 @@
 import { Alert, AlertColor, Snackbar, SnackbarOrigin } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export interface State extends SnackbarOrigin {
     open: boolean;
@@ -19,7 +20,7 @@ export default function MessageShow(props: MessageShowProps) {
         vertical: 'top',
         horizontal: 'right',
     });
-
+    const { t } = useTranslation();
     const { vertical, horizontal, open } = state;
 
     useEffect(() => {

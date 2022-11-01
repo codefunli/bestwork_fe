@@ -20,8 +20,8 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from 'react-query';
 import { Link, useNavigate } from 'react-router-dom';
-import { ConfirmConstants, UrlFeApp } from '../../core/constants/common';
-import { SUCCESS_MSG } from '../../core/constants/message';
+import { AlertColorConstants, ConfirmConstants, Item, UrlFeApp } from '../../core/constants/common';
+import { ERROR_MSG, SUCCESS_MSG } from '../../core/constants/message';
 import { headCompanyCol } from '../../core/types/company';
 import { deleteCompanies, getCompanies } from '../../services/company-service';
 import MessageShow from '../../shared-components/message/message';
@@ -49,7 +49,7 @@ export default function CompanySearch() {
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [isShowMessage, setIsShowMessage] = useState(false);
     const [companyMsg, setCompanyMsg] = useState('');
-    const [typeCompanyMsg, setTypeCompanyMsg] = useState<AlertColor>('success');
+    const [typeCompanyMsg, setTypeCompanyMsg] = useState<AlertColor>(AlertColorConstants.SUCCESS);
     const [formValues, setFormValues] = useState(initialValues);
     const queryClient = useQueryClient();
     const [state, setState] = useState<any>();
@@ -120,8 +120,8 @@ export default function CompanySearch() {
             lstCompanyId: [...childData.ids],
         };
 
-        setTypeCompanyMsg('success');
-        setCompanyMsg(SUCCESS_MSG.S01_004);
+        setTypeCompanyMsg(AlertColorConstants.SUCCESS);
+        setCompanyMsg(t(SUCCESS_MSG.S01_004));
         setIsOpenModal(true);
         setIds(data);
     };
@@ -155,7 +155,7 @@ export default function CompanySearch() {
                 });
             })
             .catch(() => {
-                handleMessage(true, t('message.someThingWrong'), 'error');
+                handleMessage(true, t(ERROR_MSG.E01_011), AlertColorConstants.ERROR);
             });
     };
 
@@ -170,14 +170,14 @@ export default function CompanySearch() {
 
     const arruBtton: ArrayAction[] = [
         {
-            nameFn: t('tooltip.edit'),
+            nameFn: t(Item.TOOL_TIP.EDIT),
             acFn: handleEditData,
-            iconFn: 'ModeEditIcon',
+            iconFn: Item.ICON_BTN.MODE_EDIT_ICON,
         },
         {
-            nameFn: t('tooltip.addUser'),
+            nameFn: t(Item.TOOL_TIP.ADD_USER),
             acFn: handleAddUser,
-            iconFn: 'AddUser',
+            iconFn: Item.ICON_BTN.MODE_ADD_USER_ICON,
         },
     ];
 
@@ -187,7 +187,7 @@ export default function CompanySearch() {
                 <div className="row">
                     <div className="col-sm-12 col-md-6 text-start d-none d-lg-block">
                         <Typography variant="h5" color="textSecondary" gutterBottom sx={{ textTransform: 'uppercase' }}>
-                            {t('company.title')}
+                            {t(Item.COMPANY.TITLE)}
                         </Typography>
                     </div>
                     <div className="col-sm-12 col-md-6 text-end d-none d-lg-block">
@@ -199,7 +199,7 @@ export default function CompanySearch() {
                             to={UrlFeApp.COMPANY.CREATE}
                             sx={{ textTransform: 'uppercase' }}
                         >
-                            {t('button.btnRegister')}
+                            {t(Item.LABEL_BTN.REGISTER)}
                         </Button>
                     </div>
                     <div className="col-sm-12 text-start d-block d-lg-none">
@@ -210,7 +210,7 @@ export default function CompanySearch() {
                             to={UrlFeApp.COMPANY.CREATE}
                             sx={{ textTransform: 'uppercase' }}
                         >
-                            {t('button.btnRegister')}
+                            {t(Item.LABEL_BTN.REGISTER)}
                         </Button>
                     </div>
                 </div>
@@ -222,7 +222,7 @@ export default function CompanySearch() {
                             <Card w-full="true">
                                 <CardHeader
                                     avatar={<Avatar aria-label="recipe">SC</Avatar>}
-                                    title={t('company.search.title')}
+                                    title={t(Item.COMPANY.SEARCH_TITLE)}
                                     subheader={new Date().toLocaleDateString()}
                                 />
                                 <CardContent>
@@ -239,7 +239,7 @@ export default function CompanySearch() {
                                         <div className="row justify-center m-1">
                                             <div className="col-12 d-block p-1">
                                                 <InputLabel htmlFor="keyword-search">
-                                                    {t('company.search.keyword')}
+                                                    {t(Item.COMPANY.SEARCH_KEYWORK)}
                                                 </InputLabel>
                                                 <TextField
                                                     size="small"
@@ -251,7 +251,7 @@ export default function CompanySearch() {
                                                         '& fieldset': { top: 0 },
                                                     }}
                                                     id="keyword-search"
-                                                    placeholder={t('common.placeholder')}
+                                                    placeholder={t(Item.COMMON.PLACE_HOLDER)}
                                                     name="keyword"
                                                     value={formValues.keyword}
                                                     onChange={handleInputChange}
@@ -261,7 +261,7 @@ export default function CompanySearch() {
                                         <div className="row justify-center m-1">
                                             <div className="col-12 d-block p-1">
                                                 <InputLabel id="demo-simple-select-outlined-label">
-                                                    {t('company.search.status')}
+                                                    {t(Item.COMPANY.SEARCH_STATUS)}
                                                 </InputLabel>
                                                 <FormControl
                                                     size="small"
@@ -283,7 +283,7 @@ export default function CompanySearch() {
                                                     >
                                                         <MenuItem value={2}>
                                                             <em style={{ color: '#bdbdbd', margin: '0 auto' }}>
-                                                                {t('message.status')}
+                                                                {t(Item.COMMON.STATUS)}
                                                             </em>
                                                         </MenuItem>
                                                         <MenuItem value={0}>
@@ -293,7 +293,7 @@ export default function CompanySearch() {
                                                                     width: '100%',
                                                                 }}
                                                                 className="btn btn-outline-success"
-                                                                label={t('button.btnActive')}
+                                                                label={t(Item.LABEL_BTN.ACTIVE)}
                                                                 size="small"
                                                                 icon={<CheckIcon color="success" />}
                                                             />
@@ -301,7 +301,7 @@ export default function CompanySearch() {
                                                         <MenuItem value={1}>
                                                             <Chip
                                                                 sx={{ width: '100%' }}
-                                                                label={t('button.btnPending')}
+                                                                label={t(Item.LABEL_BTN.PENDING)}
                                                                 size="small"
                                                                 className="btn btn-outline-secondary"
                                                                 icon={<CloseIcon />}
@@ -327,7 +327,7 @@ export default function CompanySearch() {
                                                     variant="contained"
                                                     onClick={handleSubmit}
                                                 >
-                                                    {t('button.btnSearch')}
+                                                    {t(Item.LABEL_BTN.SEARCH)}
                                                 </Button>
                                                 <Button
                                                     sx={{
@@ -336,7 +336,7 @@ export default function CompanySearch() {
                                                     onClick={handleClearData}
                                                     variant="outlined"
                                                 >
-                                                    {t('button.btnClear')}
+                                                    {t(Item.LABEL_BTN.CLEAR)}
                                                 </Button>
                                             </ButtonGroup>
                                         </div>
