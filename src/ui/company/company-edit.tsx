@@ -27,6 +27,7 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AlertColorConstants, UrlFeApp } from '../../core/constants/common';
+import { SUCCESS_MSG } from '../../core/constants/message';
 import { validateEditCompanyForm } from '../../core/constants/validate';
 import { District, Ward } from '../../core/types/administrative';
 import { getDistrictsByCityCode, getWardsByDistrictCode } from '../../core/utils/administrative-utils';
@@ -206,7 +207,7 @@ export default function CompanyEdit() {
         };
         updateCompany(companyValue)
             .then((data: any) => {
-                handleMessage(true, data.message, 'success');
+                handleMessage(true, t(SUCCESS_MSG.S01_003), 'success');
                 if (data.status === 'OK') {
                     setTimeout(() => {
                         navigate(UrlFeApp.COMPANY.SEARCH);

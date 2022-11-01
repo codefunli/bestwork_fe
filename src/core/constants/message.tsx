@@ -1,9 +1,9 @@
 import { isArrayEmpty } from '../utils/object-utils';
 
 export const SUCCESS_MSG = {
-    S01_001: 'Retrieve data is successfully',
-    S01_002: 'Registration data is successfully',
-    S01_003: 'Updating data is successfully',
+    S01_001: 'message.retriveSuccess',
+    S01_002: 'message.registrationSuccess',
+    S01_003: 'message.updateSuccess',
     S01_004: 'message.deleteSuccess',
 };
 
@@ -19,6 +19,7 @@ export const ERROR_MSG = {
     E01_008: '{0} should be in correct format.',
     E01_009: '{0} must be at earlier than current date',
     E01_010: '{0} must match',
+    E01_011: 'message.error',
 };
 
 export const getMessage = (msg: string, params: any[]) => {

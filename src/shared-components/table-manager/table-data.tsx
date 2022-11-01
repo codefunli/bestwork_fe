@@ -17,7 +17,7 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { FieldConstants } from '../../core/constants/common';
+import { FieldConstants, Item } from '../../core/constants/common';
 import { HeadColumn } from '../../core/types/base';
 import { EnhancedTableHead, Order } from './table-columns';
 import './table-data.scss';
@@ -120,9 +120,9 @@ export default function EnhancedTable(props: EnhancedTable) {
 
     const renderIcon = (iconFn: string) => {
         switch (iconFn) {
-            case 'ModeEditIcon':
+            case Item.ICON_BTN.MODE_EDIT_ICON:
                 return <ModeEditIcon />;
-            case 'AddUser':
+            case Item.ICON_BTN.MODE_ADD_USER_ICON:
                 return <PersonAddAlt1Icon />;
             case 'AddMaterialStatus':
                 return <PostAddSharpIcon />;

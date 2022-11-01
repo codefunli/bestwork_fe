@@ -22,6 +22,20 @@
             "colCpStartDate": "Start Date",
             "colCpExpired": "Status",
             "colCpEmail": "Email"
+        },
+        "register": {
+            "title": "Company Register",
+            "title_card": "Register a new company",
+            "name": "Company Name",
+            "email": "Email",
+            "telNo": "Tel-No",
+            "taxNo": "Tax-No",
+            "city": "City/Province",
+            "district": "District/Town",
+            "ward": "Ward/Township",
+            "street": "Street",
+            "startDate": "Start Date/Time (UTC)",
+            "endDate": "End Date/Time (UTC)"
         }
     },
     "register": {
@@ -94,7 +108,8 @@
         "viewAll": "View all",
         "profile": "Profile",
         "changePassword": "Change password",
-        "logout": "Logout"
+        "logout": "Logout",
+        "status": "Status"
     },
     "message": {
         "required": "is required.",
@@ -112,7 +127,10 @@
         "typeLabel": "Please choose type",
         "loginFailed": "The Username or Password is Incorrect",
         "accessDenied": "Access denied, you don't have permission to access on this server",
-        "deleteSuccess": "Deletion data is successfully"
+        "deleteSuccess": "Deletion data is successfully",
+        "retriveSuccess": "Retrieve data is successfully",
+        "registrationSuccess": "Registration data is successfully",
+        "updateSuccess": "Update data is successfully"
     },
     "bread_crumbs": {
         "home": "Home",
@@ -132,7 +150,7 @@
     "user": {
         "title": "User Information",
         "search": {
-            "title": "Search user",
+            "title": "User Search",
             "subtitle": "Search users through filters",
             "keyword": "Keyword",
             "companyName": "Company Name",
@@ -165,6 +183,18 @@
         },
         "create": {
             "title": "Create new user"
+        },
+        "register": {
+            "title": "User Register",
+            "title_card": "Register a new admin user",
+            "userName": "User Name",
+            "password": "Password",
+            "firstName": "First Name",
+            "lastName": "Last Name",
+            "telNo": "Tel-No",
+            "email": "Email",
+            "allowLogin": "Allow Login",
+            "roleAssigned": "Role Assigned"
         }
     },
     "title": {
