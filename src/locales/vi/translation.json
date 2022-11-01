@@ -20,6 +20,7 @@
             "colCpName": "Tên công ty",
             "colCpAddress": "Địa chỉ",
             "colCpStartDate": "Ngày bắt đầu",
+            "colCpExpiredtDate": "Ngày hết hạn",
             "colCpExpired": "Trạng thái",
             "colCpEmail": "Thư điện tử"
         },

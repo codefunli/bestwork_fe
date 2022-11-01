@@ -20,6 +20,7 @@
             "colCpName": "Company Name",
             "colCpAddress": "Address",
             "colCpStartDate": "Start Date",
+            "colCpExpiredtDate": "Expired Date",
             "colCpExpired": "Status",
             "colCpEmail": "Email"
         },

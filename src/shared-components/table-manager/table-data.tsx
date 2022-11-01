@@ -191,7 +191,9 @@ export default function EnhancedTable(props: EnhancedTable) {
                                                         align="left"
                                                         hidden={colValue.id === FieldConstants.ID}
                                                     >
-                                                        {colValue.id == 'startDate' || colValue.id == 'createDate' ? (
+                                                        {colValue.id == 'startDate' ||
+                                                        colValue.id == 'createDate' ||
+                                                        colValue.id == 'expiredDate' ? (
                                                             row[colValue.id as string].replace(/[TZ]/g, ' ')
                                                         ) : (colValue.id == 'expired' ||
                                                               colValue.id == 'enabled' ||
