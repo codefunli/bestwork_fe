@@ -390,7 +390,7 @@ export default function UserAdd() {
                                             >
                                                 <Select
                                                     value={formValues.company.id}
-                                                    displayEmpty
+                                                    disabled={formValues.company.id ? true : false}
                                                     sx={{
                                                         '& legend': { display: 'none' },
                                                         '& fieldset': { top: 0 },
