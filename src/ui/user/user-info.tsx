@@ -1,56 +1,39 @@
-import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { yupResolver } from '@hookform/resolvers/yup';
 import {
-    Button,
+    AlertColor, Button,
     ButtonGroup,
     Card,
-    CardContent,
-    FormControlLabel,
-    Grid,
-    InputLabel,
-    Radio,
-    RadioGroup,
-    Switch,
+    CardContent, FormControl, FormHelperText, Grid,
+    InputLabel, MenuItem, Select, Switch,
     TextField,
-    Typography,
-    AlertColor,
-    FormControl,
-    Select,
-    MenuItem,
-    FormHelperText,
+    Typography
 } from '@mui/material';
 import { Box } from '@mui/system';
-import { useTranslation } from 'react-i18next';
-import { UserResDto } from '../../models/user-res-dto';
-import { getRoles, getUser, putUser } from '../../services/user-service';
-import { UrlFeApp, AlertColorConstants, StatusCode, DefaultImage } from '../../core/constants/common';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { validateUserForm } from '../../core/constants/validate';
-import MessageShow from '../../shared-components/message/message';
-import { getCompanies, getCompaniesByUser } from '../../services/company-service';
+import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
+import { AlertColorConstants, DefaultImage, UrlFeApp } from '../../core/constants/common';
+import { validateUserEditForm } from '../../core/constants/validate';
+import { getCompaniesByUser } from '../../services/company-service';
+import { getRoles, getUser, putUser } from '../../services/user-service';
 import FileUpload from '../../shared-components/file-upload/file-upload';
+import MessageShow from '../../shared-components/message/message';
 import './user.scss';
 
 const initialValues = {
     id: '',
     userName: '',
-    password: 'hidden',
     firstName: '',
     lastName: '',
     uEmail: '',
     enabled: 0,
     uTelNo: '',
-    role: {
-        id: '',
-    },
+    role: '',
     avatar: DefaultImage.USER_AVATAR,
     updateDate: '',
-    countLoginFailed: '',
     deleteFlag: 0,
-    company: {
-        id: '',
-    },
+    company: '',
 };
 
 export default function UserInfo() {
@@ -71,30 +54,28 @@ export default function UserInfo() {
         handleSubmit,
         formState: { errors, isSubmitting },
     } = useForm({
-        resolver: yupResolver(validateUserForm),
+        resolver: yupResolver(validateUserEditForm),
     });
 
     useEffect(() => {
-        getRoles().then((data: any) => {
-            setRoles(data);
+        getCompaniesByUser().then(companies => {
+            if (companies) setCompanies(companies);
         });
-    }, []);
 
-    useEffect(() => {
-        const fetchCompanies = async () => {
-            const companies = await getCompaniesByUser();
-            if (companies) {
-                setCompanies(companies);
-            }
-        };
-        fetchCompanies();
+        getRoles().then((data: any) => {
+            if (data) setRoles(data);
+        });
     }, []);
 
     useEffect(() => {
         const fetchUserInfo = async () => {
             const data = await getUser(userId);
             if (data && data.data) {
-                setFormValues(data.data);
+                setFormValues({
+                    ...data.data,
+                    role: data.data.role.id,
+                    company: data.data.company.id
+                });
                 reset();
             }
         };
@@ -114,26 +95,10 @@ export default function UserInfo() {
 
     const handleInputChange = (e: any) => {
         const { name, value } = e.target;
-        if (name === 'role') {
-            setFormValues({
-                ...formValues,
-                [name]: {
-                    id: value,
-                },
-            });
-        } else if (name === 'company') {
-            setFormValues({
-                ...formValues,
-                [name]: {
-                    id: value,
-                },
-            });
-        } else {
-            setFormValues({
-                ...formValues,
-                [name]: value,
-            });
-        }
+        setFormValues({
+            ...formValues,
+            [name]: value,
+        });
     };
 
     const handleSwitchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -176,6 +141,11 @@ export default function UserInfo() {
 
     const handleCloseMsg = () => {
         setIsShowMsg(false);
+    };
+
+    const getCompanyName = (companyId: any) => {
+        const company = (companies && companies.length > 0) && companies.find((company: any) => company.id.toString() === companyId.toString());
+        return company ? company.companyName : '';
     };
 
     return (
@@ -240,32 +210,6 @@ export default function UserInfo() {
                                             />
                                         </div>
                                         <div className="col-12 col-sm-6 d-block p-1">
-                                            <InputLabel htmlFor="password" error={Boolean(errors.password)}>
-                                                {t('login.password')} <span className="input-required">*</span>
-                                            </InputLabel>
-                                            <TextField
-                                                size="small"
-                                                fullWidth
-                                                sx={{
-                                                    mt: 1,
-                                                    mb: 1,
-                                                    '& legend': { display: 'none' },
-                                                    '& fieldset': { top: 0 },
-                                                }}
-                                                required
-                                                id="password"
-                                                type="password"
-                                                label=""
-                                                placeholder={t('common.placeholder')}
-                                                value={formValues.password}
-                                                error={Boolean(errors.password)}
-                                                helperText={t(errors.password?.message?.toString() as string)}
-                                                {...register('password', {
-                                                    onChange: (e) => handleInputChange(e),
-                                                })}
-                                            />
-                                        </div>
-                                        <div className="col-12 col-sm-6 d-block p-1">
                                             <InputLabel htmlFor="uEmail" error={Boolean(errors.uEmail)}>
                                                 {t('user.info.email')} <span className="input-required">*</span>
                                             </InputLabel>
@@ -313,6 +257,28 @@ export default function UserInfo() {
                                                 {...register('uTelNo', {
                                                     onChange: (e) => handleInputChange(e),
                                                 })}
+                                            />
+                                        </div>
+                                        <div className="col-12 col-sm-6 d-block p-1">
+                                            <InputLabel htmlFor="company" error={Boolean(errors.company)}>
+                                                {t('user.info.company')} <span className="input-required">*</span>
+                                            </InputLabel>
+                                            <TextField
+                                                size="small"
+                                                fullWidth
+                                                sx={{
+                                                    mt: 1,
+                                                    mb: 1,
+                                                    '& legend': { display: 'none' },
+                                                    '& fieldset': { top: 0 },
+                                                }}
+                                                required
+                                                id="company"
+                                                label=""
+                                                placeholder=""
+                                                name="company"
+                                                value={getCompanyName(formValues.company)}
+                                                disabled
                                             />
                                         </div>
                                     </div>
@@ -370,83 +336,6 @@ export default function UserInfo() {
                                     </div>
                                     <div className="row justify-center m-1">
                                         <div className="col-12 col-sm-6 d-block p-1">
-                                            <InputLabel htmlFor="comapny" error={Boolean(errors.comapny)}>
-                                                {t('user.info.company')} <span className="input-required">*</span>
-                                            </InputLabel>
-                                            <FormControl
-                                                size="small"
-                                                fullWidth
-                                                sx={{ mt: 1, mb: 1 }}
-                                                variant="outlined"
-                                                error
-                                            >
-                                                <Select
-                                                    value={formValues.company.id}
-                                                    displayEmpty
-                                                    sx={{
-                                                        '& legend': { display: 'none' },
-                                                        '& fieldset': { top: 0 },
-                                                    }}
-                                                    error={Boolean(errors.comapny)}
-                                                    {...register('company', {
-                                                        onChange: (e) => handleInputChange(e),
-                                                    })}
-                                                >
-                                                    <MenuItem value="" disabled>
-                                                        <em className="placeholder-color">
-                                                            {t('user.search.selectCompanyName')}
-                                                        </em>
-                                                    </MenuItem>
-                                                    {companies &&
-                                                        companies.length > 0 &&
-                                                        companies.map((company: any) => {
-                                                            return (
-                                                                <MenuItem value={company.id} selected={true}>
-                                                                    <em>{company.companyName}</em>
-                                                                </MenuItem>
-                                                            );
-                                                        })}
-                                                </Select>
-                                                {Boolean(errors.comapny) && (
-                                                    <FormHelperText id="component-error-text">
-                                                        {errors?.comapny?.message as string}
-                                                    </FormHelperText>
-                                                )}
-                                            </FormControl>
-                                        </div>
-                                        <div className="col-12 col-sm-6 d-block p-1">
-                                            <InputLabel htmlFor="countLoginFailed">
-                                                {t('user.info.countLoginFailed')}
-                                            </InputLabel>
-                                            <TextField
-                                                size="small"
-                                                fullWidth
-                                                sx={{
-                                                    mt: 1,
-                                                    mb: 1,
-                                                    '& legend': { display: 'none' },
-                                                    '& fieldset': { top: 0 },
-                                                }}
-                                                required
-                                                id="countLoginFailed"
-                                                label=""
-                                                placeholder=""
-                                                name="countLoginFailed"
-                                                value={formValues.countLoginFailed}
-                                                disabled
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="row justify-center m-1">
-                                        <div className="col-12 col-sm-6 d-block p-1">
-                                            <InputLabel htmlFor="enable">{t('user.info.enabled')}</InputLabel>
-                                            <Switch
-                                                checked={formValues.enabled == 1 ? true : false}
-                                                name="enabled"
-                                                onChange={handleSwitchChange}
-                                            />
-                                        </div>
-                                        <div className="col-12 col-sm-6 d-block p-1">
                                             <InputLabel htmlFor="role" error={Boolean(errors.role)}>
                                                 {t('user.info.role')} <span className="input-required">*</span>
                                             </InputLabel>
@@ -458,7 +347,7 @@ export default function UserInfo() {
                                                 error
                                             >
                                                 <Select
-                                                    value={formValues.role.id}
+                                                    value={formValues.role}
                                                     displayEmpty
                                                     sx={{
                                                         '& legend': { display: 'none' },
@@ -474,15 +363,11 @@ export default function UserInfo() {
                                                             {t('user.search.selectRole')}
                                                         </em>
                                                     </MenuItem>
-                                                    {roles &&
-                                                        roles.length > 0 &&
-                                                        roles.map((role: any) => {
-                                                            return (
-                                                                <MenuItem value={role.id} selected={true}>
-                                                                    <em>{role.roleName}</em>
-                                                                </MenuItem>
-                                                            );
-                                                        })}
+                                                    {roles && roles.length > 0 && roles.map((role: any) => (
+                                                        <MenuItem value={role.id} selected={true}>
+                                                            <em>{role.roleName}</em>
+                                                        </MenuItem>
+                                                    ))}
                                                 </Select>
                                                 {Boolean(errors.role) && (
                                                     <FormHelperText id="component-error-text">
@@ -491,13 +376,11 @@ export default function UserInfo() {
                                                 )}
                                             </FormControl>
                                         </div>
-                                    </div>
-                                    <div className="row justify-center m-1">
                                         <div className="col-12 col-sm-6 d-block p-1">
-                                            <InputLabel htmlFor="deleteFlag">{t('user.info.deleted')}</InputLabel>
+                                            <InputLabel htmlFor="enable">{t('user.info.enabled')}</InputLabel>
                                             <Switch
-                                                checked={formValues.deleteFlag == 1 ? true : false}
-                                                name="deleteFlag"
+                                                checked={formValues.enabled === 1 ? true : false}
+                                                name="enabled"
                                                 onChange={handleSwitchChange}
                                             />
                                         </div>
@@ -521,13 +404,13 @@ export default function UserInfo() {
                                             </Button>
                                         </ButtonGroup>
                                     </div>
-                                </Box>
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                </Grid>
-            </form>
+                                </Box >
+                            </CardContent >
+                        </Card >
+                    </Grid >
+                </Grid >
+            </form >
             <MessageShow message={userMsg} showMessage={isShowMsg} type={userMsgType} handleCloseMsg={handleCloseMsg} />
-        </div>
+        </div >
     );
 }

@@ -168,7 +168,7 @@ export default function CompanySearch() {
         setIsShowMessage(false);
     };
 
-    const arruBtton: ArrayAction[] = [
+    const arrButton: ArrayAction[] = [
         {
             nameFn: t(Item.TOOL_TIP.EDIT),
             acFn: handleEditData,
@@ -361,7 +361,7 @@ export default function CompanySearch() {
                         }
                     }
                     isLoading={isLoading}
-                    arrButton={arruBtton}
+                    arrButton={arrButton}
                 />
             </Grid>
 

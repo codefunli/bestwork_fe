@@ -87,7 +87,11 @@ const ProgressEdit = (props: Props) => {
                     message: res.message,
                 });
 
-                setIsOpen(false);
+                if (res.status === StatusCode.OK) {
+                    setTimeout(() => {
+                        setIsOpen(false);
+                    }, 500);
+                };
             })
             .catch(() => {
                 setResForHandleMsg({
