@@ -25,11 +25,9 @@ export const appSlice = createSlice({
     initialState,
     reducers: {
         setIsPageLoading(state, action: PayloadAction<boolean>) {
-            console.log('Action: ' + action.payload);
             state.isPageLoading = action.payload;
         },
         setIsShowMsgErrLogin(state, action: PayloadAction<boolean>) {
-            console.log('Action: ' + action.payload);
             state.isShowMsgErrLogin = action.payload;
         },
     },

@@ -96,9 +96,7 @@ export default function ProjectEdit() {
         setSelectedProgress(tmpSelectedProgress);
     };
 
-    const handleCloseProject = (project: any) => {
-        console.log(project);
-    };
+    const handleCloseProject = (project: any) => {};
 
     return (
         <div className="project-detail">
@@ -133,7 +131,9 @@ export default function ProjectEdit() {
                                             <div className="d-flex justify-content-start flex-column p-3 info-item">
                                                 <div className="title">{t('message.status')}:</div>
                                                 <HandleProjectStatus
-                                                    statusList={(projectStatus && projectStatus.length > 0) ? projectStatus : []}
+                                                    statusList={
+                                                        projectStatus && projectStatus.length > 0 ? projectStatus : []
+                                                    }
                                                     statusId={projectData?.status}
                                                 />
                                             </div>
@@ -143,7 +143,9 @@ export default function ProjectEdit() {
                                             </div>
                                             <div className="d-flex justify-content-start flex-column p-3 info-item">
                                                 <div className="title">{t('radio.paid')}:</div>
-                                                <div>{projectData?.isPaid === 1 ? t('radio.paid') : t('radio.unPaid')}</div>
+                                                <div>
+                                                    {projectData?.isPaid === 1 ? t('radio.paid') : t('radio.unPaid')}
+                                                </div>
                                             </div>
                                             <div className="d-flex justify-content-start flex-column p-3 info-item">
                                                 <div className="title">{t('project.register.startDate')}:</div>
@@ -192,13 +194,15 @@ export default function ProjectEdit() {
                                                     className="mb-4 progress-item pb-2"
                                                     onClick={() => handleEditProgress(progress)}
                                                 >
-                                                    <div className="pb-2 h4 fw-bold">
-                                                        {progress.title}
-                                                    </div>
+                                                    <div className="pb-2 h4 fw-bold">{progress.title}</div>
                                                     <div className="pb-2">{progress.report}</div>
                                                     <div className="pb-2">
                                                         <HandleProgressStatus
-                                                            statusList={(progressStatus && progressStatus.length > 0) ? progressStatus : []}
+                                                            statusList={
+                                                                progressStatus && progressStatus.length > 0
+                                                                    ? progressStatus
+                                                                    : []
+                                                            }
                                                             statusId={progress.status}
                                                         />
                                                     </div>

@@ -83,7 +83,6 @@ export default function CompanyRegister() {
 
     const handleInputChangeCompany = (event: any) => {
         const { name, value } = event.target;
-        console.log({ name, value });
         setFormValues({
             ...formValues,
             company: {
@@ -95,7 +94,6 @@ export default function CompanyRegister() {
 
     const handleInputChangeUser = (event: any) => {
         const { name, value } = event.target;
-        console.log({ name, value });
         setFormValues({
             ...formValues,
             user: {
