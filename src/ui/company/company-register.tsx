@@ -1,3 +1,5 @@
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import {
     AlertColor,
     Avatar,
@@ -9,10 +11,14 @@ import {
     Divider,
     FormControl,
     FormControlLabel,
+    FormHelperText,
     FormLabel,
     Grid,
+    IconButton,
+    InputAdornment,
     InputLabel,
     MenuItem,
+    OutlinedInput,
     Radio,
     RadioGroup,
     Select,
@@ -22,18 +28,17 @@ import {
 } from '@mui/material';
 import cities from 'hanhchinhvn/dist/tinh_tp.json';
 import { useState } from 'react';
-import { District, Ward } from '../../core/types/administrative';
-import { getDistrictsByCityCode, getWardsByDistrictCode } from '../../core/utils/administrative-utils';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { AlertColorConstants, Item, StatusCode, UrlFeApp } from '../../core/constants/common';
+import { SUCCESS_MSG } from '../../core/constants/message';
 import { validateForm } from '../../core/constants/validate';
+import { District, Ward } from '../../core/types/administrative';
+import { getDistrictsByCityCode, getWardsByDistrictCode } from '../../core/utils/administrative-utils';
 import { currentDateTime, formatDateTimeReq } from '../../core/utils/get-current-datetime';
 import { registerCompany } from '../../services/company-service';
 import MessageShow from '../../shared-components/message/message';
-import { SUCCESS_MSG } from '../../core/constants/message';
 
 const initialValues = {
     company: {
@@ -71,6 +76,7 @@ export default function CompanyRegister() {
     const [typeCompanyMsg, setTypeCompanyMsg] = useState<AlertColor>('success');
     const navigate = useNavigate();
     const { t } = useTranslation();
+    const [showPassword, setShowPassword] = useState(false);
 
     const {
         register,
@@ -229,6 +235,10 @@ export default function CompanyRegister() {
 
     const handleCloseMsg = () => {
         setIsShowMessage(false);
+    };
+
+    const handleClickShowPassword = () => {
+        setShowPassword(!showPassword);
     };
 
     return (
@@ -498,7 +508,7 @@ export default function CompanyRegister() {
                                                     htmlFor="outlined-adornment-amount"
                                                     error={Boolean(errors.startDate)}
                                                 >
-                                                    {t(Item.COMPANY.REGISTER_END_DATE)}
+                                                    {t(Item.COMPANY.REGISTER_START_DATE)}
                                                 </InputLabel>
                                                 <TextField
                                                     fullWidth
@@ -522,7 +532,7 @@ export default function CompanyRegister() {
                                                     htmlFor="outlined-adornment-amount"
                                                     error={Boolean(errors.expiredDate)}
                                                 >
-                                                    {t(Item.COMPANY.REGISTER_START_DATE)}
+                                                    {t(Item.COMPANY.REGISTER_END_DATE)}
                                                 </InputLabel>
                                                 <TextField
                                                     fullWidth
@@ -602,26 +612,41 @@ export default function CompanyRegister() {
                                                     {t(Item.USER.REGISTER_PASSWORD)}
                                                     <span className="input-required">*</span>
                                                 </InputLabel>
-                                                <TextField
-                                                    type={'password'}
+                                                <OutlinedInput
+                                                    id="outlined-adornment-password"
+                                                    type={showPassword ? 'text' : 'password'}
                                                     value={formValues.user.password}
-                                                    size="small"
-                                                    fullWidth
+                                                    autoComplete="false"
                                                     sx={{
                                                         mt: 1,
                                                         mb: 1,
                                                         '& legend': { display: 'none' },
                                                         '& fieldset': { top: 0 },
+                                                        width: '100%',
+                                                        height: '2.4375em',
                                                     }}
-                                                    required
-                                                    id="outlined-required"
+                                                    endAdornment={
+                                                        <InputAdornment position="end">
+                                                            <IconButton
+                                                                aria-label="toggle password visibility"
+                                                                onClick={handleClickShowPassword}
+                                                                edge="end"
+                                                            >
+                                                                {showPassword ? <VisibilityOff /> : <Visibility />}
+                                                            </IconButton>
+                                                        </InputAdornment>
+                                                    }
                                                     placeholder={t(Item.COMMON.PLACE_HOLDER)}
-                                                    error={Boolean(errors.password)}
-                                                    helperText={errors.password?.message?.toString()}
                                                     {...register('password', {
                                                         onChange: (e) => handleInputChangeUser(e),
                                                     })}
+                                                    label="Password"
                                                 />
+                                                {Boolean(errors.password) && (
+                                                    <FormHelperText error>
+                                                        {errors.password?.message?.toString()}
+                                                    </FormHelperText>
+                                                )}
                                             </div>
                                         </div>
                                         <div className="row justify-center m-1">
