@@ -192,36 +192,41 @@ export default function EnhancedTable(props: EnhancedTable) {
                                                         align="left"
                                                         hidden={colValue.id === FieldConstants.ID}
                                                     >
-                                                        {colValue.id === 'startDate' || colValue.id === 'createDate' ? (
+                                                        {colValue.id === 'startDate' ||
+                                                        colValue.id === 'createDate' ||
+                                                        colValue.id === 'expiredDate' ? (
                                                             formatDateTimeResList(row[colValue.id])
-                                                        ) : (colValue.id === 'expired' ||
-                                                            colValue.id === 'enabled' ||
-                                                            colValue.id === 'status') ?
-                                                            (
-                                                                (colValue.label.includes('company')) ? (
-                                                                    <HandleCompanyStatus
-                                                                        statusId={row[colValue.id].toString()}
-                                                                    />
-                                                                ) : (
-                                                                    (colValue.label.includes('project')) ? (
-                                                                        <HandleProjectStatus
-                                                                            statusList={(projectStatus && projectStatus.length > 0) ? projectStatus : []}
-                                                                            statusId={row[colValue.id]}
-                                                                        />
-                                                                    ) : ('')
-                                                                )
-                                                            ) : colValue.id === 'projectType' ? (
-                                                                row[colValue.id as string].name
-                                                            ) : colValue.id === 'enabled' &&
-                                                                colValue.label.includes('user') ? (
-                                                                row[colValue.id as string] === 1 ? (
-                                                                    t('user.search.enabled')
-                                                                ) : (
-                                                                    t('user.search.notEnabled')
-                                                                )
+                                                        ) : colValue.id === 'expired' ||
+                                                          colValue.id === 'enabled' ||
+                                                          colValue.id === 'status' ? (
+                                                            colValue.label.includes('company') ? (
+                                                                <HandleCompanyStatus
+                                                                    statusId={row[colValue.id].toString()}
+                                                                />
+                                                            ) : colValue.label.includes('project') ? (
+                                                                <HandleProjectStatus
+                                                                    statusList={
+                                                                        projectStatus && projectStatus.length > 0
+                                                                            ? projectStatus
+                                                                            : []
+                                                                    }
+                                                                    statusId={row[colValue.id]}
+                                                                />
                                                             ) : (
-                                                                row[colValue.id as string]
-                                                            )}
+                                                                ''
+                                                            )
+                                                        ) : colValue.id === 'projectType' ? (
+                                                            row[colValue.id as string].name
+                                                        ) : colValue.id === 'enabled' &&
+                                                          colValue.label.includes('user') ? (
+                                                            row[colValue.id as string] === 1 ? (
+                                                                t('user.search.enabled')
+                                                            ) : (
+                                                                t('user.search.notEnabled')
+                                                            )
+                                                        ) : (
+                                                            row[colValue.id as string]
+                                                        )}
                                                     </TableCell>
                                                 );
                                             })}
