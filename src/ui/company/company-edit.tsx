@@ -50,8 +50,8 @@ const initialValues = {
     user: {
         userName: '',
         password: '',
-        firstNm: '',
-        lastNm: '',
+        firstName: '',
+        lastName: '',
         uTelNo: '',
         uEmail: '',
         enable: false,
@@ -386,7 +386,9 @@ export default function CompanyEdit() {
                                                         onChange={handleCityChange}
                                                     >
                                                         <MenuItem value="" selected={true} disabled>
-                                                            <em>{t('message.cityLabel')}</em>
+                                                            <em className="placeholder-color">
+                                                                {t('message.cityLabel')}
+                                                            </em>
                                                         </MenuItem>
                                                         {Object.values(cities).map((city) => (
                                                             <MenuItem value={city.code}>{city.name}</MenuItem>
@@ -413,7 +415,9 @@ export default function CompanyEdit() {
                                                         onChange={handleDistrictChange}
                                                     >
                                                         <MenuItem value="" selected={true} disabled>
-                                                            <em>{t('message.districtLabel')}</em>
+                                                            <em className="placeholder-color">
+                                                                {t('message.districtLabel')}
+                                                            </em>
                                                         </MenuItem>
                                                         {districts.map((dis) => (
                                                             <MenuItem value={dis.code}>{dis.name}</MenuItem>
@@ -442,7 +446,9 @@ export default function CompanyEdit() {
                                                         onChange={handleWardChange}
                                                     >
                                                         <MenuItem value="" selected={true} disabled>
-                                                            <em>{t('message.wardLabel')}</em>
+                                                            <em className="placeholder-color">
+                                                                {t('message.wardLabel')}
+                                                            </em>
                                                         </MenuItem>
                                                         {wards.map((ward) => (
                                                             <MenuItem value={ward.code}>{ward.name}</MenuItem>
@@ -598,7 +604,7 @@ export default function CompanyEdit() {
                                                 </InputLabel>
                                                 <TextField
                                                     name="firstName"
-                                                    value={formValues.user.firstNm}
+                                                    value={formValues.user.firstName}
                                                     disabled
                                                     size="small"
                                                     fullWidth
@@ -619,7 +625,7 @@ export default function CompanyEdit() {
                                                 </InputLabel>
                                                 <TextField
                                                     name="lastName"
-                                                    value={formValues.user.lastNm}
+                                                    value={formValues.user.lastName}
                                                     disabled
                                                     size="small"
                                                     fullWidth
@@ -742,13 +748,20 @@ export default function CompanyEdit() {
                                     </Box>
                                 </CardContent>
                             </Grid>
+                            <Grid
+                                item
+                                xs={12}
+                                sm={12}
+                                className="text-center pb-4 pt-0 mt-0"
+                                marginTop={3}
+                                onClick={handleSubmit(handleEdit)}
+                            >
+                                <Button variant="contained" color="primary">
+                                    {t('button.btnSave')}
+                                </Button>
+                            </Grid>
                         </Grid>
                     </Card>
-                    <Grid item xs={12} sm={12} className="text-center" marginTop={3} onClick={handleSubmit(handleEdit)}>
-                        <Button variant="contained" color="primary">
-                            {t('button.btnSave')}
-                        </Button>
-                    </Grid>
                 </Grid>
             </form>
             <MessageShow

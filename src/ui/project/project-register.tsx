@@ -18,7 +18,7 @@ import {
     Tab,
     Tabs,
     TextField,
-    Typography
+    Typography,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -60,7 +60,7 @@ export default function ProjectRegister() {
     const [resForHandleMsg, setResForHandleMsg] = useState<any>();
 
     useEffect(() => {
-        getProjectStatus().then(status => {
+        getProjectStatus().then((status) => {
             if (status && status.data) setProjectStatus(status.data);
         });
 
@@ -68,7 +68,7 @@ export default function ProjectRegister() {
             if (type) setProjectType(type);
         });
 
-        getAllCompanies().then(companies => {
+        getAllCompanies().then((companies) => {
             if (companies && companies.data) setCompanyList(companies?.data);
         });
     }, []);
@@ -134,7 +134,7 @@ export default function ProjectRegister() {
             ...formValues,
             project: {
                 ...formValues.project,
-                startDate: formatDateTimeReq(formValues.project.startDate)
+                startDate: formatDateTimeReq(formValues.project.startDate),
             },
         };
 
@@ -144,18 +144,18 @@ export default function ProjectRegister() {
                     return {
                         userId: user.userId,
                         canView: user.canView,
-                        canEdit: user.canEdit
+                        canEdit: user.canEdit,
                     };
                 });
 
                 return {
                     companyId: role.companyId,
-                    userList: reFormatUserList
+                    userList: reFormatUserList,
                 };
             });
 
             req.roleData = reFormatRoleData;
-        };
+        }
 
         await createProject(req)
             .then((res) => {
@@ -200,16 +200,8 @@ export default function ProjectRegister() {
                         <Grid container direction="row" alignItems="center">
                             <Grid item xs={12}>
                                 <Tabs value={value} onChange={handleChange} aria-label="" className="custom-tab">
-                                    <Tab
-                                        label={t('project.tab.register')}
-                                        tabIndex={0}
-                                        onFocus={() => setValue(0)}
-                                    />
-                                    <Tab
-                                        label={t('project.tab.assign')}
-                                        tabIndex={1}
-                                        onFocus={() => setValue(0)}
-                                    />
+                                    <Tab label={t('project.tab.register')} tabIndex={0} onFocus={() => setValue(0)} />
+                                    <Tab label={t('project.tab.assign')} tabIndex={1} onFocus={() => setValue(0)} />
                                 </Tabs>
 
                                 <div className="custom-tab">
@@ -346,11 +338,17 @@ export default function ProjectRegister() {
                                                                     })}
                                                                 >
                                                                     <MenuItem value="" selected={true} disabled>
-                                                                        <em>{t('message.statusLabel')}</em>
+                                                                        <em className="placeholder-color">
+                                                                            {t('message.statusLabel')}
+                                                                        </em>
                                                                     </MenuItem>
-                                                                    {(projectStatus && projectStatus.length > 0) && projectStatus.map((item: any) => (
-                                                                        <MenuItem value={item.id}>{item.status}</MenuItem>
-                                                                    ))}
+                                                                    {projectStatus &&
+                                                                        projectStatus.length > 0 &&
+                                                                        projectStatus.map((item: any) => (
+                                                                            <MenuItem value={item.id}>
+                                                                                {item.status}
+                                                                            </MenuItem>
+                                                                        ))}
                                                                 </Select>
                                                                 {Boolean(errors.status) && (
                                                                     <FormHelperText id="component-error-text">
@@ -387,11 +385,17 @@ export default function ProjectRegister() {
                                                                     })}
                                                                 >
                                                                     <MenuItem value="" selected={true} disabled>
-                                                                        <em>{t('message.typeLabel')}</em>
+                                                                        <em className="placeholder-color">
+                                                                            {t('message.typeLabel')}
+                                                                        </em>
                                                                     </MenuItem>
-                                                                    {(projectType && projectType.length > 0) && projectType.map((type: ProjectTypeDTO) => (
-                                                                        <MenuItem value={type.id}>{type.name}</MenuItem>
-                                                                    ))}
+                                                                    {projectType &&
+                                                                        projectType.length > 0 &&
+                                                                        projectType.map((type: ProjectTypeDTO) => (
+                                                                            <MenuItem value={type.id}>
+                                                                                {type.name}
+                                                                            </MenuItem>
+                                                                        ))}
                                                                 </Select>
                                                                 {Boolean(errors.projectType) && (
                                                                     <FormHelperText id="component-error-text">
@@ -463,36 +467,45 @@ export default function ProjectRegister() {
                                                             variant="contained"
                                                             aria-label="Disabled elevation buttons"
                                                         >
-                                                            <Button variant="contained" color="primary" sx={{ mr: 1 }} onClick={handleSubmit(handleSubmitForm)}>
+                                                            <Button
+                                                                variant="contained"
+                                                                color="primary"
+                                                                sx={{ mr: 1 }}
+                                                                onClick={handleSubmit(handleSubmitForm)}
+                                                            >
                                                                 {t('button.btnCreate')}
                                                             </Button>
                                                             <Button variant="outlined" onClick={handleClearCompany}>
                                                                 {t('button.btnClear')}
                                                             </Button>
                                                         </ButtonGroup>
-                                                    </div >
-                                                </Box >
-                                            </CardContent >
-                                        </TabPanel >
-                                    </Card >
-                                </div >
+                                                    </div>
+                                                </Box>
+                                            </CardContent>
+                                        </TabPanel>
+                                    </Card>
+                                </div>
 
                                 <div className="assign-user-tab">
                                     <Card w-full="true">
                                         <TabPanel value={value} index={1}>
                                             <CardContent>
-                                                <Role defaultCompanyList={companyList} defaultRoleData={roleData} setRoleData={setRoleData} />
-                                            </CardContent >
-                                        </TabPanel >
-                                    </Card >
-                                </div >
-                            </Grid >
-                        </Grid >
-                    </form >
-                </Grid >
+                                                <Role
+                                                    defaultCompanyList={companyList}
+                                                    defaultRoleData={roleData}
+                                                    setRoleData={setRoleData}
+                                                />
+                                            </CardContent>
+                                        </TabPanel>
+                                    </Card>
+                                </div>
+                            </Grid>
+                        </Grid>
+                    </form>
+                </Grid>
 
                 <ApiAlert response={resForHandleMsg} />
-            </Grid >
-        </div >
+            </Grid>
+        </div>
     );
 }

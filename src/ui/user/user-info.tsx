@@ -393,7 +393,9 @@ export default function UserInfo() {
                                                     })}
                                                 >
                                                     <MenuItem value="" disabled>
-                                                        <em>{t('user.search.selectCompanyName')}</em>
+                                                        <em className="placeholder-color">
+                                                            {t('user.search.selectCompanyName')}
+                                                        </em>
                                                     </MenuItem>
                                                     {companies &&
                                                         companies.length > 0 &&
@@ -468,7 +470,9 @@ export default function UserInfo() {
                                                     })}
                                                 >
                                                     <MenuItem value="" disabled>
-                                                        <em>{t('user.search.selectRole')}</em>
+                                                        <em className="placeholder-color">
+                                                            {t('user.search.selectRole')}
+                                                        </em>
                                                     </MenuItem>
                                                     {roles &&
                                                         roles.length > 0 &&
