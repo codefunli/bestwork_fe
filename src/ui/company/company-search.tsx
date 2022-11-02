@@ -282,7 +282,10 @@ export default function CompanySearch() {
                                                         onChange={handleInputChange}
                                                     >
                                                         <MenuItem value={2}>
-                                                            <em style={{ color: '#bdbdbd', margin: '0 auto' }}>
+                                                            <em
+                                                                style={{ margin: '0 auto' }}
+                                                                className="placeholder-color"
+                                                            >
                                                                 {t(Item.COMMON.STATUS)}
                                                             </em>
                                                         </MenuItem>

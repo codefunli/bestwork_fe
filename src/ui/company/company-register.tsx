@@ -407,7 +407,9 @@ export default function CompanyRegister() {
                                                         onChange={handleCityChange}
                                                     >
                                                         <MenuItem value="" selected={true} disabled>
-                                                            <em>{t(Item.MESSAGE.CITY_LABEL)}</em>
+                                                            <em className="placeholder-color">
+                                                                {t(Item.MESSAGE.CITY_LABEL)}
+                                                            </em>
                                                         </MenuItem>
                                                         {Object.values(cities).map((city) => (
                                                             <MenuItem value={city.code}>{city.name}</MenuItem>
@@ -434,7 +436,9 @@ export default function CompanyRegister() {
                                                         onChange={handleDistrictChange}
                                                     >
                                                         <MenuItem value="">
-                                                            <em>{t(Item.MESSAGE.DISTRICT_LABEL)}</em>
+                                                            <em className="placeholder-color">
+                                                                {t(Item.MESSAGE.DISTRICT_LABEL)}
+                                                            </em>
                                                         </MenuItem>
                                                         {districts.map((dis) => (
                                                             <MenuItem value={dis.code}>{dis.name}</MenuItem>
@@ -463,7 +467,9 @@ export default function CompanyRegister() {
                                                         onChange={handleInputChangeCompany}
                                                     >
                                                         <MenuItem value="">
-                                                            <em>{t(Item.MESSAGE.WARD_LABEL)}</em>
+                                                            <em className="placeholder-color">
+                                                                {t(Item.MESSAGE.WARD_LABEL)}
+                                                            </em>
                                                         </MenuItem>
                                                         {wards.map((ward) => (
                                                             <MenuItem value={ward.code}>{ward.name}</MenuItem>

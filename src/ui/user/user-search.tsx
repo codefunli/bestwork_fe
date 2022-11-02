@@ -258,7 +258,7 @@ export default function UserSearch() {
                                                 onChange={handleInputChange}
                                             >
                                                 <MenuItem value="" selected={true}>
-                                                    <em>{t('user.search.selectRole')}</em>
+                                                    <em className="placeholder-color">{t('user.search.selectRole')}</em>
                                                 </MenuItem>
                                                 {roles.map((role: any) => (
                                                     <MenuItem value={role.id}>{role.roleName}</MenuItem>
@@ -280,7 +280,9 @@ export default function UserSearch() {
                                                 onChange={handleInputChange}
                                             >
                                                 <MenuItem value="" selected={true}>
-                                                    <em>{t('user.search.selectStatus')}</em>
+                                                    <em className="placeholder-color">
+                                                        {t('user.search.selectStatus')}
+                                                    </em>
                                                 </MenuItem>
                                                 <MenuItem value="1">
                                                     <em>{t('user.search.enabled')}</em>

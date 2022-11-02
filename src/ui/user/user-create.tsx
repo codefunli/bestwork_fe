@@ -390,7 +390,7 @@ export default function UserAdd() {
                                             >
                                                 <Select
                                                     value={formValues.company.id}
-                                                    disabled={formValues.company.id ? true : false}
+                                                    displayEmpty
                                                     sx={{
                                                         '& legend': { display: 'none' },
                                                         '& fieldset': { top: 0 },
@@ -400,15 +400,15 @@ export default function UserAdd() {
                                                         onChange: (e) => handleInputChange(e),
                                                     })}
                                                 >
-                                                    <MenuItem value="" selected={true} disabled>
-                                                        <em style={{ color: '#bdbdbd', margin: '0 auto' }}>
+                                                    <MenuItem value="" disabled>
+                                                        <em style={{ margin: '0 auto' }} className="placeholder-color">
                                                             {t('user.search.selectCompanyName')}
                                                         </em>
                                                     </MenuItem>
                                                     {companies &&
                                                         companies.length > 0 &&
                                                         companies.map((company: any) => (
-                                                            <MenuItem value={company.id}>
+                                                            <MenuItem value={company.id} selected={true}>
                                                                 {company.companyName}
                                                             </MenuItem>
                                                         ))}
