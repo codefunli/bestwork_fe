@@ -20,7 +20,10 @@ export default function ImageManager(props: ImageManager) {
     };
     return (
         <>
-            <button onClick={showModal} className="border-0 bg-white d-flex align-items-center justify-content-center">
+            <button
+                onClick={showModal}
+                className="border-0 bg-white d-flex align-items-center justify-content-center w-100"
+            >
                 <QuiltedImage callBackFn={() => {}} images={images} isOpenModal={false} />
             </button>
             <ShowImage

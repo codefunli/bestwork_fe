@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
 import { forwardRef, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { getPostByPostId, updatePost } from '../../services/material-service';
 import MultipleFileUpload from '../file-upload/multiple-file-upload';
 
@@ -35,8 +36,6 @@ interface AlertDialogSlideProps {
         postId: string;
         fileStorages: any;
     };
-    noBtn: string;
-    okBtn: string;
     isOpen: boolean;
     closeFunc: Function;
     okFunc: Function;
@@ -54,33 +53,41 @@ const initialDataImg = {
 };
 
 export default function EditMaterialModal(props: AlertDialogSlideProps) {
-    const { title, content, isOpen, closeFunc, okFunc, noBtn, okBtn } = props;
+    const { title, content, isOpen, closeFunc, okFunc } = props;
     const [open, setOpen] = useState(false);
     const [postData, setPostData] = useState(initialDataImg);
     const [imgData, setImgData] = useState<any>([]);
+    const { t } = useTranslation();
 
     useEffect(() => {
         fetchData();
-    }, [content.projectId, content.postId]);
+    }, [content.projectId, content.postId, isOpen]);
 
     const fetchData = () => {
         getPostByPostId(content.postId, content.projectId).then((value: any) => {
             if (value && value.data) {
                 setPostData(value.data);
-                const imgs = value.data.fileStorages.map((val: any) => {
-                    return val.data;
-                });
-                setImgData(imgs);
+                setImgData(value.data.fileStorages);
             }
         });
     };
 
     const handleOkFunc = () => {
-        const resObj = {
-            projectId: content.projectId,
-            description: postData.description,
-            images: imgData,
-        };
+        let resObj;
+        if (postData.images) {
+            resObj = {
+                projectId: content.projectId,
+                description: postData.description,
+                images: postData.images,
+            };
+        } else {
+            const imgs = postData.fileStorages.map((img: any) => img.data);
+            resObj = {
+                projectId: content.projectId,
+                description: postData.description,
+                images: imgs,
+            };
+        }
 
         updatePost(content.postId, content.projectId, resObj).then((resp: any) => {
             closeFunc();
@@ -97,17 +104,17 @@ export default function EditMaterialModal(props: AlertDialogSlideProps) {
     };
 
     useEffect(() => {
-        if (isOpen) {
-            setOpen(isOpen);
-        }
+        if (isOpen) setOpen(isOpen);
     }, [isOpen]);
 
-    const onChangeImage = (data: any) => {
+    const onChangeImageEdit = (data: any) => {
+        const imgs = data.map((img: any) => img.data);
+
         setImgData([...data]);
 
         setPostData({
             ...postData,
-            images: data,
+            images: imgs,
         });
     };
 
@@ -168,9 +175,10 @@ export default function EditMaterialModal(props: AlertDialogSlideProps) {
                             </Grid>
                             <Grid item xs={12} lg={12}>
                                 <MultipleFileUpload
-                                    clearPreview={open}
-                                    callbackFunc={onChangeImage}
+                                    callbackFunc={onChangeImageEdit}
                                     imgData={imgData}
+                                    isEditUpload={true}
+                                    clearPreview={open}
                                 />
                             </Grid>
                         </Grid>
@@ -179,10 +187,10 @@ export default function EditMaterialModal(props: AlertDialogSlideProps) {
                 <Divider />
                 <DialogActions>
                     <Button variant="outlined" onClick={handleClose}>
-                        Cancel
+                        {t('button.btnCancel')}
                     </Button>
                     <Button variant="contained" onClick={handleOkFunc}>
-                        Upload
+                        {t('button.btnUpdate')}
                     </Button>
                 </DialogActions>
             </Dialog>

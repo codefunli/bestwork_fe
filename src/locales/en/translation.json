@@ -91,7 +91,8 @@
         "btnReset": "Reset",
         "btnResetAll": "Reset All",
         "btnUpdate": "Update",
-        "btnBackToHome": "Back To Home"
+        "btnBackToHome": "Back To Home",
+        "btnUpload": "Upload"
     },
     "common": {
         "placeholder": "Please input a new value",
@@ -329,5 +330,22 @@
         "currentPassword": "Current password",
         "newPassword": "New password",
         "confirmPassword": "Confirm password"
+    },
+    "material": {
+        "title": "Material Status",
+        "uploadTitle": "Upload image for material products",
+        "editTitle": "Edit for material products",
+        "comment": "Comment",
+        "edit": "Edit",
+        "reply": "Reply",
+        "show": "Show",
+        "hide": "Hide",
+        "placeholder": "Please input a new value",
+        "secondAgo": "second ago",
+        "minuteAgo": "minute ago",
+        "hourAgo": "hour ago",
+        "dayAgo": "day ago",
+        "responding": "Responding",
+        "editFor": "Edit for"
     }
 }

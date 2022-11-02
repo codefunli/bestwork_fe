@@ -91,7 +91,8 @@
         "btnReset": "Đặt lại",
         "btnResetAll": "Đặt lại tất cả",
         "btnUpdate": "Cập nhật",
-        "btnBackToHome": "Quay về trang chủ"
+        "btnBackToHome": "Quay về trang chủ",
+        "btnUpload": "Đăng"
     },
     "common": {
         "placeholder": "Nhập một giá trị mới",
@@ -327,5 +328,22 @@
         "currentPassword": "Mật khẩu hiện tại",
         "newPassword": "Mật khẩu mới",
         "confirmPassword": "Xác nhận mật khẩu"
+    },
+    "material": {
+        "title": "Quản lý vật tư",
+        "uploadTitle": "Tải lên hình ảnh cho dự án",
+        "editTitle": "Chỉnh sửa hình ảnh cho dự án",
+        "comment": "Bình luận",
+        "edit": "Sửa",
+        "reply": "Trả Lời",
+        "show": "Hiện",
+        "hide": "Ẩn",
+        "placeholder": "Vui lòng nhập giá trị",
+        "secondAgo": "giây trước",
+        "minuteAgo": "phút trước",
+        "hourAgo": "giờ trước",
+        "dayAgo": "ngày trước",
+        "responding": "Trả lời",
+        "editFor": "Chỉnh sửa"
     }
 }
