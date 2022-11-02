@@ -769,13 +769,13 @@ export default function CompanyRegister() {
                                     </Box>
                                 </CardContent>
                             </Grid>
+                            <Grid item xs={12} sm={12} className="text-center pb-4 pt-0">
+                                <Button variant="contained" color="primary" onClick={handleSubmit(handleSubmitForm)}>
+                                    {t(Item.LABEL_BTN.SAVE)}
+                                </Button>
+                            </Grid>
                         </Grid>
                     </Card>
-                    <Grid item xs={12} sm={12} className="text-center" marginTop={3}>
-                        <Button variant="contained" color="primary" onClick={handleSubmit(handleSubmitForm)}>
-                            {t(Item.LABEL_BTN.SAVE)}
-                        </Button>
-                    </Grid>
                 </Grid>
             </form>
             <MessageShow
