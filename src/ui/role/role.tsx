@@ -17,7 +17,7 @@ import {
     TableRow,
     Tabs,
     TextField,
-    Typography
+    Typography,
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/system';
@@ -43,7 +43,7 @@ const initRoleList = [
                 view: true,
                 create: true,
                 edit: true,
-                delete: true
+                delete: true,
             },
             {
                 screenId: 2,
@@ -51,7 +51,7 @@ const initRoleList = [
                 view: true,
                 create: true,
                 edit: true,
-                delete: true
+                delete: true,
             },
             {
                 screenId: 3,
@@ -59,9 +59,9 @@ const initRoleList = [
                 view: true,
                 create: true,
                 edit: true,
-                delete: false
-            }
-        ]
+                delete: false,
+            },
+        ],
     },
     {
         id: 2,
@@ -74,7 +74,7 @@ const initRoleList = [
                 view: true,
                 create: false,
                 edit: false,
-                delete: true
+                delete: true,
             },
             {
                 screenId: 2,
@@ -82,7 +82,7 @@ const initRoleList = [
                 view: false,
                 create: false,
                 edit: false,
-                delete: false
+                delete: false,
             },
             {
                 screenId: 3,
@@ -90,7 +90,7 @@ const initRoleList = [
                 view: true,
                 create: false,
                 edit: true,
-                delete: false
+                delete: false,
             },
             {
                 screenId: 1,
@@ -98,7 +98,7 @@ const initRoleList = [
                 view: true,
                 create: false,
                 edit: false,
-                delete: true
+                delete: true,
             },
             {
                 screenId: 2,
@@ -106,7 +106,7 @@ const initRoleList = [
                 view: false,
                 create: false,
                 edit: false,
-                delete: false
+                delete: false,
             },
             {
                 screenId: 3,
@@ -114,7 +114,7 @@ const initRoleList = [
                 view: true,
                 create: false,
                 edit: true,
-                delete: false
+                delete: false,
             },
             {
                 screenId: 3,
@@ -122,7 +122,7 @@ const initRoleList = [
                 view: true,
                 create: false,
                 edit: true,
-                delete: false
+                delete: false,
             },
             {
                 screenId: 1,
@@ -130,7 +130,7 @@ const initRoleList = [
                 view: true,
                 create: false,
                 edit: false,
-                delete: true
+                delete: true,
             },
             {
                 screenId: 2,
@@ -138,7 +138,7 @@ const initRoleList = [
                 view: false,
                 create: false,
                 edit: false,
-                delete: false
+                delete: false,
             },
             {
                 screenId: 3,
@@ -146,9 +146,9 @@ const initRoleList = [
                 view: true,
                 create: false,
                 edit: true,
-                delete: false
-            }
-        ]
+                delete: false,
+            },
+        ],
     },
     {
         id: 3,
@@ -161,7 +161,7 @@ const initRoleList = [
                 view: true,
                 create: false,
                 edit: false,
-                delete: false
+                delete: false,
             },
             {
                 screenId: 2,
@@ -169,7 +169,7 @@ const initRoleList = [
                 view: true,
                 create: true,
                 edit: false,
-                delete: false
+                delete: false,
             },
             {
                 screenId: 3,
@@ -177,9 +177,9 @@ const initRoleList = [
                 view: true,
                 create: false,
                 edit: true,
-                delete: false
-            }
-        ]
+                delete: false,
+            },
+        ],
     },
     {
         id: 4,
@@ -192,7 +192,7 @@ const initRoleList = [
                 view: true,
                 create: false,
                 edit: false,
-                delete: false
+                delete: false,
             },
             {
                 screenId: 2,
@@ -200,7 +200,7 @@ const initRoleList = [
                 view: true,
                 create: true,
                 edit: false,
-                delete: false
+                delete: false,
             },
             {
                 screenId: 3,
@@ -208,9 +208,9 @@ const initRoleList = [
                 view: true,
                 create: false,
                 edit: true,
-                delete: false
-            }
-        ]
+                delete: false,
+            },
+        ],
     },
     {
         id: 5,
@@ -223,7 +223,7 @@ const initRoleList = [
                 view: true,
                 create: false,
                 edit: false,
-                delete: true
+                delete: true,
             },
             {
                 screenId: 2,
@@ -231,7 +231,7 @@ const initRoleList = [
                 view: false,
                 create: false,
                 edit: false,
-                delete: false
+                delete: false,
             },
             {
                 screenId: 3,
@@ -239,9 +239,9 @@ const initRoleList = [
                 view: true,
                 create: false,
                 edit: true,
-                delete: false
-            }
-        ]
+                delete: false,
+            },
+        ],
     },
     {
         id: 1,
@@ -254,7 +254,7 @@ const initRoleList = [
                 view: true,
                 create: true,
                 edit: true,
-                delete: true
+                delete: true,
             },
             {
                 screenId: 2,
@@ -262,7 +262,7 @@ const initRoleList = [
                 view: true,
                 create: true,
                 edit: true,
-                delete: true
+                delete: true,
             },
             {
                 screenId: 3,
@@ -270,9 +270,9 @@ const initRoleList = [
                 view: true,
                 create: true,
                 edit: true,
-                delete: false
-            }
-        ]
+                delete: false,
+            },
+        ],
     },
     {
         id: 2,
@@ -285,7 +285,7 @@ const initRoleList = [
                 view: true,
                 create: true,
                 edit: false,
-                delete: false
+                delete: false,
             },
             {
                 screenId: 2,
@@ -293,7 +293,7 @@ const initRoleList = [
                 view: true,
                 create: true,
                 edit: true,
-                delete: false
+                delete: false,
             },
             {
                 screenId: 3,
@@ -301,9 +301,9 @@ const initRoleList = [
                 view: true,
                 create: false,
                 edit: true,
-                delete: false
-            }
-        ]
+                delete: false,
+            },
+        ],
     },
     {
         id: 3,
@@ -316,7 +316,7 @@ const initRoleList = [
                 view: true,
                 create: false,
                 edit: false,
-                delete: false
+                delete: false,
             },
             {
                 screenId: 2,
@@ -324,7 +324,7 @@ const initRoleList = [
                 view: true,
                 create: true,
                 edit: false,
-                delete: false
+                delete: false,
             },
             {
                 screenId: 3,
@@ -332,9 +332,9 @@ const initRoleList = [
                 view: true,
                 create: false,
                 edit: true,
-                delete: false
-            }
-        ]
+                delete: false,
+            },
+        ],
     },
     {
         id: 4,
@@ -347,7 +347,7 @@ const initRoleList = [
                 view: true,
                 create: false,
                 edit: false,
-                delete: false
+                delete: false,
             },
             {
                 screenId: 2,
@@ -355,7 +355,7 @@ const initRoleList = [
                 view: true,
                 create: true,
                 edit: false,
-                delete: false
+                delete: false,
             },
             {
                 screenId: 3,
@@ -363,9 +363,9 @@ const initRoleList = [
                 view: true,
                 create: false,
                 edit: true,
-                delete: false
-            }
-        ]
+                delete: false,
+            },
+        ],
     },
     {
         id: 5,
@@ -378,7 +378,7 @@ const initRoleList = [
                 view: true,
                 create: false,
                 edit: false,
-                delete: true
+                delete: true,
             },
             {
                 screenId: 2,
@@ -386,7 +386,7 @@ const initRoleList = [
                 view: false,
                 create: false,
                 edit: false,
-                delete: false
+                delete: false,
             },
             {
                 screenId: 3,
@@ -394,9 +394,9 @@ const initRoleList = [
                 view: true,
                 create: false,
                 edit: true,
-                delete: false
-            }
-        ]
+                delete: false,
+            },
+        ],
     },
     {
         id: 1,
@@ -409,7 +409,7 @@ const initRoleList = [
                 view: true,
                 create: true,
                 edit: true,
-                delete: true
+                delete: true,
             },
             {
                 screenId: 2,
@@ -417,7 +417,7 @@ const initRoleList = [
                 view: true,
                 create: true,
                 edit: true,
-                delete: true
+                delete: true,
             },
             {
                 screenId: 3,
@@ -425,9 +425,9 @@ const initRoleList = [
                 view: true,
                 create: true,
                 edit: true,
-                delete: false
-            }
-        ]
+                delete: false,
+            },
+        ],
     },
     {
         id: 2,
@@ -440,7 +440,7 @@ const initRoleList = [
                 view: true,
                 create: true,
                 edit: false,
-                delete: false
+                delete: false,
             },
             {
                 screenId: 2,
@@ -448,7 +448,7 @@ const initRoleList = [
                 view: true,
                 create: true,
                 edit: true,
-                delete: false
+                delete: false,
             },
             {
                 screenId: 3,
@@ -456,9 +456,9 @@ const initRoleList = [
                 view: true,
                 create: false,
                 edit: true,
-                delete: false
-            }
-        ]
+                delete: false,
+            },
+        ],
     },
     {
         id: 3,
@@ -471,7 +471,7 @@ const initRoleList = [
                 view: true,
                 create: false,
                 edit: false,
-                delete: false
+                delete: false,
             },
             {
                 screenId: 2,
@@ -479,7 +479,7 @@ const initRoleList = [
                 view: true,
                 create: true,
                 edit: false,
-                delete: false
+                delete: false,
             },
             {
                 screenId: 3,
@@ -487,9 +487,9 @@ const initRoleList = [
                 view: true,
                 create: false,
                 edit: true,
-                delete: false
-            }
-        ]
+                delete: false,
+            },
+        ],
     },
     {
         id: 4,
@@ -502,7 +502,7 @@ const initRoleList = [
                 view: true,
                 create: false,
                 edit: false,
-                delete: false
+                delete: false,
             },
             {
                 screenId: 2,
@@ -510,7 +510,7 @@ const initRoleList = [
                 view: true,
                 create: true,
                 edit: false,
-                delete: false
+                delete: false,
             },
             {
                 screenId: 3,
@@ -518,10 +518,10 @@ const initRoleList = [
                 view: true,
                 create: false,
                 edit: true,
-                delete: false
-            }
-        ]
-    }
+                delete: false,
+            },
+        ],
+    },
 ];
 
 export default function Role() {
@@ -553,9 +553,15 @@ export default function Role() {
         setCurrentRole(roleList[newValue]);
     };
 
-    const handleChangeCheckbox = (event: React.ChangeEvent<HTMLInputElement>, screenId: any, index: number, activeAll?: boolean, allStatus?: boolean) => {
+    const handleChangeCheckbox = (
+        event: React.ChangeEvent<HTMLInputElement>,
+        screenId: any,
+        index: number,
+        activeAll?: boolean,
+        allStatus?: boolean,
+    ) => {
         // Change selected screen in current role (tab)
-        let selectedScreen = currentRole.permissions.find(permission => permission.screenId === parseInt(screenId));
+        let selectedScreen = currentRole.permissions.find((permission) => permission.screenId === parseInt(screenId));
         let tempPermission: any;
 
         // If select all permissions
@@ -566,7 +572,7 @@ export default function Role() {
                     view: false,
                     create: false,
                     edit: false,
-                    delete: false
+                    delete: false,
                 };
             } else {
                 tempPermission = {
@@ -574,9 +580,9 @@ export default function Role() {
                     view: true,
                     create: true,
                     edit: true,
-                    delete: true
+                    delete: true,
                 };
-            };
+            }
         } else {
             tempPermission = {
                 ...selectedScreen,
@@ -589,25 +595,25 @@ export default function Role() {
                     view: false,
                     create: false,
                     edit: false,
-                    delete: false
-                }
+                    delete: false,
+                };
             }
-        };
+        }
 
         // Update permissions of selected screen
         let permissions: any = [...currentRole.permissions];
         permissions[index] = tempPermission;
         setCurrentRole({
             ...currentRole,
-            permissions
+            permissions,
         });
 
         // Update role list
         let tmpRoleList = roleList;
         tmpRoleList[currentTab] = {
             ...currentRole,
-            permissions
-        }
+            permissions,
+        };
         setRoleList(tmpRoleList);
     };
 
@@ -636,11 +642,13 @@ export default function Role() {
     };
 
     const handleCreateNewRole = (roleName: string, description: string) => {
-        createRole({ roleName, description }).then((res) => {
-            handleResponse(res);
-        }).catch((err) => {
-            handleMessage(true, err.message, AlertColorConstants.ERROR);
-        });
+        createRole({ roleName, description })
+            .then((res) => {
+                handleResponse(res);
+            })
+            .catch((err) => {
+                handleMessage(true, err.message, AlertColorConstants.ERROR);
+            });
 
         // Temp
         setRoleList([
@@ -656,7 +664,7 @@ export default function Role() {
                         view: true,
                         create: false,
                         edit: true,
-                        delete: true
+                        delete: true,
                     },
                     {
                         screenId: 2,
@@ -664,7 +672,7 @@ export default function Role() {
                         view: false,
                         create: true,
                         edit: true,
-                        delete: true
+                        delete: true,
                     },
                     {
                         screenId: 3,
@@ -672,31 +680,31 @@ export default function Role() {
                         view: true,
                         create: false,
                         edit: true,
-                        delete: false
-                    }
-                ]
-            }
-        ])
+                        delete: false,
+                    },
+                ],
+            },
+        ]);
     };
 
     const handleUpdateRole = (roleName: string, description: string) => {
-        updateRole(roleList[currentTab].id, { roleName, description }).then((res) => {
-            handleResponse(res);
-        }).catch((err) => {
-            handleMessage(true, err.message, AlertColorConstants.ERROR);
-        });
+        updateRole(roleList[currentTab].id, { roleName, description })
+            .then((res) => {
+                handleResponse(res);
+            })
+            .catch((err) => {
+                handleMessage(true, err.message, AlertColorConstants.ERROR);
+            });
     };
 
-    const handleSaveChange = () => {
-        console.log('Save', roleList);
-    };
+    const handleSaveChange = () => {};
 
     const handleResetCurrentRoleChange = () => {
         setCurrentRole(JSON.parse(JSON.stringify(initRoleList[currentTab])));
         let tempRoleList = roleList;
         tempRoleList[currentTab] = initRoleList[currentTab];
         setRoleList(tempRoleList);
-    }
+    };
 
     const handleResetAllChange = () => {
         setRoleList(JSON.parse(JSON.stringify(initRoleList)));
@@ -705,9 +713,8 @@ export default function Role() {
 
     const handleSearch = () => {
         const filterItems = () => {
-            return initRoleList.filter(role =>
-                role.name.toLowerCase().indexOf(searchKeyword.toLowerCase()) !== -1);
-        }
+            return initRoleList.filter((role) => role.name.toLowerCase().indexOf(searchKeyword.toLowerCase()) !== -1);
+        };
         setRoleList(filterItems);
     };
 
@@ -718,12 +725,14 @@ export default function Role() {
     };
 
     const alertConfirmDelete = () => {
-        deleteRole(roleList[currentTab].id).then((value) => {
-            setIsShowMsg(true);
-            fetchData();
-        }).catch((err) => {
-            handleMessage(true, t('message.error'), AlertColorConstants.ERROR);
-        });
+        deleteRole(roleList[currentTab].id)
+            .then((value) => {
+                setIsShowMsg(true);
+                fetchData();
+            })
+            .catch((err) => {
+                handleMessage(true, t('message.error'), AlertColorConstants.ERROR);
+            });
         setIsOpenDeleteModal(false);
     };
 
@@ -734,16 +743,17 @@ export default function Role() {
 
     return (
         <div className="role">
-            <Grid
-                container
-                direction="row"
-                spacing={3}
-            >
+            <Grid container direction="row" spacing={3}>
                 <Grid item xs={12} sx={{ mt: 1 }}>
                     <div className="row">
                         <div className="col-sm-12 col-md-6 text-start d-none d-lg-block">
-                            <Typography variant="h5" color="textSecondary" gutterBottom sx={{ textTransform: 'uppercase' }}>
-                                {t("role.title")}
+                            <Typography
+                                variant="h5"
+                                color="textSecondary"
+                                gutterBottom
+                                sx={{ textTransform: 'uppercase' }}
+                            >
+                                {t('role.title')}
                             </Typography>
                         </div>
                         <div className="col-sm-12 col-md-6 text-end d-none d-lg-block">
@@ -774,7 +784,7 @@ export default function Role() {
                             <Box
                                 component="form"
                                 sx={{
-                                    '& > :not(style)': { m: 1 }
+                                    '& > :not(style)': { m: 1 },
                                 }}
                                 noValidate
                                 autoComplete="off"
@@ -789,7 +799,7 @@ export default function Role() {
                                                     mt: 1,
                                                     mb: 1,
                                                     '& legend': { display: 'none' },
-                                                    '& fieldset': { top: 0 }
+                                                    '& fieldset': { top: 0 },
                                                 }}
                                                 name="keyword"
                                                 label=""
@@ -808,7 +818,7 @@ export default function Role() {
                                             aria-label=""
                                             sx={{
                                                 borderRight: 1,
-                                                borderColor: 'divider'
+                                                borderColor: 'divider',
                                             }}
                                             className="role-list"
                                         >
@@ -816,7 +826,7 @@ export default function Role() {
                                                 <Tab key={index} label={role.name} />
                                             ))}
                                         </Tabs>
-                                        <div className='text-center justify-center mt-4'>
+                                        <div className="text-center justify-center mt-4">
                                             <ButtonGroup
                                                 disableElevation
                                                 variant="contained"
@@ -827,14 +837,14 @@ export default function Role() {
                                                     variant="contained"
                                                     onClick={() => toggleUpdateModal(true)}
                                                 >
-                                                    {t("button.btnUpdate")}
+                                                    {t('button.btnUpdate')}
                                                 </Button>
                                                 <Button
                                                     onClick={() => handleDeleteRole()}
                                                     variant="outlined"
                                                     color="error"
                                                 >
-                                                    {t("button.btnDelete")}
+                                                    {t('button.btnDelete')}
                                                 </Button>
                                             </ButtonGroup>
                                         </div>
@@ -847,7 +857,7 @@ export default function Role() {
                                                 variant="contained"
                                                 color="warning"
                                             >
-                                                {t("button.btnResetAll")}
+                                                {t('button.btnResetAll')}
                                             </Button>
                                         </div>
                                         <div className="role-content">
@@ -855,7 +865,9 @@ export default function Role() {
                                                 <Table className="role-table" aria-label={t('role.tab.roleList')}>
                                                     <TableHead>
                                                         <TableRow>
-                                                            <TableCell><b>{t('role.tab.screen')}</b></TableCell>
+                                                            <TableCell>
+                                                                <b>{t('role.tab.screen')}</b>
+                                                            </TableCell>
                                                             <TableCell align="center">{t('role.tab.all')}</TableCell>
                                                             <TableCell align="center">{t('role.tab.view')}</TableCell>
                                                             <TableCell align="center">{t('role.tab.create')}</TableCell>
@@ -867,29 +879,51 @@ export default function Role() {
                                                         {currentRole.permissions.map((row, index) => (
                                                             <TableRow
                                                                 key={row.screenId}
-                                                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                                                sx={{
+                                                                    '&:last-child td, &:last-child th': { border: 0 },
+                                                                }}
                                                             >
                                                                 <TableCell component="th" scope="row">
                                                                     {row.screenName}
                                                                 </TableCell>
                                                                 <TableCell align="center">
                                                                     <Checkbox
-                                                                        checked={row.view && row.create && row.edit && row.delete}
-                                                                        onChange={(e) => handleChangeCheckbox(e, row.screenId, index, true, row.view && row.create && row.edit && row.delete)}
+                                                                        checked={
+                                                                            row.view &&
+                                                                            row.create &&
+                                                                            row.edit &&
+                                                                            row.delete
+                                                                        }
+                                                                        onChange={(e) =>
+                                                                            handleChangeCheckbox(
+                                                                                e,
+                                                                                row.screenId,
+                                                                                index,
+                                                                                true,
+                                                                                row.view &&
+                                                                                    row.create &&
+                                                                                    row.edit &&
+                                                                                    row.delete,
+                                                                            )
+                                                                        }
                                                                         name="all"
                                                                     />
                                                                 </TableCell>
                                                                 <TableCell align="center">
                                                                     <Checkbox
                                                                         checked={row.view}
-                                                                        onChange={(e) => handleChangeCheckbox(e, row.screenId, index)}
+                                                                        onChange={(e) =>
+                                                                            handleChangeCheckbox(e, row.screenId, index)
+                                                                        }
                                                                         name="view"
                                                                     />
                                                                 </TableCell>
                                                                 <TableCell align="center">
                                                                     <Checkbox
                                                                         checked={row.create}
-                                                                        onChange={(e) => handleChangeCheckbox(e, row.screenId, index)}
+                                                                        onChange={(e) =>
+                                                                            handleChangeCheckbox(e, row.screenId, index)
+                                                                        }
                                                                         name="create"
                                                                         disabled={!row.view}
                                                                     />
@@ -897,7 +931,9 @@ export default function Role() {
                                                                 <TableCell align="center">
                                                                     <Checkbox
                                                                         checked={row.edit}
-                                                                        onChange={(e) => handleChangeCheckbox(e, row.screenId, index)}
+                                                                        onChange={(e) =>
+                                                                            handleChangeCheckbox(e, row.screenId, index)
+                                                                        }
                                                                         name="edit"
                                                                         disabled={!row.view}
                                                                     />
@@ -905,7 +941,9 @@ export default function Role() {
                                                                 <TableCell align="center">
                                                                     <Checkbox
                                                                         checked={row.delete}
-                                                                        onChange={(e) => handleChangeCheckbox(e, row.screenId, index)}
+                                                                        onChange={(e) =>
+                                                                            handleChangeCheckbox(e, row.screenId, index)
+                                                                        }
                                                                         name="delete"
                                                                         disabled={!row.view}
                                                                     />
@@ -916,24 +954,20 @@ export default function Role() {
                                                 </Table>
                                             </TableContainer>
                                         </div>
-                                        <div className='text-center justify-center mt-4'>
+                                        <div className="text-center justify-center mt-4">
                                             <ButtonGroup
                                                 disableElevation
                                                 variant="contained"
                                                 aria-label="Disabled elevation buttons"
                                             >
-                                                <Button
-                                                    sx={{ mr: 1 }}
-                                                    variant="contained"
-                                                    onClick={handleSaveChange}
-                                                >
-                                                    {t("button.btnSave")}
+                                                <Button sx={{ mr: 1 }} variant="contained" onClick={handleSaveChange}>
+                                                    {t('button.btnSave')}
                                                 </Button>
                                                 <Button
                                                     onClick={() => handleResetCurrentRoleChange()}
                                                     variant="outlined"
                                                 >
-                                                    {t("button.btnReset")}
+                                                    {t('button.btnReset')}
                                                 </Button>
                                             </ButtonGroup>
                                         </div>
@@ -958,12 +992,7 @@ export default function Role() {
                 handleUpdateRole={handleUpdateRole}
             />
 
-            <MessageShow
-                message={roleMsg}
-                showMessage={isShowMsg}
-                type={roleMsgType}
-                handleCloseMsg={handleCloseMsg}
-            />
+            <MessageShow message={roleMsg} showMessage={isShowMsg} type={roleMsgType} handleCloseMsg={handleCloseMsg} />
 
             <AlertDialogSlide
                 isOpen={isOpenDeleteModal}

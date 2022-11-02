@@ -113,8 +113,6 @@ export default function CompanyEdit() {
                         };
                     }
 
-                    console.log(objValue);
-
                     setFormValues(objValue);
                     setDistricts(getDistrictsByCityCode(value.data.company.city || ''));
                     setWards(getWardsByDistrictCode(value.data.company.district || ''));

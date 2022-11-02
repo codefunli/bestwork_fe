@@ -144,11 +144,8 @@ export default function UserSearch() {
     };
 
     const alertOkFunc = () => {
-        console.log(selectedUserIdList);
-
         deleteUsers(selectedUserIdList)
             .then((value) => {
-                console.log(value);
                 if (value.status === 'OK') {
                     handleMessage(true, value.message, AlertColorConstants.SUCCESS);
                     fetchData({

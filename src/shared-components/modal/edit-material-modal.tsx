@@ -103,7 +103,6 @@ export default function EditMaterialModal(props: AlertDialogSlideProps) {
     }, [isOpen]);
 
     const onChangeImage = (data: any) => {
-        console.log('data', data);
         setImgData([...data]);
 
         setPostData({
