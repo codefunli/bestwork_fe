@@ -90,7 +90,7 @@ export const UrlServer = {
         GET_USER_ASSIGN_UPDATE: `${PREFIX_SERVER_URL}/projects/assign-list-edit`,
     },
     ROLE: {
-        GET: `${PREFIX_SERVER_URL}/roles`,
+        GET: `${PREFIX_SERVER_URL}/role/all`,
         CREATE: `${PREFIX_SERVER_URL}/roles/create`,
         UPDATE: `${PREFIX_SERVER_URL}/roles/update`,
         DELETE: `${PREFIX_SERVER_URL}/roles/delete`,

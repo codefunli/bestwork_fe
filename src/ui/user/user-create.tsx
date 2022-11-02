@@ -1,19 +1,15 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
-    AlertColor,
     Button,
     ButtonGroup,
     Card,
     CardContent,
     CardHeader,
     FormControl,
-    FormControlLabel,
     FormHelperText,
     Grid,
     InputLabel,
     MenuItem,
-    Radio,
-    RadioGroup,
     Select,
     Switch,
     TextField,
@@ -24,12 +20,12 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import { AlertColorConstants, DefaultImage, UrlFeApp } from '../../core/constants/common';
-import { validateCreateUserForm } from '../../core/constants/validate';
+import { DefaultImage, StatusCode, UrlFeApp } from '../../core/constants/common';
+import { validateCreateUserForm, validateCreateUserWithCompanyForm } from '../../core/constants/validate';
 import { getCompaniesByUser } from '../../services/company-service';
 import { createUsers, getRoles } from '../../services/user-service';
+import ApiAlert from '../../shared-components/alert/api-alert';
 import FileUpload from '../../shared-components/file-upload/file-upload';
-import MessageShow from '../../shared-components/message/message';
 import './user.scss';
 
 const initialValues: any = {
@@ -39,13 +35,9 @@ const initialValues: any = {
     lastName: '',
     uEmail: '',
     uTelNo: '',
-    company: {
-        id: '',
-    },
+    company: '',
     enabled: 1,
-    role: {
-        id: '',
-    },
+    role: '',
     avatar: '',
 };
 
@@ -53,13 +45,11 @@ export default function UserAdd() {
     const navigate = useNavigate();
     const { t } = useTranslation();
     const [formValues, setFormValues] = useState(initialValues);
-    const [imgData, setImgData] = useState(DefaultImage.USER_AVATAR);
     const [companies, setCompanies] = useState<any>();
-    const [userMsg, setUserMsg] = useState('');
-    const [userMsgType, setUserMsgType] = useState<AlertColor>(AlertColorConstants.SUCCESS);
-    const [isShowMsg, setIsShowMsg] = useState(false);
     const [roles, setRoles] = useState([]);
     const params = useParams();
+    const [resForHandleMsg, setResForHandleMsg] = useState<any>();
+    const [isCreateWithCompany, setIsCreateWithCompany] = useState(false);
 
     const {
         register,
@@ -67,33 +57,27 @@ export default function UserAdd() {
         handleSubmit,
         formState: { errors, isSubmitting },
     } = useForm({
-        resolver: yupResolver(validateCreateUserForm),
+        resolver: yupResolver(isCreateWithCompany ? validateCreateUserWithCompanyForm : validateCreateUserForm),
     });
 
     useEffect(() => {
         if (params.id) {
             setFormValues({
                 ...formValues,
-                company: {
-                    id: params.id,
-                },
+                company: parseInt(params.id),
             });
+
+            setIsCreateWithCompany(true);
         }
     }, [params]);
 
     useEffect(() => {
-        const fetchCompanies = async () => {
-            const companies = await getCompaniesByUser();
-            if (companies) {
-                setCompanies(companies);
-            }
-        };
-        fetchCompanies();
-    }, []);
+        getCompaniesByUser().then(companies => {
+            if (companies) setCompanies(companies);
+        });
 
-    useEffect(() => {
         getRoles().then((data: any) => {
-            setRoles(data);
+            if (data) setRoles(data);
         });
     }, []);
 
@@ -102,34 +86,13 @@ export default function UserAdd() {
         reset();
     };
 
-    const handleMessage = (showMsg: boolean, msg: string, type: AlertColor) => {
-        setIsShowMsg(showMsg);
-        setUserMsg(msg);
-        setUserMsgType(type);
-    };
 
     const handleInputChange = (e: any) => {
         const { name, value } = e.target;
-        if (name === 'role') {
-            setFormValues({
-                ...formValues,
-                [name]: {
-                    id: value,
-                },
-            });
-        } else if (name === 'company') {
-            setFormValues({
-                ...formValues,
-                [name]: {
-                    id: value,
-                },
-            });
-        } else {
-            setFormValues({
-                ...formValues,
-                [name]: value,
-            });
-        }
+        setFormValues({
+            ...formValues,
+            [name]: value,
+        });
     };
 
     const handleSwitchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -142,22 +105,26 @@ export default function UserAdd() {
     const handleSubmitForm = () => {
         createUsers(formValues)
             .then((res: any) => {
-                if (res.status === 'OK') {
-                    handleMessage(true, res.message, AlertColorConstants.SUCCESS);
+                setResForHandleMsg({
+                    status: res.status,
+                    message: res.message,
+                });
+
+                if (res.status === StatusCode.OK) {
                     setTimeout(() => {
                         navigate(UrlFeApp.USER.SEARCH);
                     }, 1000);
-                } else {
-                    handleMessage(true, res.data[0].defaultMessage, AlertColorConstants.ERROR);
-                }
+                };
             })
             .catch((err) => {
-                handleMessage(true, err.message, AlertColorConstants.ERROR);
+                setResForHandleMsg({
+                    status: StatusCode.ERROR,
+                    message: t('message.error'),
+                });
             });
     };
 
     const onChangeAvatar = (event: any) => {
-        setImgData(event.target.files[0]);
         if (event.target.files[0]) {
             const reader: any = new FileReader();
             reader.addEventListener('load', () => {
@@ -168,10 +135,6 @@ export default function UserAdd() {
             });
             reader.readAsDataURL(event.target.files[0]);
         }
-    };
-
-    const handleCloseMsg = () => {
-        setIsShowMsg(false);
     };
 
     const handleCancelChange = () => {
@@ -389,8 +352,9 @@ export default function UserAdd() {
                                                 error
                                             >
                                                 <Select
-                                                    value={formValues.company.id}
                                                     displayEmpty
+                                                    value={formValues.company}
+                                                    disabled={formValues.company ? true : false}
                                                     sx={{
                                                         '& legend': { display: 'none' },
                                                         '& fieldset': { top: 0 },
@@ -405,21 +369,19 @@ export default function UserAdd() {
                                                             {t('user.search.selectCompanyName')}
                                                         </em>
                                                     </MenuItem>
-                                                    {companies &&
-                                                        companies.length > 0 &&
-                                                        companies.map((company: any) => (
-                                                            <MenuItem value={company.id} selected={true}>
-                                                                {company.companyName}
-                                                            </MenuItem>
-                                                        ))}
-                                                </Select>
+                                                    {companies && companies.length > 0 && companies.map((company: any) => (
+                                                        <MenuItem value={company.id}>
+                                                            {company.companyName}
+                                                        </MenuItem>
+                                                    ))}
+                                                </Select >
                                                 {Boolean(errors.company) && (
                                                     <FormHelperText id="component-error-text">
                                                         {errors?.company?.message as string}
                                                     </FormHelperText>
                                                 )}
-                                            </FormControl>
-                                        </div>
+                                            </FormControl >
+                                        </div >
                                         <div className="col-12 col-sm-6 d-block p-1">
                                             <InputLabel htmlFor="role" error={Boolean(errors.role)}>
                                                 {t('user.info.role')} <span className="input-required">*</span>
@@ -432,8 +394,8 @@ export default function UserAdd() {
                                                 error
                                             >
                                                 <Select
-                                                    value={formValues.role.id}
                                                     displayEmpty
+                                                    value={formValues.role.id}
                                                     sx={{
                                                         '& legend': { display: 'none' },
                                                         '& fieldset': { top: 0 },
@@ -443,20 +405,16 @@ export default function UserAdd() {
                                                         onChange: (e) => handleInputChange(e),
                                                     })}
                                                 >
-                                                    <MenuItem value="" disabled>
+                                                    <MenuItem value="" selected={true} disabled>
                                                         <em style={{ color: '#bdbdbd', margin: '0 auto' }}>
                                                             {t('user.search.selectRole')}
                                                         </em>
                                                     </MenuItem>
-                                                    {roles &&
-                                                        roles.length > 0 &&
-                                                        roles.map((role: any) => {
-                                                            return (
-                                                                <MenuItem value={role.id} selected={true}>
-                                                                    <em>{role.roleName}</em>
-                                                                </MenuItem>
-                                                            );
-                                                        })}
+                                                    {roles && roles.length > 0 && roles.map((role: any) => (
+                                                        <MenuItem value={role.id} selected={true}>
+                                                            <em>{role.roleName}</em>
+                                                        </MenuItem>
+                                                    ))}
                                                 </Select>
                                                 {Boolean(errors.role) && (
                                                     <FormHelperText id="component-error-text">
@@ -465,7 +423,7 @@ export default function UserAdd() {
                                                 )}
                                             </FormControl>
                                         </div>
-                                    </div>
+                                    </div >
                                     <div className="row justify-center m-1">
                                         <div className="col-12 col-sm-6 d-block p-1">
                                             <InputLabel htmlFor="enabled">{t('user.info.enabled')}</InputLabel>
@@ -495,13 +453,14 @@ export default function UserAdd() {
                                             </Button>
                                         </ButtonGroup>
                                     </div>
-                                </Box>
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                </Grid>
-            </form>
-            <MessageShow message={userMsg} showMessage={isShowMsg} type={userMsgType} handleCloseMsg={handleCloseMsg} />
-        </div>
+                                </Box >
+                            </CardContent >
+                        </Card >
+                    </Grid >
+                </Grid >
+            </form >
+
+            <ApiAlert response={resForHandleMsg} />
+        </div >
     );
 }

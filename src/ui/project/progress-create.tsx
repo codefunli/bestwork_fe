@@ -118,7 +118,12 @@ const ProgressCreate = (props: Props) => {
                     status: res.status,
                     message: res.message,
                 });
-                callBackFn();
+
+                if (res.status === StatusCode.OK) {
+                    setTimeout(() => {
+                        callBackFn();
+                    }, 500);
+                };
             })
             .catch(() => {
                 setResForHandleMsg({

@@ -201,7 +201,11 @@ export default function ProjectRegister() {
                     message: res.message,
                 });
 
-                navigate(UrlFeApp.PROJECT.SEARCH);
+                if (res.status === StatusCode.OK) {
+                    setTimeout(() => {
+                        navigate(UrlFeApp.PROJECT.SEARCH);
+                    }, 1000);
+                };
             })
             .catch(() => {
                 setResForHandleMsg({

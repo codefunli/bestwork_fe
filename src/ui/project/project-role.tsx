@@ -28,10 +28,10 @@ export default function Role(props: Role) {
     const { defaultCompanyList, defaultRoleData, setRoleData } = props;
 
     const { t } = useTranslation();
-    const [companyList, setCompanyList] = useState<Company[]>(defaultCompanyList);
+    const [companyList, setCompanyList] = useState<Company[]>((defaultCompanyList && defaultCompanyList.length > 0) ? defaultCompanyList : []);
     const [currentTab, setCurrentTab] = useState(0);
-    const [selectedCompanyId, setSelectedCompanyId] = useState<number>(defaultCompanyList[0].id);
-    const [currentCompany, setCurrentCompany] = useState<Company>(defaultCompanyList[0]);
+    const [selectedCompanyId, setSelectedCompanyId] = useState<number>((defaultCompanyList && defaultCompanyList[0]?.id) ? defaultCompanyList[0].id : 0);
+    const [currentCompany, setCurrentCompany] = useState<Company>((defaultCompanyList && defaultCompanyList[0]) ? defaultCompanyList[0] : { id: 0, companyName: '' });
     const [searchKeyword, setSearchKeyword] = useState('');
     const [currentUserAssignList, setCurrentUserAssignList] = useState<User[]>([]);
 

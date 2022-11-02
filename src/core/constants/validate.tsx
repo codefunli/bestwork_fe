@@ -59,6 +59,21 @@ export const validateUserForm = yup.object({
     firstName: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.FIRST_NAME])),
     lastName: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.LAST_NAME])),
     company: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.COMPANY_NAME])),
+    role: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.ROLE])),
+});
+
+export const validateUserEditForm = yup.object({
+    userName: yup
+        .string()
+        .required(getMessage(ERROR_MSG.E01_001, [FieldConstants.USER_NAME]))
+        .matches(pattern.userName, getMessage(ERROR_MSG.E01_005, [FieldConstants.USER_NAME])),
+    uEmail: yup
+        .string()
+        .required(getMessage(ERROR_MSG.E01_001, [FieldConstants.EMAIL]))
+        .matches(pattern.email, getMessage(ERROR_MSG.E01_008, [FieldConstants.EMAIL])),
+    firstName: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.FIRST_NAME])),
+    lastName: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.LAST_NAME])),
+    role: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.ROLE])),
 });
 
 export const validateCreateUserForm = yup.object({
@@ -73,6 +88,7 @@ export const validateCreateUserForm = yup.object({
     firstName: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.FIRST_NAME])),
     lastName: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.LAST_NAME])),
     company: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.COMPANY_NAME])),
+    role: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.ROLE])),
     password: yup
         .string()
         .required(getMessage(ERROR_MSG.E01_001, [FieldConstants.PASSWORD]))
@@ -82,6 +98,28 @@ export const validateCreateUserForm = yup.object({
         .required(getMessage(ERROR_MSG.E01_001, [FieldConstants.TEL_NO]))
         .matches(pattern.telNo, getMessage(ERROR_MSG.E01_006, [FieldConstants.TEL_NO])),
 });
+
+export const validateCreateUserWithCompanyForm = yup.object({
+    userName: yup
+        .string()
+        .required(getMessage(ERROR_MSG.E01_001, [FieldConstants.USER_NAME]))
+        .matches(pattern.userName, getMessage(ERROR_MSG.E01_005, [FieldConstants.USER_NAME])),
+    uEmail: yup
+        .string()
+        .required(getMessage(ERROR_MSG.E01_001, [FieldConstants.EMAIL]))
+        .matches(pattern.email, getMessage(ERROR_MSG.E01_008, [FieldConstants.EMAIL])),
+    firstName: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.FIRST_NAME])),
+    lastName: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.LAST_NAME])),
+    password: yup
+        .string()
+        .required(getMessage(ERROR_MSG.E01_001, [FieldConstants.PASSWORD]))
+        .matches(pattern.password, getMessage(ERROR_MSG.E01_004, [FieldConstants.NEW_PASSWORD])),
+    uTelNo: yup
+        .string()
+        .required(getMessage(ERROR_MSG.E01_001, [FieldConstants.TEL_NO]))
+        .matches(pattern.telNo, getMessage(ERROR_MSG.E01_006, [FieldConstants.TEL_NO])),
+});
+
 export const validateEditCompanyForm = yup.object({
     companyName: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.COMPANY_NAME])),
     cpEmail: yup
@@ -109,6 +147,7 @@ export const validateEditCompanyForm = yup.object({
             getMessage(ERROR_MSG.E01_003, [FieldConstants.EXPIRED_DATE, FieldConstants.START_DATE]),
         ),
 });
+
 export const validateProjectRegisterForm = yup.object({
     projectName: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldProjectConstants.PROJECT_NAME])),
     startDate: yup
