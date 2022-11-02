@@ -63,10 +63,23 @@ function formatDate(date: any, patternStr: any) {
 };
 
 export const currentDateTime = formatDate(new Date(), 'yyyy-MM-ddTHH:mm:ss');
-export const formatDateTime = (date: any) => {
+export const formatDateTimeReq = (date: any) => {
     return formatDate(new Date(date), 'yyyy-MM-ddTHH:mm:ss:000Z');
 };
 export const formatDateTimeRes = (date: any) => {
     return formatDate(new Date(date), 'yyyy-MM-ddTHH:mm:ss');
 };
-export const formatTimeOrg = "YYYY-MM-DDTHH:mm:ss:SSSZ";
+
+export const formatDateTimeResList = (date: any) => {
+    if (date) {
+        date = date.replace('T', ' ');
+        date = date.replace('Z', '');
+        date = date.replace(':000', '');
+        return date;
+    }
+    return '';
+};
+
+export const formatDateTimeResNoneSuffixes = (date: any) => {
+    return date.replace(':000Z', '');
+};

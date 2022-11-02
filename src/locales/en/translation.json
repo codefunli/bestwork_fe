@@ -251,7 +251,7 @@
         "table": {
             "colPrjName": "Project Name",
             "colPrjType": "Project Type",
-            "colCreateDate": "Create Date",
+            "colStartDate": "Start Date",
             "colDescription": "Description",
             "colStatus": "Status"
         },
@@ -261,7 +261,7 @@
             "type": "Project type",
             "description": "Description",
             "comment": "Comment",
-            "createDate": "Create date",
+            "startDate": "Start date",
             "status": "Status",
             "notificationFlag": "Auto send email",
             "isPaid": "Pain status"

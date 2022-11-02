@@ -22,7 +22,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ConfirmConstants, UrlFeApp } from '../../core/constants/common';
 import { SUCCESS_MSG } from '../../core/constants/message';
 import { headProjectCol } from '../../core/types/project';
-import { deleteProjects, getProjects, getProjectStatus } from '../../services/project-service';
+import { deleteProjects, getProjects, getProjectStatus, getProjectTypes } from '../../services/project-service';
 import MessageShow from '../../shared-components/message/message';
 import AlertDialogSlide from '../../shared-components/modal/alert-dialog-slide';
 import EnhancedTable, { ArrayAction } from '../../shared-components/table-manager/table-data';
@@ -53,7 +53,7 @@ export default function ProjectSearch() {
 
     useEffect(() => {
         getProjectStatus().then((status: any) => {
-            if (status && status.data) setProjectStatus(status);
+            if (status && status.data) setProjectStatus(status.data);
         });
     }, []);
 
@@ -173,7 +173,7 @@ export default function ProjectSearch() {
         setIsShowMessage(false);
     };
 
-    const arruBtton: ArrayAction[] = [
+    const arrButton: ArrayAction[] = [
         {
             nameFn: t('tooltip.edit'),
             acFn: handleEditData,
@@ -298,11 +298,11 @@ export default function ProjectSearch() {
                                                         {(projectStatus && projectStatus.length > 0) && projectStatus.map((data: any, index: any) => {
                                                             return (
                                                                 <MenuItem
-                                                                    key={data}
+                                                                    key={data.id}
                                                                     value={index}
                                                                     className="text-center"
                                                                 >
-                                                                    <div className="text-center w-100">{data}</div>
+                                                                    <div className="text-center w-100">{data.status}</div>
                                                                 </MenuItem>
                                                             );
                                                         })}
@@ -321,7 +321,6 @@ export default function ProjectSearch() {
                                                         mr: 1,
                                                         textTransform: 'uppercase',
                                                     }}
-                                                    size="small"
                                                     variant="contained"
                                                     onClick={handleSubmit}
                                                 >
@@ -356,7 +355,8 @@ export default function ProjectSearch() {
                         }
                     }
                     isLoading={isLoading}
-                    arrButton={arruBtton}
+                    arrButton={arrButton}
+                    projectStatus={projectStatus}
                 />
             </Grid>
 

@@ -251,7 +251,7 @@
         "table": {
             "colPrjName": "Tên dự án",
             "colPrjType": "Loại dự án",
-            "colCreateDate": "Ngày khởi tạo",
+            "colStartDate": "Ngày bắt đầu",
             "colDescription": "Mô tả",
             "colStatus": "Trạng thái"
         },
@@ -261,7 +261,7 @@
             "type": "Loại dự án",
             "description": "Mô tả",
             "comment": "Nhận xét",
-            "createDate": "Ngày tạo",
+            "startDate": "Ngày bắt đầu",
             "status": "Trạng thái",
             "notificationFlag": "Tự động gửi mail",
             "isPaid": "Trạng thái thanh toán"
