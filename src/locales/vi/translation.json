@@ -21,7 +21,8 @@
             "colCpAddress": "Địa chỉ",
             "colCpStartDate": "Ngày bắt đầu",
             "colCpExpired": "Trạng thái",
-            "colCpEmail": "Thư điện tử"
+            "colCpEmail": "Thư điện tử",
+            "colCpExpiredDate": "Ngày kết thúc"
         },
         "register": {
             "title": "Đăng Ký Công Ty",

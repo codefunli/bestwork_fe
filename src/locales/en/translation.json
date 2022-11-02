@@ -21,7 +21,8 @@
             "colCpAddress": "Address",
             "colCpStartDate": "Start Date",
             "colCpExpired": "Status",
-            "colCpEmail": "Email"
+            "colCpEmail": "Email",
+            "colCpExpiredDate": "Expired Date"
         },
         "register": {
             "title": "Company Register",
