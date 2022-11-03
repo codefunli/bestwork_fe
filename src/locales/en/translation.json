@@ -347,5 +347,12 @@
         "dayAgo": "day ago",
         "responding": "Responding",
         "editFor": "Edit for"
+    },
+    "menu": {
+        "dashboard": "Dashboard",
+        "company": "Branch",
+        "user": "User",
+        "project": "Project",
+        "role": "Role"
     }
 }

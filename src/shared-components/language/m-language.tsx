@@ -1,4 +1,15 @@
-import { Badge, ClickAwayListener, Grid, Grow, IconButton, MenuItem, MenuList, Paper, Popper, Tooltip } from '@mui/material';
+import {
+    Badge,
+    ClickAwayListener,
+    Grid,
+    Grow,
+    IconButton,
+    MenuItem,
+    MenuList,
+    Paper,
+    Popper,
+    Tooltip,
+} from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import LanguageIcon from '@mui/icons-material/Language';
 import React from 'react';
@@ -32,7 +43,7 @@ export default function MLanguage(props: Props) {
     const { color } = props;
     const anchorRef = useRef<HTMLDivElement>(null);
     const [open, setOpen] = useState(false);
-    const [selectedIndex, setSelectedIndex] = React.useState(0);
+    const [selectedIndex, setSelectedIndex] = React.useState(1);
     const { t } = useTranslation();
 
     useEffect(() => {
@@ -99,7 +110,7 @@ export default function MLanguage(props: Props) {
                         {...TransitionProps}
                         style={{
                             transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
-                            marginTop: '1.5rem'
+                            marginTop: '1.5rem',
                         }}
                     >
                         <Paper>

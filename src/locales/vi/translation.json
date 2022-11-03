@@ -345,5 +345,12 @@
         "dayAgo": "ngày trước",
         "responding": "Trả lời",
         "editFor": "Chỉnh sửa"
+    },
+    "menu": {
+        "dashboard": "Bảng điều khiển",
+        "company": "Hãng",
+        "user": "Nhân viên",
+        "project": "Dự án",
+        "role": "Quyền hạn"
     }
 }

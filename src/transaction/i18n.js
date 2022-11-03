@@ -19,7 +19,7 @@ i18n.use(Backend)
     .use(initReactI18next)
     .init({
         resources,
-        fallbackLng: 'en',
+        fallbackLng: 'vi',
         debug: false,
         interpolation: {
             escapeValue: false, // not needed for react as it escapes by default

@@ -1,12 +1,7 @@
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import InboxIcon from '@mui/icons-material/Inbox';
-import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from '@mui/icons-material/Menu';
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import {
-    Avatar,
-    Badge,
     CssBaseline,
     Divider,
     IconButton,
@@ -31,14 +26,14 @@ import { useAppDispatch, useAppSelector } from '../core/hook/redux';
 import { appAction } from '../core/redux/app-slice';
 import { userActions } from '../core/redux/user-slice';
 import { isObjectEmpty } from '../core/utils/object-utils';
+import { renderIconLeftBar } from '../core/utils/render-utils';
 import { isCheckLogined } from '../services/user-service';
 import MLanguage from '../shared-components/language/m-language';
 import LinearProgressWithLabel from '../shared-components/progress/LinearProgressWithLabel';
-import CollapsedBreadcrumbs from './collapsed-breadcrumbs';
 import Notification from '../ui/notification/notification';
 import UserDropdown from '../ui/user-dropdown/user-dropdown';
+import CollapsedBreadcrumbs from './collapsed-breadcrumbs';
 import './main-app.scss';
-import { renderIconLeftBar } from '../core/utils/render-utils';
 
 const drawerWidth = 240;
 
@@ -234,7 +229,7 @@ export default function MiniDrawer() {
                                             >
                                                 {renderIconLeftBar(menuItem.iconNm)}
                                             </ListItemIcon>
-                                            <ListItemText primary={menuItem.name} sx={{ opacity: open ? 1 : 0 }} />
+                                            <ListItemText primary={t(menuItem.name)} sx={{ opacity: open ? 1 : 0 }} />
                                         </ListItemButton>
                                     </ListItem>
                                 ))}
