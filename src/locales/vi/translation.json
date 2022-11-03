@@ -92,7 +92,8 @@
         "btnResetAll": "Đặt lại tất cả",
         "btnUpdate": "Cập nhật",
         "btnBackToHome": "Quay về trang chủ",
-        "btnUpload": "Đăng"
+        "btnUpload": "Đăng",
+        "btnClose": "Đóng"
     },
     "common": {
         "placeholder": "Nhập một giá trị mới",
@@ -344,7 +345,10 @@
         "hourAgo": "giờ trước",
         "dayAgo": "ngày trước",
         "responding": "Trả lời",
-        "editFor": "Chỉnh sửa"
+        "editFor": "Chỉnh sửa cho",
+        "previewImage": "Danh sách ảnh",
+        "descriptionPlaceHolder": "Mô tả...",
+        "eqBillPlaceHolder": "Hóa đơn thiết bị..."
     },
     "menu": {
         "dashboard": "Bảng điều khiển",

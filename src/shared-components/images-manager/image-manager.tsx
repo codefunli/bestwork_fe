@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import ShowImage from '../modal/show-image';
 import QuiltedImage from './quilted-image';
 interface ImageManager {
@@ -7,6 +8,7 @@ interface ImageManager {
 export default function ImageManager(props: ImageManager) {
     const { images } = props;
     const [isShowModal, setIsShowModal] = useState(false);
+    const { t } = useTranslation();
 
     const showModal = () => {
         setIsShowModal(true);
@@ -30,7 +32,7 @@ export default function ImageManager(props: ImageManager) {
                 isOpen={isShowModal}
                 closeFunc={closeModal}
                 okFunc={alertOkFunc}
-                title="Preview image"
+                title={t('material.previewImage')}
                 content={{ images: images }}
                 noBtn="NO"
                 okBtn="OK"

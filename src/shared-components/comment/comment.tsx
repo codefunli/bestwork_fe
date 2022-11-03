@@ -9,6 +9,7 @@ import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
 import { v4 as uuidv4 } from 'uuid';
 import { postComment } from '../../services/material-service';
 import { useTranslation } from 'react-i18next';
+import { CommentConstant } from '../../core/constants/constant';
 
 interface CommentProps {
     arrMsg: Comment[];
@@ -23,19 +24,20 @@ export default function CommentEl(props: CommentProps) {
     const [newMsg, setNewMsg] = useState('');
     const [replyLabel, setReplyLabel] = useState('');
     const [currentId, setCurrentId] = useState('');
-    const [type, setType] = useState('ADD');
+    const [type, setType] = useState(CommentConstant.ADD);
     const { t } = useTranslation();
 
     const doReplyLabel = (replyLabel: string, id: string) => {
         setReplyLabel(replyLabel);
         setCurrentId(id);
-        setType('REPLY');
+        setType(CommentConstant.REPLY);
+        setNewMsg('');
     };
 
     const doEditLabel = (editLabel: string, id: string, comment: string) => {
         setReplyLabel(editLabel);
         setCurrentId(id);
-        setType('EDIT');
+        setType(CommentConstant.EDIT);
         setNewMsg(comment);
     };
 
@@ -44,14 +46,14 @@ export default function CommentEl(props: CommentProps) {
     };
 
     const handleClear = () => {
-        setType('ADD');
+        setType(CommentConstant.ADD);
         setReplyLabel(STR_EMPTY);
         setCurrentId(STR_EMPTY);
     };
 
     const handleAddNewMsg = (e: any) => {
         if (STR_EMPTY !== newMsg) {
-            if ('ADD' === type) {
+            if (CommentConstant.ADD === type) {
                 arrMsgIn.push({
                     id: uuidv4(),
                     commentUser: {
@@ -64,7 +66,7 @@ export default function CommentEl(props: CommentProps) {
                     isLastSub: false,
                     subComment: [],
                 });
-            } else if ('REPLY' === type) {
+            } else if (CommentConstant.REPLY === type) {
                 arrMsgIn.map((cmt) => {
                     if (cmt.id === currentId) {
                         cmt.subComment.push({
@@ -100,7 +102,7 @@ export default function CommentEl(props: CommentProps) {
                         });
                     }
                 });
-            } else if ('EDIT' === type) {
+            } else if (CommentConstant.EDIT === type) {
                 arrMsgIn.map((cmt) => {
                     if (cmt.id === currentId) {
                         cmt.comment = newMsg;
@@ -132,12 +134,27 @@ export default function CommentEl(props: CommentProps) {
             return [...prev];
         });
 
-        postComment(pId, projectId, repObj).then((data: any) => {});
+        postComment(pId, projectId, repObj).then((data: any) => {
+            if (CommentConstant.ADD === type) {
+                const myElement = document.getElementById('comment-box');
+                myElement?.scrollTo(0, myElement.scrollHeight + 650);
+            }
+        });
+    };
+
+    const handleKeyDown = (event: any) => {
+        if (event.key === CommentConstant.ENTER) {
+            event.preventDefault();
+            handleAddNewMsg(event);
+        }
     };
 
     return (
         <div className="mb-2">
-            <div className={` msg-wrapper-scroll pt-1 ${isEnabled && arrMsgIn.length > 0 ? 'msg-height-15rem' : ''}`}>
+            <div
+                className={` msg-wrapper-scroll pt-3 ${isEnabled && arrMsgIn.length > 0 ? 'msg-height-15rem' : ''}`}
+                id="comment-box"
+            >
                 {isEnabled &&
                     arrMsgIn.map((item: any) => {
                         return <CommentLeft key={item.id} msg={item} reply={doReplyLabel} edit={doEditLabel} />;
@@ -166,6 +183,7 @@ export default function CommentEl(props: CommentProps) {
                                 label={replyLabel}
                                 placeholder={t('material.placeholder')}
                                 onChange={handleInputChange}
+                                onKeyDown={handleKeyDown}
                             />
                             <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
                             <IconButton

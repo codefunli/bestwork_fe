@@ -33,6 +33,7 @@ interface AlertDialogSlideProps {
         images: any;
         isOpenComment: boolean;
         postUser: any;
+        eqBill: string;
     };
     isOpen: boolean;
     closeFunc: Function;
@@ -47,6 +48,7 @@ const initialDataImg = {
         id: 0,
         name: 'Đông Tà',
     },
+    eqBill: '',
 };
 
 export default function ImageUploadDialog(props: AlertDialogSlideProps) {
@@ -129,6 +131,32 @@ export default function ImageUploadDialog(props: AlertDialogSlideProps) {
                                         size="small"
                                         fullWidth
                                         multiline
+                                        value={imgData.eqBill}
+                                        sx={{
+                                            mt: 1,
+                                            mb: 1,
+                                            '& legend': { display: 'none' },
+                                            '& fieldset': { top: 0 },
+                                        }}
+                                        id="outlined-required"
+                                        placeholder={t('material.eqBillPlaceHolder')}
+                                        name="eqBill"
+                                        onChange={handleInputChange}
+                                    />
+                                </div>
+                            </Grid>
+                            <Grid item xs={12} lg={12}>
+                                <div
+                                    w-fullWidth
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                    }}
+                                >
+                                    <TextField
+                                        size="small"
+                                        fullWidth
+                                        multiline
                                         rows={3}
                                         value={imgData.description}
                                         sx={{
@@ -138,7 +166,7 @@ export default function ImageUploadDialog(props: AlertDialogSlideProps) {
                                             '& fieldset': { top: 0 },
                                         }}
                                         id="outlined-required"
-                                        placeholder="Description..."
+                                        placeholder={t('material.descriptionPlaceHolder')}
                                         name="description"
                                         onChange={handleInputChange}
                                     />

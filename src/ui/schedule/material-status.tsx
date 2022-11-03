@@ -47,6 +47,7 @@ const initialDataImg = {
         id: '0',
         name: 'Đông Tà',
     },
+    eqBill: '',
 };
 export default function MaterialSchedule() {
     const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);
@@ -169,7 +170,7 @@ export default function MaterialSchedule() {
                     >
                         <Grid item xs={12} lg={5}>
                             <div>
-                                <Card w-full>
+                                <Card w-full="true">
                                     <CardHeader
                                         avatar={<Avatar aria-label="recipe">MS</Avatar>}
                                         title={data.postUser.name}
@@ -186,6 +187,7 @@ export default function MaterialSchedule() {
                                         }
                                     />
                                     <CardContent>
+                                        <h3>{data.eqBill}</h3>
                                         <p>{data.description}</p>
                                         <ImageManager images={data.fileStorages} />
                                     </CardContent>
