@@ -15,13 +15,14 @@ import {
     Typography,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Comment } from '../../core/types/base';
 import { getPostByPostId, getPostByProjectId, postComment } from '../../services/material-service';
 import CommentEl from '../../shared-components/comment/comment';
 import ImageManager from '../../shared-components/images-manager/image-manager';
+import ImageUploadDialog from '../../shared-components/modal/create-material-modal';
 import EditMaterialModal from '../../shared-components/modal/edit-material-modal';
-import ImageUploadDialog from '../../shared-components/modal/image-upload-dialog';
 
 const initialDataImg = {
     description: '',
@@ -55,6 +56,7 @@ export default function MaterialSchedule() {
     const [contentCreate, setContentCreate] = useState(initialDataImg);
     const [contentEdit, setContentEdit] = useState<any>({});
     const params = useParams();
+    const { t } = useTranslation();
 
     useEffect(() => {
         fetchData();
@@ -100,6 +102,7 @@ export default function MaterialSchedule() {
     const closeModal = () => {
         setIsOpenCreateModal(false);
         setIsOpenEditModal(false);
+        fetchData();
     };
 
     const openModal = () => {
@@ -107,9 +110,9 @@ export default function MaterialSchedule() {
     };
 
     const alertOkFunc = () => {
-        fetchData();
         setIsOpenCreateModal(false);
         setIsOpenEditModal(false);
+        fetchData();
     };
 
     useEffect(() => {
@@ -127,12 +130,12 @@ export default function MaterialSchedule() {
                 postId: data.id,
             };
         });
-        setIsOpenEditModal(() => true);
+        setIsOpenEditModal(true);
     };
     return (
         <div>
-            <Typography variant="h5" className="mb-4" color="textSecondary" gutterBottom>
-                MATERIAL STATUS
+            <Typography variant="h5" className="mb-4 text-uppercase" color="textSecondary" gutterBottom>
+                {t('material.title')}
                 <Divider />
             </Typography>
             <Grid container spacing={3} direction="row" justifyContent="center" alignItems="center" sx={{ mb: 3 }}>
@@ -147,7 +150,7 @@ export default function MaterialSchedule() {
                             justifyContent: 'center',
                         }}
                     >
-                        <InputLabel htmlFor="outlined-adornment-amount">Upload image of material products</InputLabel>
+                        <InputLabel htmlFor="outlined-adornment-amount">{t('material.uploadTitle')}</InputLabel>
                         <IconButton color="primary" sx={{ p: '10px' }} aria-label="directions">
                             <AddPhotoAlternateIcon onClick={openModal} />
                         </IconButton>
@@ -188,7 +191,7 @@ export default function MaterialSchedule() {
                                     </CardContent>
                                     <CardActions>
                                         <Button size="small" onClick={() => enableComment(data)}>
-                                            COMMENT
+                                            {t('material.comment')}
                                         </Button>
                                     </CardActions>
                                 </Card>
@@ -204,24 +207,23 @@ export default function MaterialSchedule() {
                         </Grid>
                     </Grid>
                 ))}
-            <ImageUploadDialog
-                isOpen={isOpenCreateModal}
-                closeFunc={closeModal}
-                okFunc={alertOkFunc}
-                title="Upload image for material products"
-                content={contentCreate}
-                noBtn="NO"
-                okBtn="OK"
-            />
-            <EditMaterialModal
-                isOpen={isOpenEditModal}
-                closeFunc={closeModal}
-                okFunc={alertOkFunc}
-                title="Edit for material products"
-                content={contentEdit}
-                noBtn="NO"
-                okBtn="OK"
-            ></EditMaterialModal>
+            {isOpenCreateModal ? (
+                <ImageUploadDialog
+                    isOpen={isOpenCreateModal}
+                    closeFunc={closeModal}
+                    okFunc={alertOkFunc}
+                    title={t('material.uploadTitle')}
+                    content={contentCreate}
+                />
+            ) : (
+                <EditMaterialModal
+                    isOpen={isOpenEditModal}
+                    closeFunc={closeModal}
+                    okFunc={alertOkFunc}
+                    title={t('material.editTitle')}
+                    content={contentEdit}
+                />
+            )}
         </div>
     );
 }

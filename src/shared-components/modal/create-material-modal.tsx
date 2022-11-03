@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
 import { forwardRef, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { postMaterialStatus } from '../../services/material-service';
 import MultipleFileUpload from '../file-upload/multiple-file-upload';
 
@@ -33,8 +34,6 @@ interface AlertDialogSlideProps {
         isOpenComment: boolean;
         postUser: any;
     };
-    noBtn: string;
-    okBtn: string;
     isOpen: boolean;
     closeFunc: Function;
     okFunc: Function;
@@ -51,9 +50,10 @@ const initialDataImg = {
 };
 
 export default function ImageUploadDialog(props: AlertDialogSlideProps) {
-    const { title, content, isOpen, closeFunc, okFunc, noBtn, okBtn } = props;
+    const { title, content, isOpen, closeFunc, okFunc } = props;
     const [open, setOpen] = useState(false);
     const [imgData, setImgData] = useState(initialDataImg);
+    const { t } = useTranslation();
 
     useEffect(() => {
         if (isOpen) {
@@ -94,16 +94,6 @@ export default function ImageUploadDialog(props: AlertDialogSlideProps) {
         setImgData({
             ...imgData,
             [name]: value,
-        });
-    };
-
-    const deleteImageCallback = (index: number) => {
-        const data = imgData.images.filter((image: any, i: number) => {
-            return index !== i;
-        });
-        setImgData({
-            ...imgData,
-            images: data,
         });
     };
 
@@ -163,10 +153,10 @@ export default function ImageUploadDialog(props: AlertDialogSlideProps) {
                 <Divider />
                 <DialogActions>
                     <Button variant="outlined" onClick={handleClose}>
-                        Cancel
+                        {t('button.btnCancel')}
                     </Button>
                     <Button variant="contained" onClick={handleOkFunc}>
-                        Upload
+                        {t('button.btnUpload')}
                     </Button>
                 </DialogActions>
             </Dialog>

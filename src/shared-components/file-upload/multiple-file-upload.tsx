@@ -3,10 +3,17 @@ import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import './file-upload.scss';
 
-export default function MultipleFileUpload(props: any) {
+interface props {
+    clearPreview?: any;
+    callbackFunc: Function;
+    imgData?: any;
+    isEditUpload?: boolean;
+}
+
+export default function MultipleFileUpload(props: props) {
     const { clearPreview, callbackFunc, imgData, isEditUpload } = props;
     const [images, setImages] = useState<string[]>([]);
-    const [imagePreviews, setImagePreviews] = useState<string[]>((imgData && imgData.length > 0) ? imgData : []);
+    const [imagePreviews, setImagePreviews] = useState<string[]>(imgData && imgData.length > 0 ? imgData : []);
     const [isEdit, setIsEdit] = useState(false);
 
     const onChangeImage = (event: any) => {
@@ -14,7 +21,9 @@ export default function MultipleFileUpload(props: any) {
     };
 
     useEffect(() => {
-        setIsEdit(isEditUpload);
+        if (isEditUpload) {
+            setIsEdit(isEditUpload);
+        }
     }, [isEditUpload]);
 
     useEffect(() => {
@@ -39,12 +48,12 @@ export default function MultipleFileUpload(props: any) {
                     if (isEdit) {
                         tmpNewImageUrls = newImageUrls.map((url: any) => {
                             return {
-                                data: url
+                                data: url,
                             };
-                        })
+                        });
                     } else {
                         tmpNewImageUrls = [...newImageUrls];
-                    };
+                    }
 
                     setImagePreviews([...imagePreviews, ...tmpNewImageUrls]);
                     callbackFunc([...imagePreviews, ...tmpNewImageUrls]);
@@ -64,30 +73,27 @@ export default function MultipleFileUpload(props: any) {
     return (
         <div className="multiple-file-upload">
             <div className="image-area">
-                <label htmlFor="chosen-image" className={`${imagePreviews.length > 0 ? 'label-selector-fixed' : 'label-selector'} `}>
+                <label
+                    htmlFor="chosen-image"
+                    className={`${imagePreviews.length > 0 ? 'label-selector-fixed' : 'label-selector'} `}
+                >
                     <AddPhotoAlternateIcon />
                 </label>
                 <div className="row image-list">
-                    {(imagePreviews && imagePreviews.length) > 0 && imagePreviews.reverse().map((image: any, index: number) => (
-                        <div className="col-6 col-lg-4 img-item" key={index}>
-                            <HighlightOffIcon onClick={() => removeImageItem(index)} />
-                            {isEdit ?
-                                <img src={image.data} alt={image.id} key={index} />
-                                :
-                                <img src={image} alt={image} key={index} />
-                            }
-                        </div>
-                    ))}
+                    {(imagePreviews && imagePreviews.length) > 0 &&
+                        imagePreviews.reverse().map((image: any, index: number) => (
+                            <div className="col-6 col-lg-4 img-item" key={index}>
+                                <HighlightOffIcon onClick={() => removeImageItem(index)} />
+                                {isEdit ? (
+                                    <img src={image.data} alt={image.id} key={index} />
+                                ) : (
+                                    <img src={image} alt={image} key={index} />
+                                )}
+                            </div>
+                        ))}
                 </div>
             </div>
-            <input
-                accept="image/*"
-                id="chosen-image"
-                type="file"
-                multiple
-                hidden
-                onChange={onChangeImage}
-            />
-        </div >
+            <input accept="image/*" id="chosen-image" type="file" multiple hidden onChange={onChangeImage} />
+        </div>
     );
-};
+}

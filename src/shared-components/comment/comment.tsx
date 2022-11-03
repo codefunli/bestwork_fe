@@ -8,6 +8,7 @@ import { STR_EMPTY } from '../../core/utils/object-utils';
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
 import { v4 as uuidv4 } from 'uuid';
 import { postComment } from '../../services/material-service';
+import { useTranslation } from 'react-i18next';
 
 interface CommentProps {
     arrMsg: Comment[];
@@ -23,6 +24,7 @@ export default function CommentEl(props: CommentProps) {
     const [replyLabel, setReplyLabel] = useState('');
     const [currentId, setCurrentId] = useState('');
     const [type, setType] = useState('ADD');
+    const { t } = useTranslation();
 
     const doReplyLabel = (replyLabel: string, id: string) => {
         setReplyLabel(replyLabel);
@@ -162,7 +164,7 @@ export default function CommentEl(props: CommentProps) {
                                 id="outlined-required"
                                 autoComplete="off"
                                 label={replyLabel}
-                                placeholder="Please input a new value"
+                                placeholder={t('material.placeholder')}
                                 onChange={handleInputChange}
                             />
                             <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />

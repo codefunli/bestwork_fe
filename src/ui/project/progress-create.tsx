@@ -98,7 +98,7 @@ const ProgressCreate = (props: Props) => {
 
     const handleImageChange = (data: any) => {
         const convertedImages = data.map((image: any) => {
-            return { data: image }
+            return { data: image };
         });
 
         setProgressData({
@@ -260,11 +260,13 @@ const ProgressCreate = (props: Props) => {
                                         <MenuItem value="" selected={true} disabled>
                                             <em>{t('message.statusLabel')}</em>
                                         </MenuItem>
-                                        {(progressStatus && progressStatus.length > 0) && progressStatus.map((status: any) => (
-                                            <MenuItem value={status.id} key={status.id}>
-                                                <em>{status.status}</em>
-                                            </MenuItem>
-                                        ))}
+                                        {progressStatus &&
+                                            progressStatus.length > 0 &&
+                                            progressStatus.map((status: any) => (
+                                                <MenuItem value={status.id} key={status.id}>
+                                                    <em>{status.status}</em>
+                                                </MenuItem>
+                                            ))}
                                     </Select>
                                     {Boolean(errors.status) && (
                                         <FormHelperText id="component-error-text">

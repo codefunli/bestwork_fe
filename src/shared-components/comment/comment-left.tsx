@@ -1,6 +1,7 @@
 import { Avatar, Button } from '@mui/material';
 import { deepOrange } from '@mui/material/colors';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Comment } from '../../core/types/base';
 import './comment.scss';
 
@@ -26,8 +27,8 @@ const message: Comment = {
 
 export default function CommentLeft(props: CommentRightProps) {
     const { msg, reply, edit } = props;
-
     const [messages, setMessage] = useState(message);
+    const { t } = useTranslation();
 
     useEffect(() => {
         setMessage(msg);
@@ -35,13 +36,13 @@ export default function CommentLeft(props: CommentRightProps) {
 
     const passIdMsg = (id: any) => {
         if (messages.id === id) {
-            reply('Responding ' + messages.commentUser.name, id);
+            reply(t('material.responding') + ' ' + messages.commentUser.name, id);
         }
     };
 
     const passIdMsgEdit = (id: any) => {
         if (messages.id === id) {
-            edit('Edit for ' + messages.commentUser.name, id, messages.comment);
+            edit(t('material.editFor') + ' ' + messages.commentUser.name, id, messages.comment);
         }
     };
 
@@ -76,15 +77,22 @@ export default function CommentLeft(props: CommentRightProps) {
                                     ? new Date().getMinutes() - new Date(messages.dateTime).getMinutes() <= 0
                                         ? new Date().getSeconds() -
                                           new Date(messages.dateTime).getSeconds() +
-                                          ' giay truoc'
+                                          ' ' +
+                                          t('material.secondAgo')
                                         : new Date().getMinutes() -
                                           new Date(messages.dateTime).getMinutes() +
-                                          ' phut truoc'
-                                    : new Date().getHours() - new Date(messages.dateTime).getHours() + ' gio truoc'
+                                          ' ' +
+                                          t('material.minuteAgo')
+                                    : new Date().getHours() -
+                                      new Date(messages.dateTime).getHours() +
+                                      ' ' +
+                                      t('material.hourAgo')
                                 : (
                                       (new Date().getTime() - new Date(messages.dateTime).getTime()) /
                                       (1000 * 3600 * 24)
-                                  ).toFixed(0) + ' ngay truoc'}
+                                  ).toFixed(0) +
+                                  ' ' +
+                                  t('material.dayAgo')}
                         </small>
                     </div>
                     <div>
@@ -93,17 +101,18 @@ export default function CommentLeft(props: CommentRightProps) {
                 </div>
                 <div className="msg-btn-reply text-end">
                     <Button size="small" variant="text" onClick={() => passIdMsgEdit(messages.id)}>
-                        Edit
+                        {t('material.edit')}
                     </Button>
                     {!messages.isLastSub && (
                         <Button size="small" variant="text" onClick={() => passIdMsg(messages.id)}>
-                            Reply
+                            {t('material.reply')}
                         </Button>
                     )}
                     {messages?.subComment.length > 0 && (
                         <Button onClick={() => handleShowComment(messages.id)}>
                             <small>
-                                {messages.isShowSubComment ? 'Hide' : 'Show'} ({messages?.subComment.length}){' '}
+                                {messages.isShowSubComment ? t('material.hide') : t('material.show')} (
+                                {messages?.subComment.length}){' '}
                             </small>
                         </Button>
                     )}
