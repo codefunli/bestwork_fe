@@ -19,10 +19,10 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from 'react-query';
 import { Link, useNavigate } from 'react-router-dom';
-import { ConfirmConstants, UrlFeApp } from '../../core/constants/common';
+import { ConfirmConstants, UrlFeApp, Item } from '../../core/constants/common';
 import { SUCCESS_MSG } from '../../core/constants/message';
 import { headProjectCol } from '../../core/types/project';
-import { deleteProjects, getProjects, getProjectStatus, getProjectTypes } from '../../services/project-service';
+import { deleteProjects, getProjects, getProjectStatus } from '../../services/project-service';
 import MessageShow from '../../shared-components/message/message';
 import AlertDialogSlide from '../../shared-components/modal/alert-dialog-slide';
 import EnhancedTable, { ArrayAction } from '../../shared-components/table-manager/table-data';
@@ -202,24 +202,26 @@ export default function ProjectSearch() {
                     </div>
                     <div className="col-sm-12 col-md-6 text-end d-none d-lg-block">
                         <Button
+                            className="btn-create"
                             variant="contained"
                             color="primary"
                             component={Link}
                             to={UrlFeApp.PROJECT.CREATE}
                             sx={{ textTransform: 'uppercase' }}
                         >
-                            {t('button.btnRegister')}
+                            {t(Item.LABEL_BTN.CREATE)}
                         </Button>
                     </div>
                     <div className="col-sm-12 text-start d-block d-lg-none">
                         <Button
+                            className="btn-create"
                             variant="contained"
                             color="primary"
                             component={Link}
                             to={UrlFeApp.COMPANY.CREATE}
                             sx={{ textTransform: 'uppercase' }}
                         >
-                            {t('button.btnRegister')}
+                            {t(Item.LABEL_BTN.CREATE)}
                         </Button>
                     </div>
                 </div>
@@ -333,7 +335,7 @@ export default function ProjectSearch() {
                                                     onClick={handleClearData}
                                                     variant="outlined"
                                                 >
-                                                    {t('button.btnClear')}
+                                                    {t(Item.LABEL_BTN.CLEAR)}
                                                 </Button>
                                             </ButtonGroup>
                                         </div>

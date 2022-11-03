@@ -20,7 +20,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import { DefaultImage, StatusCode, UrlFeApp } from '../../core/constants/common';
+import { DefaultImage, StatusCode, UrlFeApp, Item } from '../../core/constants/common';
 import { validateCreateUserForm, validateCreateUserWithCompanyForm } from '../../core/constants/validate';
 import { getCompaniesByUser } from '../../services/company-service';
 import { createUsers, getRoles } from '../../services/user-service';
@@ -82,10 +82,12 @@ export default function UserAdd() {
     }, []);
 
     const handleClearForm = () => {
-        setFormValues(initialValues);
+        setFormValues({
+            ...initialValues,
+            company: params.id ? parseInt(params.id) : '',
+        });
         reset();
     };
-
 
     const handleInputChange = (e: any) => {
         const { name, value } = e.target;
@@ -137,7 +139,7 @@ export default function UserAdd() {
         }
     };
 
-    const handleCancelChange = () => {
+    const handleBack = () => {
         navigate(`${UrlFeApp.USER.SEARCH}`);
     };
 
@@ -170,7 +172,7 @@ export default function UserAdd() {
                             <CardHeader
                                 action={
                                     <Button onClick={handleClearForm} variant="outlined">
-                                        {t('button.btnClear')}
+                                        {t(Item.LABEL_BTN.CLEAR)}
                                     </Button>
                                 }
                             ></CardHeader>
@@ -446,10 +448,10 @@ export default function UserAdd() {
                                                 disabled={isSubmitting}
                                                 onClick={handleSubmit(handleSubmitForm)}
                                             >
-                                                {t('button.btnCreate')}
+                                                {t(Item.LABEL_BTN.CREATE)}
                                             </Button>
-                                            <Button onClick={handleCancelChange} variant="outlined">
-                                                {t('button.btnBack')}
+                                            <Button onClick={handleBack} variant="outlined">
+                                                {t(Item.LABEL_BTN.BACK)}
                                             </Button>
                                         </ButtonGroup>
                                     </div>

@@ -118,7 +118,7 @@ export default function ProjectRegister() {
         register,
         handleSubmit,
         reset,
-        formState: { errors },
+        formState: { errors, isSubmitting },
     } = useForm({
         resolver: yupResolver(validateProjectRegisterForm),
     });
@@ -504,7 +504,13 @@ export default function ProjectRegister() {
                                                             variant="contained"
                                                             aria-label="Disabled elevation buttons"
                                                         >
-                                                            <Button variant="contained" color="primary" sx={{ mr: 1 }} onClick={handleSubmit(handleSubmitForm)}>
+                                                            <Button
+                                                                variant="contained"
+                                                                color="primary"
+                                                                sx={{ mr: 1 }}
+                                                                disabled={isSubmitting}
+                                                                onClick={handleSubmit(handleSubmitForm)}
+                                                            >
                                                                 {t('button.btnUpdate')}
                                                             </Button>
                                                             <Button variant="outlined" onClick={handleBack}>

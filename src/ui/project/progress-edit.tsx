@@ -35,7 +35,7 @@ const ProgressEdit = (props: Props) => {
         register,
         handleSubmit,
         reset,
-        formState: { errors },
+        formState: { errors, isSubmitting },
     } = useForm({
         resolver: yupResolver(validateProjectProgress),
     });
@@ -313,7 +313,13 @@ const ProgressEdit = (props: Props) => {
                                         <Button onClick={handleCancel} variant="outlined">
                                             {t('button.btnCancel')}
                                         </Button>
-                                        <Button variant="contained" color="primary" sx={{ ml: 1 }} onClick={handleSubmit(handleSubmitForm)}>
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            sx={{ ml: 1 }}
+                                            disabled={isSubmitting}
+                                            onClick={handleSubmit(handleSubmitForm)}
+                                        >
                                             {t('button.btnUpdate')}
                                         </Button>
                                     </ButtonGroup>

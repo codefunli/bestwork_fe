@@ -192,25 +192,26 @@ export default function CompanySearch() {
                     </div>
                     <div className="col-sm-12 col-md-6 text-end d-none d-lg-block">
                         <Button
-                            className="btn-register"
+                            className="btn-create"
                             variant="contained"
                             color="primary"
                             component={Link}
                             to={UrlFeApp.COMPANY.CREATE}
                             sx={{ textTransform: 'uppercase' }}
                         >
-                            {t(Item.LABEL_BTN.REGISTER)}
+                            {t(Item.LABEL_BTN.CREATE)}
                         </Button>
                     </div>
                     <div className="col-sm-12 text-start d-block d-lg-none">
                         <Button
+                            className="btn-create"
                             variant="contained"
                             color="primary"
                             component={Link}
                             to={UrlFeApp.COMPANY.CREATE}
                             sx={{ textTransform: 'uppercase' }}
                         >
-                            {t(Item.LABEL_BTN.REGISTER)}
+                            {t(Item.LABEL_BTN.CREATE)}
                         </Button>
                     </div>
                 </div>
@@ -239,7 +240,7 @@ export default function CompanySearch() {
                                         <div className="row justify-center m-1">
                                             <div className="col-12 d-block p-1">
                                                 <InputLabel htmlFor="keyword-search">
-                                                    {t(Item.COMPANY.SEARCH_KEYWORK)}
+                                                    {t(Item.COMPANY.SEARCH_KEYWORD)}
                                                 </InputLabel>
                                                 <TextField
                                                     size="small"
