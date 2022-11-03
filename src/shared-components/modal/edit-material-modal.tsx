@@ -35,6 +35,7 @@ interface AlertDialogSlideProps {
         postUser: any;
         postId: string;
         fileStorages: any;
+        eqBill: string;
     };
     isOpen: boolean;
     closeFunc: Function;
@@ -50,6 +51,7 @@ const initialDataImg = {
         id: 0,
         name: 'Đông Tà',
     },
+    eqBill: '',
 };
 
 export default function EditMaterialModal(props: AlertDialogSlideProps) {
@@ -79,6 +81,7 @@ export default function EditMaterialModal(props: AlertDialogSlideProps) {
                 projectId: content.projectId,
                 description: postData.description,
                 images: postData.images,
+                eqBill: postData.eqBill,
             };
         } else {
             const imgs = postData.fileStorages.map((img: any) => img.data);
@@ -86,6 +89,7 @@ export default function EditMaterialModal(props: AlertDialogSlideProps) {
                 projectId: content.projectId,
                 description: postData.description,
                 images: imgs,
+                eqBill: postData.eqBill,
             };
         }
 
@@ -158,6 +162,32 @@ export default function EditMaterialModal(props: AlertDialogSlideProps) {
                                         size="small"
                                         fullWidth
                                         multiline
+                                        value={postData.eqBill}
+                                        sx={{
+                                            mt: 1,
+                                            mb: 1,
+                                            '& legend': { display: 'none' },
+                                            '& fieldset': { top: 0 },
+                                        }}
+                                        id="outlined-required"
+                                        placeholder={t('material.eqBillPlaceHolder')}
+                                        name="eqBill"
+                                        onChange={handleInputChange}
+                                    />
+                                </div>
+                            </Grid>
+                            <Grid item xs={12} lg={12}>
+                                <div
+                                    w-fullWidth
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                    }}
+                                >
+                                    <TextField
+                                        size="small"
+                                        fullWidth
+                                        multiline
                                         rows={3}
                                         value={postData.description}
                                         sx={{
@@ -167,7 +197,7 @@ export default function EditMaterialModal(props: AlertDialogSlideProps) {
                                             '& fieldset': { top: 0 },
                                         }}
                                         id="outlined-required"
-                                        placeholder="Description..."
+                                        placeholder={t('material.descriptionPlaceHolder')}
                                         name="description"
                                         onChange={handleInputChange}
                                     />

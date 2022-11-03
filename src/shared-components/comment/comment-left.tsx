@@ -62,7 +62,7 @@ export default function CommentLeft(props: CommentRightProps) {
                 }}
                 src={messages.commentUser.avatar}
             ></Avatar>
-            <div className="msg-content-wrapper">
+            <div className="msg-content-wrapper w-75 ">
                 <div className="msg-content-detail">
                     <div className="fw-bold mb-1">
                         {messages.commentUser.name} -{' '}
@@ -96,7 +96,9 @@ export default function CommentLeft(props: CommentRightProps) {
                         </small>
                     </div>
                     <div>
-                        <p className="mb-0">{messages.comment}</p>
+                        <p className="mb-0" id={`cmt${messages.id}`}>
+                            {messages.comment}
+                        </p>
                     </div>
                 </div>
                 <div className="msg-btn-reply text-end">

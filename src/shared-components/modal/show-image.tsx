@@ -1,6 +1,7 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
 import { forwardRef, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const Transition = forwardRef(function Transition(
     props: TransitionProps & {
@@ -26,6 +27,7 @@ interface AlertDialogSlideProps {
 export default function ShowImage(props: AlertDialogSlideProps) {
     const { title, content, isOpen, closeFunc, okFunc, noBtn, okBtn } = props;
     const [open, setOpen] = useState(false);
+    const { t } = useTranslation();
 
     const handleClose = () => {
         setOpen(false);
@@ -65,7 +67,7 @@ export default function ShowImage(props: AlertDialogSlideProps) {
                 </DialogContent>
                 <DialogActions>
                     <Button variant="outlined" onClick={handleClose}>
-                        Close
+                        {t('button.btnClose')}
                     </Button>
                 </DialogActions>
             </Dialog>

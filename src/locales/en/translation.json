@@ -92,7 +92,8 @@
         "btnResetAll": "Reset All",
         "btnUpdate": "Update",
         "btnBackToHome": "Back To Home",
-        "btnUpload": "Upload"
+        "btnUpload": "Upload",
+        "btnClose": "Close"
     },
     "common": {
         "placeholder": "Please input a new value",
@@ -346,7 +347,10 @@
         "hourAgo": "hour ago",
         "dayAgo": "day ago",
         "responding": "Responding",
-        "editFor": "Edit for"
+        "editFor": "Edit for",
+        "previewImage": "Preview image",
+        "descriptionPlaceHolder": "Description...",
+        "eqBillPlaceHolder": "Equipment bill..."
     },
     "menu": {
         "dashboard": "Dashboard",
