@@ -38,6 +38,7 @@ import CollapsedBreadcrumbs from './collapsed-breadcrumbs';
 import Notification from '../ui/notification/notification';
 import UserDropdown from '../ui/user-dropdown/user-dropdown';
 import './main-app.scss';
+import { renderIconLeftBar } from '../core/utils/render-utils';
 
 const drawerWidth = 240;
 
@@ -231,7 +232,7 @@ export default function MiniDrawer() {
                                                     justifyContent: 'center',
                                                 }}
                                             >
-                                                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                                                {renderIconLeftBar(menuItem.iconNm)}
                                             </ListItemIcon>
                                             <ListItemText primary={menuItem.name} sx={{ opacity: open ? 1 : 0 }} />
                                         </ListItemButton>

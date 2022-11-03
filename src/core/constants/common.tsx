@@ -182,6 +182,13 @@ export const Item = {
         MODE_EDIT_ICON: 'ModeEditIcon',
         MODE_ADD_USER_ICON: 'AddUser',
     },
+    ICON_NM: {
+        ICON_DASHBOARD_NM_BAR: 'DashBoardIcon',
+        ICON_COM_NM_BAR: 'CompanyIcon',
+        ICON_USER_NM_BAR: 'UserIcon',
+        ICON_PRJ_NM_BAR: 'ProjectIcon',
+        ICON_ROLE_NM_BAR: 'RoleIcon',
+    },
     LABEL_BTN: {
         REGISTER: 'button.btnRegister',
         PENDING: 'button.btnPending',
