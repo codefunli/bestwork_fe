@@ -17,10 +17,10 @@ import {
     Grid,
 } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
-import { AlertColorConstants, UrlFeApp, ConfirmConstants } from '../../core/constants/common';
+import { AlertColorConstants, UrlFeApp, ConfirmConstants, Item } from '../../core/constants/common';
 import { useQuery, useQueryClient } from 'react-query';
 import EnhancedTable, { ArrayAction } from '../../shared-components/table-manager/table-data';
-import { headUserCol, RoleUser } from '../../core/types/user';
+import { headUserCol } from '../../core/types/user';
 import { useTranslation } from 'react-i18next';
 import { getUsers, deleteUsers, getRoles } from '../../services/user-service';
 import AlertDialogSlide from '../../shared-components/modal/alert-dialog-slide';
@@ -185,24 +185,26 @@ export default function UserSearch() {
                         </div>
                         <div className="col-sm-12 col-md-6 text-end d-none d-lg-block">
                             <Button
+                                className="btn-create"
                                 variant="contained"
                                 color="primary"
                                 component={Link}
                                 to={UrlFeApp.USER.CREATE}
                                 sx={{ textTransform: 'uppercase' }}
                             >
-                                {t('button.btnCreate')}
+                                {t(Item.LABEL_BTN.CREATE)}
                             </Button>
                         </div>
                         <div className="col-sm-12 text-start d-block d-lg-none">
                             <Button
+                                className="btn-create"
                                 variant="contained"
                                 color="primary"
                                 component={Link}
                                 to={UrlFeApp.USER.CREATE}
                                 sx={{ textTransform: 'uppercase' }}
                             >
-                                {t('button.btnCreate')}
+                                {t(Item.LABEL_BTN.CREATE)}
                             </Button>
                         </div>
                     </div>

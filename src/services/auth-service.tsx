@@ -12,6 +12,6 @@ export const logout = async () => {
 };
 
 export const changePassword = async (object: any) => {
-    const res = await apiClient.post(`${UrlServer.AUTH.CHANGE_PASSWORD}`, object);
-    return res;
+    const res = await apiClient.post(`${UrlServer.CHANGE_PASSWORD}`, object);
+    return res.data;
 };

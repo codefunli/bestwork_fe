@@ -70,7 +70,7 @@ const ProgressCreate = (props: Props) => {
         register,
         handleSubmit,
         reset,
-        formState: { errors },
+        formState: { errors, isSubmitting },
     } = useForm({
         resolver: yupResolver(validateProjectProgress),
     });
@@ -332,6 +332,7 @@ const ProgressCreate = (props: Props) => {
                                     variant="contained"
                                     color="primary"
                                     sx={{ ml: 1 }}
+                                    disabled={isSubmitting}
                                     onClick={handleSubmit(handleSubmitForm)}
                                 >
                                     {t('button.btnCreate')}

@@ -62,9 +62,11 @@ export default function ChangePassword(props: ChangePasswordModalProps) {
                 message: res.message,
             });
 
-            toggleOpen(false);
-            setFormValues(initialValues);
-            reset();
+            if (res.status === StatusCode.OK) {
+                toggleOpen(false);
+                setFormValues(initialValues);
+                reset();
+            };
         }).catch(() => {
             setResForHandleMsg({
                 status: StatusCode.ERROR,

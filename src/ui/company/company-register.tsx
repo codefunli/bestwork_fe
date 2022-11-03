@@ -1,7 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import {
-    AlertColor,
     Avatar,
     Box,
     Button,
@@ -25,20 +24,20 @@ import {
     Switch,
     TextField,
     Typography,
+    ButtonGroup
 } from '@mui/material';
 import cities from 'hanhchinhvn/dist/tinh_tp.json';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { AlertColorConstants, Item, StatusCode, UrlFeApp } from '../../core/constants/common';
-import { SUCCESS_MSG } from '../../core/constants/message';
+import { Item, StatusCode, UrlFeApp } from '../../core/constants/common';
 import { validateForm } from '../../core/constants/validate';
 import { District, Ward } from '../../core/types/administrative';
 import { getDistrictsByCityCode, getWardsByDistrictCode } from '../../core/utils/administrative-utils';
 import { currentDateTime, formatDateTimeReq } from '../../core/utils/get-current-datetime';
 import { registerCompany } from '../../services/company-service';
-import MessageShow from '../../shared-components/message/message';
+import ApiAlert from '../../shared-components/alert/api-alert';
 
 const initialValues = {
     company: {
@@ -71,18 +70,16 @@ export default function CompanyRegister() {
     const [formValues, setFormValues] = useState(initialValues);
     const [districts, setDistricts] = useState<District[]>([]);
     const [wards, setWards] = useState<Ward[]>([]);
-    const [isShowMessage, setIsShowMessage] = useState(false);
-    const [companyMsg, setCompanyMsg] = useState('');
-    const [typeCompanyMsg, setTypeCompanyMsg] = useState<AlertColor>('success');
     const navigate = useNavigate();
     const { t } = useTranslation();
     const [showPassword, setShowPassword] = useState(false);
+    const [resForHandleMsg, setResForHandleMsg] = useState<any>();
 
     const {
         register,
         handleSubmit,
         reset,
-        formState: { errors },
+        formState: { errors, isSubmitting },
     } = useForm({
         resolver: yupResolver(validateForm),
     });
@@ -135,17 +132,6 @@ export default function CompanyRegister() {
         setWards(getWardsByDistrictCode(value));
     };
 
-    const handleWardChange = (event: any) => {
-        const { name, value } = event.target;
-        setFormValues({
-            ...formValues,
-            company: {
-                ...formValues.company,
-                [name]: value,
-            },
-        });
-    };
-
     const handleAllowLoginChange = (event: any) => {
         const { name, value } = event.target;
 
@@ -174,71 +160,46 @@ export default function CompanyRegister() {
         reset();
     };
 
-    const handleMessage = (showMsg: boolean, msg: string, type: AlertColor) => {
-        setIsShowMessage(showMsg);
-        setCompanyMsg(msg);
-        setTypeCompanyMsg(type);
-    };
-
-    const handleResponse = (resp: any) => {
-        switch (resp.status) {
-            case StatusCode.OK:
-                handleMessage(true, t(SUCCESS_MSG.S01_002), AlertColorConstants.SUCCESS);
-                navigate(UrlFeApp.COMPANY.SEARCH);
-                break;
-            case StatusCode:
-                handleMessage(true, resp.message, AlertColorConstants.ERROR);
-                break;
-            default:
-                handleMessage(true, resp.message, AlertColorConstants.WARNING);
-                break;
-        }
-    };
-
     const handleSubmitForm = () => {
-        let objValue: any = {};
-
-        if (formValues.user.enabled) {
-            objValue = {
-                company: {
-                    ...formValues.company,
-                    startDate: formatDateTimeReq(formValues.company.startDate),
-                    expiredDate: formatDateTimeReq(formValues.company.expiredDate),
-                },
-                user: {
-                    ...formValues.user,
-                    enabled: 1,
-                },
-            };
-        } else {
-            objValue = {
-                company: {
-                    ...formValues.company,
-                    startDate: formatDateTimeReq(formValues.company.startDate),
-                    expiredDate: formatDateTimeReq(formValues.company.expiredDate),
-                },
-                user: {
-                    ...formValues.user,
-                    enabled: 0,
-                },
-            };
-        }
+        let objValue: any = {
+            company: {
+                ...formValues.company,
+                startDate: formatDateTimeReq(formValues.company.startDate),
+                expiredDate: formatDateTimeReq(formValues.company.expiredDate),
+            },
+            user: {
+                ...formValues.user,
+                enabled: formValues.user.enabled ? 1 : 0,
+            },
+        };
 
         registerCompany(objValue)
-            .then((resp) => {
-                handleResponse(resp);
+            .then((res) => {
+                setResForHandleMsg({
+                    status: res.status,
+                    message: res.message,
+                });
+
+                if (res.status === StatusCode.OK) {
+                    setTimeout(() => {
+                        navigate(UrlFeApp.COMPANY.SEARCH);
+                    }, 1000);
+                };
             })
             .catch(() => {
-                handleMessage(true, t(Item.MESSAGE.ERROR), AlertColorConstants.ERROR);
+                setResForHandleMsg({
+                    status: StatusCode.ERROR,
+                    message: t('message.error'),
+                });
             });
-    };
-
-    const handleCloseMsg = () => {
-        setIsShowMessage(false);
     };
 
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword);
+    };
+
+    const handleBack = () => {
+        navigate(`${UrlFeApp.COMPANY.SEARCH}`);
     };
 
     return (
@@ -412,6 +373,10 @@ export default function CompanyRegister() {
                                                         labelId="demo-simple-select-outlined-label"
                                                         id="demo-simple-select-outlined"
                                                         name="city"
+                                                        sx={{
+                                                            '& legend': { display: 'none' },
+                                                            '& fieldset': { top: 0 },
+                                                        }}
                                                         displayEmpty
                                                         value={formValues.company.city}
                                                         onChange={handleCityChange}
@@ -441,6 +406,10 @@ export default function CompanyRegister() {
                                                         labelId="demo-simple-select-outlined-label"
                                                         id="demo-simple-select-outlined"
                                                         name="district"
+                                                        sx={{
+                                                            '& legend': { display: 'none' },
+                                                            '& fieldset': { top: 0 },
+                                                        }}
                                                         displayEmpty
                                                         value={formValues.company.district}
                                                         onChange={handleDistrictChange}
@@ -472,6 +441,10 @@ export default function CompanyRegister() {
                                                         labelId="demo-simple-select-outlined-label"
                                                         id="demo-simple-select-outlined"
                                                         name="ward"
+                                                        sx={{
+                                                            '& legend': { display: 'none' },
+                                                            '& fieldset': { top: 0 },
+                                                        }}
                                                         displayEmpty
                                                         value={formValues.company.ward}
                                                         onChange={handleInputChangeCompany}
@@ -495,7 +468,12 @@ export default function CompanyRegister() {
                                                     name="street"
                                                     size="small"
                                                     fullWidth
-                                                    sx={{ mt: 1, mb: 1 }}
+                                                    sx={{
+                                                        mt: 1,
+                                                        mb: 1,
+                                                        '& legend': { display: 'none' },
+                                                        '& fieldset': { top: 0 },
+                                                    }}
                                                     id="outlined-required"
                                                     placeholder={t(Item.COMMON.PLACE_HOLDER)}
                                                     onChange={handleInputChangeCompany}
@@ -512,7 +490,13 @@ export default function CompanyRegister() {
                                                 </InputLabel>
                                                 <TextField
                                                     fullWidth
-                                                    sx={{ mt: 1, mb: 1 }}
+                                                    size='small'
+                                                    sx={{
+                                                        mt: 1,
+                                                        mb: 1,
+                                                        '& legend': { display: 'none' },
+                                                        '& fieldset': { top: 0 },
+                                                    }}
                                                     value={formValues.company.startDate}
                                                     id="dateStart"
                                                     type="datetime-local"
@@ -536,7 +520,13 @@ export default function CompanyRegister() {
                                                 </InputLabel>
                                                 <TextField
                                                     fullWidth
-                                                    sx={{ mt: 1, mb: 1 }}
+                                                    size='small'
+                                                    sx={{
+                                                        mt: 1,
+                                                        mb: 1,
+                                                        '& legend': { display: 'none' },
+                                                        '& fieldset': { top: 0 },
+                                                    }}
                                                     value={formValues.company.expiredDate}
                                                     id="dateEnd"
                                                     type="datetime-local"
@@ -652,7 +642,7 @@ export default function CompanyRegister() {
                                         <div className="row justify-center m-1">
                                             <div className="col-12 col-sm-6 d-block p-1">
                                                 <InputLabel htmlFor="outlined-adornment-amount">
-                                                    {t(Item.USER.REGISTER_FRIST_NAME)}
+                                                    {t(Item.USER.REGISTER_FIRST_NAME)}
                                                 </InputLabel>
                                                 <TextField
                                                     name="firstName"
@@ -764,7 +754,7 @@ export default function CompanyRegister() {
                                                                 onChange={handleAllowLoginChange}
                                                             />
                                                         }
-                                                        label={t(Item.COMMON.RADIO_ENBLED)}
+                                                        label={t(Item.COMMON.RADIO_ENABLED)}
                                                     />
                                                 </FormControl>
                                             </div>
@@ -799,20 +789,31 @@ export default function CompanyRegister() {
                                 </CardContent>
                             </Grid>
                             <Grid item xs={12} sm={12} className="text-center pb-4 pt-0">
-                                <Button variant="contained" color="primary" onClick={handleSubmit(handleSubmitForm)}>
-                                    {t(Item.LABEL_BTN.SAVE)}
-                                </Button>
+                                <ButtonGroup
+                                    disableElevation
+                                    variant="contained"
+                                    aria-label="Disabled elevation buttons"
+                                >
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        sx={{ mr: 1 }}
+                                        disabled={isSubmitting}
+                                        onClick={handleSubmit(handleSubmitForm)}
+                                    >
+                                        {t(Item.LABEL_BTN.CREATE)}
+                                    </Button>
+                                    <Button variant="outlined" onClick={handleBack}>
+                                        {t(Item.LABEL_BTN.BACK)}
+                                    </Button>
+                                </ButtonGroup>
                             </Grid>
                         </Grid>
                     </Card>
                 </Grid>
             </form>
-            <MessageShow
-                message={companyMsg}
-                showMessage={isShowMessage}
-                type={typeCompanyMsg}
-                handleCloseMsg={handleCloseMsg}
-            />
+
+            <ApiAlert response={resForHandleMsg} />
         </div>
     );
 }
