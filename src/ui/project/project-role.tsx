@@ -218,7 +218,7 @@ export default function Role(props: Role) {
                         </Tabs>
                     </div>
 
-                    <div className="col-xs-12 col-md-7 col-lg-8 col-xl-9">
+                    <div className="col-xs-12 col-md-7 col-lg-8 col-xl-9 role-wrapper">
                         <div className="role-content">
                             <TableContainer component={Paper}>
                                 <Table className="role-table" aria-label={t('role.tab.roleList')}>

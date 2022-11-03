@@ -1,6 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
-    AlertColor,
     Avatar,
     Box,
     Button,
@@ -26,13 +25,13 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import { AlertColorConstants, UrlFeApp } from '../../core/constants/common';
-import { SUCCESS_MSG } from '../../core/constants/message';
+import { StatusCode, UrlFeApp, Item } from '../../core/constants/common';
 import { validateEditCompanyForm } from '../../core/constants/validate';
 import { District, Ward } from '../../core/types/administrative';
 import { getDistrictsByCityCode, getWardsByDistrictCode } from '../../core/utils/administrative-utils';
 import { getCompanyById, updateCompany } from '../../services/company-service';
-import MessageShow from '../../shared-components/message/message';
+import { formatDateTimeReq, formatDateTimeResNoneSuffixes } from '../../core/utils/get-current-datetime';
+import ApiAlert from '../../shared-components/alert/api-alert';
 
 const initialValues = {
     company: {
@@ -54,7 +53,7 @@ const initialValues = {
         lastName: '',
         uTelNo: '',
         uEmail: '',
-        enable: false,
+        enabled: false,
         role: {
             id: 1,
         },
@@ -67,53 +66,33 @@ export default function CompanyEdit() {
     const [wards, setWards] = useState<Ward[]>([]);
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const [isShowMessage, setIsShowMessage] = useState(false);
-    const [companyMsg, setCompanyMsg] = useState('');
-    const [typeCompanyMsg, setTypeCompanyMsg] = useState<AlertColor>('success');
+    const [resForHandleMsg, setResForHandleMsg] = useState<any>();
 
     const {
         register,
         handleSubmit,
         reset,
-        formState: { errors },
+        formState: { errors, isSubmitting },
     } = useForm({
         resolver: yupResolver(validateEditCompanyForm),
     });
 
     useEffect(() => {
-        if (params.id != undefined) {
+        if (params.id !== undefined) {
             getCompanyById(params.id).then((value: any) => {
-                if (value != undefined && value.data != undefined) {
-                    let objValue: any = {};
-                    if (value.data.user.enabled === 1) {
-                        objValue = {
-                            ...value.data,
-                            company: {
-                                ...value.data.company,
-                                startDate: `${value.data.company.startDate.substring(0, 16)}`,
-                                expiredDate: `${value.data.company.expiredDate.substring(0, 16)}`,
-                            },
-                            user: {
-                                ...value.data.user,
-                                enabled: true,
-                            },
-                        };
-                    } else if (value.data.user.enabled === 0) {
-                        objValue = {
-                            ...value.data,
-                            company: {
-                                ...value.data.company,
-                                startDate: `${value.data.company.startDate.substring(0, 16)}`,
-                                expiredDate: `${value.data.company.expiredDate.substring(0, 16)}`,
-                            },
-                            user: {
-                                ...value.data.user,
-                                enabled: false,
-                            },
-                        };
-                    }
+                if (value && value.data) {
+                    setFormValues({
+                        company: {
+                            ...value.data.company,
+                            startDate: formatDateTimeResNoneSuffixes(value.data.company.startDate),
+                            expiredDate: formatDateTimeResNoneSuffixes(value.data.company.expiredDate),
+                        },
+                        user: {
+                            ...value.data.user,
+                            enabled: value.data.user.enabled === 1 ? true : false,
+                        },
+                    })
 
-                    setFormValues(objValue);
                     setDistricts(getDistrictsByCityCode(value.data.company.city || ''));
                     setWards(getWardsByDistrictCode(value.data.company.district || ''));
                 }
@@ -176,7 +155,7 @@ export default function CompanyEdit() {
             ...formValues,
             user: {
                 ...formValues.user,
-                [name]: !formValues.user.enable,
+                [name]: !formValues.user.enabled,
             },
         });
     };
@@ -189,32 +168,29 @@ export default function CompanyEdit() {
         reset();
     };
 
-    const handleMessage = (showMsg: boolean, msg: string, type: AlertColor) => {
-        setIsShowMessage(showMsg);
-        setCompanyMsg(msg);
-        setTypeCompanyMsg(type);
-    };
-
-    const handleCloseMsg = () => {
-        setIsShowMessage(false);
-    };
-
     const handleEdit = () => {
-        const companyValue = {
+        const companyValue: any = {
             ...formValues.company,
+            startDate: formatDateTimeReq(formValues.company.startDate),
+            expiredDate: formatDateTimeReq(formValues.company.expiredDate),
         };
-        updateCompany(companyValue)
-            .then((data: any) => {
-                handleMessage(true, t(SUCCESS_MSG.S01_003), 'success');
-                if (data.status === 'OK') {
-                    setTimeout(() => {
-                        navigate(UrlFeApp.COMPANY.SEARCH);
-                    }, 1000);
-                }
-            })
-            .catch(() => {
-                handleMessage(true, t('message.error'), AlertColorConstants.ERROR);
+        updateCompany(companyValue).then((res: any) => {
+            setResForHandleMsg({
+                status: res.status,
+                message: res.message,
             });
+
+            if (res.status === StatusCode.OK) {
+                setTimeout(() => {
+                    navigate(UrlFeApp.COMPANY.SEARCH);
+                }, 1000);
+            };
+        }).catch(() => {
+            setResForHandleMsg({
+                status: StatusCode.ERROR,
+                message: t('message.error'),
+            });
+        });
     };
 
     return (
@@ -240,7 +216,7 @@ export default function CompanyEdit() {
                                     subheader={new Date().toLocaleDateString()}
                                     action={
                                         <Button variant="outlined" onClick={handleClearCompany}>
-                                            {t('button.btnClear')}
+                                            {t(Item.LABEL_BTN.CLEAR)}
                                         </Button>
                                     }
                                 />
@@ -379,6 +355,11 @@ export default function CompanyEdit() {
                                                         labelId="demo-simple-select-outlined-label"
                                                         id="demo-simple-select-outlined"
                                                         name="city"
+                                                        size='small'
+                                                        sx={{
+                                                            '& legend': { display: 'none' },
+                                                            '& fieldset': { top: 0 },
+                                                        }}
                                                         displayEmpty
                                                         value={formValues.company.city}
                                                         onChange={handleCityChange}
@@ -408,6 +389,11 @@ export default function CompanyEdit() {
                                                         labelId="demo-simple-select-outlined-label"
                                                         id="demo-simple-select-outlined"
                                                         name="district"
+                                                        size='small'
+                                                        sx={{
+                                                            '& legend': { display: 'none' },
+                                                            '& fieldset': { top: 0 },
+                                                        }}
                                                         displayEmpty
                                                         value={formValues.company.district}
                                                         onChange={handleDistrictChange}
@@ -439,6 +425,11 @@ export default function CompanyEdit() {
                                                         labelId="demo-simple-select-outlined-label"
                                                         id="demo-simple-select-outlined"
                                                         name="ward"
+                                                        size='small'
+                                                        sx={{
+                                                            '& legend': { display: 'none' },
+                                                            '& fieldset': { top: 0 },
+                                                        }}
                                                         displayEmpty
                                                         value={formValues.company.ward}
                                                         onChange={handleWardChange}
@@ -461,7 +452,12 @@ export default function CompanyEdit() {
                                                 <TextField
                                                     size="small"
                                                     fullWidth
-                                                    sx={{ mt: 1, mb: 1 }}
+                                                    sx={{
+                                                        mt: 1,
+                                                        mb: 1,
+                                                        '& legend': { display: 'none' },
+                                                        '& fieldset': { top: 0 },
+                                                    }}
                                                     id="outlined-required"
                                                     placeholder={t('common.placeholder')}
                                                     name="street"
@@ -480,7 +476,13 @@ export default function CompanyEdit() {
                                                 </InputLabel>
                                                 <TextField
                                                     fullWidth
-                                                    sx={{ mt: 1, mb: 1 }}
+                                                    size='small'
+                                                    sx={{
+                                                        mt: 1,
+                                                        mb: 1,
+                                                        '& legend': { display: 'none' },
+                                                        '& fieldset': { top: 0 },
+                                                    }}
                                                     value={formValues.company.startDate}
                                                     id="dateStart"
                                                     type="datetime-local"
@@ -503,7 +505,13 @@ export default function CompanyEdit() {
                                                 </InputLabel>
                                                 <TextField
                                                     fullWidth
-                                                    sx={{ mt: 1, mb: 1 }}
+                                                    size='small'
+                                                    sx={{
+                                                        mt: 1,
+                                                        mb: 1,
+                                                        '& legend': { display: 'none' },
+                                                        '& fieldset': { top: 0 },
+                                                    }}
                                                     value={formValues.company.expiredDate}
                                                     id="dateEnd"
                                                     type="datetime-local"
@@ -706,7 +714,7 @@ export default function CompanyEdit() {
                                                     <FormControlLabel
                                                         control={
                                                             <Switch
-                                                                checked={formValues.user.enable}
+                                                                checked={formValues.user.enabled}
                                                                 disabled
                                                                 name="enable"
                                                                 onChange={handleAllowLoginChange}
@@ -752,9 +760,13 @@ export default function CompanyEdit() {
                                 sm={12}
                                 className="text-center pb-4 pt-0 mt-0"
                                 marginTop={3}
-                                onClick={handleSubmit(handleEdit)}
                             >
-                                <Button variant="contained" color="primary">
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    disabled={isSubmitting}
+                                    onClick={handleSubmit(handleEdit)}
+                                >
                                     {t('button.btnSave')}
                                 </Button>
                             </Grid>
@@ -762,12 +774,8 @@ export default function CompanyEdit() {
                     </Card>
                 </Grid>
             </form>
-            <MessageShow
-                message={companyMsg}
-                showMessage={isShowMessage}
-                type={typeCompanyMsg}
-                handleCloseMsg={handleCloseMsg}
-            />
+
+            <ApiAlert response={resForHandleMsg} />
         </>
     );
 }

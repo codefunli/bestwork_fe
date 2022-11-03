@@ -25,7 +25,7 @@ import CreateRoleModal from './create-modal';
 import UpdateRoleModal from './update-modal';
 import SearchIcon from '@mui/icons-material/Search';
 import { getRoles, createRole, updateRole, deleteRole } from '../../services/role-service';
-import { AlertColorConstants, ConfirmConstants, StatusCode } from '../../core/constants/common';
+import { AlertColorConstants, ConfirmConstants, StatusCode, Item } from '../../core/constants/common';
 import MessageShow from '../../shared-components/message/message';
 import AlertDialogSlide from '../../shared-components/modal/alert-dialog-slide';
 import { SUCCESS_MSG } from '../../core/constants/message';
@@ -697,7 +697,7 @@ export default function Role() {
             });
     };
 
-    const handleSaveChange = () => {};
+    const handleSaveChange = () => { };
 
     const handleResetCurrentRoleChange = () => {
         setCurrentRole(JSON.parse(JSON.stringify(initRoleList[currentTab])));
@@ -758,22 +758,24 @@ export default function Role() {
                         </div>
                         <div className="col-sm-12 col-md-6 text-end d-none d-lg-block">
                             <Button
+                                className="btn-create"
                                 variant="contained"
                                 color="primary"
                                 sx={{ textTransform: 'uppercase' }}
                                 onClick={() => toggleCreateModal(true)}
                             >
-                                {t('button.btnCreate')}
+                                {t(Item.LABEL_BTN.CREATE)}
                             </Button>
                         </div>
                         <div className="col-sm-12 text-start d-block d-lg-none">
                             <Button
+                                className="btn-create"
                                 variant="contained"
                                 color="primary"
                                 sx={{ textTransform: 'uppercase' }}
                                 onClick={() => toggleCreateModal(true)}
                             >
-                                {t('button.btnCreate')}
+                                {t(Item.LABEL_BTN.CREATE)}
                             </Button>
                         </div>
                     </div>
@@ -901,9 +903,9 @@ export default function Role() {
                                                                                 index,
                                                                                 true,
                                                                                 row.view &&
-                                                                                    row.create &&
-                                                                                    row.edit &&
-                                                                                    row.delete,
+                                                                                row.create &&
+                                                                                row.edit &&
+                                                                                row.delete,
                                                                             )
                                                                         }
                                                                         name="all"

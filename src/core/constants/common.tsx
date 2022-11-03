@@ -53,6 +53,7 @@ export const UrlFeApp = {
 export const UrlServer = {
     API_LOGIN_URL: '/bestwork/login',
     API_LOGOUT_URL: '/bestwork/logout',
+    CHANGE_PASSWORD: `${PREFIX_SERVER_URL}/change-password`,
     COMPANY: {
         GET_COMPANIES: `${PREFIX_SERVER_URL}/companies/list`,
         REGISTER: `${PREFIX_SERVER_URL}/companies/create`,
@@ -98,7 +99,6 @@ export const UrlServer = {
     AUTH: {
         FORGOT_PASSWORD: `${PREFIX_SERVER_URL}/auth/forgot-password`,
         RESET_PASSWORD: `${PREFIX_SERVER_URL}/auth/reset-password`,
-        CHANGE_PASSWORD: `${PREFIX_SERVER_URL}/auth/change-password`,
     },
     MATERIAL: {
         POST_STATUS: `${PREFIX_SERVER_URL}/post/create`,
@@ -196,12 +196,14 @@ export const Item = {
         CLEAR: 'button.btnClear',
         ACTIVE: 'button.btnActive',
         SAVE: 'button.btnSave',
+        CREATE: 'button.btnCreate',
+        BACK: 'button.btnBack',
     },
     COMPANY: {
         TITLE: 'company.title',
         SEARCH_TITLE: 'company.search.title',
         SEARCH_STATUS: 'company.search.status',
-        SEARCH_KEYWORK: 'company.search.keyword',
+        SEARCH_KEYWORD: 'company.search.keyword',
         REGISTER_TITLE: 'company.register.title',
         REGISTER_TITLE_CARD: 'company.register.title_card',
         REGISTER_NAME: 'company.register.name',
@@ -220,7 +222,7 @@ export const Item = {
         REGISTER_TITLE_CARD: 'user.register.title_card',
         REGISTER_USER_NAME: 'user.register.userName',
         REGISTER_PASSWORD: 'user.register.password',
-        REGISTER_FRIST_NAME: 'user.register.firstName',
+        REGISTER_FIRST_NAME: 'user.register.firstName',
         REGISTER_LAST_NAME: 'user.register.lastName',
         REGISTER_TELNO: 'user.register.telNo',
         REGISTER_EMAIL: 'user.register.email',
@@ -232,7 +234,7 @@ export const Item = {
         STATUS: 'common.status',
         RADIO_ADMIN: 'radio.admin',
         RADIO_USER: 'radio.user',
-        RADIO_ENBLED: 'radio.enabled',
+        RADIO_ENABLED: 'radio.enabled',
     },
     MESSAGE: {
         ERROR: 'message.error',

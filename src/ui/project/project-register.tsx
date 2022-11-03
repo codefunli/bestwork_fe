@@ -19,12 +19,13 @@ import {
     Tabs,
     TextField,
     Typography,
+    CardHeader
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { StatusCode, UrlFeApp } from '../../core/constants/common';
+import { StatusCode, UrlFeApp, Item } from '../../core/constants/common';
 import { validateProjectRegisterForm } from '../../core/constants/validate';
 import { currentDateTime, formatDateTimeReq } from '../../core/utils/get-current-datetime';
 import { isArrayEmpty, isObjectEmpty } from '../../core/utils/object-utils';
@@ -77,7 +78,7 @@ export default function ProjectRegister() {
         register,
         handleSubmit,
         reset,
-        formState: { errors },
+        formState: { errors, isSubmitting },
     } = useForm({
         resolver: yupResolver(validateProjectRegisterForm),
     });
@@ -121,12 +122,17 @@ export default function ProjectRegister() {
         });
     };
 
-    const handleClearCompany = () => {
+    const handleClearProjectForm = () => {
         setFormValues({
             ...formValues,
             project: initialValues.project,
         });
         reset();
+    };
+
+    const handleClearAssignUser = () => {
+        setRoleData([]);
+        setValue(0);
     };
 
     const handleSubmitForm = async (event: any) => {
@@ -182,6 +188,10 @@ export default function ProjectRegister() {
         setValue(newValue);
     };
 
+    const handleBack = () => {
+        navigate(`${UrlFeApp.PROJECT.SEARCH}`);
+    };
+
     return (
         <div className="project">
             <Grid container direction="row" spacing={3} className="project-register">
@@ -212,6 +222,14 @@ export default function ProjectRegister() {
                                     <Card w-full="true">
                                         <TabPanel value={value} index={0}>
                                             <CardContent>
+                                                <CardHeader
+                                                    action={
+                                                        <Button onClick={handleClearProjectForm} variant="outlined">
+                                                            {t(Item.LABEL_BTN.CLEAR)}
+                                                        </Button>
+                                                    }
+                                                ></CardHeader>
+
                                                 <Box
                                                     component="form"
                                                     sx={{
@@ -475,12 +493,13 @@ export default function ProjectRegister() {
                                                                 variant="contained"
                                                                 color="primary"
                                                                 sx={{ mr: 1 }}
+                                                                disabled={isSubmitting}
                                                                 onClick={handleSubmit(handleSubmitForm)}
                                                             >
-                                                                {t('button.btnCreate')}
+                                                                {t(Item.LABEL_BTN.CREATE)}
                                                             </Button>
-                                                            <Button variant="outlined" onClick={handleClearCompany}>
-                                                                {t('button.btnClear')}
+                                                            <Button variant="outlined" onClick={handleBack}>
+                                                                {t(Item.LABEL_BTN.BACK)}
                                                             </Button>
                                                         </ButtonGroup>
                                                     </div>
@@ -494,6 +513,14 @@ export default function ProjectRegister() {
                                     <Card w-full="true">
                                         <TabPanel value={value} index={1}>
                                             <CardContent>
+                                                <CardHeader
+                                                    action={
+                                                        <Button onClick={handleClearAssignUser} variant="outlined">
+                                                            {t(Item.LABEL_BTN.CLEAR)}
+                                                        </Button>
+                                                    }
+                                                ></CardHeader>
+
                                                 <Role
                                                     defaultCompanyList={companyList}
                                                     defaultRoleData={roleData}

@@ -93,7 +93,7 @@
 /* width */
 ::-webkit-scrollbar {
     width: 5px;
-    height: 5px;
+    height: 10px;
 }
 
 /* Track */
@@ -121,4 +121,16 @@
 
 .placeholder-color {
     color: #bdbdbd !important;
+}
+
+/* Global create button */
+.btn-create {
+    position: relative;
+    text-align: center;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: 1s !important;
+}
+.btn-create:hover {
+    letter-spacing: 3px;
 }

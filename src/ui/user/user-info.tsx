@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
-    AlertColor, Button,
+    Button,
     ButtonGroup,
     Card,
     CardContent, FormControl, FormHelperText, Grid,
@@ -13,12 +13,12 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import { AlertColorConstants, DefaultImage, UrlFeApp } from '../../core/constants/common';
+import { DefaultImage, StatusCode, UrlFeApp } from '../../core/constants/common';
 import { validateUserEditForm } from '../../core/constants/validate';
 import { getCompaniesByUser } from '../../services/company-service';
 import { getRoles, getUser, putUser } from '../../services/user-service';
+import ApiAlert from '../../shared-components/alert/api-alert';
 import FileUpload from '../../shared-components/file-upload/file-upload';
-import MessageShow from '../../shared-components/message/message';
 import './user.scss';
 
 const initialValues = {
@@ -43,10 +43,8 @@ export default function UserInfo() {
 
     const [formValues, setFormValues] = useState(initialValues);
     const [companies, setCompanies] = useState<any>();
-    const [userMsg, setUserMsg] = useState('');
-    const [userMsgType, setUserMsgType] = useState<AlertColor>(AlertColorConstants.SUCCESS);
-    const [isShowMsg, setIsShowMsg] = useState(false);
     const [roles, setRoles] = useState([]);
+    const [resForHandleMsg, setResForHandleMsg] = useState<any>();
 
     const {
         register,
@@ -87,12 +85,6 @@ export default function UserInfo() {
         navigate(`${UrlFeApp.USER.SEARCH}`);
     };
 
-    const handleMessage = (showMsg: boolean, msg: string, type: AlertColor) => {
-        setIsShowMsg(showMsg);
-        setUserMsg(msg);
-        setUserMsgType(type);
-    };
-
     const handleInputChange = (e: any) => {
         const { name, value } = e.target;
         setFormValues({
@@ -112,17 +104,22 @@ export default function UserInfo() {
     const handleSubmitForm = () => {
         putUser(userId, formValues)
             .then((res: any) => {
-                if (res.status === 'OK') {
-                    handleMessage(true, res.message, AlertColorConstants.SUCCESS);
+                setResForHandleMsg({
+                    status: res.status,
+                    message: res.message,
+                });
+
+                if (res.status === StatusCode.OK) {
                     setTimeout(() => {
                         navigate(UrlFeApp.USER.SEARCH);
                     }, 1000);
-                } else {
-                    handleMessage(true, res.data[0].defaultMessage, AlertColorConstants.ERROR);
-                }
+                };
             })
             .catch((err) => {
-                handleMessage(true, err.message, AlertColorConstants.ERROR);
+                setResForHandleMsg({
+                    status: StatusCode.ERROR,
+                    message: t('message.error'),
+                });
             });
     };
 
@@ -137,10 +134,6 @@ export default function UserInfo() {
             });
             reader.readAsDataURL(event.target.files[0]);
         }
-    };
-
-    const handleCloseMsg = () => {
-        setIsShowMsg(false);
     };
 
     const getCompanyName = (companyId: any) => {
@@ -410,7 +403,8 @@ export default function UserInfo() {
                     </Grid >
                 </Grid >
             </form >
-            <MessageShow message={userMsg} showMessage={isShowMsg} type={userMsgType} handleCloseMsg={handleCloseMsg} />
+
+            <ApiAlert response={resForHandleMsg} />
         </div >
     );
 }
