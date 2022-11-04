@@ -307,7 +307,7 @@ export default function MiniDrawer() {
                                                             justifyContent: open ? 'initial' : 'center',
                                                             px: 2.5,
                                                         }}
-                                                        onClick={(event) => {
+                                                        onClick={() => {
                                                             navigateByLink(menuItem.link);
                                                         }}
                                                     >
@@ -339,7 +339,7 @@ export default function MiniDrawer() {
                                                             justifyContent: open ? 'initial' : 'center',
                                                             px: 2.5,
                                                         }}
-                                                        onClick={(event) => {
+                                                        onClick={() => {
                                                             navigateByLink(menuItem.link);
                                                         }}
                                                     >
@@ -370,7 +370,7 @@ export default function MiniDrawer() {
                                                             justifyContent: open ? 'initial' : 'center',
                                                             px: 2.5,
                                                         }}
-                                                        onClick={(event) => {
+                                                        onClick={() => {
                                                             navigateByLink(menuItem.link);
                                                         }}
                                                     >

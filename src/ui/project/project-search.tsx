@@ -219,7 +219,7 @@ export default function ProjectSearch() {
                             variant="contained"
                             color="primary"
                             component={Link}
-                            to={UrlFeApp.COMPANY.CREATE}
+                            to={UrlFeApp.PROJECT.CREATE}
                             sx={{ textTransform: 'uppercase' }}
                         >
                             {t(Item.LABEL_BTN.CREATE)}

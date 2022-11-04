@@ -2,15 +2,15 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RoleUser } from '../types/user';
 
 interface UserInformation {
-    id: number;
-    userName: string;
-    firstName: string;
-    lastName: string;
-    uEmail: string;
-    enabled: number;
-    uTelNo: string;
-    uRole: string;
-    loginFailedNum: string;
+    id: number,
+    userName: string,
+    firstName: string,
+    lastName: string,
+    uEmail: string,
+    enabled: number,
+    uTelNo: string,
+    uRole: string,
+    loginFailedNum: string,
     avatar: string;
     company: {
         id: number;
