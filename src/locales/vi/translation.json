@@ -112,7 +112,9 @@
         "profile": "Hồ sơ",
         "changePassword": "Đổi mật khẩu",
         "logout": "Đăng xuất",
-        "status": "Trạng thái"
+        "status": "Trạng thái",
+        "enable": "Đã kích hoạt",
+        "disable": "Chưa kích hoạt"
     },
     "message": {
         "required": "là bắt buộc.",
