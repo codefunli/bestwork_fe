@@ -16,13 +16,15 @@ import {
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import { UrlFeApp } from '../../core/constants/common';
 import { Comment } from '../../core/types/base';
 import { getPostByPostId, getPostByProjectId, postComment } from '../../services/material-service';
 import CommentEl from '../../shared-components/comment/comment';
 import ImageManager from '../../shared-components/images-manager/image-manager';
 import ImageUploadDialog from '../../shared-components/modal/create-material-modal';
 import EditMaterialModal from '../../shared-components/modal/edit-material-modal';
+import { Item } from '../../core/constants/common'
 
 const initialDataImg = {
     description: '',
@@ -135,11 +137,40 @@ export default function MaterialSchedule() {
     };
     return (
         <div>
-            <Typography variant="h5" className="mb-4 text-uppercase" color="textSecondary" gutterBottom>
-                {t('material.title')}
-                <Divider />
-            </Typography>
             <Grid container spacing={3} direction="row" justifyContent="center" alignItems="center" sx={{ mb: 3 }}>
+                <Grid item xs={12} sx={{ mt: 1 }}>
+                    <div className="row">
+                        <div className="col-sm-12 col-md-6 text-start d-none d-lg-block">
+                            <Typography variant="h5" color="textSecondary" gutterBottom sx={{ textTransform: 'uppercase' }}>
+                                {t(Item.MATERIAL.TITLE)}
+                            </Typography>
+                        </div>
+                        <div className="col-sm-12 col-md-6 text-end d-none d-lg-block">
+                            <Button
+                                className="btn-create"
+                                variant="contained"
+                                color="primary"
+                                component={Link}
+                                to={`${UrlFeApp.PROJECT.DETAIL}/${params.id}`}
+                                sx={{ textTransform: 'uppercase' }}
+                            >
+                                {t(Item.LABEL_BTN.FINISH)}
+                            </Button>
+                        </div>
+                        <div className="col-sm-12 text-start d-block d-lg-none">
+                            <Button
+                                className="btn-create"
+                                variant="contained"
+                                color="primary"
+                                component={Link}
+                                to={`${UrlFeApp.PROJECT.DETAIL}/${params.id}`}
+                                sx={{ textTransform: 'uppercase' }}
+                            >
+                                {t(Item.LABEL_BTN.FINISH)}
+                            </Button>
+                        </div>
+                    </div>
+                </Grid>
                 <Grid item xs={12} lg={5} justifyContent="center">
                     <Paper
                         w-fullWidth
@@ -158,7 +189,8 @@ export default function MaterialSchedule() {
                     </Paper>
                 </Grid>
             </Grid>
-            {imagesData.length > 0 &&
+            {
+                imagesData.length > 0 &&
                 imagesData.map((data: any) => (
                     <Grid
                         key={data.id}
@@ -208,24 +240,27 @@ export default function MaterialSchedule() {
                             </div>
                         </Grid>
                     </Grid>
-                ))}
-            {isOpenCreateModal ? (
-                <ImageUploadDialog
-                    isOpen={isOpenCreateModal}
-                    closeFunc={closeModal}
-                    okFunc={alertOkFunc}
-                    title={t('material.uploadTitle')}
-                    content={contentCreate}
-                />
-            ) : (
-                <EditMaterialModal
-                    isOpen={isOpenEditModal}
-                    closeFunc={closeModal}
-                    okFunc={alertOkFunc}
-                    title={t('material.editTitle')}
-                    content={contentEdit}
-                />
-            )}
-        </div>
+                ))
+            }
+            {
+                isOpenCreateModal ? (
+                    <ImageUploadDialog
+                        isOpen={isOpenCreateModal}
+                        closeFunc={closeModal}
+                        okFunc={alertOkFunc}
+                        title={t('material.uploadTitle')}
+                        content={contentCreate}
+                    />
+                ) : (
+                    <EditMaterialModal
+                        isOpen={isOpenEditModal}
+                        closeFunc={closeModal}
+                        okFunc={alertOkFunc}
+                        title={t('material.editTitle')}
+                        content={contentEdit}
+                    />
+                )
+            }
+        </div >
     );
 }

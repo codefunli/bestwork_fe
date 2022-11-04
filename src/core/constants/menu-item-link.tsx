@@ -1,4 +1,4 @@
-import { UrlFeApp } from './common';
+import { UrlFeApp, MenuItem } from './common';
 
 export type MenuItemLink = {
     name: string;
@@ -8,27 +8,27 @@ export type MenuItemLink = {
 
 const menuItemLinkData: MenuItemLink[] = [
     {
-        name: 'menu.dashboard',
+        name: MenuItem.DASHBOARD,
         link: UrlFeApp.DASH_BOARD,
         iconNm: 'DashBoardIcon',
     },
     {
-        name: 'menu.company',
+        name: MenuItem.COMPANY,
         link: UrlFeApp.COMPANY.SEARCH,
         iconNm: 'CompanyIcon',
     },
     {
-        name: 'menu.user',
+        name: MenuItem.USER,
         link: UrlFeApp.USER.SEARCH,
         iconNm: 'UserIcon',
     },
     {
-        name: 'menu.project',
+        name: MenuItem.PROJECT,
         link: UrlFeApp.PROJECT.SEARCH,
         iconNm: 'ProjectIcon',
     },
     {
-        name: 'menu.role',
+        name: MenuItem.ROLE,
         link: UrlFeApp.ROLE.INDEX,
         iconNm: 'RoleIcon',
     },

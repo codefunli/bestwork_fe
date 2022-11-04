@@ -78,7 +78,7 @@
     "button": {
         "btnRegister": "Đăng kí",
         "btnSearch": "Tìm kiếm",
-        "btnClear": "Xóa thông tin",
+        "btnClear": "Nhập lại",
         "btnSave": "Lưu",
         "btnDelete": "Xóa",
         "btnNo": "Hủy",
@@ -93,7 +93,8 @@
         "btnUpdate": "Cập nhật",
         "btnBackToHome": "Quay về trang chủ",
         "btnUpload": "Đăng",
-        "btnClose": "Đóng"
+        "btnClose": "Đóng",
+        "btnFinish": "Hoàn thành"
     },
     "common": {
         "placeholder": "Nhập một giá trị mới",

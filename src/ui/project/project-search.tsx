@@ -333,7 +333,7 @@ export default function ProjectSearch() {
                                                     variant="contained"
                                                     onClick={handleSubmit}
                                                 >
-                                                    {t('button.btnSearch')}
+                                                    {t(Item.LABEL_BTN.SEARCH)}
                                                 </Button>
                                                 <Button
                                                     sx={{

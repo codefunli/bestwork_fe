@@ -323,11 +323,11 @@ export default function UserSearch() {
                                         variant="contained"
                                         aria-label="Disabled elevation buttons"
                                     >
-                                        <Button onClick={handleSubmit} sx={{ mr: 1 }} size="small" variant="contained">
-                                            {t('button.btnSearch')}
+                                        <Button onClick={handleSubmit} sx={{ mr: 1 }} variant="contained">
+                                            {t(Item.LABEL_BTN.SEARCH)}
                                         </Button>
                                         <Button onClick={handleClearData} variant="outlined">
-                                            {t('button.btnClear')}
+                                            {t(Item.LABEL_BTN.CLEAR)}
                                         </Button>
                                     </ButtonGroup>
                                 </div>

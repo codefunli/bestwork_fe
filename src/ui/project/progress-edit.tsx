@@ -10,8 +10,7 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { StatusCode } from '../../core/constants/common';
 import { validateProjectProgress } from '../../core/constants/validate';
-import { ProjectProgressDTO } from '../../models/project-res-dto';
-import { currentDateTime, formatDateTimeReq, formatDateTimeRes } from '../../core/utils/get-current-datetime';
+import { formatDateTimeReq, formatDateTimeRes } from '../../core/utils/get-current-datetime';
 import ApiAlert from '../../shared-components/alert/api-alert';
 import MultipleFileUpload from '../../shared-components/file-upload/multiple-file-upload';
 import { updateProgress, getProgressStatus } from '../../services/project-service';
@@ -52,8 +51,8 @@ const ProgressEdit = (props: Props) => {
     useEffect(() => {
         setProgressData({
             ...progress,
-            startDate: progress?.startDate ? formatDateTimeRes(progress?.startDate) : currentDateTime,
-            endDate: progress?.endDate ? formatDateTimeRes(progress?.endDate) : currentDateTime,
+            startDate: progress?.startDate ? formatDateTimeRes(progress?.startDate) : formatDateTimeRes(new Date()),
+            endDate: progress?.endDate ? formatDateTimeRes(progress?.endDate) : formatDateTimeRes(new Date()),
         });
         setImgData(progress?.fileStorages);
     }, [progress]);

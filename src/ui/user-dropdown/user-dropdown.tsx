@@ -9,6 +9,8 @@ import { useNavigate } from 'react-router-dom';
 import { UrlFeApp } from '../../core/constants/common';
 import { logout } from '../../services/auth-service';
 import ChangePassword from '../change-password/change-password';
+import { useSelector } from "react-redux";
+import { getUserInfo } from '../../core/redux/user-slice';
 import './user-dropdown.scss';
 
 const UserDropdown = () => {
@@ -16,6 +18,7 @@ const UserDropdown = () => {
     const [open, setOpen] = useState(false);
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const userInfo = useSelector(getUserInfo);
 
     const [isOpenChangePasswordModal, setIsOpenChangePasswordModal] = useState(false);
     const toggleChangePasswordModal = (value: boolean) => setIsOpenChangePasswordModal(value);
@@ -46,9 +49,7 @@ const UserDropdown = () => {
                             onClick={handleToggle}
                             className="avatar"
                         >
-                            <Avatar sx={{ bgcolor: deepOrange[500] }}>
-
-                            </Avatar>
+                            <Avatar sx={{ bgcolor: deepOrange[500] }} />
                         </Badge>
                     </Tooltip>
                 </Grid>
@@ -76,7 +77,7 @@ const UserDropdown = () => {
                             <ClickAwayListener onClickAway={handleClose}>
                                 <MenuList className="menu-list">
                                     <MenuItem>
-                                        <PersonIcon /> <span>{t('common.profile')}</span>
+                                        <PersonIcon /> <span>{t('common.profile')} ({userInfo?.userName})</span>
                                     </MenuItem>
                                     <MenuItem onClick={() => toggleChangePasswordModal(true)}>
                                         <SettingsIcon /> <span>{t('common.changePassword')}</span>

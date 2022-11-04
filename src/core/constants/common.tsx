@@ -73,6 +73,7 @@ export const UrlServer = {
         RESET_PASSWORD: `${PREFIX_SERVER_URL}/auth/reset_password`,
         ROLES: `${PREFIX_SERVER_URL}/users/roles`,
         UPDATE: `${PREFIX_SERVER_URL}/users/update`,
+        INFO: `${PREFIX_SERVER_URL}/users/detect-infor`,
     },
     PROJECT: {
         GET_LIST: `${PREFIX_SERVER_URL}/projects/list`,
@@ -198,6 +199,7 @@ export const Item = {
         SAVE: 'button.btnSave',
         CREATE: 'button.btnCreate',
         BACK: 'button.btnBack',
+        FINISH: 'button.btnFinish',
     },
     COMPANY: {
         TITLE: 'company.title',
@@ -246,4 +248,15 @@ export const Item = {
         WARD_LABEL: 'message.wardLabel',
         DISTRICT_LABEL: 'message.districtLabel',
     },
+    MATERIAL: {
+        TITLE: 'material.title',
+    }
 };
+
+export const MenuItem = {
+    DASHBOARD: 'menu.dashboard',
+    COMPANY: 'menu.company',
+    USER: 'menu.user',
+    PROJECT: 'menu.project',
+    ROLE: 'menu.role'
+}

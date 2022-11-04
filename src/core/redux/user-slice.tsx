@@ -1,43 +1,77 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RoleUser } from '../types/user';
 
-export interface UserInfo {
-    id: number;
-    userId: string;
-    currentOrgId: number;
-    userName: string;
-    role: RoleUser;
-    email: string;
-    firstName: string;
-    lastName: string;
-    isDeleted: boolean;
-    createdDt: string;
-    createdPrgId: string;
-    updatedDt: string;
-    updatedPrgId: string;
+interface UserInformation {
+    id: number,
+    userName: string,
+    firstName: string,
+    lastName: string,
+    uEmail: string,
+    enabled: number,
+    uTelNo: string,
+    uRole: string,
+    loginFailedNum: string,
+    company: {
+        id: number,
+        companyName: string,
+        cpEmail: string,
+        cpTelNo: string,
+        taxNo: string,
+        city: string,
+        district: string,
+        ward: string,
+        street: string,
+        startDate: string,
+        expiredDate: string,
+        status: number
+    },
+    project: Array<{
+        id: string,
+        name: string,
+        canView: boolean,
+        canEdit: boolean
+    }>
 }
 
 interface initialUserState {
     isLogined: boolean;
-    info: UserInfo;
+    info: UserInformation;
 }
 
 const initialState: initialUserState = {
     isLogined: false,
     info: {
         id: -1,
-        userId: '',
-        currentOrgId: -1,
         userName: '',
-        role: RoleUser.ORG_USER,
-        email: '',
         firstName: '',
         lastName: '',
-        isDeleted: false,
-        createdDt: '',
-        createdPrgId: '',
-        updatedDt: '',
-        updatedPrgId: '',
+        uEmail: '',
+        enabled: 0,
+        uTelNo: '',
+        uRole: RoleUser.COMPANY_USER,
+        loginFailedNum: '',
+        company: {
+            id: -1,
+            companyName: '',
+            cpEmail: '',
+            cpTelNo: '',
+            taxNo: '',
+            city: '',
+            district: '',
+            ward: '',
+            street: '',
+            startDate: '',
+            expiredDate: '',
+            status: 0
+        },
+        project: [
+            {
+                id: '',
+                name: '',
+                canView: false,
+                canEdit: false
+            }
+        ]
     },
 };
 
@@ -48,8 +82,14 @@ export const userSlice = createSlice({
         setIsLogined(state, action: PayloadAction<boolean>) {
             state.isLogined = action.payload;
         },
+        setUserInfo(state, action: PayloadAction<UserInformation>) {
+            state.info = action.payload;
+        },
     },
 });
 
 export const userActions = userSlice.actions;
+
+export const getUserInfo = (state: any) => state.user.info;
+
 export default userSlice.reducer;
