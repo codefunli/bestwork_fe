@@ -2,35 +2,36 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RoleUser } from '../types/user';
 
 interface UserInformation {
-    id: number,
-    userName: string,
-    firstName: string,
-    lastName: string,
-    uEmail: string,
-    enabled: number,
-    uTelNo: string,
-    uRole: string,
-    loginFailedNum: string,
+    id: number;
+    userName: string;
+    firstName: string;
+    lastName: string;
+    uEmail: string;
+    enabled: number;
+    uTelNo: string;
+    uRole: string;
+    loginFailedNum: string;
+    avatar: string;
     company: {
-        id: number,
-        companyName: string,
-        cpEmail: string,
-        cpTelNo: string,
-        taxNo: string,
-        city: string,
-        district: string,
-        ward: string,
-        street: string,
-        startDate: string,
-        expiredDate: string,
-        status: number
-    },
+        id: number;
+        companyName: string;
+        cpEmail: string;
+        cpTelNo: string;
+        taxNo: string;
+        city: string;
+        district: string;
+        ward: string;
+        street: string;
+        startDate: string;
+        expiredDate: string;
+        status: number;
+    };
     project: Array<{
-        id: string,
-        name: string,
-        canView: boolean,
-        canEdit: boolean
-    }>
+        id: string;
+        name: string;
+        canView: boolean;
+        canEdit: boolean;
+    }>;
 }
 
 interface initialUserState {
@@ -50,6 +51,7 @@ const initialState: initialUserState = {
         uTelNo: '',
         uRole: RoleUser.COMPANY_USER,
         loginFailedNum: '',
+        avatar: '',
         company: {
             id: -1,
             companyName: '',
@@ -62,16 +64,16 @@ const initialState: initialUserState = {
             street: '',
             startDate: '',
             expiredDate: '',
-            status: 0
+            status: 0,
         },
         project: [
             {
                 id: '',
                 name: '',
                 canView: false,
-                canEdit: false
-            }
-        ]
+                canEdit: false,
+            },
+        ],
     },
 };
 
