@@ -13,7 +13,7 @@ import {
     MenuItem,
     Select,
     TextField,
-    Typography
+    Typography,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -25,6 +25,7 @@ import { headProjectCol } from '../../core/types/project';
 import { deleteProjects, getProjects, getProjectStatus } from '../../services/project-service';
 import MessageShow from '../../shared-components/message/message';
 import AlertDialogSlide from '../../shared-components/modal/alert-dialog-slide';
+import HandleProjectStatus from '../../shared-components/status-handle/project-status-handle';
 import EnhancedTable, { ArrayAction } from '../../shared-components/table-manager/table-data';
 import './project.scss';
 
@@ -192,7 +193,7 @@ export default function ProjectSearch() {
     ];
 
     return (
-        <Grid container direction="row" spacing={3}>
+        <Grid container direction="row" spacing={3} className="project-search">
             <Grid item xs={12} sx={{ mt: 1 }}>
                 <div className="row">
                     <div className="col-sm-12 col-md-6 text-start d-none d-lg-block">
@@ -297,17 +298,23 @@ export default function ProjectSearch() {
                                                                 {t('message.status')}
                                                             </em>
                                                         </MenuItem>
-                                                        {(projectStatus && projectStatus.length > 0) && projectStatus.map((data: any, index: any) => {
-                                                            return (
-                                                                <MenuItem
-                                                                    key={data.id}
-                                                                    value={index}
-                                                                    className="text-center"
-                                                                >
-                                                                    <div className="text-center w-100">{data.status}</div>
-                                                                </MenuItem>
-                                                            );
-                                                        })}
+                                                        {projectStatus &&
+                                                            projectStatus.length > 0 &&
+                                                            projectStatus.map((data: any, index: any) => {
+                                                                return (
+                                                                    <MenuItem
+                                                                        key={data.id}
+                                                                        value={index}
+                                                                        className="text-center"
+                                                                    >
+                                                                        <HandleProjectStatus
+                                                                            isSearch={true}
+                                                                            statusList={projectStatus}
+                                                                            statusId={data.id.toString()}
+                                                                        />
+                                                                    </MenuItem>
+                                                                );
+                                                            })}
                                                     </Select>
                                                 </FormControl>
                                             </div>
