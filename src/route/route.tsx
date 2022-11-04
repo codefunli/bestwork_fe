@@ -101,19 +101,19 @@ const listRouter: RouteObject[] = [
                 path: UrlFeApp.LOGIN_URL,
                 element: <Login />,
             },
-            {
-                path: UrlFeApp.FORGOT_PASSWORD.FORGOT,
-                element: <ForgotPassword />,
-            },
-            {
-                path: `${UrlFeApp.FORGOT_PASSWORD.RESET}/:token`,
-                element: <ResetPassword />,
-            },
         ],
     },
     {
         path: '/*',
         element: <Page404NotFound />,
+    },
+    {
+        path: UrlFeApp.FORGOT_PASSWORD.FORGOT,
+        element: <ForgotPassword />,
+    },
+    {
+        path: `${UrlFeApp.FORGOT_PASSWORD.RESET}/:token`,
+        element: <ResetPassword />,
     },
 ];
 export default function RenderRouter() {

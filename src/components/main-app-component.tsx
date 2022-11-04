@@ -2,6 +2,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import MenuIcon from '@mui/icons-material/Menu';
 import {
+    Avatar,
     CssBaseline,
     Divider,
     IconButton,
@@ -11,22 +12,28 @@ import {
     ListItemIcon,
     ListItemText,
     Toolbar,
+    Typography,
 } from '@mui/material';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
+import Badge from '@mui/material/Badge';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
+import Stack from '@mui/material/Stack';
 import { CSSObject, styled, Theme, useTheme } from '@mui/material/styles';
 import * as React from 'react';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import { Outlet, useNavigate } from 'react-router-dom';
-import { ErrorPagePath, StatusCode, UrlFeApp, MenuItem } from '../core/constants/common';
+import { ErrorPagePath, MenuItem, StatusCode, UrlFeApp } from '../core/constants/common';
 import menuItemLinkData from '../core/constants/menu-item-link';
 import { useAppDispatch, useAppSelector } from '../core/hook/redux';
 import { appAction } from '../core/redux/app-slice';
-import { userActions } from '../core/redux/user-slice';
+import { getUserInfo, userActions } from '../core/redux/user-slice';
+import { RoleUser } from '../core/types/user';
 import { isObjectEmpty } from '../core/utils/object-utils';
 import { renderIconLeftBar } from '../core/utils/render-utils';
+import { getCurrentUserInfo } from '../services/auth-service';
 import { isCheckLogined } from '../services/user-service';
 import MLanguage from '../shared-components/language/m-language';
 import LinearProgressWithLabel from '../shared-components/progress/LinearProgressWithLabel';
@@ -34,10 +41,6 @@ import Notification from '../ui/notification/notification';
 import UserDropdown from '../ui/user-dropdown/user-dropdown';
 import CollapsedBreadcrumbs from './collapsed-breadcrumbs';
 import './main-app.scss';
-import { getCurrentUserInfo } from '../services/auth-service';
-import { useSelector } from "react-redux";
-import { getUserInfo } from '../core/redux/user-slice';
-import { RoleUser } from '../core/types/user';
 
 const drawerWidth = 240;
 
@@ -148,7 +151,9 @@ export default function MiniDrawer() {
                     clearInterval(timer);
                     navigate(UrlFeApp.DASH_BOARD);
 
-                    getCurrentUserInfo().then(res => {
+                    getCurrentUserInfo().then((res) => {
+                        console.log('res.data', res.data);
+
                         dispatch(userActions.setUserInfo(res.data));
                     });
                 } else {
@@ -165,6 +170,35 @@ export default function MiniDrawer() {
                 navigate(UrlFeApp.LOGIN_URL);
             });
     }, []);
+
+    const StyledBadge = styled(Badge)(({ theme }) => ({
+        '& .MuiBadge-badge': {
+            backgroundColor: '#44b700',
+            color: '#44b700',
+            boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+            '&::after': {
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                borderRadius: '50%',
+                animation: 'ripple 1.2s infinite ease-in-out',
+                border: '1px solid currentColor',
+                content: '""',
+            },
+        },
+        '@keyframes ripple': {
+            '0%': {
+                transform: 'scale(.8)',
+                opacity: 1,
+            },
+            '100%': {
+                transform: 'scale(2.4)',
+                opacity: 0,
+            },
+        },
+    }));
 
     return (
         <div className="h-100">
@@ -211,7 +245,22 @@ export default function MiniDrawer() {
                             </div>
                         </AppBar>
                         <Drawer variant="permanent" open={open}>
-                            <DrawerHeader>
+                            <DrawerHeader className="p-1 ">
+                                <Stack direction="row" spacing={3} className="p-1">
+                                    <StyledBadge
+                                        overlap="circular"
+                                        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                                        variant="dot"
+                                    >
+                                        <Avatar alt="Remy Sharp" src={userInfo?.avatar} />
+                                    </StyledBadge>
+                                </Stack>
+                                <Typography>
+                                    <span className="p-2">
+                                        <span className="d-block fw-bold text-primary ">{`${userInfo.firstName} ${userInfo.lastName}`}</span>
+                                        <span className="fst-italic">{`${userInfo.uRole}`}</span>
+                                    </span>
+                                </Typography>
                                 <IconButton onClick={handleDrawerClose}>
                                     {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
                                 </IconButton>
@@ -220,37 +269,39 @@ export default function MiniDrawer() {
                             <List>
                                 {menuItemLinkData.map((menuItem, index) => (
                                     <>
-                                        {
-                                            (userInfo?.uRole === RoleUser.SYS_ADMIN) && (
-                                                <ListItem key={index} disablePadding sx={{ display: 'block' }}>
-                                                    <ListItemButton
+                                        {userInfo?.uRole === RoleUser.SYS_ADMIN && (
+                                            <ListItem key={index} disablePadding sx={{ display: 'block' }}>
+                                                <ListItemButton
+                                                    sx={{
+                                                        minHeight: 48,
+                                                        justifyContent: open ? 'initial' : 'center',
+                                                        px: 2.5,
+                                                    }}
+                                                    onClick={(event) => {
+                                                        navigateByLink(menuItem.link);
+                                                    }}
+                                                >
+                                                    <ListItemIcon
                                                         sx={{
-                                                            minHeight: 48,
-                                                            justifyContent: open ? 'initial' : 'center',
-                                                            px: 2.5,
-                                                        }}
-                                                        onClick={(event) => {
-                                                            navigateByLink(menuItem.link);
+                                                            minWidth: 0,
+                                                            mr: open ? 3 : 'auto',
+                                                            justifyContent: 'center',
                                                         }}
                                                     >
-                                                        < ListItemIcon
-                                                            sx={{
-                                                                minWidth: 0,
-                                                                mr: open ? 3 : 'auto',
-                                                                justifyContent: 'center',
-                                                            }}
-                                                        >
-                                                            {renderIconLeftBar(menuItem.iconNm)}
-                                                        </ListItemIcon>
-                                                        <ListItemText primary={t(menuItem.name)} sx={{ opacity: open ? 1 : 0 }} />
-                                                    </ListItemButton>
-                                                </ListItem>
-                                            )
-                                        }
+                                                        {renderIconLeftBar(menuItem.iconNm)}
+                                                    </ListItemIcon>
+                                                    <ListItemText
+                                                        primary={t(menuItem.name)}
+                                                        sx={{ opacity: open ? 1 : 0 }}
+                                                    />
+                                                </ListItemButton>
+                                            </ListItem>
+                                        )}
 
-                                        {
-                                            (userInfo?.uRole === RoleUser.COMPANY_ADMIN) && (
-                                                (menuItem.name === MenuItem.DASHBOARD || menuItem.name === MenuItem.USER || menuItem.name === MenuItem.PROJECT) &&
+                                        {userInfo?.uRole === RoleUser.COMPANY_ADMIN &&
+                                            (menuItem.name === MenuItem.DASHBOARD ||
+                                                menuItem.name === MenuItem.USER ||
+                                                menuItem.name === MenuItem.PROJECT) && (
                                                 <ListItem key={index} disablePadding sx={{ display: 'block' }}>
                                                     <ListItemButton
                                                         sx={{
@@ -262,7 +313,7 @@ export default function MiniDrawer() {
                                                             navigateByLink(menuItem.link);
                                                         }}
                                                     >
-                                                        < ListItemIcon
+                                                        <ListItemIcon
                                                             sx={{
                                                                 minWidth: 0,
                                                                 mr: open ? 3 : 'auto',
@@ -271,15 +322,18 @@ export default function MiniDrawer() {
                                                         >
                                                             {renderIconLeftBar(menuItem.iconNm)}
                                                         </ListItemIcon>
-                                                        <ListItemText primary={t(menuItem.name)} sx={{ opacity: open ? 1 : 0 }} />
+                                                        <ListItemText
+                                                            primary={t(menuItem.name)}
+                                                            sx={{ opacity: open ? 1 : 0 }}
+                                                        />
                                                     </ListItemButton>
                                                 </ListItem>
-                                            )
-                                        }
+                                            )}
 
-                                        {
-                                            (userInfo?.uRole === RoleUser.SUB_COMPANY_ADMIN) && (
-                                                (menuItem.name === MenuItem.DASHBOARD || menuItem.name === MenuItem.USER || menuItem.name === MenuItem.PROJECT) &&
+                                        {userInfo?.uRole === RoleUser.SUB_COMPANY_ADMIN &&
+                                            (menuItem.name === MenuItem.DASHBOARD ||
+                                                menuItem.name === MenuItem.USER ||
+                                                menuItem.name === MenuItem.PROJECT) && (
                                                 <ListItem key={index} disablePadding sx={{ display: 'block' }}>
                                                     <ListItemButton
                                                         sx={{
@@ -291,7 +345,7 @@ export default function MiniDrawer() {
                                                             navigateByLink(menuItem.link);
                                                         }}
                                                     >
-                                                        < ListItemIcon
+                                                        <ListItemIcon
                                                             sx={{
                                                                 minWidth: 0,
                                                                 mr: open ? 3 : 'auto',
@@ -300,15 +354,17 @@ export default function MiniDrawer() {
                                                         >
                                                             {renderIconLeftBar(menuItem.iconNm)}
                                                         </ListItemIcon>
-                                                        <ListItemText primary={t(menuItem.name)} sx={{ opacity: open ? 1 : 0 }} />
+                                                        <ListItemText
+                                                            primary={t(menuItem.name)}
+                                                            sx={{ opacity: open ? 1 : 0 }}
+                                                        />
                                                     </ListItemButton>
                                                 </ListItem>
-                                            )
-                                        }
+                                            )}
 
-                                        {
-                                            (userInfo?.uRole === RoleUser.COMPANY_USER) && (
-                                                (menuItem.name === MenuItem.DASHBOARD || menuItem.name === MenuItem.PROJECT) &&
+                                        {userInfo?.uRole === RoleUser.COMPANY_USER &&
+                                            (menuItem.name === MenuItem.DASHBOARD ||
+                                                menuItem.name === MenuItem.PROJECT) && (
                                                 <ListItem key={index} disablePadding sx={{ display: 'block' }}>
                                                     <ListItemButton
                                                         sx={{
@@ -320,7 +376,7 @@ export default function MiniDrawer() {
                                                             navigateByLink(menuItem.link);
                                                         }}
                                                     >
-                                                        < ListItemIcon
+                                                        <ListItemIcon
                                                             sx={{
                                                                 minWidth: 0,
                                                                 mr: open ? 3 : 'auto',
@@ -329,11 +385,13 @@ export default function MiniDrawer() {
                                                         >
                                                             {renderIconLeftBar(menuItem.iconNm)}
                                                         </ListItemIcon>
-                                                        <ListItemText primary={t(menuItem.name)} sx={{ opacity: open ? 1 : 0 }} />
+                                                        <ListItemText
+                                                            primary={t(menuItem.name)}
+                                                            sx={{ opacity: open ? 1 : 0 }}
+                                                        />
                                                     </ListItemButton>
                                                 </ListItem>
-                                            )
-                                        }
+                                            )}
                                     </>
                                 ))}
                             </List>
@@ -350,8 +408,7 @@ export default function MiniDrawer() {
                         <LinearProgressWithLabel value={progress} color="warning" />
                     </Box>
                 </div>
-            )
-            }
-        </div >
+            )}
+        </div>
     );
 }
