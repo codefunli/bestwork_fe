@@ -1,9 +1,10 @@
 import { HeadColumn } from './base';
 
 export enum RoleUser {
-    SYS_ADMIN = 'SYS_ADMIN',
-    ORG_ADMIN = 'ADMIN',
-    ORG_USER = 'USER',
+    SYS_ADMIN = 'sysadmin',
+    COMPANY_ADMIN = 'companyadmin',
+    SUB_COMPANY_ADMIN = 'sub-companyadmin',
+    COMPANY_USER = 'companyuser',
 }
 
 export const headUserCol: HeadColumn[] = [

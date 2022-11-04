@@ -32,7 +32,7 @@ import { Company } from '../../models/project-req-dto';
 import { ProjectTypeDTO } from '../../models/project-res-dto';
 import { getAllCompanies } from '../../services/company-service';
 import { getProject, getProjectStatus, getProjectTypes, updateProject, getUsersAssignListUpdate } from '../../services/project-service';
-import { currentDateTime, formatDateTimeReq, formatDateTimeResNoneSuffixes } from '../../core/utils/get-current-datetime';
+import { formatDateTimeRes, formatDateTimeReq, formatDateTimeResNoneSuffixes } from '../../core/utils/get-current-datetime';
 import ApiAlert from '../../shared-components/alert/api-alert';
 import TabPanel from '../../shared-components/tab-manager/tab-panel';
 import Role from './project-role';
@@ -43,7 +43,7 @@ const initialValues: any = {
         projectType: '',
         description: '',
         comment: '',
-        startDate: currentDateTime,
+        startDate: '',
         notificationFlag: true,
         isPaid: false,
         status: '',
@@ -54,7 +54,12 @@ export default function ProjectRegister() {
     const { t } = useTranslation();
     const params = useParams();
     const navigate = useNavigate();
-    const [formValues, setFormValues] = useState(initialValues);
+    const [formValues, setFormValues] = useState({
+        project: {
+            ...initialValues.project,
+            startDate: formatDateTimeRes(new Date())
+        }
+    });
     const [value, setValue] = useState(0);
     const [roleData, setRoleData] = useState<Company[]>([]);
     const [projectStatus, setProjectStatus] = useState<any>([]);

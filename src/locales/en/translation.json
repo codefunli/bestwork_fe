@@ -93,7 +93,8 @@
         "btnUpdate": "Update",
         "btnBackToHome": "Back To Home",
         "btnUpload": "Upload",
-        "btnClose": "Close"
+        "btnClose": "Close",
+        "btnFinish": "Finish"
     },
     "common": {
         "placeholder": "Please input a new value",

@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { StatusCode } from '../../core/constants/common';
 import { validateProjectProgress } from '../../core/constants/validate';
-import { currentDateTime, formatDateTimeReq } from '../../core/utils/get-current-datetime';
+import { formatDateTimeRes, formatDateTimeReq } from '../../core/utils/get-current-datetime';
 import { ProjectProgressDTO } from '../../models/project-res-dto';
 import { createProgress, getProgressStatus } from '../../services/project-service';
 import ApiAlert from '../../shared-components/alert/api-alert';
@@ -29,8 +29,8 @@ const progressInitValues: ProjectProgressDTO = {
     projectId: '',
     title: '',
     fileStorages: [],
-    startDate: currentDateTime,
-    endDate: currentDateTime,
+    startDate: '',
+    endDate: '',
     status: '',
     report: '',
     note: '',
@@ -47,7 +47,11 @@ const ProgressCreate = (props: Props) => {
     const { isOpen, setIsOpen, toggleDrawer, callBackFn } = props;
     const { t } = useTranslation();
     const params = useParams();
-    const [progressData, setProgressData] = useState(progressInitValues);
+    const [progressData, setProgressData] = useState({
+        ...progressInitValues,
+        startDate: formatDateTimeRes(new Date()),
+        endDate: formatDateTimeRes(new Date())
+    });
     const [isClearPreview, setIsClearPreview] = useState(false);
     const [resForHandleMsg, setResForHandleMsg] = useState<any>();
     const [progressStatus, setProgressStatus] = useState([]);

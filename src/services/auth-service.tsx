@@ -15,3 +15,8 @@ export const changePassword = async (object: any) => {
     const res = await apiClient.post(`${UrlServer.CHANGE_PASSWORD}`, object);
     return res.data;
 };
+
+export const getCurrentUserInfo = async () => {
+    const res = await apiClient.get(`${UrlServer.USER.INFO}`);
+    return res.data;
+};

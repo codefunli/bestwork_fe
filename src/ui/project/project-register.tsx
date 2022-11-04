@@ -27,7 +27,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { StatusCode, UrlFeApp, Item } from '../../core/constants/common';
 import { validateProjectRegisterForm } from '../../core/constants/validate';
-import { currentDateTime, formatDateTimeReq } from '../../core/utils/get-current-datetime';
+import { formatDateTimeRes, formatDateTimeReq } from '../../core/utils/get-current-datetime';
 import { isArrayEmpty, isObjectEmpty } from '../../core/utils/object-utils';
 import { Company } from '../../models/project-req-dto';
 import { ProjectTypeDTO } from '../../models/project-res-dto';
@@ -42,7 +42,7 @@ const initialValues: any = {
         projectName: '',
         projectType: '',
         description: '',
-        startDate: currentDateTime,
+        startDate: '',
         notificationFlag: true,
         isPaid: false,
         status: '',
@@ -52,7 +52,12 @@ const initialValues: any = {
 export default function ProjectRegister() {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const [formValues, setFormValues] = useState(initialValues);
+    const [formValues, setFormValues] = useState({
+        project: {
+            ...initialValues.project,
+            startDate: formatDateTimeRes(new Date())
+        }
+    });
     const [value, setValue] = useState(0);
     const [roleData, setRoleData] = useState<Company[]>([]);
     const [projectStatus, setProjectStatus] = useState<any>([]);

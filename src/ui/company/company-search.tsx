@@ -327,7 +327,6 @@ export default function CompanySearch() {
                                                         textTransform: 'uppercase',
                                                     }}
                                                     color="primary"
-                                                    size="small"
                                                     variant="contained"
                                                     onClick={handleSubmit}
                                                 >

@@ -35,7 +35,7 @@ import { Item, StatusCode, UrlFeApp } from '../../core/constants/common';
 import { validateForm } from '../../core/constants/validate';
 import { District, Ward } from '../../core/types/administrative';
 import { getDistrictsByCityCode, getWardsByDistrictCode } from '../../core/utils/administrative-utils';
-import { currentDateTime, formatDateTimeReq } from '../../core/utils/get-current-datetime';
+import { formatDateTimeRes, formatDateTimeReq } from '../../core/utils/get-current-datetime';
 import { registerCompany } from '../../services/company-service';
 import ApiAlert from '../../shared-components/alert/api-alert';
 
@@ -49,8 +49,8 @@ const initialValues = {
         district: '',
         ward: '',
         street: '',
-        startDate: currentDateTime,
-        expiredDate: currentDateTime,
+        startDate: '',
+        expiredDate: '',
     },
     user: {
         userName: '',
@@ -59,7 +59,7 @@ const initialValues = {
         lastName: '',
         uTelNo: '',
         uEmail: '',
-        enabled: false,
+        enabled: true,
         role: {
             id: 1,
         },
@@ -67,7 +67,14 @@ const initialValues = {
 };
 
 export default function CompanyRegister() {
-    const [formValues, setFormValues] = useState(initialValues);
+    const [formValues, setFormValues] = useState({
+        ...initialValues,
+        company: {
+            ...initialValues.company,
+            startDate: formatDateTimeRes(new Date()),
+            expiredDate: formatDateTimeRes(new Date())
+        }
+    });
     const [districts, setDistricts] = useState<District[]>([]);
     const [wards, setWards] = useState<Ward[]>([]);
     const navigate = useNavigate();
@@ -774,12 +781,6 @@ export default function CompanyRegister() {
                                                             value="1"
                                                             control={<Radio color="primary" />}
                                                             label={t(Item.COMMON.RADIO_ADMIN)}
-                                                        />
-                                                        <FormControlLabel
-                                                            value="2"
-                                                            control={<Radio color="primary" />}
-                                                            label={t(Item.COMMON.RADIO_USER)}
-                                                            disabled
                                                         />
                                                     </RadioGroup>
                                                 </FormControl>

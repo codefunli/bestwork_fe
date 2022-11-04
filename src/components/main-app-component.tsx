@@ -20,7 +20,7 @@ import * as React from 'react';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useNavigate } from 'react-router-dom';
-import { ErrorPagePath, StatusCode, UrlFeApp } from '../core/constants/common';
+import { ErrorPagePath, StatusCode, UrlFeApp, MenuItem } from '../core/constants/common';
 import menuItemLinkData from '../core/constants/menu-item-link';
 import { useAppDispatch, useAppSelector } from '../core/hook/redux';
 import { appAction } from '../core/redux/app-slice';
@@ -34,6 +34,10 @@ import Notification from '../ui/notification/notification';
 import UserDropdown from '../ui/user-dropdown/user-dropdown';
 import CollapsedBreadcrumbs from './collapsed-breadcrumbs';
 import './main-app.scss';
+import { getCurrentUserInfo } from '../services/auth-service';
+import { useSelector } from "react-redux";
+import { getUserInfo } from '../core/redux/user-slice';
+import { RoleUser } from '../core/types/user';
 
 const drawerWidth = 240;
 
@@ -113,6 +117,8 @@ export default function MiniDrawer() {
     const dispatch = useAppDispatch();
     const [progress, setProgress] = React.useState(10);
 
+    const userInfo = useSelector(getUserInfo);
+
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -132,7 +138,7 @@ export default function MiniDrawer() {
     useEffect(() => {
         const timer = setInterval(() => {
             setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10));
-        }, 1100);
+        }, 1000);
 
         isCheckLogined()
             .then((resp) => {
@@ -141,6 +147,10 @@ export default function MiniDrawer() {
                     dispatch(appAction.setIsShowMsgErrLogin(false));
                     clearInterval(timer);
                     navigate(UrlFeApp.DASH_BOARD);
+
+                    getCurrentUserInfo().then(res => {
+                        dispatch(userActions.setUserInfo(res.data));
+                    });
                 } else {
                     dispatch(appAction.setIsPageLoading(true));
                     dispatch(userActions.setIsLogined(false));
@@ -209,29 +219,122 @@ export default function MiniDrawer() {
                             <Divider />
                             <List>
                                 {menuItemLinkData.map((menuItem, index) => (
-                                    <ListItem key={menuItem.name} disablePadding sx={{ display: 'block' }}>
-                                        <ListItemButton
-                                            sx={{
-                                                minHeight: 48,
-                                                justifyContent: open ? 'initial' : 'center',
-                                                px: 2.5,
-                                            }}
-                                            onClick={(event) => {
-                                                navigateByLink(menuItem.link);
-                                            }}
-                                        >
-                                            <ListItemIcon
-                                                sx={{
-                                                    minWidth: 0,
-                                                    mr: open ? 3 : 'auto',
-                                                    justifyContent: 'center',
-                                                }}
-                                            >
-                                                {renderIconLeftBar(menuItem.iconNm)}
-                                            </ListItemIcon>
-                                            <ListItemText primary={t(menuItem.name)} sx={{ opacity: open ? 1 : 0 }} />
-                                        </ListItemButton>
-                                    </ListItem>
+                                    <>
+                                        {
+                                            (userInfo?.uRole === RoleUser.SYS_ADMIN) && (
+                                                <ListItem key={index} disablePadding sx={{ display: 'block' }}>
+                                                    <ListItemButton
+                                                        sx={{
+                                                            minHeight: 48,
+                                                            justifyContent: open ? 'initial' : 'center',
+                                                            px: 2.5,
+                                                        }}
+                                                        onClick={(event) => {
+                                                            navigateByLink(menuItem.link);
+                                                        }}
+                                                    >
+                                                        < ListItemIcon
+                                                            sx={{
+                                                                minWidth: 0,
+                                                                mr: open ? 3 : 'auto',
+                                                                justifyContent: 'center',
+                                                            }}
+                                                        >
+                                                            {renderIconLeftBar(menuItem.iconNm)}
+                                                        </ListItemIcon>
+                                                        <ListItemText primary={t(menuItem.name)} sx={{ opacity: open ? 1 : 0 }} />
+                                                    </ListItemButton>
+                                                </ListItem>
+                                            )
+                                        }
+
+                                        {
+                                            (userInfo?.uRole === RoleUser.COMPANY_ADMIN) && (
+                                                (menuItem.name === MenuItem.DASHBOARD || menuItem.name === MenuItem.USER || menuItem.name === MenuItem.PROJECT) &&
+                                                <ListItem key={index} disablePadding sx={{ display: 'block' }}>
+                                                    <ListItemButton
+                                                        sx={{
+                                                            minHeight: 48,
+                                                            justifyContent: open ? 'initial' : 'center',
+                                                            px: 2.5,
+                                                        }}
+                                                        onClick={(event) => {
+                                                            navigateByLink(menuItem.link);
+                                                        }}
+                                                    >
+                                                        < ListItemIcon
+                                                            sx={{
+                                                                minWidth: 0,
+                                                                mr: open ? 3 : 'auto',
+                                                                justifyContent: 'center',
+                                                            }}
+                                                        >
+                                                            {renderIconLeftBar(menuItem.iconNm)}
+                                                        </ListItemIcon>
+                                                        <ListItemText primary={t(menuItem.name)} sx={{ opacity: open ? 1 : 0 }} />
+                                                    </ListItemButton>
+                                                </ListItem>
+                                            )
+                                        }
+
+                                        {
+                                            (userInfo?.uRole === RoleUser.SUB_COMPANY_ADMIN) && (
+                                                (menuItem.name === MenuItem.DASHBOARD || menuItem.name === MenuItem.USER || menuItem.name === MenuItem.PROJECT) &&
+                                                <ListItem key={index} disablePadding sx={{ display: 'block' }}>
+                                                    <ListItemButton
+                                                        sx={{
+                                                            minHeight: 48,
+                                                            justifyContent: open ? 'initial' : 'center',
+                                                            px: 2.5,
+                                                        }}
+                                                        onClick={(event) => {
+                                                            navigateByLink(menuItem.link);
+                                                        }}
+                                                    >
+                                                        < ListItemIcon
+                                                            sx={{
+                                                                minWidth: 0,
+                                                                mr: open ? 3 : 'auto',
+                                                                justifyContent: 'center',
+                                                            }}
+                                                        >
+                                                            {renderIconLeftBar(menuItem.iconNm)}
+                                                        </ListItemIcon>
+                                                        <ListItemText primary={t(menuItem.name)} sx={{ opacity: open ? 1 : 0 }} />
+                                                    </ListItemButton>
+                                                </ListItem>
+                                            )
+                                        }
+
+                                        {
+                                            (userInfo?.uRole === RoleUser.COMPANY_USER) && (
+                                                (menuItem.name === MenuItem.DASHBOARD || menuItem.name === MenuItem.PROJECT) &&
+                                                <ListItem key={index} disablePadding sx={{ display: 'block' }}>
+                                                    <ListItemButton
+                                                        sx={{
+                                                            minHeight: 48,
+                                                            justifyContent: open ? 'initial' : 'center',
+                                                            px: 2.5,
+                                                        }}
+                                                        onClick={(event) => {
+                                                            navigateByLink(menuItem.link);
+                                                        }}
+                                                    >
+                                                        < ListItemIcon
+                                                            sx={{
+                                                                minWidth: 0,
+                                                                mr: open ? 3 : 'auto',
+                                                                justifyContent: 'center',
+                                                            }}
+                                                        >
+                                                            {renderIconLeftBar(menuItem.iconNm)}
+                                                        </ListItemIcon>
+                                                        <ListItemText primary={t(menuItem.name)} sx={{ opacity: open ? 1 : 0 }} />
+                                                    </ListItemButton>
+                                                </ListItem>
+                                            )
+                                        }
+                                    </>
                                 ))}
                             </List>
                         </Drawer>
@@ -247,7 +350,8 @@ export default function MiniDrawer() {
                         <LinearProgressWithLabel value={progress} color="warning" />
                     </Box>
                 </div>
-            )}
-        </div>
+            )
+            }
+        </div >
     );
 }
