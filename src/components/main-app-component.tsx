@@ -152,8 +152,6 @@ export default function MiniDrawer() {
                     navigate(UrlFeApp.DASH_BOARD);
 
                     getCurrentUserInfo().then((res) => {
-                        console.log('res.data', res.data);
-
                         dispatch(userActions.setUserInfo(res.data));
                     });
                 } else {
