@@ -15,6 +15,7 @@ import {
     Typography,
     AlertColor,
     Grid,
+    Chip,
 } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { AlertColorConstants, UrlFeApp, ConfirmConstants, Item } from '../../core/constants/common';
@@ -27,6 +28,9 @@ import AlertDialogSlide from '../../shared-components/modal/alert-dialog-slide';
 import MessageShow from '../../shared-components/message/message';
 import { SUCCESS_MSG } from '../../core/constants/message';
 import './user.scss';
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
+import { green } from '@mui/material/colors';
 
 const initialValues = {
     page: '0',
@@ -111,7 +115,7 @@ export default function UserSearch() {
 
     const arrButton: ArrayAction[] = [
         {
-            nameFn: 'Edit',
+            nameFn: t(Item.TOOL_TIP.EDIT),
             acFn: handleEditData,
             iconFn: 'ModeEditIcon',
         },
@@ -260,7 +264,9 @@ export default function UserSearch() {
                                                 onChange={handleInputChange}
                                             >
                                                 <MenuItem value="" selected={true}>
-                                                    <em className="placeholder-color">{t('user.search.selectRole')}</em>
+                                                    <em className="placeholder-color m-auto">
+                                                        {t(Item.USER.SELECT_ROLE)}
+                                                    </em>
                                                 </MenuItem>
                                                 {roles.map((role: any) => (
                                                     <MenuItem value={role.id}>{role.roleName}</MenuItem>
@@ -282,15 +288,30 @@ export default function UserSearch() {
                                                 onChange={handleInputChange}
                                             >
                                                 <MenuItem value="" selected={true}>
-                                                    <em className="placeholder-color">
-                                                        {t('user.search.selectStatus')}
+                                                    <em className="placeholder-color m-auto">
+                                                        {t(Item.USER.SELECT_STATUS)}
                                                     </em>
                                                 </MenuItem>
                                                 <MenuItem value="1">
-                                                    <em>{t('user.search.enabled')}</em>
+                                                    <Chip
+                                                        sx={{
+                                                            backgroundColor: green[400],
+                                                            width: '100%',
+                                                        }}
+                                                        className="btn btn-outline-success"
+                                                        label={t(Item.USER.SEARCH_ENABLE)}
+                                                        size="small"
+                                                        icon={<CheckIcon color="success" />}
+                                                    />
                                                 </MenuItem>
                                                 <MenuItem value="0">
-                                                    <em>{t('user.search.notEnabled')}</em>
+                                                    <Chip
+                                                        sx={{ width: '100%' }}
+                                                        label={t(Item.USER.SEARCH_DISABLE)}
+                                                        size="small"
+                                                        className="btn btn-outline-secondary"
+                                                        icon={<CloseIcon />}
+                                                    />
                                                 </MenuItem>
                                             </Select>
                                         </FormControl>
@@ -303,10 +324,10 @@ export default function UserSearch() {
                                         aria-label="Disabled elevation buttons"
                                     >
                                         <Button onClick={handleSubmit} sx={{ mr: 1 }} size="small" variant="contained">
-                                            Search
+                                            {t('button.btnSearch')}
                                         </Button>
                                         <Button onClick={handleClearData} variant="outlined">
-                                            Clear
+                                            {t('button.btnClear')}
                                         </Button>
                                     </ButtonGroup>
                                 </div>

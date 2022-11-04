@@ -228,6 +228,10 @@ export const Item = {
         REGISTER_EMAIL: 'user.register.email',
         REGISTER_ALLOW_LOGIN: 'user.register.allowLogin',
         REGISTER_ROLE_ASSIGNED: 'user.register.roleAssigned',
+        SEARCH_ENABLE: 'user.search.enabled',
+        SEARCH_DISABLE: 'user.search.notEnabled',
+        SELECT_STATUS: 'user.search.selectStatus',
+        SELECT_ROLE: 'user.search.selectRole',
     },
     COMMON: {
         PLACE_HOLDER: 'common.placeholder',
