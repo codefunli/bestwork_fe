@@ -258,5 +258,9 @@ export const MenuItem = {
     COMPANY: 'menu.company',
     USER: 'menu.user',
     PROJECT: 'menu.project',
-    ROLE: 'menu.role',
-};
+    ROLE: 'menu.role'
+}
+
+export const BreadcrumbReplaceList = [
+    'with',
+]

@@ -49,7 +49,7 @@ const UserDropdown = () => {
                             onClick={handleToggle}
                             className="avatar"
                         >
-                            <Avatar sx={{ bgcolor: deepOrange[500] }} />
+                            <Avatar sx={{ bgcolor: deepOrange[500] }} src={userInfo?.avatar} />
                         </Badge>
                     </Tooltip>
                 </Grid>

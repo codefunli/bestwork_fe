@@ -52,7 +52,18 @@ export default function Role(props: Role) {
                     // If the user assign list of selected company is already exist
                     const alreadyExistCompany = defaultRoleData.find((company: any) => company.companyId.toString() === selectedCompanyId.toString());
                     if (alreadyExistCompany && alreadyExistCompany.userList) {
-                        setCurrentUserAssignList(alreadyExistCompany.userList);
+                        const tmpRoleList = res.data.map((user: any) => {
+                            let willReplaceUser = user;
+                            alreadyExistCompany.userList.forEach((existUser: any) => {
+                                if (user.userId === existUser.userId) {
+                                    willReplaceUser = existUser;
+                                };
+                            });
+
+                            return willReplaceUser;
+                        });
+
+                        setCurrentUserAssignList(tmpRoleList);
                     }
                 };
             });
