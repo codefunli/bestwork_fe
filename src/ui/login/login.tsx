@@ -13,7 +13,13 @@ import {
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
-import { AlertColorConstants, FieldConstants, HttpStatusCode, UrlFeApp } from '../../core/constants/common';
+import {
+    AlertColorConstants,
+    FieldConstants,
+    HttpStatusCode,
+    NameElConstants,
+    UrlFeApp,
+} from '../../core/constants/common';
 import { ERROR_MSG, getMessage } from '../../core/constants/message';
 import { useAppDispatch } from '../../core/hook/redux';
 import { userActions } from '../../core/redux/user-slice';
@@ -44,11 +50,11 @@ export default function Login() {
     const handleChangeValue = (event: any) => {
         const { name, value } = event.target;
 
-        if (FieldConstants.USER_NAME === name) {
+        if (NameElConstants.USER_NAME === name) {
             setIsErrorUserName(false);
         }
 
-        if (FieldConstants.PASSWORD === name) {
+        if (NameElConstants.PASSWORD === name) {
             setIsErrorPassword(false);
         }
 
@@ -191,9 +197,7 @@ export default function Login() {
             </form>
 
             <div className="forgot-password-btn mt-4">
-                <Link to={UrlFeApp.FORGOT_PASSWORD.FORGOT}>
-                    {t('forgotPassword.title')}?
-                </Link>
+                <Link to={UrlFeApp.FORGOT_PASSWORD.FORGOT}>{t('forgotPassword.title')}?</Link>
             </div>
 
             <MessageShow
