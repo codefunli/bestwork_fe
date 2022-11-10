@@ -258,9 +258,12 @@ export const MenuItem = {
     COMPANY: 'menu.company',
     USER: 'menu.user',
     PROJECT: 'menu.project',
-    ROLE: 'menu.role'
-}
+    ROLE: 'menu.role',
+};
 
-export const BreadcrumbReplaceList = [
-    'with',
-]
+export const BreadcrumbReplaceList = ['with'];
+
+export const NameElConstants = {
+    USER_NAME: 'userName',
+    PASSWORD: 'password',
+};
