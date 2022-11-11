@@ -24,7 +24,7 @@ import {
     Switch,
     TextField,
     Typography,
-    ButtonGroup
+    ButtonGroup,
 } from '@mui/material';
 import cities from 'hanhchinhvn/dist/tinh_tp.json';
 import { useState } from 'react';
@@ -45,6 +45,7 @@ const initialValues = {
         cpEmail: '',
         cpTelNo: '',
         taxNo: '',
+        national: '',
         city: '',
         district: '',
         ward: '',
@@ -72,8 +73,8 @@ export default function CompanyRegister() {
         company: {
             ...initialValues.company,
             startDate: formatDateTimeRes(new Date()),
-            expiredDate: formatDateTimeRes(new Date())
-        }
+            expiredDate: formatDateTimeRes(new Date()),
+        },
     });
     const [districts, setDistricts] = useState<District[]>([]);
     const [wards, setWards] = useState<Ward[]>([]);
@@ -191,7 +192,7 @@ export default function CompanyRegister() {
                     setTimeout(() => {
                         navigate(UrlFeApp.COMPANY.SEARCH);
                     }, 1000);
-                };
+                }
             })
             .catch(() => {
                 setResForHandleMsg({
@@ -312,7 +313,6 @@ export default function CompanyRegister() {
                                                     error={Boolean(errors.cpTelNo)}
                                                 >
                                                     {t(Item.COMPANY.REGISTER_TELNO)}{' '}
-                                                    <span className="input-required">*</span>
                                                 </InputLabel>
                                                 <TextField
                                                     size="small"
@@ -366,106 +366,100 @@ export default function CompanyRegister() {
                                             </div>
                                         </div>
                                         <div className="row justify-center m-1">
+                                            <div className="col-12 col-sm-12 d-block p-1">
+                                                <InputLabel id="outlined-adornment-amount">
+                                                    {t(Item.COMPANY.REGISTER_NATIONAL)}{' '}
+                                                </InputLabel>
+                                                <TextField
+                                                    size="small"
+                                                    value={formValues.company.national}
+                                                    fullWidth
+                                                    required
+                                                    id="outlined-required"
+                                                    sx={{
+                                                        mt: 1,
+                                                        mb: 1,
+                                                        '& legend': { display: 'none' },
+                                                        '& fieldset': { top: 0 },
+                                                    }}
+                                                    label=""
+                                                    placeholder={t(Item.COMMON.PLACE_HOLDER)}
+                                                    error={Boolean(errors.national)}
+                                                    helperText={errors.national?.message?.toString()}
+                                                    {...register('national', {
+                                                        onChange: (e) => handleInputChangeCompany(e),
+                                                    })}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="row justify-center m-1">
                                             <div className="col-12 col-sm-6 p-1">
-                                                <InputLabel id="demo-simple-select-outlined-label">
+                                                <InputLabel id="outlined-adornment-amount">
                                                     {t(Item.COMPANY.REGISTER_CITY)}
                                                 </InputLabel>
-                                                <FormControl
+                                                <TextField
+                                                    name="city"
                                                     size="small"
+                                                    value={formValues.company.city}
                                                     fullWidth
-                                                    sx={{ mt: 1, mb: 1 }}
-                                                    variant="outlined"
-                                                >
-                                                    <Select
-                                                        labelId="demo-simple-select-outlined-label"
-                                                        id="demo-simple-select-outlined"
-                                                        name="city"
-                                                        sx={{
-                                                            '& legend': { display: 'none' },
-                                                            '& fieldset': { top: 0 },
-                                                        }}
-                                                        displayEmpty
-                                                        value={formValues.company.city}
-                                                        onChange={handleCityChange}
-                                                    >
-                                                        <MenuItem value="" selected={true} disabled>
-                                                            <em className="placeholder-color">
-                                                                {t(Item.MESSAGE.CITY_LABEL)}
-                                                            </em>
-                                                        </MenuItem>
-                                                        {Object.values(cities).map((city) => (
-                                                            <MenuItem value={city.code}>{city.name}</MenuItem>
-                                                        ))}
-                                                    </Select>
-                                                </FormControl>
+                                                    required
+                                                    id="outlined-required"
+                                                    sx={{
+                                                        mt: 1,
+                                                        mb: 1,
+                                                        '& legend': { display: 'none' },
+                                                        '& fieldset': { top: 0 },
+                                                    }}
+                                                    label=""
+                                                    placeholder={t(Item.COMMON.PLACE_HOLDER)}
+                                                    onChange={handleInputChangeCompany}
+                                                />
                                             </div>
                                             <div className="col-12 col-sm-6 p-1">
-                                                <InputLabel id="demo-simple-select-outlined-label">
+                                                <InputLabel id="outlined-adornment-amount">
                                                     {t(Item.COMPANY.REGISTER_DISTRICT)}
                                                 </InputLabel>
-                                                <FormControl
+                                                <TextField
+                                                    name="district"
                                                     size="small"
+                                                    value={formValues.company.district}
                                                     fullWidth
-                                                    sx={{ mt: 1, mb: 1 }}
-                                                    variant="outlined"
-                                                >
-                                                    <Select
-                                                        labelId="demo-simple-select-outlined-label"
-                                                        id="demo-simple-select-outlined"
-                                                        name="district"
-                                                        sx={{
-                                                            '& legend': { display: 'none' },
-                                                            '& fieldset': { top: 0 },
-                                                        }}
-                                                        displayEmpty
-                                                        value={formValues.company.district}
-                                                        onChange={handleDistrictChange}
-                                                    >
-                                                        <MenuItem value="">
-                                                            <em className="placeholder-color">
-                                                                {t(Item.MESSAGE.DISTRICT_LABEL)}
-                                                            </em>
-                                                        </MenuItem>
-                                                        {districts.map((dis) => (
-                                                            <MenuItem value={dis.code}>{dis.name}</MenuItem>
-                                                        ))}
-                                                    </Select>
-                                                </FormControl>
+                                                    required
+                                                    id="outlined-required"
+                                                    sx={{
+                                                        mt: 1,
+                                                        mb: 1,
+                                                        '& legend': { display: 'none' },
+                                                        '& fieldset': { top: 0 },
+                                                    }}
+                                                    label=""
+                                                    placeholder={t(Item.COMMON.PLACE_HOLDER)}
+                                                    onChange={handleInputChangeCompany}
+                                                />
                                             </div>
                                         </div>
                                         <div className="row justify-center m-1">
                                             <div className="col-12 col-sm-6 d-block p-1">
-                                                <InputLabel id="demo-simple-select-outlined-label">
+                                                <InputLabel id="outlined-adornment-amount">
                                                     {t(Item.COMPANY.REGISTER_WARD)}
                                                 </InputLabel>
-                                                <FormControl
+                                                <TextField
+                                                    name="ward"
                                                     size="small"
+                                                    value={formValues.company.ward}
                                                     fullWidth
-                                                    sx={{ mt: 1, mb: 1 }}
-                                                    variant="outlined"
-                                                >
-                                                    <Select
-                                                        labelId="demo-simple-select-outlined-label"
-                                                        id="demo-simple-select-outlined"
-                                                        name="ward"
-                                                        sx={{
-                                                            '& legend': { display: 'none' },
-                                                            '& fieldset': { top: 0 },
-                                                        }}
-                                                        displayEmpty
-                                                        value={formValues.company.ward}
-                                                        onChange={handleInputChangeCompany}
-                                                    >
-                                                        <MenuItem value="">
-                                                            <em className="placeholder-color">
-                                                                {t(Item.MESSAGE.WARD_LABEL)}
-                                                            </em>
-                                                        </MenuItem>
-                                                        {wards.map((ward) => (
-                                                            <MenuItem value={ward.code}>{ward.name}</MenuItem>
-                                                        ))}
-                                                    </Select>
-                                                </FormControl>
+                                                    required
+                                                    id="outlined-required"
+                                                    sx={{
+                                                        mt: 1,
+                                                        mb: 1,
+                                                        '& legend': { display: 'none' },
+                                                        '& fieldset': { top: 0 },
+                                                    }}
+                                                    label=""
+                                                    placeholder={t(Item.COMMON.PLACE_HOLDER)}
+                                                    onChange={handleInputChangeCompany}
+                                                />
                                             </div>
                                             <div className="col-12 col-sm-6 d-block p-1">
                                                 <InputLabel htmlFor="outlined-adornment-amount">
@@ -497,7 +491,7 @@ export default function CompanyRegister() {
                                                 </InputLabel>
                                                 <TextField
                                                     fullWidth
-                                                    size='small'
+                                                    size="small"
                                                     sx={{
                                                         mt: 1,
                                                         mb: 1,
@@ -527,7 +521,7 @@ export default function CompanyRegister() {
                                                 </InputLabel>
                                                 <TextField
                                                     fullWidth
-                                                    size='small'
+                                                    size="small"
                                                     sx={{
                                                         mt: 1,
                                                         mb: 1,
@@ -578,7 +572,7 @@ export default function CompanyRegister() {
                                                     htmlFor="outlined-adornment-amount"
                                                     error={Boolean(errors.userName)}
                                                 >
-                                                    {t(Item.USER.REGISTER_USER_NAME)}
+                                                    {t(Item.USER.REGISTER_USER_NAME)}{' '}
                                                     <span className="input-required">*</span>
                                                 </InputLabel>
                                                 <TextField
@@ -606,7 +600,7 @@ export default function CompanyRegister() {
                                                     htmlFor="outlined-adornment-amount"
                                                     error={Boolean(errors.password)}
                                                 >
-                                                    {t(Item.USER.REGISTER_PASSWORD)}
+                                                    {t(Item.USER.REGISTER_PASSWORD)}{' '}
                                                     <span className="input-required">*</span>
                                                 </InputLabel>
                                                 <OutlinedInput
@@ -694,7 +688,7 @@ export default function CompanyRegister() {
                                                     htmlFor="outlined-adornment-amount"
                                                     error={Boolean(errors.uTelNo)}
                                                 >
-                                                    {t(Item.USER.REGISTER_TELNO)}
+                                                    {t(Item.USER.REGISTER_TELNO)}{' '}
                                                     <span className="input-required">*</span>
                                                 </InputLabel>
                                                 <TextField
@@ -724,7 +718,7 @@ export default function CompanyRegister() {
                                                     htmlFor="outlined-adornment-amount"
                                                     error={Boolean(errors.uEmail)}
                                                 >
-                                                    {t(Item.USER.REGISTER_EMAIL)}
+                                                    {t(Item.USER.REGISTER_EMAIL)}{' '}
                                                     <span className="input-required">*</span>
                                                 </InputLabel>
                                                 <TextField

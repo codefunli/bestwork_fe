@@ -212,6 +212,7 @@ export const Item = {
         REGISTER_EMAIL: 'company.register.email',
         REGISTER_TELNO: 'company.register.telNo',
         REGISTER_TAX_NO: 'company.register.taxNo',
+        REGISTER_NATIONAL: 'company.register.national',
         REGISTER_CITY: 'company.register.city',
         REGISTER_DISTRICT: 'company.register.district',
         REGISTER_WARD: 'company.register.ward',

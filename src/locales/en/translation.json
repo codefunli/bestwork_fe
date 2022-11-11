@@ -31,6 +31,7 @@
             "email": "Email",
             "telNo": "Tel-No",
             "taxNo": "Tax-No",
+            "national": "National",
             "city": "City/Province",
             "district": "District/Town",
             "ward": "Ward/Township",

@@ -203,9 +203,7 @@ export const validateResetPassword = yup.object({
 });
 
 export const validateChangePassword = yup.object({
-    currentPassword: yup
-        .string()
-        .required(getMessage(ERROR_MSG.E01_001, [FieldConstants.PASSWORD])),
+    currentPassword: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.PASSWORD])),
     newPassword: yup
         .string()
         .required(getMessage(ERROR_MSG.E01_001, [FieldConstants.PASSWORD]))
