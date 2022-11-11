@@ -36,7 +36,7 @@ import { renderIconLeftBar } from '../core/utils/render-utils';
 import { getCurrentUserInfo } from '../services/auth-service';
 import { isCheckLogined } from '../services/user-service';
 import MLanguage from '../shared-components/language/m-language';
-import LinearProgressWithLabel from '../shared-components/progress/LinearProgressWithLabel';
+import LinearProgressWithLabel from '../shared-components/progress/linear-progress-with-label';
 import Notification from '../ui/notification/notification';
 import UserDropdown from '../ui/user-dropdown/user-dropdown';
 import CollapsedBreadcrumbs from './collapsed-breadcrumbs';

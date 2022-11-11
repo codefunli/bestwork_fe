@@ -39,6 +39,7 @@ const initialValues = {
         cpEmail: '',
         cpTelNo: '',
         taxNo: '',
+        national: '',
         city: '',
         district: '',
         ward: '',
@@ -62,8 +63,6 @@ const initialValues = {
 export default function CompanyEdit() {
     const params = useParams();
     const [formValues, setFormValues] = useState(initialValues);
-    const [districts, setDistricts] = useState<District[]>([]);
-    const [wards, setWards] = useState<Ward[]>([]);
     const { t } = useTranslation();
     const navigate = useNavigate();
     const [resForHandleMsg, setResForHandleMsg] = useState<any>();
@@ -91,10 +90,7 @@ export default function CompanyEdit() {
                             ...value.data.user,
                             enabled: value.data.user.enabled === 1 ? true : false,
                         },
-                    })
-
-                    setDistricts(getDistrictsByCityCode(value.data.company.city || ''));
-                    setWards(getWardsByDistrictCode(value.data.company.district || ''));
+                    });
                 }
 
                 reset();
@@ -103,42 +99,6 @@ export default function CompanyEdit() {
     }, [params.id]);
 
     const handleInputChange = (event: any) => {
-        const { name, value } = event.target;
-        setFormValues({
-            ...formValues,
-            company: {
-                ...formValues.company,
-                [name]: value,
-            },
-        });
-    };
-
-    const handleCityChange = (event: any) => {
-        const { name, value } = event.target;
-        setFormValues({
-            ...formValues,
-            company: {
-                ...formValues.company,
-                [name]: value,
-            },
-        });
-
-        setDistricts(getDistrictsByCityCode(value));
-    };
-
-    const handleDistrictChange = (event: any) => {
-        const { name, value } = event.target;
-        setFormValues({
-            ...formValues,
-            company: {
-                ...formValues.company,
-                [name]: value,
-            },
-        });
-        setWards(getWardsByDistrictCode(value));
-    };
-
-    const handleWardChange = (event: any) => {
         const { name, value } = event.target;
         setFormValues({
             ...formValues,
@@ -174,23 +134,25 @@ export default function CompanyEdit() {
             startDate: formatDateTimeReq(formValues.company.startDate),
             expiredDate: formatDateTimeReq(formValues.company.expiredDate),
         };
-        updateCompany(companyValue).then((res: any) => {
-            setResForHandleMsg({
-                status: res.status,
-                message: res.message,
-            });
+        updateCompany(companyValue)
+            .then((res: any) => {
+                setResForHandleMsg({
+                    status: res.status,
+                    message: res.message,
+                });
 
-            if (res.status === StatusCode.OK) {
-                setTimeout(() => {
-                    navigate(UrlFeApp.COMPANY.SEARCH);
-                }, 1000);
-            };
-        }).catch(() => {
-            setResForHandleMsg({
-                status: StatusCode.ERROR,
-                message: t('message.error'),
+                if (res.status === StatusCode.OK) {
+                    setTimeout(() => {
+                        navigate(UrlFeApp.COMPANY.SEARCH);
+                    }, 1000);
+                }
+            })
+            .catch(() => {
+                setResForHandleMsg({
+                    status: StatusCode.ERROR,
+                    message: t('message.error'),
+                });
             });
-        });
     };
 
     return (
@@ -341,115 +303,106 @@ export default function CompanyEdit() {
                                             </div>
                                         </div>
                                         <div className="row justify-center m-1">
-                                            <div className="col-12 col-sm-6 p-1">
-                                                <InputLabel id="demo-simple-select-outlined-label">
-                                                    {t('edit.company.city')}
+                                            <div className="col-12 col-sm-12 d-block p-1">
+                                                <InputLabel id="outlined-adornment-amount">
+                                                    {t(Item.COMPANY.REGISTER_NATIONAL)}{' '}
                                                 </InputLabel>
-                                                <FormControl
+                                                <TextField
+                                                    name="national"
                                                     size="small"
+                                                    value={formValues.company.national}
                                                     fullWidth
-                                                    sx={{ mt: 1, mb: 1 }}
-                                                    variant="outlined"
-                                                >
-                                                    <Select
-                                                        labelId="demo-simple-select-outlined-label"
-                                                        id="demo-simple-select-outlined"
-                                                        name="city"
-                                                        size='small'
-                                                        sx={{
-                                                            '& legend': { display: 'none' },
-                                                            '& fieldset': { top: 0 },
-                                                        }}
-                                                        displayEmpty
-                                                        value={formValues.company.city}
-                                                        onChange={handleCityChange}
-                                                    >
-                                                        <MenuItem value="" selected={true} disabled>
-                                                            <em className="placeholder-color">
-                                                                {t('message.cityLabel')}
-                                                            </em>
-                                                        </MenuItem>
-                                                        {Object.values(cities).map((city) => (
-                                                            <MenuItem value={city.code}>{city.name}</MenuItem>
-                                                        ))}
-                                                    </Select>
-                                                </FormControl>
+                                                    required
+                                                    id="outlined-required"
+                                                    sx={{
+                                                        mt: 1,
+                                                        mb: 1,
+                                                        '& legend': { display: 'none' },
+                                                        '& fieldset': { top: 0 },
+                                                    }}
+                                                    label=""
+                                                    placeholder={t(Item.COMMON.PLACE_HOLDER)}
+                                                    error={Boolean(errors.national)}
+                                                    helperText={errors.national?.message?.toString()}
+                                                    onChange={handleInputChange}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="row justify-center m-1">
+                                            <div className="col-12 col-sm-6 p-1">
+                                                <InputLabel id="outlined-adornment-amount">
+                                                    {t(Item.COMPANY.REGISTER_CITY)}
+                                                </InputLabel>
+                                                <TextField
+                                                    name="city"
+                                                    size="small"
+                                                    value={formValues.company.city}
+                                                    fullWidth
+                                                    required
+                                                    id="outlined-required"
+                                                    sx={{
+                                                        mt: 1,
+                                                        mb: 1,
+                                                        '& legend': { display: 'none' },
+                                                        '& fieldset': { top: 0 },
+                                                    }}
+                                                    label=""
+                                                    placeholder={t(Item.COMMON.PLACE_HOLDER)}
+                                                    onChange={handleInputChange}
+                                                />
                                             </div>
                                             <div className="col-12 col-sm-6 p-1">
-                                                <InputLabel id="demo-simple-select-outlined-label">
-                                                    {t('edit.company.district')}
+                                                <InputLabel id="outlined-adornment-amount">
+                                                    {t(Item.COMPANY.REGISTER_DISTRICT)}
                                                 </InputLabel>
-                                                <FormControl
+                                                <TextField
+                                                    name="district"
                                                     size="small"
+                                                    value={formValues.company.district}
                                                     fullWidth
-                                                    sx={{ mt: 1, mb: 1 }}
-                                                    variant="outlined"
-                                                >
-                                                    <Select
-                                                        labelId="demo-simple-select-outlined-label"
-                                                        id="demo-simple-select-outlined"
-                                                        name="district"
-                                                        size='small'
-                                                        sx={{
-                                                            '& legend': { display: 'none' },
-                                                            '& fieldset': { top: 0 },
-                                                        }}
-                                                        displayEmpty
-                                                        value={formValues.company.district}
-                                                        onChange={handleDistrictChange}
-                                                    >
-                                                        <MenuItem value="" selected={true} disabled>
-                                                            <em className="placeholder-color">
-                                                                {t('message.districtLabel')}
-                                                            </em>
-                                                        </MenuItem>
-                                                        {districts.map((dis) => (
-                                                            <MenuItem value={dis.code}>{dis.name}</MenuItem>
-                                                        ))}
-                                                    </Select>
-                                                </FormControl>
+                                                    required
+                                                    id="outlined-required"
+                                                    sx={{
+                                                        mt: 1,
+                                                        mb: 1,
+                                                        '& legend': { display: 'none' },
+                                                        '& fieldset': { top: 0 },
+                                                    }}
+                                                    label=""
+                                                    placeholder={t(Item.COMMON.PLACE_HOLDER)}
+                                                    onChange={handleInputChange}
+                                                />
                                             </div>
                                         </div>
                                         <div className="row justify-center m-1">
                                             <div className="col-12 col-sm-6 d-block p-1">
-                                                <InputLabel id="demo-simple-select-outlined-label">
-                                                    {t('edit.company.ward')}
+                                                <InputLabel id="outlined-adornment-amount">
+                                                    {t(Item.COMPANY.REGISTER_WARD)}
                                                 </InputLabel>
-                                                <FormControl
+                                                <TextField
+                                                    name="ward"
                                                     size="small"
+                                                    value={formValues.company.ward}
                                                     fullWidth
-                                                    sx={{ mt: 1, mb: 1 }}
-                                                    variant="outlined"
-                                                >
-                                                    <Select
-                                                        labelId="demo-simple-select-outlined-label"
-                                                        id="demo-simple-select-outlined"
-                                                        name="ward"
-                                                        size='small'
-                                                        sx={{
-                                                            '& legend': { display: 'none' },
-                                                            '& fieldset': { top: 0 },
-                                                        }}
-                                                        displayEmpty
-                                                        value={formValues.company.ward}
-                                                        onChange={handleWardChange}
-                                                    >
-                                                        <MenuItem value="" selected={true} disabled>
-                                                            <em className="placeholder-color">
-                                                                {t('message.wardLabel')}
-                                                            </em>
-                                                        </MenuItem>
-                                                        {wards.map((ward) => (
-                                                            <MenuItem value={ward.code}>{ward.name}</MenuItem>
-                                                        ))}
-                                                    </Select>
-                                                </FormControl>
+                                                    required
+                                                    id="outlined-required"
+                                                    sx={{
+                                                        mt: 1,
+                                                        mb: 1,
+                                                        '& legend': { display: 'none' },
+                                                        '& fieldset': { top: 0 },
+                                                    }}
+                                                    label=""
+                                                    placeholder={t(Item.COMMON.PLACE_HOLDER)}
+                                                    onChange={handleInputChange}
+                                                />
                                             </div>
                                             <div className="col-12 col-sm-6 d-block p-1">
                                                 <InputLabel htmlFor="outlined-adornment-amount">
-                                                    {t('edit.company.street')}
+                                                    {t(Item.COMPANY.REGISTER_STREET)}
                                                 </InputLabel>
                                                 <TextField
+                                                    name="street"
                                                     size="small"
                                                     fullWidth
                                                     sx={{
@@ -459,9 +412,7 @@ export default function CompanyEdit() {
                                                         '& fieldset': { top: 0 },
                                                     }}
                                                     id="outlined-required"
-                                                    placeholder={t('common.placeholder')}
-                                                    name="street"
-                                                    value={formValues.company.street}
+                                                    placeholder={t(Item.COMMON.PLACE_HOLDER)}
                                                     onChange={handleInputChange}
                                                 />
                                             </div>
@@ -476,7 +427,7 @@ export default function CompanyEdit() {
                                                 </InputLabel>
                                                 <TextField
                                                     fullWidth
-                                                    size='small'
+                                                    size="small"
                                                     sx={{
                                                         mt: 1,
                                                         mb: 1,
@@ -505,7 +456,7 @@ export default function CompanyEdit() {
                                                 </InputLabel>
                                                 <TextField
                                                     fullWidth
-                                                    size='small'
+                                                    size="small"
                                                     sx={{
                                                         mt: 1,
                                                         mb: 1,
@@ -754,13 +705,7 @@ export default function CompanyEdit() {
                                     </Box>
                                 </CardContent>
                             </Grid>
-                            <Grid
-                                item
-                                xs={12}
-                                sm={12}
-                                className="text-center pb-4 pt-0 mt-0"
-                                marginTop={3}
-                            >
+                            <Grid item xs={12} sm={12} className="text-center pb-4 pt-0 mt-0" marginTop={3}>
                                 <Button
                                     variant="contained"
                                     color="primary"

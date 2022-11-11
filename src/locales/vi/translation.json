@@ -31,6 +31,7 @@
             "email": "Thư điện tử",
             "telNo": "Số điện thoại",
             "taxNo": "Mã số thuế",
+            "national": "Quốc gia",
             "city": "Tỉnh/Thành phố",
             "district": "Quận/Huyện",
             "ward": "Phường/Xã",
