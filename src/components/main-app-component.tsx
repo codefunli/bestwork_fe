@@ -41,6 +41,7 @@ import Notification from '../ui/notification/notification';
 import UserDropdown from '../ui/user-dropdown/user-dropdown';
 import CollapsedBreadcrumbs from './collapsed-breadcrumbs';
 import './main-app.scss';
+import '../App.scss';
 
 const drawerWidth = 240;
 
@@ -254,7 +255,7 @@ export default function MiniDrawer() {
                                 </Stack>
                                 <Typography>
                                     <span className="p-2">
-                                        <span className="d-block fw-bold text-primary ">{`${userInfo.firstName} ${userInfo.lastName}`}</span>
+                                        <span className="d-block fw-bold text-customTheme ">{`${userInfo.firstName} ${userInfo.lastName}`}</span>
                                         <span className="fst-italic">{`${userInfo.uRole}`}</span>
                                     </span>
                                 </Typography>

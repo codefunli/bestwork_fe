@@ -248,10 +248,7 @@ export default function CompanyRegister() {
                                     >
                                         <div className="row justify-center m-1">
                                             <div className="col-12 col-sm-6 d-block p-1">
-                                                <InputLabel
-                                                    htmlFor="outlined-adornment-amount"
-                                                    error={Boolean(errors.companyName)}
-                                                >
+                                                <InputLabel htmlFor="companyName" error={Boolean(errors.companyName)}>
                                                     {t(Item.COMPANY.REGISTER_NAME)}{' '}
                                                     <span className="input-required">*</span>
                                                 </InputLabel>
@@ -267,7 +264,7 @@ export default function CompanyRegister() {
                                                         '& fieldset': { top: 0 },
                                                     }}
                                                     label=""
-                                                    id="outlined-required"
+                                                    id="companyName"
                                                     placeholder={t(Item.COMMON.PLACE_HOLDER)}
                                                     error={Boolean(errors.companyName)}
                                                     helperText={t(errors.companyName?.message?.toString() as string)}
@@ -277,10 +274,7 @@ export default function CompanyRegister() {
                                                 />
                                             </div>
                                             <div className="col-12 col-sm-6 d-block p-1">
-                                                <InputLabel
-                                                    htmlFor="outlined-adornment-amount"
-                                                    error={Boolean(errors.cpEmail)}
-                                                >
+                                                <InputLabel htmlFor="cpEmail" error={Boolean(errors.cpEmail)}>
                                                     {t(Item.COMPANY.REGISTER_EMAIL)}
                                                     <span className="input-required">*</span>
                                                 </InputLabel>
@@ -289,7 +283,7 @@ export default function CompanyRegister() {
                                                     value={formValues.company.cpEmail}
                                                     fullWidth
                                                     required
-                                                    id="outlined-required"
+                                                    id="cpEmail"
                                                     sx={{
                                                         mt: 1,
                                                         mb: 1,
@@ -308,10 +302,7 @@ export default function CompanyRegister() {
                                         </div>
                                         <div className="row justify-center m-1">
                                             <div className="col-12 col-sm-6 d-block p-1">
-                                                <InputLabel
-                                                    htmlFor="outlined-adornment-amount"
-                                                    error={Boolean(errors.cpTelNo)}
-                                                >
+                                                <InputLabel htmlFor="cpTelNo" error={Boolean(errors.cpTelNo)}>
                                                     {t(Item.COMPANY.REGISTER_TELNO)}{' '}
                                                 </InputLabel>
                                                 <TextField
@@ -319,7 +310,7 @@ export default function CompanyRegister() {
                                                     value={formValues.company.cpTelNo}
                                                     fullWidth
                                                     required
-                                                    id="outlined-required"
+                                                    id="cpTelNo"
                                                     sx={{
                                                         mt: 1,
                                                         mb: 1,
@@ -336,10 +327,7 @@ export default function CompanyRegister() {
                                                 />
                                             </div>
                                             <div className="col-12 col-sm-6 d-block p-1">
-                                                <InputLabel
-                                                    htmlFor="outlined-adornment-amount"
-                                                    error={Boolean(errors.taxNo)}
-                                                >
+                                                <InputLabel htmlFor="taxNo" error={Boolean(errors.taxNo)}>
                                                     {t(Item.COMPANY.REGISTER_TAX_NO)}{' '}
                                                     <span className="input-required">*</span>
                                                 </InputLabel>
@@ -348,7 +336,7 @@ export default function CompanyRegister() {
                                                     value={formValues.company.taxNo}
                                                     fullWidth
                                                     required
-                                                    id="outlined-required"
+                                                    id="taxNo"
                                                     sx={{
                                                         mt: 1,
                                                         mb: 1,
@@ -367,7 +355,7 @@ export default function CompanyRegister() {
                                         </div>
                                         <div className="row justify-center m-1">
                                             <div className="col-12 col-sm-12 d-block p-1">
-                                                <InputLabel id="outlined-adornment-amount">
+                                                <InputLabel id="national">
                                                     {t(Item.COMPANY.REGISTER_NATIONAL)}{' '}
                                                 </InputLabel>
                                                 <TextField
@@ -375,7 +363,7 @@ export default function CompanyRegister() {
                                                     value={formValues.company.national}
                                                     fullWidth
                                                     required
-                                                    id="outlined-required"
+                                                    id="national"
                                                     sx={{
                                                         mt: 1,
                                                         mb: 1,
@@ -394,16 +382,14 @@ export default function CompanyRegister() {
                                         </div>
                                         <div className="row justify-center m-1">
                                             <div className="col-12 col-sm-6 p-1">
-                                                <InputLabel id="outlined-adornment-amount">
-                                                    {t(Item.COMPANY.REGISTER_CITY)}
-                                                </InputLabel>
+                                                <InputLabel id="city">{t(Item.COMPANY.REGISTER_CITY)}</InputLabel>
                                                 <TextField
                                                     name="city"
                                                     size="small"
                                                     value={formValues.company.city}
                                                     fullWidth
                                                     required
-                                                    id="outlined-required"
+                                                    id="city"
                                                     sx={{
                                                         mt: 1,
                                                         mb: 1,
@@ -416,7 +402,7 @@ export default function CompanyRegister() {
                                                 />
                                             </div>
                                             <div className="col-12 col-sm-6 p-1">
-                                                <InputLabel id="outlined-adornment-amount">
+                                                <InputLabel id="district">
                                                     {t(Item.COMPANY.REGISTER_DISTRICT)}
                                                 </InputLabel>
                                                 <TextField
@@ -425,7 +411,7 @@ export default function CompanyRegister() {
                                                     value={formValues.company.district}
                                                     fullWidth
                                                     required
-                                                    id="outlined-required"
+                                                    id="district"
                                                     sx={{
                                                         mt: 1,
                                                         mb: 1,
@@ -440,16 +426,14 @@ export default function CompanyRegister() {
                                         </div>
                                         <div className="row justify-center m-1">
                                             <div className="col-12 col-sm-6 d-block p-1">
-                                                <InputLabel id="outlined-adornment-amount">
-                                                    {t(Item.COMPANY.REGISTER_WARD)}
-                                                </InputLabel>
+                                                <InputLabel id="ward">{t(Item.COMPANY.REGISTER_WARD)}</InputLabel>
                                                 <TextField
                                                     name="ward"
                                                     size="small"
                                                     value={formValues.company.ward}
                                                     fullWidth
                                                     required
-                                                    id="outlined-required"
+                                                    id="ward"
                                                     sx={{
                                                         mt: 1,
                                                         mb: 1,
@@ -462,7 +446,7 @@ export default function CompanyRegister() {
                                                 />
                                             </div>
                                             <div className="col-12 col-sm-6 d-block p-1">
-                                                <InputLabel htmlFor="outlined-adornment-amount">
+                                                <InputLabel htmlFor="street">
                                                     {t(Item.COMPANY.REGISTER_STREET)}
                                                 </InputLabel>
                                                 <TextField
@@ -475,7 +459,7 @@ export default function CompanyRegister() {
                                                         '& legend': { display: 'none' },
                                                         '& fieldset': { top: 0 },
                                                     }}
-                                                    id="outlined-required"
+                                                    id="street"
                                                     placeholder={t(Item.COMMON.PLACE_HOLDER)}
                                                     onChange={handleInputChangeCompany}
                                                 />
@@ -483,10 +467,7 @@ export default function CompanyRegister() {
                                         </div>
                                         <div className="row justify-center m-1">
                                             <div className="col-12 col-sm-6 d-block p-1">
-                                                <InputLabel
-                                                    htmlFor="outlined-adornment-amount"
-                                                    error={Boolean(errors.startDate)}
-                                                >
+                                                <InputLabel htmlFor="startDate" error={Boolean(errors.startDate)}>
                                                     {t(Item.COMPANY.REGISTER_START_DATE)}
                                                 </InputLabel>
                                                 <TextField
@@ -499,7 +480,7 @@ export default function CompanyRegister() {
                                                         '& fieldset': { top: 0 },
                                                     }}
                                                     value={formValues.company.startDate}
-                                                    id="dateStart"
+                                                    id="startDate"
                                                     type="datetime-local"
                                                     defaultValue="2017-05-23T10:30"
                                                     InputLabelProps={{
@@ -513,10 +494,7 @@ export default function CompanyRegister() {
                                                 />
                                             </div>
                                             <div className="col-12 col-sm-6 d-block p-1">
-                                                <InputLabel
-                                                    htmlFor="outlined-adornment-amount"
-                                                    error={Boolean(errors.expiredDate)}
-                                                >
+                                                <InputLabel htmlFor="expiredDate" error={Boolean(errors.expiredDate)}>
                                                     {t(Item.COMPANY.REGISTER_END_DATE)}
                                                 </InputLabel>
                                                 <TextField
@@ -529,7 +507,7 @@ export default function CompanyRegister() {
                                                         '& fieldset': { top: 0 },
                                                     }}
                                                     value={formValues.company.expiredDate}
-                                                    id="dateEnd"
+                                                    id="expiredDate"
                                                     type="datetime-local"
                                                     defaultValue="2017-05-24T10:30"
                                                     InputLabelProps={{
@@ -568,10 +546,7 @@ export default function CompanyRegister() {
                                     >
                                         <div className="row justify-center m-1">
                                             <div className="col-12 col-sm-6 d-block p-1">
-                                                <InputLabel
-                                                    htmlFor="outlined-adornment-amount"
-                                                    error={Boolean(errors.userName)}
-                                                >
+                                                <InputLabel htmlFor="userName" error={Boolean(errors.userName)}>
                                                     {t(Item.USER.REGISTER_USER_NAME)}{' '}
                                                     <span className="input-required">*</span>
                                                 </InputLabel>
@@ -586,7 +561,7 @@ export default function CompanyRegister() {
                                                         '& fieldset': { top: 0 },
                                                     }}
                                                     required
-                                                    id="outlined-required"
+                                                    id="userName"
                                                     placeholder={t(Item.COMMON.PLACE_HOLDER)}
                                                     error={Boolean(errors.userName)}
                                                     helperText={errors.userName?.message?.toString()}
@@ -596,15 +571,12 @@ export default function CompanyRegister() {
                                                 />
                                             </div>
                                             <div className="col-12 col-sm-6 d-block p-1">
-                                                <InputLabel
-                                                    htmlFor="outlined-adornment-amount"
-                                                    error={Boolean(errors.password)}
-                                                >
+                                                <InputLabel htmlFor="password" error={Boolean(errors.password)}>
                                                     {t(Item.USER.REGISTER_PASSWORD)}{' '}
                                                     <span className="input-required">*</span>
                                                 </InputLabel>
                                                 <OutlinedInput
-                                                    id="outlined-adornment-password"
+                                                    id="password"
                                                     type={showPassword ? 'text' : 'password'}
                                                     value={formValues.user.password}
                                                     autoComplete="false"
@@ -642,7 +614,7 @@ export default function CompanyRegister() {
                                         </div>
                                         <div className="row justify-center m-1">
                                             <div className="col-12 col-sm-6 d-block p-1">
-                                                <InputLabel htmlFor="outlined-adornment-amount">
+                                                <InputLabel htmlFor="firstName">
                                                     {t(Item.USER.REGISTER_FIRST_NAME)}
                                                 </InputLabel>
                                                 <TextField
@@ -656,13 +628,13 @@ export default function CompanyRegister() {
                                                         '& legend': { display: 'none' },
                                                         '& fieldset': { top: 0 },
                                                     }}
-                                                    id="outlined-required"
+                                                    id="firstName"
                                                     placeholder={t(Item.COMMON.PLACE_HOLDER)}
                                                     onChange={handleInputChangeUser}
                                                 />
                                             </div>
                                             <div className="col-12 col-sm-6 d-block p-1">
-                                                <InputLabel htmlFor="outlined-adornment-amount">
+                                                <InputLabel htmlFor="lastName">
                                                     {t(Item.USER.REGISTER_LAST_NAME)}
                                                 </InputLabel>
                                                 <TextField
@@ -676,7 +648,7 @@ export default function CompanyRegister() {
                                                         '& legend': { display: 'none' },
                                                         '& fieldset': { top: 0 },
                                                     }}
-                                                    id="outlined-required"
+                                                    id="lastName"
                                                     placeholder={t(Item.COMMON.PLACE_HOLDER)}
                                                     onChange={handleInputChangeUser}
                                                 />
@@ -684,10 +656,7 @@ export default function CompanyRegister() {
                                         </div>
                                         <div className="row justify-center m-1">
                                             <div className="col-12 col-sm-12 d-block p-1">
-                                                <InputLabel
-                                                    htmlFor="outlined-adornment-amount"
-                                                    error={Boolean(errors.uTelNo)}
-                                                >
+                                                <InputLabel htmlFor="uTelNo" error={Boolean(errors.uTelNo)}>
                                                     {t(Item.USER.REGISTER_TELNO)}{' '}
                                                     <span className="input-required">*</span>
                                                 </InputLabel>
@@ -701,7 +670,7 @@ export default function CompanyRegister() {
                                                         '& legend': { display: 'none' },
                                                         '& fieldset': { top: 0 },
                                                     }}
-                                                    id="outlined-required"
+                                                    id="uTelNo"
                                                     required
                                                     placeholder={t(Item.COMMON.PLACE_HOLDER)}
                                                     error={Boolean(errors.uTelNo)}
@@ -714,10 +683,7 @@ export default function CompanyRegister() {
                                         </div>
                                         <div className="row justify-center m-1">
                                             <div className="col-12 col-sm-12 d-block p-1">
-                                                <InputLabel
-                                                    htmlFor="outlined-adornment-amount"
-                                                    error={Boolean(errors.uEmail)}
-                                                >
+                                                <InputLabel htmlFor="uEmail" error={Boolean(errors.uEmail)}>
                                                     {t(Item.USER.REGISTER_EMAIL)}{' '}
                                                     <span className="input-required">*</span>
                                                 </InputLabel>
@@ -731,7 +697,7 @@ export default function CompanyRegister() {
                                                         '& legend': { display: 'none' },
                                                         '& fieldset': { top: 0 },
                                                     }}
-                                                    id="outlined-required"
+                                                    id="uEmail"
                                                     placeholder={t(Item.COMMON.PLACE_HOLDER)}
                                                     error={Boolean(errors.uEmail)}
                                                     helperText={errors.uEmail?.message?.toString()}
