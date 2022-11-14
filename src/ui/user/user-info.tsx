@@ -4,6 +4,7 @@ import {
     ButtonGroup,
     Card,
     CardContent,
+    Divider,
     FormControl,
     FormHelperText,
     Grid,
@@ -152,16 +153,19 @@ export default function UserInfo() {
 
     return (
         <div className="user-info">
-            <div className="row">
-                <div className="col-sm-12 col-md-6">
-                    <Typography variant="h5">
-                        <span className="font-weight-bold text-uppercase btn disabled text-white bg-light opacity-100 border-customTheme">
-                            <div className="particletext">{t('user.title')}</div>
-                        </span>
+            <form>
+                <div className="p-label-header-1">
+                    <Typography
+                        variant="h5"
+                        className="btn disabled text-white bg-light opacity-100 border-customTheme"
+                        color="textSecondary"
+                        gutterBottom
+                        sx={{ textTransform: 'uppercase' }}
+                    >
+                        <div className="particletext">{t('user.title')}</div>
+                        <Divider />
                     </Typography>
                 </div>
-            </div>
-            <form>
                 <Grid container direction="row" spacing={3}>
                     <Grid item xs={12} md={5} lg={3} sx={{ mt: 1, mb: 1 }}>
                         <Card className="general-info">

@@ -6,10 +6,10 @@
         "btnLogin": "Login"
     },
     "company": {
-        "title": "Company search",
+        "title": "Brand search",
         "search": {
-            "title": "Search info of your company",
-            "name": "Company Name",
+            "title": "Search info of your Brand",
+            "name": "Brand Name",
             "email": "Email",
             "telNo": "Tel-no",
             "taxNo": "Tax-no",
@@ -17,7 +17,7 @@
             "status": "Status"
         },
         "table": {
-            "colCpName": "Company Name",
+            "colCpName": "Brand Name",
             "colCpAddress": "Address",
             "colCpStartDate": "Start Date",
             "colCpExpired": "Status",
@@ -25,9 +25,9 @@
             "colCpExpiredDate": "Expired Date"
         },
         "register": {
-            "title": "Company Registration",
-            "title_card": "Register a new company",
-            "name": "Company Name",
+            "title": "Brand Registration",
+            "title_card": "Register a new Brand",
+            "name": "Brand Name",
             "email": "Email",
             "telNo": "Tel-No",
             "taxNo": "Tax-No",
@@ -41,10 +41,10 @@
         }
     },
     "register": {
-        "title": "Company Registration",
+        "title": "Brand Registration",
         "company": {
-            "title": "Register a new company",
-            "name": "Company Name",
+            "title": "Register a new Brand",
+            "name": "Brand Name",
             "email": "Email",
             "telNo": "Tel-No",
             "taxNo": "Tax-No",
@@ -193,7 +193,7 @@
             "blocked": "Blocked"
         },
         "create": {
-            "title": "Create new user"
+            "title": "User Registration"
         },
         "register": {
             "title": "User Registration",
@@ -221,10 +221,10 @@
         "remove": "Remove"
     },
     "edit": {
-        "title": "Company Edit",
+        "title": "Brand Edition",
         "company": {
-            "title": "Edit company",
-            "name": "Company Name",
+            "title": "Edit Brand",
+            "name": "Brand Name",
             "email": "Email",
             "telNo": "Tel-No",
             "taxNo": "Tax-No",
@@ -250,7 +250,7 @@
     "project": {
         "title": "Project Search",
         "registerTitle": "Project Registration",
-        "editTitle": "Edit Project",
+        "editTitle": "Project Edition",
         "tab": {
             "register": "Register Project",
             "assign": "Assign User"
@@ -286,7 +286,7 @@
         },
         "progress": {
             "title": "Construction progress",
-            "create": "Create new progress",
+            "create": "Progress Creation",
             "edit": "Edit progress",
             "progressTitle": "Title",
             "progressImg": "Construction images",
@@ -309,7 +309,7 @@
             "delete": "Delete"
         },
         "modal": {
-            "title": "Create new role",
+            "title": "Role Creation",
             "roleName": "Role Name",
             "description": "Description"
         }
@@ -363,7 +363,7 @@
     },
     "menu": {
         "dashboard": "Dashboard",
-        "company": "Branch",
+        "company": "Brand",
         "user": "User",
         "project": "Project",
         "construction": "Construction",
@@ -402,7 +402,7 @@
             "constructionTitle": "Title"
         },
         "register": {
-            "title": "Construction Registration",
+            "title": "Construction Creation",
             "cttName": "Construction Name",
             "cttCode": "Construction Code",
             "cttStartDate": "Start Date",

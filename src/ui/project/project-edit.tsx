@@ -6,6 +6,7 @@ import {
     ButtonGroup,
     Card,
     CardContent,
+    Divider,
     FormControl,
     FormControlLabel,
     FormHelperText,
@@ -236,22 +237,19 @@ export default function ProjectRegister() {
 
     return (
         <div className="project">
+            <div className="p-label-header">
+                <Typography
+                    variant="h5"
+                    className="btn disabled text-white bg-light opacity-100 border-customTheme"
+                    color="textSecondary"
+                    gutterBottom
+                    sx={{ textTransform: 'uppercase' }}
+                >
+                    <div className="particletext">{t('project.editTitle')}</div>
+                    <Divider />
+                </Typography>
+            </div>
             <Grid container direction="row" spacing={3} className="project-register">
-                <Grid item xs={12} sx={{ mt: 1 }}>
-                    <div className="row">
-                        <div className="col-12">
-                            <Typography
-                                variant="h5"
-                                color="textSecondary"
-                                gutterBottom
-                                sx={{ textTransform: 'uppercase' }}
-                                className="btn disabled text-white bg-light opacity-100 border-customTheme"
-                            >
-                                <div className="particletext">{t('project.editTitle')}</div>
-                            </Typography>
-                        </div>
-                    </div>
-                </Grid>
                 <Grid item xs={12}>
                     <form onSubmit={handleSubmitForm}>
                         <Grid container direction="row" alignItems="center">

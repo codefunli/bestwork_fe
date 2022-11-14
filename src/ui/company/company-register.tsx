@@ -4,6 +4,7 @@ import {
     Avatar,
     Box,
     Button,
+    ButtonGroup,
     Card,
     CardContent,
     CardHeader,
@@ -16,17 +17,13 @@ import {
     IconButton,
     InputAdornment,
     InputLabel,
-    MenuItem,
     OutlinedInput,
     Radio,
     RadioGroup,
-    Select,
     Switch,
     TextField,
     Typography,
-    ButtonGroup,
 } from '@mui/material';
-import cities from 'hanhchinhvn/dist/tinh_tp.json';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -34,8 +31,7 @@ import { useNavigate } from 'react-router-dom';
 import { Item, StatusCode, UrlFeApp } from '../../core/constants/common';
 import { validateForm } from '../../core/constants/validate';
 import { District, Ward } from '../../core/types/administrative';
-import { getDistrictsByCityCode, getWardsByDistrictCode } from '../../core/utils/administrative-utils';
-import { formatDateTimeRes, formatDateTimeReq } from '../../core/utils/get-current-datetime';
+import { formatDateTimeReq, formatDateTimeRes } from '../../core/utils/get-current-datetime';
 import { registerCompany } from '../../services/company-service';
 import ApiAlert from '../../shared-components/alert/api-alert';
 
@@ -114,32 +110,6 @@ export default function CompanyRegister() {
         });
     };
 
-    const handleCityChange = (event: any) => {
-        const { name, value } = event.target;
-        setFormValues({
-            ...formValues,
-            company: {
-                ...formValues.company,
-                [name]: value,
-            },
-        });
-
-        setDistricts(getDistrictsByCityCode(value));
-    };
-
-    const handleDistrictChange = (event: any) => {
-        const { name, value } = event.target;
-        setFormValues({
-            ...formValues,
-            company: {
-                ...formValues.company,
-                [name]: value,
-            },
-        });
-
-        setWards(getWardsByDistrictCode(value));
-    };
-
     const handleAllowLoginChange = (event: any) => {
         const { name, value } = event.target;
 
@@ -213,16 +183,18 @@ export default function CompanyRegister() {
     return (
         <div>
             <form onSubmit={handleSubmitForm}>
-                <Typography
-                    variant="h5"
-                    className="mb-4 btn disabled text-white bg-light opacity-100 border-customTheme"
-                    color="textSecondary"
-                    gutterBottom
-                    sx={{ textTransform: 'uppercase' }}
-                >
-                    <div className="particletext">{t(Item.COMPANY.REGISTER_TITLE)}</div>
-                    <Divider />
-                </Typography>
+                <div className="p-label-header">
+                    <Typography
+                        variant="h5"
+                        className="btn disabled text-white bg-light opacity-100 border-customTheme"
+                        color="textSecondary"
+                        gutterBottom
+                        sx={{ textTransform: 'uppercase' }}
+                    >
+                        <div className="particletext">{t(Item.COMPANY.REGISTER_TITLE)}</div>
+                        <Divider />
+                    </Typography>
+                </div>
                 <Grid container>
                     <Card style={{ width: '100%' }}>
                         <Grid container spacing={3}>

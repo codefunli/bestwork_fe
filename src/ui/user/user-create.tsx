@@ -5,6 +5,7 @@ import {
     Card,
     CardContent,
     CardHeader,
+    Divider,
     FormControl,
     FormHelperText,
     Grid,
@@ -145,19 +146,20 @@ export default function UserAdd() {
 
     return (
         <div className="user-info">
-            <div className="row">
-                <div className="col-sm-12 col-md-6">
+            <form>
+                <div className="p-label-header-1">
                     <Typography
                         variant="h5"
                         className="btn disabled text-white bg-light opacity-100 border-customTheme"
+                        color="textSecondary"
+                        gutterBottom
+                        sx={{ textTransform: 'uppercase' }}
                     >
-                        <span className="font-weight-bold text-uppercase">
-                            <div className="particletext">{t('user.create.title')}</div>
-                        </span>
+                        <div className="particletext">{t('user.create.title')}</div>
+                        <Divider />
                     </Typography>
                 </div>
-            </div>
-            <form>
+
                 <Grid container direction="row" spacing={3}>
                     <Grid item xs={12} md={5} lg={3} sx={{ mt: 1, mb: 1 }}>
                         <Card className="general-info">

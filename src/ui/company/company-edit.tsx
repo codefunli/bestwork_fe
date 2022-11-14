@@ -158,16 +158,18 @@ export default function CompanyEdit() {
     return (
         <>
             <form>
-                <Typography
-                    variant="h5"
-                    className="mb-4 btn disabled text-white bg-light opacity-100 border-customTheme"
-                    color="textSecondary"
-                    gutterBottom
-                    sx={{ textTransform: 'uppercase' }}
-                >
-                    <div className="particletext">{t('edit.title')}</div>
-                    <Divider />
-                </Typography>
+                <div className="p-label-header">
+                    <Typography
+                        variant="h5"
+                        className="btn disabled text-white bg-light opacity-100 border-customTheme"
+                        color="textSecondary"
+                        gutterBottom
+                        sx={{ textTransform: 'uppercase' }}
+                    >
+                        <div className="particletext">{t('edit.title')}</div>
+                        <Divider />
+                    </Typography>
+                </div>
                 <Grid container>
                     <Card style={{ width: '100%' }}>
                         <Grid container spacing={3}>

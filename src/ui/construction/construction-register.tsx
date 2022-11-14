@@ -106,16 +106,18 @@ export default function ConstructionRegister() {
     return (
         <div className="construction-register">
             <form onSubmit={handleSubmitForm}>
-                <Typography
-                    variant="h5"
-                    color="textSecondary"
-                    gutterBottom
-                    sx={{ textTransform: 'uppercase' }}
-                    className="mb-4 btn disabled text-white bg-light opacity-100 border-customTheme"
-                >
-                    <div className="particletext">{t('construction.register.title')}</div>
-                    <Divider />
-                </Typography>
+                <div className="p-label-header">
+                    <Typography
+                        variant="h5"
+                        className="btn disabled text-white bg-light opacity-100 border-customTheme"
+                        color="textSecondary"
+                        gutterBottom
+                        sx={{ textTransform: 'uppercase' }}
+                    >
+                        <div className="particletext">{t('construction.register.title')}</div>
+                        <Divider />
+                    </Typography>
+                </div>
                 <Grid container spacing={3} justifyContent="center">
                     <Grid item md={12} lg={4}>
                         <Card>
@@ -130,7 +132,9 @@ export default function ConstructionRegister() {
                             <div className="construction-info">
                                 <CardContent>
                                     <div className="d-flex justify-content-start flex-column p-2 info-item">
-                                        <div className="item-header">{t(Item.LABEL_BTN.UPLOAD_CONSTRUCTION)}</div>
+                                        <InputLabel htmlFor="outlined-adornment-amount">
+                                            {t(Item.LABEL_BTN.UPLOAD_CONSTRUCTION)}
+                                        </InputLabel>
                                         <div className="content">
                                             <MultipleFileUpload
                                                 clearPreview={isClearPreview}
@@ -299,7 +303,9 @@ export default function ConstructionRegister() {
                                             })}
                                         >
                                             <MenuItem value="" selected={true} disabled>
-                                                <em>{t('message.statusLabel')}</em>
+                                                <em className="m-auto color-label-select-box">
+                                                    {t('message.statusLabel')}
+                                                </em>
                                             </MenuItem>
                                             {projectStatus &&
                                                 projectStatus.length > 0 &&
@@ -340,7 +346,9 @@ export default function ConstructionRegister() {
                                             })}
                                         >
                                             <MenuItem value="" selected={true} disabled>
-                                                <em>{t('message.statusLabel')}</em>
+                                                <em className="m-auto color-label-select-box">
+                                                    {t('message.statusLabel')}
+                                                </em>
                                             </MenuItem>
                                             {projectStatus &&
                                                 projectStatus.length > 0 &&
