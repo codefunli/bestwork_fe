@@ -249,14 +249,14 @@ export default function ConstructionSearch() {
                                 />
                                 <CardContent>
                                     <Box
-                                        component="form"
+                                        // component="form"
                                         sx={{
                                             '& > :not(style)': {
                                                 m: 1,
                                             },
                                         }}
-                                        noValidate
-                                        autoComplete="off"
+                                        // noValidate
+                                        // autoComplete="off"
                                     >
                                         <div className="row justify-center m-1">
                                             <div className="col-12 d-block p-1">

@@ -27,7 +27,7 @@ import {
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { Form, useNavigate } from 'react-router-dom';
 import { Item, StatusCode, UrlFeApp } from '../../core/constants/common';
 import { validateForm } from '../../core/constants/validate';
 import { District, Ward } from '../../core/types/administrative';
@@ -46,8 +46,8 @@ const initialValues = {
         district: '',
         ward: '',
         street: '',
-        startDate: '',
-        expiredDate: '',
+        startDate: formatDateTimeRes(new Date()),
+        expiredDate: formatDateTimeRes(new Date()),
     },
     user: {
         userName: '',
@@ -66,11 +66,6 @@ const initialValues = {
 export default function CompanyRegister() {
     const [formValues, setFormValues] = useState({
         ...initialValues,
-        company: {
-            ...initialValues.company,
-            startDate: formatDateTimeRes(new Date()),
-            expiredDate: formatDateTimeRes(new Date()),
-        },
     });
     const [districts, setDistricts] = useState<District[]>([]);
     const [wards, setWards] = useState<Ward[]>([]);
@@ -211,12 +206,12 @@ export default function CompanyRegister() {
                                 />
                                 <CardContent>
                                     <Box
-                                        component="form"
+                                        // component="form"
                                         sx={{
                                             '& > :not(style)': { m: 1 },
                                         }}
-                                        noValidate
-                                        autoComplete="off"
+                                        // noValidate
+                                        // autoComplete="off"
                                     >
                                         <div className="row justify-center m-1">
                                             <div className="col-12 col-sm-6 d-block p-1">
@@ -454,7 +449,6 @@ export default function CompanyRegister() {
                                                     value={formValues.company.startDate}
                                                     id="startDate"
                                                     type="datetime-local"
-                                                    defaultValue="2017-05-23T10:30"
                                                     InputLabelProps={{
                                                         shrink: true,
                                                     }}
@@ -481,7 +475,6 @@ export default function CompanyRegister() {
                                                     value={formValues.company.expiredDate}
                                                     id="expiredDate"
                                                     type="datetime-local"
-                                                    defaultValue="2017-05-24T10:30"
                                                     InputLabelProps={{
                                                         shrink: true,
                                                     }}
@@ -509,12 +502,12 @@ export default function CompanyRegister() {
                                 />
                                 <CardContent>
                                     <Box
-                                        component="form"
+                                        // component="form"
                                         sx={{
                                             '& > :not(style)': { m: 1 },
                                         }}
-                                        noValidate
-                                        autoComplete="off"
+                                        // noValidate
+                                        // autoComplete="off"
                                     >
                                         <div className="row justify-center m-1">
                                             <div className="col-12 col-sm-6 d-block p-1">
@@ -577,7 +570,7 @@ export default function CompanyRegister() {
                                                     })}
                                                     label="Password"
                                                 />
-                                                {Boolean(errors.password) && (
+                                                {errors.password && Boolean(errors.password) && (
                                                     <FormHelperText error>
                                                         {errors.password?.message?.toString()}
                                                     </FormHelperText>

@@ -266,7 +266,7 @@ export default function MiniDrawer() {
                             <Divider />
                             <List>
                                 {menuItemLinkData.map((menuItem, index) => (
-                                    <>
+                                    <React.Fragment key={index}>
                                         {userInfo?.uRole === RoleUser.SYS_ADMIN && (
                                             <ListItem key={index} disablePadding sx={{ display: 'block' }}>
                                                 <ListItemButton
@@ -390,7 +390,7 @@ export default function MiniDrawer() {
                                                     </ListItemButton>
                                                 </ListItem>
                                             )}
-                                    </>
+                                    </React.Fragment>
                                 ))}
                             </List>
                         </Drawer>

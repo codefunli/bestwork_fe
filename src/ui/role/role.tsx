@@ -982,18 +982,20 @@ export default function Role() {
                 </Grid>
             </Grid>
 
-            <CreateRoleModal
-                isOpen={isOpenCreateModal}
-                toggleOpen={toggleCreateModal}
-                handleCreateNewRole={handleCreateNewRole}
-            />
-
-            <UpdateRoleModal
-                isOpen={isOpenUpdateModal}
-                toggleOpen={toggleUpdateModal}
-                currentRole={currentRole}
-                handleUpdateRole={handleUpdateRole}
-            />
+            {isOpenCreateModal ? (
+                <CreateRoleModal
+                    isOpen={isOpenCreateModal}
+                    toggleOpen={toggleCreateModal}
+                    handleCreateNewRole={handleCreateNewRole}
+                />
+            ) : (
+                <UpdateRoleModal
+                    isOpen={isOpenUpdateModal}
+                    toggleOpen={toggleUpdateModal}
+                    currentRole={currentRole}
+                    handleUpdateRole={handleUpdateRole}
+                />
+            )}
 
             <MessageShow message={roleMsg} showMessage={isShowMsg} type={roleMsgType} handleCloseMsg={handleCloseMsg} />
 
