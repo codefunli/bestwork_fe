@@ -28,6 +28,11 @@ const menuItemLinkData: MenuItemLink[] = [
         iconNm: 'ProjectIcon',
     },
     {
+        name: MenuItem.CONSTRUCTION,
+        link: UrlFeApp.CONSTRUCTION.SEARCH,
+        iconNm: 'ConstructionIcon',
+    },
+    {
         name: MenuItem.ROLE,
         link: UrlFeApp.ROLE.INDEX,
         iconNm: 'RoleIcon',

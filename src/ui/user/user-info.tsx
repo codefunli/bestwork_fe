@@ -3,10 +3,16 @@ import {
     Button,
     ButtonGroup,
     Card,
-    CardContent, FormControl, FormHelperText, Grid,
-    InputLabel, MenuItem, Select, Switch,
+    CardContent,
+    FormControl,
+    FormHelperText,
+    Grid,
+    InputLabel,
+    MenuItem,
+    Select,
+    Switch,
     TextField,
-    Typography
+    Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { useEffect, useState } from 'react';
@@ -56,7 +62,7 @@ export default function UserInfo() {
     });
 
     useEffect(() => {
-        getCompaniesByUser().then(companies => {
+        getCompaniesByUser().then((companies) => {
             if (companies) setCompanies(companies);
         });
 
@@ -72,7 +78,7 @@ export default function UserInfo() {
                 setFormValues({
                     ...data.data,
                     role: data.data.role.id,
-                    company: data.data.company.id
+                    company: data.data.company.id,
                 });
                 reset();
             }
@@ -113,7 +119,7 @@ export default function UserInfo() {
                     setTimeout(() => {
                         navigate(UrlFeApp.USER.SEARCH);
                     }, 1000);
-                };
+                }
             })
             .catch((err) => {
                 setResForHandleMsg({
@@ -137,7 +143,10 @@ export default function UserInfo() {
     };
 
     const getCompanyName = (companyId: any) => {
-        const company = (companies && companies.length > 0) && companies.find((company: any) => company.id.toString() === companyId.toString());
+        const company =
+            companies &&
+            companies.length > 0 &&
+            companies.find((company: any) => company.id.toString() === companyId.toString());
         return company ? company.companyName : '';
     };
 
@@ -356,11 +365,13 @@ export default function UserInfo() {
                                                             {t('user.search.selectRole')}
                                                         </em>
                                                     </MenuItem>
-                                                    {roles && roles.length > 0 && roles.map((role: any) => (
-                                                        <MenuItem value={role.id} selected={true}>
-                                                            <em>{role.roleName}</em>
-                                                        </MenuItem>
-                                                    ))}
+                                                    {roles &&
+                                                        roles.length > 0 &&
+                                                        roles.map((role: any) => (
+                                                            <MenuItem value={role.id} selected={true}>
+                                                                <em>{role.roleName}</em>
+                                                            </MenuItem>
+                                                        ))}
                                                 </Select>
                                                 {Boolean(errors.role) && (
                                                     <FormHelperText id="component-error-text">
@@ -397,14 +408,14 @@ export default function UserInfo() {
                                             </Button>
                                         </ButtonGroup>
                                     </div>
-                                </Box >
-                            </CardContent >
-                        </Card >
-                    </Grid >
-                </Grid >
-            </form >
+                                </Box>
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                </Grid>
+            </form>
 
             <ApiAlert response={resForHandleMsg} />
-        </div >
+        </div>
     );
 }

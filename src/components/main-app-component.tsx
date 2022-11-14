@@ -116,7 +116,6 @@ export default function MiniDrawer() {
     const [open, setOpen] = React.useState(false);
     const { t } = useTranslation();
     const isUserLogged = useAppSelector((state) => state.user.isLogined);
-    const isPageLoading = useAppSelector((state) => state.app.isPageLoading);
     const dispatch = useAppDispatch();
     const [progress, setProgress] = React.useState(10);
 

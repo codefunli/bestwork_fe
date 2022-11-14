@@ -43,7 +43,7 @@ export default function MLanguage(props: Props) {
     const { color } = props;
     const anchorRef = useRef<HTMLDivElement>(null);
     const [open, setOpen] = useState(false);
-    const [selectedIndex, setSelectedIndex] = React.useState(1);
+    const [selectedIndex, setSelectedIndex] = React.useState(0);
     const { t } = useTranslation();
 
     useEffect(() => {

@@ -25,7 +25,7 @@
             "colCpExpiredDate": "Expired Date"
         },
         "register": {
-            "title": "Company Register",
+            "title": "Company Registration",
             "title_card": "Register a new company",
             "name": "Company Name",
             "email": "Email",
@@ -41,7 +41,7 @@
         }
     },
     "register": {
-        "title": "Company Register",
+        "title": "Company Registration",
         "company": {
             "title": "Register a new company",
             "name": "Company Name",
@@ -96,7 +96,8 @@
         "btnUpload": "Upload",
         "btnClose": "Close",
         "btnFinish": "Finish",
-        "btnDownload": "Download"
+        "btnDownload": "Download",
+        "btnConstruction": "Construction drawing"
     },
     "common": {
         "placeholder": "Please input a new value",
@@ -155,7 +156,8 @@
         "status": "Status",
         "detail": "Detail",
         "awb": "AWB",
-        "list": "List"
+        "list": "List",
+        "construction": "Construction"
     },
     "user": {
         "title": "User Information",
@@ -195,7 +197,7 @@
             "title": "Create new user"
         },
         "register": {
-            "title": "User Register",
+            "title": "User Registration",
             "title_card": "Register a new admin user",
             "userName": "User Name",
             "password": "Password",
@@ -247,7 +249,7 @@
     },
     "project": {
         "title": "Project Search",
-        "registerTitle": "Project Register",
+        "registerTitle": "Project Registration",
         "editTitle": "Edit Project",
         "tab": {
             "register": "Register Project",
@@ -364,6 +366,7 @@
         "company": "Branch",
         "user": "User",
         "project": "Project",
+        "construction": "Construction",
         "role": "Role"
     },
     "awb": {
@@ -381,6 +384,33 @@
         "create": {
             "title": "Create air waybill",
             "note": "Note"
+        }
+    },
+    "construction": {
+        "table": {
+            "colCttName": "Construction Name",
+            "colCttCode": "Construction Code",
+            "colStartDate": "Start Date",
+            "colAWB": "Air way bill",
+            "colStatus": "Status",
+            "colLocation": "Location"
+        },
+        "search": {
+            "title": "Construction Search",
+            "title_card": "Search info of your construction",
+            "constructionName": "Project Name",
+            "constructionTitle": "Title"
+        },
+        "register": {
+            "title": "Construction Registration",
+            "cttName": "Construction Name",
+            "cttCode": "Construction Code",
+            "cttStartDate": "Start Date",
+            "cttEndDate": "End Date",
+            "cttStatus": "Status",
+            "cttLocation": "Location",
+            "cttDraw": "Construction drawing",
+            "cttAwb": "Air way bill"
         }
     }
 }

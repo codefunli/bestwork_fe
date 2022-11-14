@@ -4,6 +4,7 @@ import ApartmentIcon from '@mui/icons-material/Apartment';
 import PeopleIcon from '@mui/icons-material/People';
 import SourceIcon from '@mui/icons-material/Source';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import ConstructionIcon from '@mui/icons-material/Construction';
 
 export const renderIconLeftBar = (iconNm: string) => {
     switch (iconNm) {
@@ -17,6 +18,8 @@ export const renderIconLeftBar = (iconNm: string) => {
             return <SourceIcon color="primary" />;
         case Item.ICON_NM.ICON_ROLE_NM_BAR:
             return <AssignmentIndIcon color="primary" />;
+        case Item.ICON_NM.ICON_CONSTRUCTION_NM_BAR:
+            return <ConstructionIcon color="primary" />;
         default:
             break;
     }
