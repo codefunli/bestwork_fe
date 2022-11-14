@@ -48,6 +48,11 @@ export const UrlFeApp = {
         LIST: '/app/awb/list',
         LIST_HAS_ID: '/app/awb/list/:id',
     },
+    CONSTRUCTION: {
+        SEARCH: '/app/construction',
+        CREATE: '/app/construction/register',
+        EDIT_HAS_ID: '/app/construction/edit/:id',
+    },
 };
 
 export const UrlServer = {
@@ -103,7 +108,7 @@ export const UrlServer = {
     },
     AWB: {
         GET_STATUS: `${PREFIX_SERVER_URL}/airway-bill/status`,
-        CREATE_AWB: `${PREFIX_SERVER_URL}/airway-bill/create`
+        CREATE_AWB: `${PREFIX_SERVER_URL}/airway-bill/create`,
     },
 };
 
@@ -124,6 +129,13 @@ export const FieldConstants = {
     NEW_PASSWORD: 'New password',
     CONFIRM_PASSWORD: 'Confirm password',
     AIR_WAY_BILL_NO: 'AWB no',
+    CONSTRUCTION_NAME: 'Construstion Name',
+    CONSTRUCTION_CODE: 'Construction Code',
+    STATUS: 'Status',
+    AIR_WAY_BILL: 'Air way bill',
+    END_DATE: 'End date',
+    LOCATION: 'Location',
+    AWB: 'AWB',
 };
 
 export const ConfirmConstants = {
@@ -188,6 +200,7 @@ export const Item = {
         ICON_USER_NM_BAR: 'UserIcon',
         ICON_PRJ_NM_BAR: 'ProjectIcon',
         ICON_ROLE_NM_BAR: 'RoleIcon',
+        ICON_CONSTRUCTION_NM_BAR: 'ConstructionIcon',
     },
     LABEL_BTN: {
         REGISTER: 'button.btnRegister',
@@ -199,6 +212,7 @@ export const Item = {
         CREATE: 'button.btnCreate',
         BACK: 'button.btnBack',
         FINISH: 'button.btnFinish',
+        UPLOAD_CONSTRUCTION: 'button.btnConstruction',
     },
     COMPANY: {
         TITLE: 'company.title',
@@ -251,6 +265,26 @@ export const Item = {
     MATERIAL: {
         TITLE: 'material.title',
     },
+    CONSTRUCTION: {
+        TABLE_COL_CTTNAME: 'construction.table.colCttName',
+        TABLE_COL_CTTCODE: 'construction.table.colCttCode',
+        TABLE_COL_START_DATE: 'construction.table.colStartDate',
+        TABLE_COL_AWB: 'construction.table.colAWB',
+        TABLE_COL_STATUS: 'construction.table.colStatus',
+        TABLE_COL_LOCATION: 'construction.table.colLocation',
+        SEARCH_TITLE: 'construction.search.title',
+        SEARCH_TITLE_CARD: 'construction.search.title_card',
+        NAME: 'construction.search.constructionName',
+        RU_TITLE: 'construction.register.title',
+        RU_NAME: 'construction.register.cttName',
+        RU_CODE: 'construction.register.cttCode',
+        RU_START_DATE: 'construction.register.cttStartDate',
+        RU_END_DATE: 'construction.register.cttEndDate',
+        RU_STATUS: 'construction.register.cttStatus',
+        RU_LOCATION: 'construction.register.cttLocation',
+        RU_DRAWING: 'construction.register.cttDraw',
+        RU_AWB: 'construction.register.cttAwb',
+    },
 };
 
 export const MenuItem = {
@@ -258,6 +292,7 @@ export const MenuItem = {
     COMPANY: 'menu.company',
     USER: 'menu.user',
     PROJECT: 'menu.project',
+    CONSTRUCTION: 'menu.construction',
     ROLE: 'menu.role',
 };
 
@@ -267,6 +302,7 @@ export const NameElConstants = {
     USER_NAME: 'userName',
     PASSWORD: 'password',
 };
+
 export const renderImage = (data: any, index: any) => {
     if (data.file.includes('pdf;'))
         return (

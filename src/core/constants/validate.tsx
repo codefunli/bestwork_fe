@@ -216,3 +216,19 @@ export const validateChangePassword = yup.object({
 export const validateCreateAwbForm = yup.object({
     code: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.AIR_WAY_BILL_NO])),
 });
+
+export const validateConstruction = yup.object({
+    constructionCode: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.CONSTRUCTION_CODE])),
+    constructionName: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.CONSTRUCTION_NAME])),
+    startDate: yup
+        .date()
+        .required(getMessage(ERROR_MSG.E01_001, [FieldConstants.START_DATE]))
+        .typeError(getMessage(ERROR_MSG.E01_001, [FieldConstants.START_DATE])),
+    endDate: yup
+        .date()
+        .required(getMessage(ERROR_MSG.E01_001, [FieldConstants.END_DATE]))
+        .typeError(getMessage(ERROR_MSG.E01_001, [FieldConstants.END_DATE]))
+        .min(yup.ref('startDate'), getMessage(ERROR_MSG.E01_003, [FieldConstants.END_DATE, FieldConstants.START_DATE])),
+    status: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.STATUS])),
+    awb: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.AWB])),
+});

@@ -96,7 +96,8 @@
         "btnUpload": "Đăng",
         "btnClose": "Đóng",
         "btnFinish": "Hoàn thành",
-        "btnDownload": "Tải xuống"
+        "btnDownload": "Tải xuống",
+        "btnConstruction": "Bản vẽ"
     },
     "common": {
         "placeholder": "Nhập một giá trị mới",
@@ -155,7 +156,8 @@
         "status": "Trạng thái",
         "detail": "Chi tiết",
         "awb": "Mã vận chuyển",
-        "list": "Danh sách"
+        "list": "Danh sách",
+        "construction": "Công trình"
     },
     "user": {
         "title": "Thông tin người dùng",
@@ -364,6 +366,7 @@
         "company": "Hãng",
         "user": "Nhân viên",
         "project": "Dự án",
+        "construction": "Công trình",
         "role": "Quyền hạn"
     },
     "awb": {
@@ -381,6 +384,33 @@
         "create": {
             "title": "Thêm air waybill",
             "note": "Ghi chú"
+        }
+    },
+    "construction": {
+        "table": {
+            "colCttName": "Tên công trình",
+            "colCttCode": "Mã công trình",
+            "colStartDate": "Ngày bắt đầu",
+            "colAWB": "Hóa đơn vận chuyển",
+            "colStatus": "Trạng thái",
+            "colLocation": "Địa điểm"
+        },
+        "search": {
+            "title": "Tìm kiếm thông tin công trình",
+            "title_card": "Tim kiếm thông tin công trình của bạn",
+            "constructionName": "Tên công trình",
+            "constructionTitle": "Title"
+        },
+        "register": {
+            "title": "Đăng kí công trình",
+            "cttName": "Tên công trình",
+            "cttCode": "Mã công trinh",
+            "cttStartDate": "Ngày bắt đầu",
+            "cttEndDate": "Ngày kết thúc",
+            "cttStatus": "Trạng thái",
+            "cttLocation": "Địa điểm",
+            "cttDraw": "Bản vẽ",
+            "cttAwb": "Hóa đơn vận chuyển"
         }
     }
 }

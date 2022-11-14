@@ -21,6 +21,8 @@ const Page404NotFound = lazy(() => import('../ui/error-page/404NotFound'));
 const ProjectRegister = lazy(() => import('../ui/project/project-register'));
 const ForgotPassword = lazy(() => import('../ui/forgot-password/forgot-password'));
 const ResetPassword = lazy(() => import('../ui/forgot-password/reset-password'));
+const ConstructionSearch = lazy(() => import('../ui/construction/construction-search'));
+const ConstructionRegister = lazy(() => import('../ui/construction/construction-register'));
 
 const listRouter: RouteObject[] = [
     {
@@ -90,6 +92,14 @@ const listRouter: RouteObject[] = [
             {
                 path: UrlFeApp.AWB.LIST_HAS_ID,
                 element: <AirWayBillList />,
+            },
+            {
+                path: UrlFeApp.CONSTRUCTION.SEARCH,
+                element: <ConstructionSearch />,
+            },
+            {
+                path: UrlFeApp.CONSTRUCTION.CREATE,
+                element: <ConstructionRegister />,
             },
         ],
     },
