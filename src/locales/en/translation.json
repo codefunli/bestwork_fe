@@ -95,7 +95,8 @@
         "btnBackToHome": "Back To Home",
         "btnUpload": "Upload",
         "btnClose": "Close",
-        "btnFinish": "Finish"
+        "btnFinish": "Finish",
+        "btnDownload": "Download"
     },
     "common": {
         "placeholder": "Please input a new value",
@@ -152,7 +153,9 @@
         "role": "Role",
         "material": "Material",
         "status": "Status",
-        "detail": "Detail"
+        "detail": "Detail",
+        "awb": "AWB",
+        "list": "List"
     },
     "user": {
         "title": "User Information",
@@ -211,7 +214,9 @@
         "edit": "Edit",
         "addUser": "Add user",
         "materialStatus": "Add material status",
-        "projectDetail": "Add construction progress"
+        "projectDetail": "Add construction progress",
+        "addAll": "Add all",
+        "add": "Add"
     },
     "edit": {
         "title": "Company Edit",
@@ -360,5 +365,22 @@
         "user": "User",
         "project": "Project",
         "role": "Role"
+    },
+    "awb": {
+        "title": "Air way bill",
+        "commercialInvoice": "Commercial Invoice",
+        "packingList": "Packing List",
+        "imageBefore": "Image Before",
+        "imageAfter": "Image After",
+        "uploadFile": "Upload File",
+        "uploadImage": "Upload Image",
+        "createConstruction": "Create Construction",
+        "createAwb": "Create Air WayBill",
+        "AWBNo": "Air waybill",
+        "customsClearanceDocuments": "Customs Clearance Documents",
+        "create": {
+            "title": "Create air waybill",
+            "note": "Note"
+        }
     }
 }

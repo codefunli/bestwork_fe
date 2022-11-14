@@ -1,15 +1,14 @@
-import { Divider, IconButton, Paper, TextField } from '@mui/material';
-import { Comment } from '../../core/types/base';
-import SendIcon from '@mui/icons-material/Send';
-import './comment.scss';
-import { useEffect, useState } from 'react';
-import CommentLeft from './comment-left';
-import { STR_EMPTY } from '../../core/utils/object-utils';
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
-import { v4 as uuidv4 } from 'uuid';
-import { postComment } from '../../services/material-service';
+import SendIcon from '@mui/icons-material/Send';
+import { Divider, IconButton, Paper, TextField } from '@mui/material';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { v4 as uuidv4 } from 'uuid';
 import { CommentConstant } from '../../core/constants/constant';
+import { Comment } from '../../core/types/base';
+import { STR_EMPTY } from '../../core/utils/object-utils';
+import CommentLeft from './comment-left';
+import './comment.scss';
 
 interface CommentProps {
     arrMsg: Comment[];
@@ -132,13 +131,6 @@ export default function CommentEl(props: CommentProps) {
 
         setArrMsgIn((prev) => {
             return [...prev];
-        });
-
-        postComment(pId, projectId, repObj).then((data: any) => {
-            if (CommentConstant.ADD === type) {
-                const myElement = document.getElementById('comment-box');
-                myElement?.scrollTo(0, myElement.scrollHeight + 650);
-            }
         });
     };
 

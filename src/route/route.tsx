@@ -1,6 +1,7 @@
 import { lazy } from 'react';
 import { UrlFeApp } from '../core/constants/common';
 import { RouteObject, useRoutes } from 'react-router-dom';
+import AirWayBillList from '../ui/awb/awb-list';
 
 const AuthComponent = lazy(() => import('../components/auth-component'));
 const Login = lazy(() => import('../ui/login/login'));
@@ -18,7 +19,6 @@ const ProjectDetail = lazy(() => import('../ui/project/project-detail'));
 const Role = lazy(() => import('../ui/role/role'));
 const Page404NotFound = lazy(() => import('../ui/error-page/404NotFound'));
 const ProjectRegister = lazy(() => import('../ui/project/project-register'));
-const MaterialStatus = lazy(() => import('../ui/schedule/material-status'));
 const ForgotPassword = lazy(() => import('../ui/forgot-password/forgot-password'));
 const ResetPassword = lazy(() => import('../ui/forgot-password/reset-password'));
 
@@ -80,16 +80,16 @@ const listRouter: RouteObject[] = [
                 element: <ProjectRegister />,
             },
             {
-                path: UrlFeApp.SCHEDULE.MATERIAL_STATUS,
-                element: <MaterialStatus />,
-            },
-            {
-                path: UrlFeApp.SCHEDULE.MATERIAL_STATUS_HAS_ID,
-                element: <MaterialStatus />,
-            },
-            {
                 path: UrlFeApp.PROJECT.DETAIL,
                 element: <ProjectDetail />,
+            },
+            {
+                path: UrlFeApp.AWB.LIST,
+                element: <AirWayBillList />,
+            },
+            {
+                path: UrlFeApp.AWB.LIST_HAS_ID,
+                element: <AirWayBillList />,
             },
         ],
     },

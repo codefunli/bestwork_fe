@@ -95,7 +95,8 @@
         "btnBackToHome": "Quay về trang chủ",
         "btnUpload": "Đăng",
         "btnClose": "Đóng",
-        "btnFinish": "Hoàn thành"
+        "btnFinish": "Hoàn thành",
+        "btnDownload": "Tải xuống"
     },
     "common": {
         "placeholder": "Nhập một giá trị mới",
@@ -152,7 +153,9 @@
         "role": "Phân quyền",
         "material": "Vật liệu",
         "status": "Trạng thái",
-        "detail": "Chi tiết"
+        "detail": "Chi tiết",
+        "awb": "Mã vận chuyển",
+        "list": "Danh sách"
     },
     "user": {
         "title": "Thông tin người dùng",
@@ -211,7 +214,9 @@
         "edit": "Chỉnh sửa",
         "addUser": "Thêm người dùng",
         "materialStatus": "Thêm trạng thái vật tư",
-        "projectDetail": "Thêm tiến độ thi công"
+        "projectDetail": "Thêm tiến độ thi công",
+        "addAll": "Thêm tất cả",
+        "add": "Thêm"
     },
     "edit": {
         "title": "Chỉnh sửa công ty",
@@ -360,5 +365,22 @@
         "user": "Nhân viên",
         "project": "Dự án",
         "role": "Quyền hạn"
+    },
+    "awb": {
+        "title": "Mã vận chuyển",
+        "commercialInvoice": "Hóa đơn thương mại",
+        "packingList": "Chi tiết đóng gói",
+        "imageBefore": "Hình ảnh trước",
+        "imageAfter": "Hình ảnh sau",
+        "uploadFile": "Tải lên tập tin",
+        "uploadImage": "Tải lên hình ảnh",
+        "createConstruction": "Tạo công trình",
+        "createAwb": "Tạo mã vận chuyển",
+        "AWBNo": "Mã vận chuyển",
+        "customsClearanceDocuments": "Hồ sơ thi công",
+        "create": {
+            "title": "Thêm air waybill",
+            "note": "Ghi chú"
+        }
     }
 }

@@ -13,8 +13,9 @@ import {
 import { TransitionProps } from '@mui/material/transitions';
 import { forwardRef, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getPostByPostId, updatePost } from '../../services/material-service';
-import MultipleFileUpload from '../file-upload/multiple-file-upload';
+import { useSelector } from 'react-redux';
+import { getUserInfo } from '../../core/redux/user-slice';
+import UploadFile from '../file-management/upload-file';
 
 const Transition = forwardRef(function Transition(
     props: TransitionProps & {
@@ -30,12 +31,10 @@ interface AlertDialogSlideProps {
     content: {
         projectId: string;
         description: string;
-        images: any;
+        files: any;
         isOpenComment: boolean;
         postUser: any;
-        postId: string;
-        fileStorages: any;
-        eqBill: string;
+        ewbId: string;
     };
     isOpen: boolean;
     closeFunc: Function;
@@ -43,91 +42,79 @@ interface AlertDialogSlideProps {
 }
 const initialDataImg = {
     description: '',
-    images: [],
-    fileStorages: [],
+    files: [],
     projectId: '',
     isOpenComment: false,
-    postUser: {
-        id: 0,
-        name: 'Đông Tà',
-    },
-    eqBill: '',
+    postUser: {},
+    ewbId: '',
 };
 
-export default function EditMaterialModal(props: AlertDialogSlideProps) {
+export default function FileUploadModal(props: AlertDialogSlideProps) {
     const { title, content, isOpen, closeFunc, okFunc } = props;
     const [open, setOpen] = useState(false);
-    const [postData, setPostData] = useState(initialDataImg);
-    const [imgData, setImgData] = useState<any>([]);
+    const [imgData, setImgData] = useState(initialDataImg);
     const { t } = useTranslation();
+    const userInfo = useSelector(getUserInfo);
+    const [eventImage, setEventImage] = useState<any>();
 
     useEffect(() => {
-        fetchData();
-    }, [content.projectId, content.postId, isOpen]);
+        if (isOpen)
+            setImgData({
+                ...content,
+                postUser: {
+                    id: userInfo.id,
+                    name: userInfo.userName,
+                },
+            });
+    }, [isOpen]);
 
-    const fetchData = () => {
-        getPostByPostId(content.postId, content.projectId).then((value: any) => {
-            if (value && value.data) {
-                setPostData(value.data);
-                setImgData(value.data.fileStorages);
-            }
-        });
+    const clearEventImage = () => {
+        eventImage.target.value = '';
     };
 
     const handleOkFunc = () => {
-        let resObj;
-        if (postData.images) {
-            resObj = {
-                projectId: content.projectId,
-                description: postData.description,
-                images: postData.images,
-                eqBill: postData.eqBill,
-            };
-        } else {
-            const imgs = postData.fileStorages.map((img: any) => img.data);
-            resObj = {
-                projectId: content.projectId,
-                description: postData.description,
-                images: imgs,
-                eqBill: postData.eqBill,
-            };
-        }
+        // postMaterialStatus(imgData).then((data: any) => {
+        //     setOpen(false);
+        //     okFunc();
+        // });
+        localStorage.setItem('imgData', JSON.stringify(imgData));
+        setOpen(false);
+        okFunc();
+        clearEventImage();
 
-        updatePost(content.postId, content.projectId, resObj).then((resp: any) => {
-            closeFunc();
-            setOpen(false);
-            setPostData(() => resp.data);
-        });
+        setImgData(content);
     };
 
     const handleClose = () => {
-        fetchData();
         setOpen(false);
         closeFunc();
-        setPostData(content);
+        setImgData(content);
+        clearEventImage();
     };
 
     useEffect(() => {
-        if (isOpen) setOpen(isOpen);
+        if (isOpen) {
+            setOpen(isOpen);
+        }
     }, [isOpen]);
 
-    const onChangeImageEdit = (data: any) => {
-        const imgs = data.map((img: any) => img.data);
-
-        setImgData([...data]);
-
-        setPostData({
-            ...postData,
-            images: imgs,
+    const onChangeImage = (data: any) => {
+        setImgData({
+            ...imgData,
+            files: data,
         });
     };
 
     const handleInputChange = (event: any) => {
         const { name, value } = event.target;
-        setPostData({
-            ...postData,
+        setImgData({
+            ...imgData,
             [name]: value,
         });
+    };
+
+    const handleClearEvent = (event: any) => {
+        setEventImage(event);
     };
 
     return (
@@ -162,34 +149,8 @@ export default function EditMaterialModal(props: AlertDialogSlideProps) {
                                         size="small"
                                         fullWidth
                                         multiline
-                                        value={postData.eqBill}
-                                        sx={{
-                                            mt: 1,
-                                            mb: 1,
-                                            '& legend': { display: 'none' },
-                                            '& fieldset': { top: 0 },
-                                        }}
-                                        id="outlined-required"
-                                        placeholder={t('material.eqBillPlaceHolder')}
-                                        name="eqBill"
-                                        onChange={handleInputChange}
-                                    />
-                                </div>
-                            </Grid>
-                            <Grid item xs={12} lg={12}>
-                                <div
-                                    w-fullWidth
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                    }}
-                                >
-                                    <TextField
-                                        size="small"
-                                        fullWidth
-                                        multiline
                                         rows={3}
-                                        value={postData.description}
+                                        value={imgData.description}
                                         sx={{
                                             mt: 1,
                                             mb: 1,
@@ -204,11 +165,10 @@ export default function EditMaterialModal(props: AlertDialogSlideProps) {
                                 </div>
                             </Grid>
                             <Grid item xs={12} lg={12}>
-                                <MultipleFileUpload
-                                    callbackFunc={onChangeImageEdit}
-                                    imgData={imgData}
-                                    isEditUpload={true}
+                                <UploadFile
                                     clearPreview={open}
+                                    callbackFunc={onChangeImage}
+                                    callBackClearEvent={handleClearEvent}
                                 />
                             </Grid>
                         </Grid>
@@ -220,7 +180,7 @@ export default function EditMaterialModal(props: AlertDialogSlideProps) {
                         {t('button.btnCancel')}
                     </Button>
                     <Button variant="contained" onClick={handleOkFunc}>
-                        {t('button.btnUpdate')}
+                        {t('button.btnUpload')}
                     </Button>
                 </DialogActions>
             </Dialog>

@@ -13,7 +13,6 @@ import {
 import { TransitionProps } from '@mui/material/transitions';
 import { forwardRef, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { postMaterialStatus } from '../../services/material-service';
 import MultipleFileUpload from '../file-upload/multiple-file-upload';
 
 const Transition = forwardRef(function Transition(
@@ -33,7 +32,7 @@ interface AlertDialogSlideProps {
         images: any;
         isOpenComment: boolean;
         postUser: any;
-        eqBill: string;
+        awbId: string;
     };
     isOpen: boolean;
     closeFunc: Function;
@@ -48,14 +47,15 @@ const initialDataImg = {
         id: 0,
         name: 'Đông Tà',
     },
-    eqBill: '',
+    awbId: '',
 };
 
-export default function ImageUploadDialog(props: AlertDialogSlideProps) {
+export default function ImageUploadModal(props: AlertDialogSlideProps) {
     const { title, content, isOpen, closeFunc, okFunc } = props;
     const [open, setOpen] = useState(false);
     const [imgData, setImgData] = useState(initialDataImg);
     const { t } = useTranslation();
+    const [eventImage, setEventImage] = useState<any>();
 
     useEffect(() => {
         if (isOpen) {
@@ -63,12 +63,14 @@ export default function ImageUploadDialog(props: AlertDialogSlideProps) {
         }
     }, [isOpen]);
 
-    const handleOkFunc = () => {
-        postMaterialStatus(imgData).then((data: any) => {
-            setOpen(false);
-            okFunc();
-        });
+    const clearEvent = () => {
+        if (eventImage) eventImage.target.value = '';
+    };
 
+    const handleOkFunc = () => {
+        setOpen(false);
+        okFunc();
+        clearEvent();
         setImgData(content);
     };
 
@@ -76,6 +78,7 @@ export default function ImageUploadDialog(props: AlertDialogSlideProps) {
         setOpen(false);
         closeFunc();
         setImgData(content);
+        clearEvent();
     };
 
     useEffect(() => {
@@ -97,6 +100,10 @@ export default function ImageUploadDialog(props: AlertDialogSlideProps) {
             ...imgData,
             [name]: value,
         });
+    };
+
+    const handleClearEvent = (event: any) => {
+        setEventImage(event);
     };
 
     return (
@@ -131,32 +138,6 @@ export default function ImageUploadDialog(props: AlertDialogSlideProps) {
                                         size="small"
                                         fullWidth
                                         multiline
-                                        value={imgData.eqBill}
-                                        sx={{
-                                            mt: 1,
-                                            mb: 1,
-                                            '& legend': { display: 'none' },
-                                            '& fieldset': { top: 0 },
-                                        }}
-                                        id="outlined-required"
-                                        placeholder={t('material.eqBillPlaceHolder')}
-                                        name="eqBill"
-                                        onChange={handleInputChange}
-                                    />
-                                </div>
-                            </Grid>
-                            <Grid item xs={12} lg={12}>
-                                <div
-                                    w-fullWidth
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                    }}
-                                >
-                                    <TextField
-                                        size="small"
-                                        fullWidth
-                                        multiline
                                         rows={3}
                                         value={imgData.description}
                                         sx={{
@@ -173,7 +154,11 @@ export default function ImageUploadDialog(props: AlertDialogSlideProps) {
                                 </div>
                             </Grid>
                             <Grid item xs={12} lg={12}>
-                                <MultipleFileUpload clearPreview={open} callbackFunc={onChangeImage} />
+                                <MultipleFileUpload
+                                    clearPreview={open}
+                                    callbackFunc={onChangeImage}
+                                    callBackClearEvent={handleClearEvent}
+                                />
                             </Grid>
                         </Grid>
                     </DialogContentText>
