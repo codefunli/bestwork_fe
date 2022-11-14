@@ -223,138 +223,133 @@ export default function CompanySearch() {
                 </div>
             </Grid>
             <Grid item lg={3} xs={12}>
-                <form>
-                    <Grid container direction="row" alignItems="center">
-                        <Grid item xs={12} sx={{ mt: 1, mb: 1 }}>
-                            <Card w-full="true">
-                                <CardHeader
-                                    avatar={<Avatar aria-label="recipe">SC</Avatar>}
-                                    title={t(Item.COMPANY.SEARCH_TITLE)}
-                                    subheader={new Date().toLocaleDateString()}
-                                />
-                                <CardContent>
-                                    <Box
-                                        component="form"
-                                        sx={{
-                                            '& > :not(style)': {
-                                                m: 1,
-                                            },
-                                        }}
-                                        noValidate
-                                        autoComplete="off"
-                                    >
-                                        <div className="row justify-center m-1">
-                                            <div className="col-12 d-block p-1">
-                                                <InputLabel htmlFor="keyword-search">
-                                                    {t(Item.COMPANY.SEARCH_KEYWORD)}
-                                                </InputLabel>
-                                                <TextField
-                                                    size="small"
-                                                    fullWidth
+                <Grid container direction="row" alignItems="center">
+                    <Grid item xs={12} sx={{ mt: 1, mb: 1 }}>
+                        <Card w-full="true">
+                            <CardHeader
+                                avatar={<Avatar aria-label="recipe">SC</Avatar>}
+                                title={t(Item.COMPANY.SEARCH_TITLE)}
+                                subheader={new Date().toLocaleDateString()}
+                            />
+                            <CardContent>
+                                <Box
+                                    component="form"
+                                    sx={{
+                                        '& > :not(style)': {
+                                            m: 1,
+                                        },
+                                    }}
+                                    noValidate
+                                    autoComplete="off"
+                                >
+                                    <div className="row justify-center m-1">
+                                        <div className="col-12 d-block p-1">
+                                            <InputLabel htmlFor="keyword-search">
+                                                {t(Item.COMPANY.SEARCH_KEYWORD)}
+                                            </InputLabel>
+                                            <TextField
+                                                size="small"
+                                                fullWidth
+                                                sx={{
+                                                    mt: 1,
+                                                    mb: 1,
+                                                    '& legend': { display: 'none' },
+                                                    '& fieldset': { top: 0 },
+                                                }}
+                                                id="keyword-search"
+                                                placeholder={t(Item.COMMON.PLACE_HOLDER)}
+                                                name="keyword"
+                                                value={formValues.keyword}
+                                                onChange={handleInputChange}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="row justify-center m-1">
+                                        <div className="col-12 d-block p-1">
+                                            <InputLabel id="demo-simple-select-outlined-label">
+                                                {t(Item.COMPANY.SEARCH_STATUS)}
+                                            </InputLabel>
+                                            <FormControl
+                                                size="small"
+                                                fullWidth
+                                                sx={{ mt: 1, mb: 1 }}
+                                                variant="outlined"
+                                            >
+                                                <Select
+                                                    labelId="demo-simple-select-outlined-label"
+                                                    id="demo-simple-select-outlined"
+                                                    name="status"
+                                                    displayEmpty
                                                     sx={{
-                                                        mt: 1,
-                                                        mb: 1,
                                                         '& legend': { display: 'none' },
                                                         '& fieldset': { top: 0 },
                                                     }}
-                                                    id="keyword-search"
-                                                    placeholder={t(Item.COMMON.PLACE_HOLDER)}
-                                                    name="keyword"
-                                                    value={formValues.keyword}
+                                                    value={formValues.status}
                                                     onChange={handleInputChange}
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="row justify-center m-1">
-                                            <div className="col-12 d-block p-1">
-                                                <InputLabel id="demo-simple-select-outlined-label">
-                                                    {t(Item.COMPANY.SEARCH_STATUS)}
-                                                </InputLabel>
-                                                <FormControl
-                                                    size="small"
-                                                    fullWidth
-                                                    sx={{ mt: 1, mb: 1 }}
-                                                    variant="outlined"
                                                 >
-                                                    <Select
-                                                        labelId="demo-simple-select-outlined-label"
-                                                        id="demo-simple-select-outlined"
-                                                        name="status"
-                                                        displayEmpty
-                                                        sx={{
-                                                            '& legend': { display: 'none' },
-                                                            '& fieldset': { top: 0 },
-                                                        }}
-                                                        value={formValues.status}
-                                                        onChange={handleInputChange}
-                                                    >
-                                                        <MenuItem value={2}>
-                                                            <em
-                                                                style={{ margin: '0 auto' }}
-                                                                className="placeholder-color"
-                                                            >
-                                                                {t(Item.COMMON.STATUS)}
-                                                            </em>
-                                                        </MenuItem>
-                                                        <MenuItem value={0}>
-                                                            <Chip
-                                                                sx={{
-                                                                    backgroundColor: green[400],
-                                                                    width: '100%',
-                                                                }}
-                                                                className="btn btn-outline-success"
-                                                                label={t(Item.LABEL_BTN.ACTIVE)}
-                                                                size="small"
-                                                                icon={<CheckIcon color="success" />}
-                                                            />
-                                                        </MenuItem>
-                                                        <MenuItem value={1}>
-                                                            <Chip
-                                                                sx={{ width: '100%' }}
-                                                                label={t(Item.LABEL_BTN.PENDING)}
-                                                                size="small"
-                                                                className="btn btn-outline-secondary"
-                                                                icon={<CloseIcon />}
-                                                            />
-                                                        </MenuItem>
-                                                    </Select>
-                                                </FormControl>
-                                            </div>
+                                                    <MenuItem value={2}>
+                                                        <em style={{ margin: '0 auto' }} className="placeholder-color">
+                                                            {t(Item.COMMON.STATUS)}
+                                                        </em>
+                                                    </MenuItem>
+                                                    <MenuItem value={0}>
+                                                        <Chip
+                                                            sx={{
+                                                                backgroundColor: green[400],
+                                                                width: '100%',
+                                                            }}
+                                                            className="btn btn-outline-success"
+                                                            label={t(Item.LABEL_BTN.ACTIVE)}
+                                                            size="small"
+                                                            icon={<CheckIcon color="success" />}
+                                                        />
+                                                    </MenuItem>
+                                                    <MenuItem value={1}>
+                                                        <Chip
+                                                            sx={{ width: '100%' }}
+                                                            label={t(Item.LABEL_BTN.PENDING)}
+                                                            size="small"
+                                                            className="btn btn-outline-secondary"
+                                                            icon={<CloseIcon />}
+                                                        />
+                                                    </MenuItem>
+                                                </Select>
+                                            </FormControl>
                                         </div>
-                                        <div className="text-center justify-center m-1">
-                                            <ButtonGroup
-                                                disableElevation
+                                    </div>
+                                    <div className="text-center justify-center m-1">
+                                        <ButtonGroup
+                                            disableElevation
+                                            variant="contained"
+                                            aria-label="Disabled elevation buttons"
+                                        >
+                                            <Button
+                                                sx={{
+                                                    mr: 1,
+                                                    textTransform: 'uppercase',
+                                                }}
+                                                color="primary"
                                                 variant="contained"
-                                                aria-label="Disabled elevation buttons"
+                                                onClick={handleSubmit}
                                             >
-                                                <Button
-                                                    sx={{
-                                                        mr: 1,
-                                                        textTransform: 'uppercase',
-                                                    }}
-                                                    color="primary"
-                                                    variant="contained"
-                                                    onClick={handleSubmit}
-                                                >
-                                                    {t(Item.LABEL_BTN.SEARCH)}
-                                                </Button>
-                                                <Button
-                                                    sx={{
-                                                        textTransform: 'uppercase',
-                                                    }}
-                                                    onClick={handleClearData}
-                                                    variant="outlined"
-                                                >
-                                                    {t(Item.LABEL_BTN.CLEAR)}
-                                                </Button>
-                                            </ButtonGroup>
-                                        </div>
-                                    </Box>
-                                </CardContent>
-                            </Card>
-                        </Grid>
+                                                {t(Item.LABEL_BTN.SEARCH)}
+                                            </Button>
+                                            <Button
+                                                sx={{
+                                                    textTransform: 'uppercase',
+                                                }}
+                                                onClick={handleClearData}
+                                                variant="outlined"
+                                            >
+                                                {t(Item.LABEL_BTN.CLEAR)}
+                                            </Button>
+                                        </ButtonGroup>
+                                    </div>
+                                </Box>
+                            </CardContent>
+                        </Card>
                     </Grid>
-                </form>
+                </Grid>
             </Grid>
             <Grid item lg={9} xs={12} sx={{ mt: 1, mb: 1 }}>
                 <EnhancedTable

@@ -194,12 +194,12 @@ export default function EnhancedTable(props: EnhancedTable) {
                                                         hidden={colValue.id === FieldConstants.ID}
                                                     >
                                                         {colValue.id === 'startDate' ||
-                                                            colValue.id === 'createDate' ||
-                                                            colValue.id === 'expiredDate' ? (
+                                                        colValue.id === 'createDate' ||
+                                                        colValue.id === 'expiredDate' ? (
                                                             formatDateTimeResList(row[colValue.id])
                                                         ) : colValue.id === 'expired' ||
-                                                            colValue.id === 'enabled' ||
-                                                            colValue.id === 'status' ? (
+                                                          colValue.id === 'enabled' ||
+                                                          colValue.id === 'status' ? (
                                                             colValue.label.includes('company') ? (
                                                                 <HandleCompanyStatus
                                                                     statusId={row[colValue.id].toString()}
@@ -213,19 +213,17 @@ export default function EnhancedTable(props: EnhancedTable) {
                                                                     }
                                                                     statusId={row[colValue.id]}
                                                                 />
+                                                            ) : colValue.label.includes('user') ? (
+                                                                <HandleUserStatus
+                                                                    statusId={row[colValue.id].toString()}
+                                                                />
                                                             ) : (
-                                                                (
-                                                                    (colValue.label.includes('user')) ? (
-                                                                        <HandleUserStatus
-                                                                            statusId={row[colValue.id].toString()}
-                                                                        />
-                                                                    ) : ('')
-                                                                )
+                                                                ''
                                                             )
                                                         ) : colValue.id === 'projectType' ? (
                                                             row[colValue.id as string].name
                                                         ) : colValue.id === 'enabled' &&
-                                                            colValue.label.includes('user') ? (
+                                                          colValue.label.includes('user') ? (
                                                             row[colValue.id as string] === 1 ? (
                                                                 t('user.search.enabled')
                                                             ) : (
@@ -270,7 +268,7 @@ export default function EnhancedTable(props: EnhancedTable) {
                                         minWidth: 300,
                                     }}
                                 >
-                                    {t('message.noData')}
+                                    <TableCell>{t('message.noData')}</TableCell>
                                 </TableRow>
                             )}
                         </TableBody>

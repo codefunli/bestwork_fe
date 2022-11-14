@@ -225,27 +225,26 @@ export default function ProjectRegister() {
                                 <div className="custom-tab">
                                     <Card w-full="true">
                                         <TabPanel value={value} index={0}>
+                                            <CardHeader
+                                                action={
+                                                    <Button onClick={handleClearProjectForm} variant="outlined">
+                                                        {t(Item.LABEL_BTN.CLEAR)}
+                                                    </Button>
+                                                }
+                                            />
                                             <CardContent>
-                                                <CardHeader
-                                                    action={
-                                                        <Button onClick={handleClearProjectForm} variant="outlined">
-                                                            {t(Item.LABEL_BTN.CLEAR)}
-                                                        </Button>
-                                                    }
-                                                ></CardHeader>
-
                                                 <Box
-                                                    component="form"
+                                                    // component="form"
                                                     sx={{
                                                         '& > :not(style)': { m: 1 },
                                                     }}
-                                                    noValidate
-                                                    autoComplete="off"
+                                                    // noValidate
+                                                    // autoComplete="off"
                                                 >
                                                     <div className="row justify-center m-1">
                                                         <div className="col-12 col-sm-6 d-block p-1">
                                                             <InputLabel
-                                                                htmlFor="outlined-adornment-amount"
+                                                                htmlFor="projectName"
                                                                 error={Boolean(errors.projectName)}
                                                             >
                                                                 {t('project.register.name')}{' '}
@@ -263,7 +262,7 @@ export default function ProjectRegister() {
                                                                     '& fieldset': { top: 0 },
                                                                 }}
                                                                 label=""
-                                                                id="outlined-required"
+                                                                id="projectName"
                                                                 placeholder={t('common.placeholder')}
                                                                 error={Boolean(errors.projectName)}
                                                                 helperText={t(
@@ -276,7 +275,7 @@ export default function ProjectRegister() {
                                                         </div>
                                                         <div className="col-12 col-sm-6 d-block p-1">
                                                             <InputLabel
-                                                                htmlFor="outlined-adornment-amount"
+                                                                htmlFor="description"
                                                                 error={Boolean(errors.description)}
                                                             >
                                                                 {t('project.register.description')}
@@ -293,7 +292,7 @@ export default function ProjectRegister() {
                                                                     '& fieldset': { top: 0 },
                                                                 }}
                                                                 label=""
-                                                                id="outlined-required"
+                                                                id="description"
                                                                 placeholder={t('common.placeholder')}
                                                                 error={Boolean(errors.description)}
                                                                 helperText={t(
@@ -308,7 +307,7 @@ export default function ProjectRegister() {
                                                     <div className="row justify-center m-1">
                                                         <div className="col-12 col-sm-6 d-block p-1">
                                                             <InputLabel
-                                                                htmlFor="outlined-adornment-amount"
+                                                                htmlFor="startDate"
                                                                 error={Boolean(errors.startDate)}
                                                             >
                                                                 {t('project.register.startDate')}{' '}
@@ -324,7 +323,7 @@ export default function ProjectRegister() {
                                                                     '& input': { padding: '8.5px 14px' },
                                                                 }}
                                                                 value={formValues.project.startDate}
-                                                                id="dateEnd"
+                                                                id="startDate"
                                                                 type="datetime-local"
                                                                 InputLabelProps={{
                                                                     shrink: true,
@@ -339,7 +338,7 @@ export default function ProjectRegister() {
                                                             />
                                                         </div>
                                                         <div className="col-12 col-sm-6 p-1">
-                                                            <InputLabel id="demo-simple-select-outlined-label">
+                                                            <InputLabel id="status">
                                                                 {t('project.register.status')}{' '}
                                                                 <span className="input-required">*</span>
                                                             </InputLabel>
@@ -356,7 +355,7 @@ export default function ProjectRegister() {
                                                             >
                                                                 <Select
                                                                     labelId="demo-simple-select-outlined-label"
-                                                                    id="demo-simple-select-outlined"
+                                                                    id="status"
                                                                     displayEmpty
                                                                     value={formValues.project.status}
                                                                     {...register('status', {
@@ -371,7 +370,7 @@ export default function ProjectRegister() {
                                                                     {projectStatus &&
                                                                         projectStatus.length > 0 &&
                                                                         projectStatus.map((item: any) => (
-                                                                            <MenuItem value={item.id}>
+                                                                            <MenuItem key={item.id} value={item.id}>
                                                                                 {item.status}
                                                                             </MenuItem>
                                                                         ))}
@@ -418,7 +417,7 @@ export default function ProjectRegister() {
                                                                     {projectType &&
                                                                         projectType.length > 0 &&
                                                                         projectType.map((type: ProjectTypeDTO) => (
-                                                                            <MenuItem value={type.id}>
+                                                                            <MenuItem key={type.id} value={type.id}>
                                                                                 {type.name}
                                                                             </MenuItem>
                                                                         ))}

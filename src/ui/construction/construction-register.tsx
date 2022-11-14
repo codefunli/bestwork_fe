@@ -143,10 +143,7 @@ export default function ConstructionRegister() {
                                         </div>
                                     </div>
                                     <div className="d-flex justify-content-start flex-column p-2 info-item">
-                                        <InputLabel
-                                            htmlFor="outlined-adornment-amount"
-                                            error={Boolean(errors.constructionCode)}
-                                        >
+                                        <InputLabel htmlFor="constructionCode" error={Boolean(errors.constructionCode)}>
                                             {t(Item.CONSTRUCTION.RU_CODE)}
                                             <span className="input-required p-1">*</span>
                                         </InputLabel>
@@ -155,7 +152,7 @@ export default function ConstructionRegister() {
                                             value={formValues.constructionCode}
                                             fullWidth
                                             required
-                                            id="outlined-required"
+                                            id="constructionCode"
                                             sx={{
                                                 mt: 1,
                                                 mb: 1,
@@ -172,10 +169,7 @@ export default function ConstructionRegister() {
                                         />
                                     </div>
                                     <div className="d-flex justify-content-start flex-column p-2 info-item">
-                                        <InputLabel
-                                            htmlFor="outlined-adornment-amount"
-                                            error={Boolean(errors.constructionName)}
-                                        >
+                                        <InputLabel htmlFor="constructionName" error={Boolean(errors.constructionName)}>
                                             {t(Item.CONSTRUCTION.RU_NAME)}
                                             <span className="input-required p-1">*</span>
                                         </InputLabel>
@@ -184,7 +178,7 @@ export default function ConstructionRegister() {
                                             value={formValues.constructionName}
                                             fullWidth
                                             required
-                                            id="outlined-required"
+                                            id="constructionName"
                                             sx={{
                                                 mt: 1,
                                                 mb: 1,
@@ -201,10 +195,7 @@ export default function ConstructionRegister() {
                                         />
                                     </div>
                                     <div className="d-flex justify-content-start flex-column p-2 info-item">
-                                        <InputLabel
-                                            htmlFor="outlined-adornment-amount"
-                                            error={Boolean(errors.startDate)}
-                                        >
+                                        <InputLabel htmlFor="startDate" error={Boolean(errors.startDate)}>
                                             {t(Item.CONSTRUCTION.RU_START_DATE)}
                                             <span className="input-required p-1">*</span>
                                         </InputLabel>
@@ -218,9 +209,8 @@ export default function ConstructionRegister() {
                                                 '& fieldset': { top: 0 },
                                             }}
                                             value={formValues.startDate}
-                                            id="dateStart"
+                                            id="startDate"
                                             type="datetime-local"
-                                            defaultValue="2017-05-23T10:30"
                                             InputLabelProps={{
                                                 shrink: true,
                                             }}
@@ -232,7 +222,7 @@ export default function ConstructionRegister() {
                                         />
                                     </div>
                                     <div className="d-flex justify-content-start flex-column p-2 info-item">
-                                        <InputLabel htmlFor="outlined-adornment-amount" error={Boolean(errors.endDate)}>
+                                        <InputLabel htmlFor="endDate" error={Boolean(errors.endDate)}>
                                             {t(Item.CONSTRUCTION.RU_END_DATE)}
                                             <span className="input-required p-1">*</span>
                                         </InputLabel>
@@ -246,9 +236,8 @@ export default function ConstructionRegister() {
                                                 '& fieldset': { top: 0 },
                                             }}
                                             value={formValues.endDate}
-                                            id="dateEnd"
+                                            id="endDate"
                                             type="datetime-local"
-                                            defaultValue="2017-05-24T10:30"
                                             InputLabelProps={{
                                                 shrink: true,
                                             }}
@@ -260,15 +249,13 @@ export default function ConstructionRegister() {
                                         />
                                     </div>
                                     <div className="d-flex justify-content-start flex-column p-2 info-item">
-                                        <InputLabel htmlFor="outlined-adornment-amount">
-                                            {t(Item.CONSTRUCTION.RU_LOCATION)}
-                                        </InputLabel>
+                                        <InputLabel htmlFor="location">{t(Item.CONSTRUCTION.RU_LOCATION)}</InputLabel>
                                         <TextField
                                             size="small"
                                             value={formValues.location}
                                             fullWidth
                                             required
-                                            id="outlined-required"
+                                            id="location"
                                             sx={{
                                                 mt: 1,
                                                 mb: 1,
@@ -285,13 +272,13 @@ export default function ConstructionRegister() {
                                         />
                                     </div>
                                     <div className="d-flex justify-content-start flex-column p-2 info-item">
-                                        <InputLabel htmlFor="outlined-adornment-amount" error={Boolean(errors.status)}>
+                                        <InputLabel htmlFor="status" error={Boolean(errors.status)}>
                                             {t(Item.CONSTRUCTION.RU_STATUS)}
                                             <span className="input-required p-1">*</span>
                                         </InputLabel>
                                         <Select
                                             labelId="demo-simple-select-outlined-label"
-                                            id="demo-simple-select-outlined"
+                                            id="status"
                                             displayEmpty
                                             sx={{
                                                 '& legend': { display: 'none' },
@@ -328,13 +315,13 @@ export default function ConstructionRegister() {
                                         )}
                                     </div>
                                     <div className="d-flex justify-content-start flex-column p-2 info-item">
-                                        <InputLabel htmlFor="outlined-adornment-amount" error={Boolean(errors.awb)}>
+                                        <InputLabel htmlFor="awb" error={Boolean(errors.awb)}>
                                             {t(Item.CONSTRUCTION.RU_AWB)}
                                             <span className="input-required p-1">*</span>
                                         </InputLabel>
                                         <Select
                                             labelId="demo-simple-select-outlined-label"
-                                            id="demo-simple-select-outlined"
+                                            id="awb"
                                             displayEmpty
                                             sx={{
                                                 '& legend': { display: 'none' },

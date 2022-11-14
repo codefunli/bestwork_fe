@@ -1,6 +1,8 @@
 import SearchIcon from '@mui/icons-material/Search';
 import {
-    Button, Checkbox, Paper,
+    Button,
+    Checkbox,
+    Paper,
     Tab,
     Table,
     TableBody,
@@ -9,7 +11,7 @@ import {
     TableHead,
     TableRow,
     Tabs,
-    TextField
+    TextField,
 } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { useEffect, useState } from 'react';
@@ -22,42 +24,50 @@ type Role = {
     defaultCompanyList: Company[];
     defaultRoleData: any;
     setRoleData: Function;
-}
+};
 
 export default function Role(props: Role) {
     const { defaultCompanyList, defaultRoleData, setRoleData } = props;
 
     const { t } = useTranslation();
-    const [companyList, setCompanyList] = useState<Company[]>((defaultCompanyList && defaultCompanyList.length > 0) ? defaultCompanyList : []);
+    const [companyList, setCompanyList] = useState<Company[]>(
+        defaultCompanyList && defaultCompanyList.length > 0 ? defaultCompanyList : [],
+    );
     const [currentTab, setCurrentTab] = useState(0);
-    const [selectedCompanyId, setSelectedCompanyId] = useState<number>((defaultCompanyList && defaultCompanyList[0]?.id) ? defaultCompanyList[0].id : 0);
-    const [currentCompany, setCurrentCompany] = useState<Company>((defaultCompanyList && defaultCompanyList[0]) ? defaultCompanyList[0] : { id: 0, companyName: '' });
+    const [selectedCompanyId, setSelectedCompanyId] = useState<number>(
+        defaultCompanyList && defaultCompanyList[0]?.id ? defaultCompanyList[0].id : 0,
+    );
+    const [currentCompany, setCurrentCompany] = useState<Company>(
+        defaultCompanyList && defaultCompanyList[0] ? defaultCompanyList[0] : { id: 0, companyName: '' },
+    );
     const [searchKeyword, setSearchKeyword] = useState('');
     const [currentUserAssignList, setCurrentUserAssignList] = useState<User[]>([]);
 
     useEffect(() => {
-        if ((currentCompany && currentCompany.id)) {
+        if (currentCompany && currentCompany.id) {
             getUsersAssignListCreate({
                 companyId: currentCompany.id,
                 projectId: '',
-            }).then(res => {
+            }).then((res) => {
                 if (res && res.data) {
                     setCurrentUserAssignList(res.data);
 
                     setCurrentCompany({
                         ...currentCompany,
-                        userList: res.data
+                        userList: res.data,
                     });
 
                     // If the user assign list of selected company is already exist
-                    const alreadyExistCompany = defaultRoleData.find((company: any) => company.companyId.toString() === selectedCompanyId.toString());
+                    const alreadyExistCompany = defaultRoleData.find(
+                        (company: any) => company.companyId.toString() === selectedCompanyId.toString(),
+                    );
                     if (alreadyExistCompany && alreadyExistCompany.userList) {
                         const tmpRoleList = res.data.map((user: any) => {
                             let willReplaceUser = user;
                             alreadyExistCompany.userList.forEach((existUser: any) => {
                                 if (user.userId === existUser.userId) {
                                     willReplaceUser = existUser;
-                                };
+                                }
                             });
 
                             return willReplaceUser;
@@ -65,9 +75,9 @@ export default function Role(props: Role) {
 
                         setCurrentUserAssignList(tmpRoleList);
                     }
-                };
+                }
             });
-        };
+        }
     }, [selectedCompanyId]);
 
     const handleChange = (event: React.SyntheticEvent, companyId: number) => {
@@ -81,9 +91,11 @@ export default function Role(props: Role) {
         user: User,
         index: number,
         activeAll?: boolean,
-        allStatus?: boolean
+        allStatus?: boolean,
     ) => {
-        let selectedUser: User | {} | undefined = currentCompany.userList ? currentCompany.userList.find(userItem => userItem.userId === user.userId) : {};
+        let selectedUser: User | {} | undefined = currentCompany.userList
+            ? currentCompany.userList.find((userItem) => userItem.userId === user.userId)
+            : {};
         let tempPermission: User | {};
 
         // If select all permissions
@@ -92,15 +104,15 @@ export default function Role(props: Role) {
                 tempPermission = {
                     ...selectedUser,
                     canView: false,
-                    canEdit: false
+                    canEdit: false,
                 };
             } else {
                 tempPermission = {
                     ...selectedUser,
                     canView: true,
-                    canEdit: true
+                    canEdit: true,
                 };
-            };
+            }
         } else {
             tempPermission = {
                 ...selectedUser,
@@ -111,17 +123,17 @@ export default function Role(props: Role) {
                 tempPermission = {
                     ...selectedUser,
                     canView: false,
-                    canEdit: false
-                }
+                    canEdit: false,
+                };
             }
-        };
+        }
 
         // Update permissions (assign list) of selected company
         let permissions: any = currentUserAssignList ? [...currentUserAssignList] : [];
         permissions[index] = tempPermission;
         setCurrentCompany({
             ...currentCompany,
-            userList: permissions
+            userList: permissions,
         });
 
         // Update current permissions (assign list) of selected company
@@ -134,12 +146,12 @@ export default function Role(props: Role) {
             if (permissions[i].canView) {
                 valueExist = true;
                 break;
-            };
+            }
             if (permissions[i].canEdit) {
                 valueExist = true;
                 break;
-            };
-        };
+            }
+        }
 
         let tmpAssignData = JSON.parse(JSON.stringify(defaultRoleData));
         // Index of selected company assign user list in assignData
@@ -152,8 +164,8 @@ export default function Role(props: Role) {
         if (valueExist) {
             tmpAssignData[assignListIndex] = {
                 companyId: currentCompany.id,
-                userList: permissions
-            }
+                userList: permissions,
+            };
             setRoleData(tmpAssignData);
         } else {
             // Else remove assign list of selected company
@@ -164,20 +176,22 @@ export default function Role(props: Role) {
 
     const handleSearch = () => {
         const filterItems = () => {
-            return defaultCompanyList.filter(company => company.companyName.toLowerCase().indexOf(searchKeyword.toLowerCase()) !== -1);
-        }
+            return defaultCompanyList.filter(
+                (company) => company.companyName.toLowerCase().indexOf(searchKeyword.toLowerCase()) !== -1,
+            );
+        };
         setCompanyList(filterItems);
     };
 
     return (
         <div className="role">
             <Box
-                component="form"
+                // component="form"
                 sx={{
                     '& > :not(style)': { m: 1 },
                 }}
-                noValidate
-                autoComplete="off"
+                // noValidate
+                // autoComplete="off"
                 className="content-area"
             >
                 <div className="row">
@@ -190,7 +204,7 @@ export default function Role(props: Role) {
                                     mt: 1,
                                     mb: 1,
                                     '& legend': { display: 'none' },
-                                    '& fieldset': { top: 0 }
+                                    '& fieldset': { top: 0 },
                                 }}
                                 name="keyword"
                                 label=""
@@ -214,18 +228,20 @@ export default function Role(props: Role) {
                                 borderColor: 'divider',
                             }}
                         >
-                            {(companyList && companyList.length > 0) && companyList.map((company, index) => (
-                                <Tab
-                                    key={index}
-                                    label={
-                                        <React.Fragment>
-                                            <div className="custom-tab-item">
-                                                <span>{company.companyName}</span>
-                                            </div>
-                                        </React.Fragment>
-                                    }
-                                />
-                            ))}
+                            {companyList &&
+                                companyList.length > 0 &&
+                                companyList.map((company, index) => (
+                                    <Tab
+                                        key={index}
+                                        label={
+                                            <React.Fragment>
+                                                <div className="custom-tab-item">
+                                                    <span>{company.companyName}</span>
+                                                </div>
+                                            </React.Fragment>
+                                        }
+                                    />
+                                ))}
                         </Tabs>
                     </div>
 
@@ -244,59 +260,49 @@ export default function Role(props: Role) {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {(currentUserAssignList && currentUserAssignList.length > 0) && currentUserAssignList.map((user: User, index: number) => (
-                                            <TableRow
-                                                key={user.userId}
-                                                sx={{
-                                                    '&:last-child td, &:last-child th': { border: 0 },
-                                                }}
-                                            >
-                                                <TableCell component="th" scope="row">
-                                                    {user.userName}
-                                                </TableCell>
-                                                <TableCell align="center">
-                                                    <Checkbox
-                                                        checked={user.canView && user.canEdit}
-                                                        onChange={(e) =>
-                                                            handleChangeCheckbox(
-                                                                e,
-                                                                user,
-                                                                index,
-                                                                true,
-                                                                user.canView && user.canEdit
-                                                            )
-                                                        }
-                                                    />
-                                                </TableCell>
-                                                <TableCell align="center">
-                                                    <Checkbox
-                                                        checked={user.canView}
-                                                        onChange={(e) =>
-                                                            handleChangeCheckbox(
-                                                                e,
-                                                                user,
-                                                                index
-                                                            )
-                                                        }
-                                                        name="canView"
-                                                    />
-                                                </TableCell>
-                                                <TableCell align="center">
-                                                    <Checkbox
-                                                        checked={user.canEdit}
-                                                        onChange={(e) =>
-                                                            handleChangeCheckbox(
-                                                                e,
-                                                                user,
-                                                                index
-                                                            )
-                                                        }
-                                                        name="canEdit"
-                                                        disabled={!user.canView}
-                                                    />
-                                                </TableCell>
-                                            </TableRow>
-                                        ))}
+                                        {currentUserAssignList &&
+                                            currentUserAssignList.length > 0 &&
+                                            currentUserAssignList.map((user: User, index: number) => (
+                                                <TableRow
+                                                    key={user.userId}
+                                                    sx={{
+                                                        '&:last-child td, &:last-child th': { border: 0 },
+                                                    }}
+                                                >
+                                                    <TableCell component="th" scope="row">
+                                                        {user.userName}
+                                                    </TableCell>
+                                                    <TableCell align="center">
+                                                        <Checkbox
+                                                            checked={user.canView && user.canEdit}
+                                                            onChange={(e) =>
+                                                                handleChangeCheckbox(
+                                                                    e,
+                                                                    user,
+                                                                    index,
+                                                                    true,
+                                                                    user.canView && user.canEdit,
+                                                                )
+                                                            }
+                                                        />
+                                                    </TableCell>
+                                                    <TableCell align="center">
+                                                        <Checkbox
+                                                            checked={user.canView}
+                                                            onChange={(e) => handleChangeCheckbox(e, user, index)}
+                                                            name="canView"
+                                                        />
+                                                    </TableCell>
+                                                    <TableCell align="center">
+                                                        <Checkbox
+                                                            checked={user.canEdit}
+                                                            onChange={(e) => handleChangeCheckbox(e, user, index)}
+                                                            name="canEdit"
+                                                            disabled={!user.canView}
+                                                        />
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))}
                                     </TableBody>
                                 </Table>
                             </TableContainer>

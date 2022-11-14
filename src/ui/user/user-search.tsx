@@ -215,7 +215,7 @@ export default function UserSearch() {
                     </div>
                 </Grid>
                 <Grid item xs={12} lg={3} sx={{ mt: 1, mb: 1 }}>
-                    <Card w-full>
+                    <Card w-full="true">
                         <CardHeader
                             avatar={<Avatar aria-label="recipe">SC</Avatar>}
                             title={t('user.search.subtitle')}
@@ -270,7 +270,9 @@ export default function UserSearch() {
                                                     </em>
                                                 </MenuItem>
                                                 {roles.map((role: any) => (
-                                                    <MenuItem value={role.id}>{role.roleName}</MenuItem>
+                                                    <MenuItem key={role.id} value={role.id}>
+                                                        {role.roleName}
+                                                    </MenuItem>
                                                 ))}
                                             </Select>
                                         </FormControl>

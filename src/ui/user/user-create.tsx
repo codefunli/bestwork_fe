@@ -37,7 +37,7 @@ const initialValues: any = {
     uEmail: '',
     uTelNo: '',
     company: '',
-    enabled: 1,
+    enabled: true,
     role: '',
     avatar: '',
 };
@@ -102,7 +102,7 @@ export default function UserAdd() {
         const { name, checked } = e.target;
         setFormValues({
             ...formValues,
-            [name]: checked ? 1 : 0,
+            [name]: checked,
         });
     };
     const handleSubmitForm = () => {
@@ -186,12 +186,12 @@ export default function UserAdd() {
 
                             <CardContent>
                                 <Box
-                                    component="form"
+                                    // component="form"
                                     sx={{
                                         '& > :not(style)': { m: 1 },
                                     }}
-                                    noValidate
-                                    autoComplete="off"
+                                    // noValidate
+                                    // autoComplete="off"
                                 >
                                     <div className="row justify-center m-1">
                                         <div className="col-12 col-sm-6 d-block p-1">
@@ -368,6 +368,7 @@ export default function UserAdd() {
                                                         '& legend': { display: 'none' },
                                                         '& fieldset': { top: 0 },
                                                     }}
+                                                    defaultValue=""
                                                     error={Boolean(errors.company)}
                                                     {...register('company', {
                                                         onChange: (e) => handleInputChange(e),
@@ -381,7 +382,7 @@ export default function UserAdd() {
                                                     {companies &&
                                                         companies.length > 0 &&
                                                         companies.map((company: any) => (
-                                                            <MenuItem value={company.id}>
+                                                            <MenuItem key={company.id} value={company.id}>
                                                                 {company.companyName}
                                                             </MenuItem>
                                                         ))}
@@ -411,12 +412,13 @@ export default function UserAdd() {
                                                         '& legend': { display: 'none' },
                                                         '& fieldset': { top: 0 },
                                                     }}
+                                                    defaultValue=""
                                                     error={Boolean(errors.role)}
                                                     {...register('role', {
                                                         onChange: (e) => handleInputChange(e),
                                                     })}
                                                 >
-                                                    <MenuItem value="" selected={true} disabled>
+                                                    <MenuItem value="" disabled>
                                                         <em style={{ color: '#bdbdbd', margin: '0 auto' }}>
                                                             {t('user.search.selectRole')}
                                                         </em>
@@ -424,7 +426,7 @@ export default function UserAdd() {
                                                     {roles &&
                                                         roles.length > 0 &&
                                                         roles.map((role: any) => (
-                                                            <MenuItem value={role.id} selected={true}>
+                                                            <MenuItem key={role.id} value={role.id}>
                                                                 <em>{role.roleName}</em>
                                                             </MenuItem>
                                                         ))}
@@ -439,8 +441,9 @@ export default function UserAdd() {
                                     </div>
                                     <div className="row justify-center m-1">
                                         <div className="col-12 col-sm-6 d-block p-1">
-                                            <InputLabel htmlFor="enabled">{t('user.info.enabled')}</InputLabel>
+                                            <InputLabel htmlFor="formEnabled">{t('user.info.enabled')}</InputLabel>
                                             <Switch
+                                                id="formEnabled"
                                                 checked={formValues.enabled}
                                                 name="enabled"
                                                 onChange={handleSwitchChange}
