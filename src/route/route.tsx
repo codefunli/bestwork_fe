@@ -1,7 +1,6 @@
 import { lazy } from 'react';
 import { UrlFeApp } from '../core/constants/common';
 import { RouteObject, useRoutes } from 'react-router-dom';
-import AirWayBillList from '../ui/awb/awb-list';
 
 const AuthComponent = lazy(() => import('../components/auth-component'));
 const Login = lazy(() => import('../ui/login/login'));
@@ -23,6 +22,7 @@ const ForgotPassword = lazy(() => import('../ui/forgot-password/forgot-password'
 const ResetPassword = lazy(() => import('../ui/forgot-password/reset-password'));
 const ConstructionSearch = lazy(() => import('../ui/construction/construction-search'));
 const ConstructionRegister = lazy(() => import('../ui/construction/construction-register'));
+const AirWayBillList = lazy(() => import('../ui/awb/awb-list'));
 
 const listRouter: RouteObject[] = [
     {

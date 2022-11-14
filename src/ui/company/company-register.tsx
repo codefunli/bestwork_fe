@@ -215,12 +215,12 @@ export default function CompanyRegister() {
             <form onSubmit={handleSubmitForm}>
                 <Typography
                     variant="h5"
-                    className="mb-4"
+                    className="mb-4 btn disabled text-white bg-light opacity-100 border-customTheme"
                     color="textSecondary"
                     gutterBottom
                     sx={{ textTransform: 'uppercase' }}
                 >
-                    {t(Item.COMPANY.REGISTER_TITLE)}
+                    <div className="particletext">{t(Item.COMPANY.REGISTER_TITLE)}</div>
                     <Divider />
                 </Typography>
                 <Grid container>

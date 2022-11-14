@@ -27,17 +27,19 @@ interface CreateAwbProps {
     isOpen: boolean;
     toggleOpen: Function;
     handleCreateNewAwb: Function;
+    projectId: string;
 }
 
 const initialValues: any = {
-    code: '',
+    projectId: '',
+    aWBcode: '',
     note: '',
     status: 0,
 };
 
 export default function CreateAwb(props: CreateAwbProps) {
     const { t } = useTranslation();
-    const { isOpen, toggleOpen, handleCreateNewAwb } = props;
+    const { isOpen, toggleOpen, handleCreateNewAwb, projectId } = props;
     const [formValues, setFormValues] = useState(initialValues);
     const [status, setStatus] = useState<any>([]);
     const [resForHandleMsg, setResForHandleMsg] = useState<any>();
@@ -47,6 +49,13 @@ export default function CreateAwb(props: CreateAwbProps) {
             if (value && value.status === 'OK' && value.data) setStatus(value.data);
         });
     }, []);
+
+    useEffect(() => {
+        setFormValues({
+            ...formValues,
+            projectId: props.projectId,
+        });
+    }, [props.projectId]);
 
     const {
         register,
@@ -58,6 +67,8 @@ export default function CreateAwb(props: CreateAwbProps) {
     });
 
     const handleSubmitForm = () => {
+        console.log(formValues);
+
         createAirWayBill(formValues)
             .then((res: any) => {
                 setResForHandleMsg({
@@ -130,7 +141,7 @@ export default function CreateAwb(props: CreateAwbProps) {
                 <DialogTitle className="text-uppercase">{t('awb.create.title')}</DialogTitle>
                 <DialogContent>
                     <div>
-                        <InputLabel htmlFor="code" error={Boolean(errors.code)}>
+                        <InputLabel htmlFor="aWBcode" error={Boolean(errors.aWBcode)}>
                             {t('awb.AWBNo')} <span className="input-required">*</span>
                         </InputLabel>
                         <TextField
@@ -143,13 +154,13 @@ export default function CreateAwb(props: CreateAwbProps) {
                                 '& fieldset': { top: 0 },
                             }}
                             required
-                            id="code"
+                            id="aWBcode"
                             label=""
                             placeholder={t('common.placeholder')}
-                            value={formValues.code}
-                            error={Boolean(errors.code)}
-                            helperText={t(errors.code?.message?.toString() as string)}
-                            {...register('code', {
+                            value={formValues.aWBcode}
+                            error={Boolean(errors.aWBcode)}
+                            helperText={t(errors.aWBcode?.message?.toString() as string)}
+                            {...register('aWBcode', {
                                 onChange: (e) => handleInputChange(e),
                             })}
                         />

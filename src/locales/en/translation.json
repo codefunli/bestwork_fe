@@ -155,9 +155,8 @@
         "material": "Material",
         "status": "Status",
         "detail": "Detail",
-        "awb": "AWB",
-        "list": "List",
-        "construction": "Construction"
+        "construction": "Construction",
+        "customsClearance": "Customs Clearance"
     },
     "user": {
         "title": "User Information",
@@ -218,7 +217,8 @@
         "materialStatus": "Add material status",
         "projectDetail": "Add construction progress",
         "addAll": "Add all",
-        "add": "Add"
+        "add": "Add",
+        "remove": "Remove"
     },
     "edit": {
         "title": "Company Edit",
@@ -370,7 +370,7 @@
         "role": "Role"
     },
     "awb": {
-        "title": "Air way bill",
+        "title": "Customs Clearance",
         "commercialInvoice": "Commercial Invoice",
         "packingList": "Packing List",
         "imageBefore": "Image Before",

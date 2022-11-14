@@ -45,8 +45,8 @@ export const UrlFeApp = {
         RESET: '/auth/reset-password',
     },
     AWB: {
-        LIST: '/app/awb/list',
-        LIST_HAS_ID: '/app/awb/list/:id',
+        LIST: '/app/project/customsClearance',
+        LIST_HAS_ID: '/app/project/customsClearance/:id',
     },
     CONSTRUCTION: {
         SEARCH: '/app/construction',

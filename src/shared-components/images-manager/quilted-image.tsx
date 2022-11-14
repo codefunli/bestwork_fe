@@ -50,13 +50,15 @@ export default function QuiltedImage(props: {
                                                 sx={{ padding: 0.5 }}
                                                 className={`card-img-overlay img-item`}
                                                 action={
-                                                    <IconButton
-                                                        aria-label="settings"
-                                                        color="primary"
-                                                        onClick={() => handleAddFile(item)}
-                                                    >
-                                                        <RemoveCircleIcon color="error" />
-                                                    </IconButton>
+                                                    <Tooltip title={t('tooltip.remove')} placement="top">
+                                                        <IconButton
+                                                            aria-label="settings"
+                                                            color="primary"
+                                                            onClick={() => handleAddFile(item)}
+                                                        >
+                                                            <RemoveCircleIcon color="error" />
+                                                        </IconButton>
+                                                    </Tooltip>
                                                 }
                                             />
                                             {renderImage(item, index)}
@@ -81,7 +83,7 @@ export default function QuiltedImage(props: {
                                                         {item.isActive ? (
                                                             <CheckCircleIcon color="primary" className="opacity-100" />
                                                         ) : (
-                                                            <Tooltip title={t('tooltip.add')} placement="left">
+                                                            <Tooltip title={t('tooltip.add')} placement="top">
                                                                 <AddCircleIcon color="primary" />
                                                             </Tooltip>
                                                         )}
@@ -105,7 +107,9 @@ export default function QuiltedImage(props: {
                                                     color="primary"
                                                     onClick={() => handleDeleteImage(index)}
                                                 >
-                                                    <RemoveCircleIcon />
+                                                    <Tooltip title={t('tooltip.remove')} placement="top">
+                                                        <RemoveCircleIcon />
+                                                    </Tooltip>
                                                 </IconButton>
                                             }
                                         />

@@ -19,7 +19,7 @@ import {
     Tab,
     Tabs,
     TextField,
-    Typography
+    Typography,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -31,8 +31,18 @@ import { isArrayEmpty, isObjectEmpty } from '../../core/utils/object-utils';
 import { Company } from '../../models/project-req-dto';
 import { ProjectTypeDTO } from '../../models/project-res-dto';
 import { getAllCompanies } from '../../services/company-service';
-import { getProject, getProjectStatus, getProjectTypes, updateProject, getUsersAssignListUpdate } from '../../services/project-service';
-import { formatDateTimeRes, formatDateTimeReq, formatDateTimeResNoneSuffixes } from '../../core/utils/get-current-datetime';
+import {
+    getProject,
+    getProjectStatus,
+    getProjectTypes,
+    updateProject,
+    getUsersAssignListUpdate,
+} from '../../services/project-service';
+import {
+    formatDateTimeRes,
+    formatDateTimeReq,
+    formatDateTimeResNoneSuffixes,
+} from '../../core/utils/get-current-datetime';
 import ApiAlert from '../../shared-components/alert/api-alert';
 import TabPanel from '../../shared-components/tab-manager/tab-panel';
 import Role from './project-role';
@@ -57,8 +67,8 @@ export default function ProjectRegister() {
     const [formValues, setFormValues] = useState({
         project: {
             ...initialValues.project,
-            startDate: formatDateTimeRes(new Date())
-        }
+            startDate: formatDateTimeRes(new Date()),
+        },
     });
     const [value, setValue] = useState(0);
     const [roleData, setRoleData] = useState<Company[]>([]);
@@ -75,17 +85,17 @@ export default function ProjectRegister() {
                         project: {
                             ...value.data,
                             projectType: value.data.projectType.id,
-                            startDate: formatDateTimeResNoneSuffixes(value.data.startDate)
-                        }
+                            startDate: formatDateTimeResNoneSuffixes(value.data.startDate),
+                        },
                     });
                     reset();
-                };
+                }
             });
 
             getUsersAssignListUpdate({
-                companyId: "",
+                companyId: '',
                 projectId: params.id,
-            }).then(res => {
+            }).then((res) => {
                 const companyIdRoleDataList: any = Object.keys(res.data);
                 const companyValueRoleDataList: any = Object.values(res.data);
 
@@ -95,18 +105,18 @@ export default function ProjectRegister() {
                     if (companyValueRoleDataList[index][0].companyId.toString() === companyId.toString()) {
                         tmpRoleData.push({
                             companyId: companyId,
-                            userList: companyValueRoleDataList[index]
+                            userList: companyValueRoleDataList[index],
                         });
-                    };
+                    }
                 });
 
                 setRoleData(tmpRoleData);
             });
-        };
+        }
     }, [params.id]);
 
     useEffect(() => {
-        getProjectStatus().then(status => {
+        getProjectStatus().then((status) => {
             if (status && status.data) setProjectStatus(status.data);
         });
 
@@ -114,7 +124,7 @@ export default function ProjectRegister() {
             if (type) setProjectType(type);
         });
 
-        getAllCompanies().then(companies => {
+        getAllCompanies().then((companies) => {
             if (companies && companies.data) setCompanyList(companies?.data);
         });
     }, []);
@@ -176,7 +186,7 @@ export default function ProjectRegister() {
             ...formValues,
             project: {
                 ...formValues.project,
-                startDate: formatDateTimeReq(formValues.project.startDate)
+                startDate: formatDateTimeReq(formValues.project.startDate),
             },
         };
 
@@ -186,18 +196,18 @@ export default function ProjectRegister() {
                     return {
                         userId: user.userId,
                         canView: user.canView,
-                        canEdit: user.canEdit
+                        canEdit: user.canEdit,
                     };
                 });
 
                 return {
                     companyId: role.companyId,
-                    userList: reFormatUserList
+                    userList: reFormatUserList,
                 };
             });
 
             req.roleData = reFormatRoleData;
-        };
+        }
 
         await updateProject(req, params.id)
             .then((res) => {
@@ -210,7 +220,7 @@ export default function ProjectRegister() {
                     setTimeout(() => {
                         navigate(UrlFeApp.PROJECT.SEARCH);
                     }, 1000);
-                };
+                }
             })
             .catch(() => {
                 setResForHandleMsg({
@@ -235,8 +245,9 @@ export default function ProjectRegister() {
                                 color="textSecondary"
                                 gutterBottom
                                 sx={{ textTransform: 'uppercase' }}
+                                className="btn disabled text-white bg-light opacity-100 border-customTheme"
                             >
-                                {t('project.registerTitle')}
+                                <div className="particletext">{t('project.editTitle')}</div>
                             </Typography>
                         </div>
                     </div>
@@ -246,16 +257,8 @@ export default function ProjectRegister() {
                         <Grid container direction="row" alignItems="center">
                             <Grid item xs={12}>
                                 <Tabs value={value} onChange={handleChange} aria-label="" className="custom-tab">
-                                    <Tab
-                                        label={t('project.tab.register')}
-                                        tabIndex={0}
-                                        onFocus={() => setValue(0)}
-                                    />
-                                    <Tab
-                                        label={t('project.tab.assign')}
-                                        tabIndex={1}
-                                        onFocus={() => setValue(0)}
-                                    />
+                                    <Tab label={t('project.tab.register')} tabIndex={0} onFocus={() => setValue(0)} />
+                                    <Tab label={t('project.tab.assign')} tabIndex={1} onFocus={() => setValue(0)} />
                                 </Tabs>
 
                                 <div className="custom-tab">
@@ -394,9 +397,13 @@ export default function ProjectRegister() {
                                                                     <MenuItem value="" selected={true} disabled>
                                                                         <em>{t('message.statusLabel')}</em>
                                                                     </MenuItem>
-                                                                    {(projectStatus && projectStatus.length > 0) && projectStatus.map((item: any) => (
-                                                                        <MenuItem value={item.id}>{item.status}</MenuItem>
-                                                                    ))}
+                                                                    {projectStatus &&
+                                                                        projectStatus.length > 0 &&
+                                                                        projectStatus.map((item: any) => (
+                                                                            <MenuItem value={item.id}>
+                                                                                {item.status}
+                                                                            </MenuItem>
+                                                                        ))}
                                                                 </Select>
                                                                 {Boolean(errors.status) && (
                                                                     <FormHelperText id="component-error-text">
@@ -435,9 +442,13 @@ export default function ProjectRegister() {
                                                                     <MenuItem value="" selected={true} disabled>
                                                                         <em>{t('message.typeLabel')}</em>
                                                                     </MenuItem>
-                                                                    {(projectType && projectType.length > 0) && projectType.map((type: ProjectTypeDTO) => (
-                                                                        <MenuItem value={type.id}>{type.name}</MenuItem>
-                                                                    ))}
+                                                                    {projectType &&
+                                                                        projectType.length > 0 &&
+                                                                        projectType.map((type: ProjectTypeDTO) => (
+                                                                            <MenuItem value={type.id}>
+                                                                                {type.name}
+                                                                            </MenuItem>
+                                                                        ))}
                                                                 </Select>
                                                                 {Boolean(errors.projectType) && (
                                                                     <FormHelperText id="component-error-text">
@@ -522,29 +533,33 @@ export default function ProjectRegister() {
                                                                 {t('button.btnBack')}
                                                             </Button>
                                                         </ButtonGroup>
-                                                    </div >
-                                                </Box >
-                                            </CardContent >
-                                        </TabPanel >
-                                    </Card >
-                                </div >
+                                                    </div>
+                                                </Box>
+                                            </CardContent>
+                                        </TabPanel>
+                                    </Card>
+                                </div>
 
                                 <div className="assign-user-tab">
                                     <Card w-full="true">
                                         <TabPanel value={value} index={1}>
                                             <CardContent>
-                                                <Role defaultCompanyList={companyList} defaultRoleData={roleData} setRoleData={setRoleData} />
-                                            </CardContent >
-                                        </TabPanel >
-                                    </Card >
-                                </div >
-                            </Grid >
-                        </Grid >
-                    </form >
-                </Grid >
+                                                <Role
+                                                    defaultCompanyList={companyList}
+                                                    defaultRoleData={roleData}
+                                                    setRoleData={setRoleData}
+                                                />
+                                            </CardContent>
+                                        </TabPanel>
+                                    </Card>
+                                </div>
+                            </Grid>
+                        </Grid>
+                    </form>
+                </Grid>
 
                 <ApiAlert response={resForHandleMsg} />
-            </Grid >
-        </div >
+            </Grid>
+        </div>
     );
 }

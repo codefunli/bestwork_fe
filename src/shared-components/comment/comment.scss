@@ -1,5 +1,6 @@
 .msg-wrapper-left {
     display: flex;
+    padding-left: 15px;
     .msg-content-wrapper {
         padding: 0.5rem;
         word-wrap: break-word;
@@ -30,7 +31,7 @@
 }
 
 .msg-height-15rem {
-    height: 15rem;
+    max-height: 15rem;
 }
 
 .msg-wrapper-scroll {

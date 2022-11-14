@@ -19,7 +19,7 @@ import {
     Tabs,
     TextField,
     Typography,
-    CardHeader
+    CardHeader,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -55,8 +55,8 @@ export default function ProjectRegister() {
     const [formValues, setFormValues] = useState({
         project: {
             ...initialValues.project,
-            startDate: formatDateTimeRes(new Date())
-        }
+            startDate: formatDateTimeRes(new Date()),
+        },
     });
     const [value, setValue] = useState(0);
     const [roleData, setRoleData] = useState<Company[]>([]);
@@ -179,7 +179,7 @@ export default function ProjectRegister() {
                     setTimeout(() => {
                         navigate(UrlFeApp.PROJECT.SEARCH);
                     }, 1000);
-                };
+                }
             })
             .catch(() => {
                 setResForHandleMsg({
@@ -208,8 +208,9 @@ export default function ProjectRegister() {
                                 color="textSecondary"
                                 gutterBottom
                                 sx={{ textTransform: 'uppercase' }}
+                                className="btn disabled text-white bg-light opacity-100 border-customTheme"
                             >
-                                {t('project.registerTitle')}
+                                <div className="particletext">{t('project.registerTitle')}</div>
                             </Typography>
                         </div>
                     </div>

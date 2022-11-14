@@ -155,7 +155,9 @@ export default function UserInfo() {
             <div className="row">
                 <div className="col-sm-12 col-md-6">
                     <Typography variant="h5">
-                        <span className="font-weight-bold text-uppercase">{t('user.title')}</span>
+                        <span className="font-weight-bold text-uppercase btn disabled text-white bg-light opacity-100 border-customTheme">
+                            <div className="particletext">{t('user.title')}</div>
+                        </span>
                     </Typography>
                 </div>
             </div>

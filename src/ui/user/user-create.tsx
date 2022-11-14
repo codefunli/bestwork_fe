@@ -72,7 +72,7 @@ export default function UserAdd() {
     }, [params]);
 
     useEffect(() => {
-        getCompaniesByUser().then(companies => {
+        getCompaniesByUser().then((companies) => {
             if (companies) setCompanies(companies);
         });
 
@@ -116,7 +116,7 @@ export default function UserAdd() {
                     setTimeout(() => {
                         navigate(UrlFeApp.USER.SEARCH);
                     }, 1000);
-                };
+                }
             })
             .catch((err) => {
                 setResForHandleMsg({
@@ -147,8 +147,13 @@ export default function UserAdd() {
         <div className="user-info">
             <div className="row">
                 <div className="col-sm-12 col-md-6">
-                    <Typography variant="h5">
-                        <span className="font-weight-bold text-uppercase">{t('user.create.title')}</span>
+                    <Typography
+                        variant="h5"
+                        className="btn disabled text-white bg-light opacity-100 border-customTheme"
+                    >
+                        <span className="font-weight-bold text-uppercase">
+                            <div className="particletext">{t('user.create.title')}</div>
+                        </span>
                     </Typography>
                 </div>
             </div>
@@ -371,19 +376,21 @@ export default function UserAdd() {
                                                             {t('user.search.selectCompanyName')}
                                                         </em>
                                                     </MenuItem>
-                                                    {companies && companies.length > 0 && companies.map((company: any) => (
-                                                        <MenuItem value={company.id}>
-                                                            {company.companyName}
-                                                        </MenuItem>
-                                                    ))}
-                                                </Select >
+                                                    {companies &&
+                                                        companies.length > 0 &&
+                                                        companies.map((company: any) => (
+                                                            <MenuItem value={company.id}>
+                                                                {company.companyName}
+                                                            </MenuItem>
+                                                        ))}
+                                                </Select>
                                                 {Boolean(errors.company) && (
                                                     <FormHelperText id="component-error-text">
                                                         {errors?.company?.message as string}
                                                     </FormHelperText>
                                                 )}
-                                            </FormControl >
-                                        </div >
+                                            </FormControl>
+                                        </div>
                                         <div className="col-12 col-sm-6 d-block p-1">
                                             <InputLabel htmlFor="role" error={Boolean(errors.role)}>
                                                 {t('user.info.role')} <span className="input-required">*</span>
@@ -412,11 +419,13 @@ export default function UserAdd() {
                                                             {t('user.search.selectRole')}
                                                         </em>
                                                     </MenuItem>
-                                                    {roles && roles.length > 0 && roles.map((role: any) => (
-                                                        <MenuItem value={role.id} selected={true}>
-                                                            <em>{role.roleName}</em>
-                                                        </MenuItem>
-                                                    ))}
+                                                    {roles &&
+                                                        roles.length > 0 &&
+                                                        roles.map((role: any) => (
+                                                            <MenuItem value={role.id} selected={true}>
+                                                                <em>{role.roleName}</em>
+                                                            </MenuItem>
+                                                        ))}
                                                 </Select>
                                                 {Boolean(errors.role) && (
                                                     <FormHelperText id="component-error-text">
@@ -425,7 +434,7 @@ export default function UserAdd() {
                                                 )}
                                             </FormControl>
                                         </div>
-                                    </div >
+                                    </div>
                                     <div className="row justify-center m-1">
                                         <div className="col-12 col-sm-6 d-block p-1">
                                             <InputLabel htmlFor="enabled">{t('user.info.enabled')}</InputLabel>
@@ -455,14 +464,14 @@ export default function UserAdd() {
                                             </Button>
                                         </ButtonGroup>
                                     </div>
-                                </Box >
-                            </CardContent >
-                        </Card >
-                    </Grid >
-                </Grid >
-            </form >
+                                </Box>
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                </Grid>
+            </form>
 
             <ApiAlert response={resForHandleMsg} />
-        </div >
+        </div>
     );
 }

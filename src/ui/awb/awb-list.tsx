@@ -15,6 +15,7 @@ import { getAwbStatus } from '../../services/awb-service';
 import CreateAwb from './awb-create';
 import { formatDateTimeRes, formatDateTimeResList } from '../../core/utils/get-current-datetime';
 import '../../App.scss';
+import { useParams } from 'react-router-dom';
 
 const initAwb = {
     projectId: 0,
@@ -385,6 +386,12 @@ export default function AirWayBillList() {
     const [customsDeclaration, setCustomsDeclaration] = useState(initialCustomsDeclaration);
     const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);
     const toggleCreateModal = (value: boolean) => setIsOpenCreateModal(value);
+    const [projectId, setProjectId] = useState('');
+    const params = useParams();
+
+    useEffect(() => {
+        if (params.id) setProjectId(params.id);
+    }, [params.id]);
 
     const handleChangeAwb = (newValue: number) => {
         setCurrentAwb(newValue);
@@ -556,7 +563,7 @@ export default function AirWayBillList() {
                                                     variant="contained"
                                                     onClick={() => toggleCreateModal(true)}
                                                 >
-                                                    {t('awb.createAwb')}
+                                                    {t('button.btnCreate')}
                                                 </Button>
                                                 <Button
                                                     onClick={() => handleDeleteAwb()}
@@ -573,7 +580,7 @@ export default function AirWayBillList() {
                         </Card>
                     </Grid>
                     <Grid item xs={12} md={12} lg={12} sx={{ mt: 1, mb: 1 }} className="content-awb">
-                        <Card sx={{ width: '100%' }} className="progress-drawer" style={{ height: 600 }}>
+                        <Card sx={{ width: '100%' }} className="progress-drawer" style={{ maxHeight: 600 }}>
                             <Grid container direction="row" spacing={0}>
                                 <Grid item xs={12} className="bg-customTheme">
                                     <Typography
@@ -713,7 +720,12 @@ export default function AirWayBillList() {
                     </Grid>
                 </Grid>
             </Grid>
-            <CreateAwb isOpen={isOpenCreateModal} toggleOpen={toggleCreateModal} handleCreateNewAwb={handleCreateAwb} />
+            <CreateAwb
+                isOpen={isOpenCreateModal}
+                toggleOpen={toggleCreateModal}
+                handleCreateNewAwb={handleCreateAwb}
+                projectId={projectId}
+            />
         </div>
     );
 }

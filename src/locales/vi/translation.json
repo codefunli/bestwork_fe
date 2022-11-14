@@ -155,9 +155,8 @@
         "material": "Vật liệu",
         "status": "Trạng thái",
         "detail": "Chi tiết",
-        "awb": "Mã vận chuyển",
-        "list": "Danh sách",
-        "construction": "Công trình"
+        "construction": "Công trình",
+        "customsClearance": "Hồ sơ thông quan"
     },
     "user": {
         "title": "Thông tin người dùng",
@@ -218,7 +217,8 @@
         "materialStatus": "Thêm trạng thái vật tư",
         "projectDetail": "Thêm tiến độ thi công",
         "addAll": "Thêm tất cả",
-        "add": "Thêm"
+        "add": "Thêm",
+        "remove": "Gỡ"
     },
     "edit": {
         "title": "Chỉnh sửa công ty",
@@ -370,7 +370,7 @@
         "role": "Quyền hạn"
     },
     "awb": {
-        "title": "Mã vận chuyển",
+        "title": "Hồ sơ thông quan",
         "commercialInvoice": "Hóa đơn thương mại",
         "packingList": "Chi tiết đóng gói",
         "imageBefore": "Hình ảnh trước",
@@ -380,7 +380,7 @@
         "createConstruction": "Tạo công trình",
         "createAwb": "Tạo mã vận chuyển",
         "AWBNo": "Mã vận chuyển",
-        "customsClearanceDocuments": "Hồ sơ thi công",
+        "customsClearanceDocuments": "Hồ sơ thông quan",
         "create": {
             "title": "Thêm air waybill",
             "note": "Ghi chú"

@@ -160,12 +160,12 @@ export default function CompanyEdit() {
             <form>
                 <Typography
                     variant="h5"
-                    className="mb-4"
+                    className="mb-4 btn disabled text-white bg-light opacity-100 border-customTheme"
                     color="textSecondary"
                     gutterBottom
                     sx={{ textTransform: 'uppercase' }}
                 >
-                    {t('edit.title')}
+                    <div className="particletext">{t('edit.title')}</div>
                     <Divider />
                 </Typography>
                 <Grid container>

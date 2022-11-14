@@ -142,7 +142,7 @@ export default function CommentEl(props: CommentProps) {
     };
 
     return (
-        <div className="mb-2">
+        <div className="mb-2 border shadow ">
             <div
                 className={` msg-wrapper-scroll pt-3 ${isEnabled && arrMsgIn.length > 0 ? 'msg-height-15rem' : ''}`}
                 id="comment-box"
