@@ -40,13 +40,13 @@ export const UrlFeApp = {
     ROLE: {
         INDEX: '/app/role',
     },
-    SCHEDULE: {
-        MATERIAL_STATUS: '/app/material/status',
-        MATERIAL_STATUS_HAS_ID: '/app/material/status/:id',
-    },
     FORGOT_PASSWORD: {
         FORGOT: '/auth/forgot-password',
         RESET: '/auth/reset-password',
+    },
+    AWB: {
+        LIST: '/app/awb/list',
+        LIST_HAS_ID: '/app/awb/list/:id',
     },
 };
 
@@ -101,11 +101,9 @@ export const UrlServer = {
         FORGOT_PASSWORD: `${PREFIX_SERVER_URL}/auth/forgot-password`,
         RESET_PASSWORD: `${PREFIX_SERVER_URL}/auth/reset-password`,
     },
-    MATERIAL: {
-        POST_STATUS: `${PREFIX_SERVER_URL}/post/create`,
-        GET_POST_BY_PROJECT_ID: `${PREFIX_SERVER_URL}/post`,
-        POST_COMMENT: `${PREFIX_SERVER_URL}/post`,
-        UPDATE_POST: `${PREFIX_SERVER_URL}/post`,
+    AWB: {
+        GET_STATUS: `${PREFIX_SERVER_URL}/airway-bill/status`,
+        CREATE_AWB: `${PREFIX_SERVER_URL}/airway-bill/create`
     },
 };
 
@@ -125,6 +123,7 @@ export const FieldConstants = {
     DESCRIPTION: 'Description',
     NEW_PASSWORD: 'New password',
     CONFIRM_PASSWORD: 'Confirm password',
+    AIR_WAY_BILL_NO: 'AWB no',
 };
 
 export const ConfirmConstants = {
@@ -267,4 +266,37 @@ export const BreadcrumbReplaceList = ['with'];
 export const NameElConstants = {
     USER_NAME: 'userName',
     PASSWORD: 'password',
+};
+export const renderImage = (data: any, index: any) => {
+    if (data.file.includes('pdf;'))
+        return (
+            <img
+                loading="lazy"
+                className="imgTag"
+                src={
+                    'https://play-lh.googleusercontent.com/9XKD5S7rwQ6FiPXSyp9SzLXfIue88ntf9sJ9K250IuHTL7pmn2-ZB0sngAX4A2Bw4w'
+                }
+                key={index}
+            />
+        );
+    if (data.file.includes('image/')) return <img loading="lazy" className="imgTag" src={data.file} key={index} />;
+    if (data.file.includes('excel;'))
+        return (
+            <img
+                loading="lazy"
+                className="imgTag"
+                src={'https://cdn1.iconfinder.com/data/icons/famous-brand-apps/100/_-04-512.png'}
+                key={index}
+            />
+        );
+    return (
+        <img
+            loading="lazy"
+            className="imgTag"
+            src={
+                'https://static.vecteezy.com/system/resources/previews/002/303/215/original/modern-flat-design-of-unknown-format-file-icon-for-web-free-vector.jpg'
+            }
+            key={index}
+        />
+    );
 };

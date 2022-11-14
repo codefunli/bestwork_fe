@@ -8,15 +8,17 @@ interface props {
     callbackFunc: Function;
     imgData?: any;
     isEditUpload?: boolean;
+    callBackClearEvent?: Function;
 }
 
 export default function MultipleFileUpload(props: props) {
-    const { clearPreview, callbackFunc, imgData, isEditUpload } = props;
+    const { clearPreview, callbackFunc, imgData, isEditUpload, callBackClearEvent } = props;
     const [images, setImages] = useState<string[]>([]);
     const [imagePreviews, setImagePreviews] = useState<string[]>(imgData && imgData.length > 0 ? imgData : []);
     const [isEdit, setIsEdit] = useState(false);
 
     const onChangeImage = (event: any) => {
+        if (callBackClearEvent) callBackClearEvent(event);
         setImages([...event.target.files]);
     };
 

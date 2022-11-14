@@ -143,7 +143,7 @@ export default function ProjectSearch() {
 
     const handleAddMaterialStatus = (e: any, id: string) => {
         e.preventDefault();
-        nativgate(`${UrlFeApp.SCHEDULE.MATERIAL_STATUS}/${id}`);
+        nativgate(`${UrlFeApp.AWB.LIST}/${id}`);
     };
 
     const handleAddProjectDetail = (e: any, id: string) => {
@@ -197,8 +197,14 @@ export default function ProjectSearch() {
             <Grid item xs={12} sx={{ mt: 1 }}>
                 <div className="row">
                     <div className="col-sm-12 col-md-6 text-start d-none d-lg-block">
-                        <Typography variant="h5" color="textSecondary" gutterBottom sx={{ textTransform: 'uppercase' }}>
-                            {t('project.title')}
+                        <Typography
+                            variant="h5"
+                            color="textSecondary"
+                            gutterBottom
+                            sx={{ textTransform: 'uppercase' }}
+                            className="btn disabled text-white bg-light opacity-100 border-customTheme"
+                        >
+                            <div className="particletext">{t('project.title')}</div>
                         </Typography>
                     </div>
                     <div className="col-sm-12 col-md-6 text-end d-none d-lg-block">

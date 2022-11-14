@@ -697,7 +697,7 @@ export default function Role() {
             });
     };
 
-    const handleSaveChange = () => { };
+    const handleSaveChange = () => {};
 
     const handleResetCurrentRoleChange = () => {
         setCurrentRole(JSON.parse(JSON.stringify(initRoleList[currentTab])));
@@ -752,8 +752,9 @@ export default function Role() {
                                 color="textSecondary"
                                 gutterBottom
                                 sx={{ textTransform: 'uppercase' }}
+                                className="btn disabled text-white bg-light opacity-100 border-customTheme"
                             >
-                                {t('role.title')}
+                                <div className="particletext">{t('role.title')}</div>
                             </Typography>
                         </div>
                         <div className="col-sm-12 col-md-6 text-end d-none d-lg-block">
@@ -809,7 +810,7 @@ export default function Role() {
                                                 value={searchKeyword}
                                                 onChange={(e) => setSearchKeyword(e.target.value)}
                                             />
-                                            <Button variant="contained" onClick={handleSearch} color="info">
+                                            <Button variant="contained" onClick={handleSearch} color="primary">
                                                 <SearchIcon />
                                             </Button>
                                         </div>
@@ -903,9 +904,9 @@ export default function Role() {
                                                                                 index,
                                                                                 true,
                                                                                 row.view &&
-                                                                                row.create &&
-                                                                                row.edit &&
-                                                                                row.delete,
+                                                                                    row.create &&
+                                                                                    row.edit &&
+                                                                                    row.delete,
                                                                             )
                                                                         }
                                                                         name="all"

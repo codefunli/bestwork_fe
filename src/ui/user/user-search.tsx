@@ -183,8 +183,9 @@ export default function UserSearch() {
                                 color="textSecondary"
                                 gutterBottom
                                 sx={{ textTransform: 'uppercase' }}
+                                className="btn disabled text-white bg-light opacity-100 border-customTheme"
                             >
-                                {t('user.search.title')}
+                                <div className="particletext">{t('user.search.title')}</div>
                             </Typography>
                         </div>
                         <div className="col-sm-12 col-md-6 text-end d-none d-lg-block">

@@ -8,15 +8,15 @@ import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 export const renderIconLeftBar = (iconNm: string) => {
     switch (iconNm) {
         case Item.ICON_NM.ICON_DASHBOARD_NM_BAR:
-            return <DashboardIcon />;
+            return <DashboardIcon color="primary" />;
         case Item.ICON_NM.ICON_COM_NM_BAR:
-            return <ApartmentIcon />;
+            return <ApartmentIcon color="primary" />;
         case Item.ICON_NM.ICON_USER_NM_BAR:
-            return <PeopleIcon />;
+            return <PeopleIcon color="primary" />;
         case Item.ICON_NM.ICON_PRJ_NM_BAR:
-            return <SourceIcon />;
+            return <SourceIcon color="primary" />;
         case Item.ICON_NM.ICON_ROLE_NM_BAR:
-            return <AssignmentIndIcon />;
+            return <AssignmentIndIcon color="primary" />;
         default:
             break;
     }

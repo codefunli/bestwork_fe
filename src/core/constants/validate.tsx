@@ -212,3 +212,7 @@ export const validateChangePassword = yup.object({
         .string()
         .oneOf([yup.ref('newPassword'), null], getMessage(ERROR_MSG.E01_010, [FieldConstants.CONFIRM_PASSWORD])),
 });
+
+export const validateCreateAwbForm = yup.object({
+    code: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.AIR_WAY_BILL_NO])),
+});

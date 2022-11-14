@@ -186,8 +186,14 @@ export default function CompanySearch() {
             <Grid item xs={12} sx={{ mt: 1 }}>
                 <div className="row">
                     <div className="col-sm-12 col-md-6 text-start d-none d-lg-block">
-                        <Typography variant="h5" color="textSecondary" gutterBottom sx={{ textTransform: 'uppercase' }}>
-                            {t(Item.COMPANY.TITLE)}
+                        <Typography
+                            variant="h5"
+                            color="textSecondary"
+                            gutterBottom
+                            sx={{ textTransform: 'uppercase' }}
+                            className="btn disabled text-white bg-light opacity-100 border-customTheme"
+                        >
+                            <div className="particletext">{t(Item.COMPANY.TITLE)}</div>
                         </Typography>
                     </div>
                     <div className="col-sm-12 col-md-6 text-end d-none d-lg-block">
