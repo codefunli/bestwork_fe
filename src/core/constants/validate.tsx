@@ -214,7 +214,7 @@ export const validateChangePassword = yup.object({
 });
 
 export const validateCreateAwbForm = yup.object({
-    aWBcode: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.AIR_WAY_BILL_NO])),
+    airWayBillCode: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.AIR_WAY_BILL_NO])),
 });
 
 export const validateConstruction = yup.object({

@@ -11,7 +11,7 @@ import QuiltedImage from '../../shared-components/images-manager/quilted-image';
 import TabPanel from '../../shared-components/tab-manager/tab-panel';
 import Chip from '@mui/material/Chip';
 import './awb.scss';
-import { getAwbStatus } from '../../services/awb-service';
+import { getAirWayBillList, getAwbStatus } from '../../services/awb-service';
 import CreateAwb from './awb-create';
 import { formatDateTimeRes, formatDateTimeResList } from '../../core/utils/get-current-datetime';
 import '../../App.scss';
@@ -377,7 +377,7 @@ const initialCustomsDeclaration = {
 
 export default function AirWayBillList() {
     const { t } = useTranslation();
-    const [awbListData, setEwbListData] = useState<any>(initAwb);
+    const [awbListData, setEwbListData] = useState<any>([]);
     const [pdfState, setPdfState] = useState<any>(initAwb.awbList[0].commercialInvoice);
     const [imageState, setImageState] = useState<any>(initAwb.awbList[0].imageBefore);
     const [currentAwb, setCurrentAwb] = useState(0);
@@ -391,6 +391,17 @@ export default function AirWayBillList() {
 
     useEffect(() => {
         if (params.id) setProjectId(params.id);
+    }, [params.id]);
+
+    const fetchData = () => {
+        if (params.id)
+            getAirWayBillList(params.id).then((value: any) => {
+                if (value && value.data && value.data.length > 0) setEwbListData(value.data);
+            });
+    };
+
+    useEffect(() => {
+        fetchData();
     }, [params.id]);
 
     const handleChangeAwb = (newValue: number) => {
@@ -425,7 +436,9 @@ export default function AirWayBillList() {
 
     const handleDeleteAwb = () => {};
 
-    const handleCreateAwb = () => {};
+    const handleCreateAwb = () => {
+        fetchData();
+    };
 
     return (
         <div className="awb-list">
@@ -459,124 +472,140 @@ export default function AirWayBillList() {
                     </div>
                 </Grid>
                 <Grid item xs={12} md={12} lg={6} xl={6} sx={{ mt: 1, mb: 1 }} className="search-awb">
-                    <Grid item xs={12} md={12} lg={12} sx={{ mt: 1, mb: 1 }} className="search-awb">
-                        <Card w-full="true" style={{ height: 400 }}>
-                            <CardContent>
-                                <Box
-                                    component="form"
-                                    sx={{
-                                        '& > :not(style)': { m: 1 },
-                                    }}
-                                    noValidate
-                                    autoComplete="off"
-                                >
-                                    <div className="row">
-                                        <div className="col-xs-12">
-                                            <div className="search-area mb-3">
-                                                <TextField
-                                                    size="small"
-                                                    fullWidth
-                                                    sx={{
-                                                        mt: 1,
-                                                        mb: 1,
-                                                        '& legend': { display: 'none' },
-                                                        '& fieldset': { top: 0 },
-                                                    }}
-                                                    name="keyword"
-                                                    label=""
-                                                    placeholder={t('common.placeholder')}
-                                                    value={searchKeyword}
-                                                    onChange={(e) => setSearchKeyword(e.target.value)}
-                                                />
-                                                <Button variant="contained" onClick={handleSearch} color="primary">
-                                                    <SearchIcon />
-                                                </Button>
-                                            </div>
-                                            <Tabs
-                                                orientation="vertical"
-                                                value={currentAwb}
-                                                aria-label=""
-                                                sx={{
-                                                    borderRight: 1,
-                                                    borderColor: 'divider',
-                                                    height: 200,
-                                                }}
-                                            >
-                                                {awbListData.awbList.map((awb: any, index: any) => (
-                                                    <span
-                                                        style={{
-                                                            backgroundColor: `${
-                                                                currentAwb === index ? '#1976d22a' : ''
-                                                            }`,
-                                                            minWidth: '450px',
+                    <Grid item xs={12} md={12} lg={12} sx={{ mb: 3 }} className="search-awb">
+                        <Card w-full="true" style={{ maxHeight: 600 }}>
+                            <Grid container direction="row" spacing={0}>
+                                <Grid item xs={12} className="bg-customTheme">
+                                    <Typography
+                                        color="white"
+                                        variant="h6"
+                                        gutterBottom
+                                        sx={{ textTransform: 'uppercase', textAlign: 'center', mt: 2 }}
+                                    >
+                                        Air Way Bill
+                                    </Typography>
+                                </Grid>
+                                <CardContent className="m-auto">
+                                    <Box
+                                        // component="form"
+                                        sx={{
+                                            '& > :not(style)': { m: 1 },
+                                        }}
+                                        // noValidate
+                                        // autoComplete="off"
+                                    >
+                                        <div className="row">
+                                            <div className="col-xs-12">
+                                                <div className="search-area mb-3">
+                                                    <TextField
+                                                        size="small"
+                                                        fullWidth
+                                                        sx={{
+                                                            mt: 1,
+                                                            mb: 1,
+                                                            '& legend': { display: 'none' },
+                                                            '& fieldset': { top: 0 },
                                                         }}
-                                                        className="btn"
-                                                        onClick={() => handleChangeAwb(index)}
-                                                    >
-                                                        <Tab
-                                                            key={index}
-                                                            label={awb.name}
-                                                            className="awb-tab"
-                                                            onFocus={() => handleChangeAwb(index)}
-                                                            style={{ width: '25%' }}
-                                                        />
-                                                        <div
-                                                            className="float-end pt-2 m-auto"
-                                                            style={{ width: '20%' }}
-                                                            onClick={() => handleChangeAwb(index)}
-                                                        >
-                                                            <Chip
-                                                                label={awb.status.status}
-                                                                color="secondary"
-                                                                size="small"
+                                                        name="keyword"
+                                                        label=""
+                                                        placeholder={t('common.placeholder')}
+                                                        value={searchKeyword}
+                                                        onChange={(e) => setSearchKeyword(e.target.value)}
+                                                    />
+                                                    <Button variant="contained" onClick={handleSearch} color="primary">
+                                                        <SearchIcon />
+                                                    </Button>
+                                                </div>
+                                                <Tabs
+                                                    orientation="vertical"
+                                                    value={currentAwb}
+                                                    aria-label=""
+                                                    sx={{
+                                                        borderRight: 1,
+                                                        borderColor: 'divider',
+                                                        height: 200,
+                                                        '& .css-jpln7h-MuiTabs-scroller': {
+                                                            overflow: 'auto !important',
+                                                        },
+                                                    }}
+                                                >
+                                                    {awbListData &&
+                                                        awbListData.map((awb: any, index: any) => (
+                                                            <span
+                                                                style={{
+                                                                    backgroundColor: `${
+                                                                        currentAwb === index ? '#1976d22a' : ''
+                                                                    }`,
+                                                                    minWidth: '450px',
+                                                                }}
                                                                 className="btn"
-                                                            />
-                                                        </div>
-                                                        <div className="float-end" style={{ width: '35%' }}>
-                                                            <Tab
-                                                                key={index}
-                                                                label={formatDateTimeResList(awb.createDate)}
-                                                                className="awb-tab"
-                                                                onFocus={() => handleChangeAwb(index)}
-                                                            />
-                                                        </div>
-                                                        <div className="float-end" style={{ width: '20%' }}>
-                                                            <Tab
-                                                                key={index}
-                                                                label={awb.createBy}
-                                                                className="awb-tab"
-                                                                onFocus={() => handleChangeAwb(index)}
-                                                            />
-                                                        </div>
-                                                    </span>
-                                                ))}
-                                            </Tabs>
-                                        </div>
-                                        <div className="text-center justify-center mt-4">
-                                            <ButtonGroup
-                                                disableElevation
-                                                variant="contained"
-                                                aria-label="Disabled elevation buttons"
-                                            >
-                                                <Button
-                                                    sx={{ mr: 1 }}
+                                                                onClick={() => handleChangeAwb(index)}
+                                                            >
+                                                                <Tab
+                                                                    key={index}
+                                                                    label={awb.code}
+                                                                    className="awb-tab"
+                                                                    onFocus={() => handleChangeAwb(index)}
+                                                                    style={{ width: '25%' }}
+                                                                />
+                                                                <div
+                                                                    className="float-end pt-2 m-auto"
+                                                                    style={{ width: '20%' }}
+                                                                    onClick={() => handleChangeAwb(index)}
+                                                                >
+                                                                    <Chip
+                                                                        label={awb.status}
+                                                                        color="secondary"
+                                                                        size="small"
+                                                                        className="btn"
+                                                                    />
+                                                                </div>
+                                                                <div className="float-end" style={{ width: '35%' }}>
+                                                                    <Tab
+                                                                        key={index}
+                                                                        label={formatDateTimeResList(awb.createDate)}
+                                                                        className="awb-tab"
+                                                                        onFocus={() => handleChangeAwb(index)}
+                                                                    />
+                                                                </div>
+                                                                <div className="float-end" style={{ width: '20%' }}>
+                                                                    <Tab
+                                                                        key={index}
+                                                                        label={awb.createBy}
+                                                                        className="awb-tab"
+                                                                        onFocus={() => handleChangeAwb(index)}
+                                                                    />
+                                                                </div>
+                                                            </span>
+                                                        ))}
+                                                </Tabs>
+                                            </div>
+                                            <div className="text-center justify-center mt-4">
+                                                <ButtonGroup
+                                                    disableElevation
                                                     variant="contained"
-                                                    onClick={() => toggleCreateModal(true)}
+                                                    aria-label="Disabled elevation buttons"
                                                 >
-                                                    {t('button.btnCreate')}
-                                                </Button>
-                                                <Button
-                                                    onClick={() => handleDeleteAwb()}
-                                                    variant="outlined"
-                                                    color="error"
-                                                >
-                                                    {t('button.btnDelete')}
-                                                </Button>
-                                            </ButtonGroup>
+                                                    <Button
+                                                        sx={{ mr: 1 }}
+                                                        variant="contained"
+                                                        onClick={() => toggleCreateModal(true)}
+                                                    >
+                                                        {t('button.btnCreate')}
+                                                    </Button>
+                                                    <Button
+                                                        onClick={() => handleDeleteAwb()}
+                                                        variant="outlined"
+                                                        color="error"
+                                                    >
+                                                        {t('button.btnDelete')}
+                                                    </Button>
+                                                </ButtonGroup>
+                                            </div>
                                         </div>
-                                    </div>
-                                </Box>
-                            </CardContent>
+                                    </Box>
+                                </CardContent>
+                            </Grid>
                         </Card>
                     </Grid>
                     <Grid item xs={12} md={12} lg={12} sx={{ mt: 1, mb: 1 }} className="content-awb">
@@ -623,7 +652,7 @@ export default function AirWayBillList() {
                                 <Grid item xs={12} className="item">
                                     <div className="item-header">{t('awb.packingList')}</div>
                                 </Grid>
-                                <Grid item xs={12} sm={12} className="text-center" sx={{ mt: 1, mb: 1 }}>
+                                <Grid item xs={12} sm={12} className="text-center" sx={{ mt: 3, mb: 3 }}>
                                     <ButtonGroup
                                         disableElevation
                                         variant="contained"
@@ -671,8 +700,8 @@ export default function AirWayBillList() {
                                 />
                             </Tabs>
                             <Grid xs={12} className="position-relative">
-                                <div>
-                                    <Card w-full="true" className="">
+                                <div className="w-100">
+                                    <Card w-full="true" className="w-100">
                                         <TabPanel value={value} index={0}>
                                             <CardContent>
                                                 <Box>

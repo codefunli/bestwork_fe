@@ -32,7 +32,7 @@ interface CreateAwbProps {
 
 const initialValues: any = {
     projectId: '',
-    aWBcode: '',
+    airWayBillCode: '',
     note: '',
     status: 0,
 };
@@ -67,8 +67,6 @@ export default function CreateAwb(props: CreateAwbProps) {
     });
 
     const handleSubmitForm = () => {
-        console.log(formValues);
-
         createAirWayBill(formValues)
             .then((res: any) => {
                 setResForHandleMsg({
@@ -78,6 +76,7 @@ export default function CreateAwb(props: CreateAwbProps) {
 
                 if (res.status === StatusCode.OK) {
                     setTimeout(() => {
+                        handleCreateNewAwb();
                         toggleOpen(false);
                         setFormValues(initialValues);
                         reset();
@@ -141,7 +140,7 @@ export default function CreateAwb(props: CreateAwbProps) {
                 <DialogTitle className="text-uppercase">{t('awb.create.title')}</DialogTitle>
                 <DialogContent>
                     <div>
-                        <InputLabel htmlFor="aWBcode" error={Boolean(errors.aWBcode)}>
+                        <InputLabel htmlFor="airWayBillCode" error={Boolean(errors.airWayBillCode)}>
                             {t('awb.AWBNo')} <span className="input-required">*</span>
                         </InputLabel>
                         <TextField
@@ -154,13 +153,13 @@ export default function CreateAwb(props: CreateAwbProps) {
                                 '& fieldset': { top: 0 },
                             }}
                             required
-                            id="aWBcode"
+                            id="airWayBillCode"
                             label=""
                             placeholder={t('common.placeholder')}
-                            value={formValues.aWBcode}
-                            error={Boolean(errors.aWBcode)}
-                            helperText={t(errors.aWBcode?.message?.toString() as string)}
-                            {...register('aWBcode', {
+                            value={formValues.airWayBillCode}
+                            error={Boolean(errors.airWayBillCode)}
+                            helperText={t(errors.airWayBillCode?.message?.toString() as string)}
+                            {...register('airWayBillCode', {
                                 onChange: (e) => handleInputChange(e),
                             })}
                         />
