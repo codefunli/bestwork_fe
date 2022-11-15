@@ -371,6 +371,7 @@
     },
     "awb": {
         "title": "Hồ sơ thông quan",
+        "awbTitle": "Mã vận chuyển",
         "commercialInvoice": "Hóa đơn thương mại",
         "packingList": "Chi tiết đóng gói",
         "imageBefore": "Hình ảnh trước",
