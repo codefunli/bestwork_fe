@@ -212,7 +212,7 @@ export default function Role(props: Role) {
                                 value={searchKeyword}
                                 onChange={(e) => setSearchKeyword(e.target.value)}
                             />
-                            <Button variant="contained" onClick={handleSearch} color="info">
+                            <Button variant="contained" onClick={handleSearch} color="primary">
                                 <SearchIcon />
                             </Button>
                         </div>
