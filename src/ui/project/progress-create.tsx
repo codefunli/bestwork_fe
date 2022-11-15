@@ -24,6 +24,7 @@ import { ProjectProgressDTO } from '../../models/project-res-dto';
 import { createProgress, getProgressStatus } from '../../services/project-service';
 import ApiAlert from '../../shared-components/alert/api-alert';
 import MultipleFileUpload from '../../shared-components/file-upload/multiple-file-upload';
+import HandleProjectStatus from '../../shared-components/status-handle/project-status-handle';
 
 const progressInitValues: ProjectProgressDTO = {
     projectId: '',
@@ -50,7 +51,7 @@ const ProgressCreate = (props: Props) => {
     const [progressData, setProgressData] = useState({
         ...progressInitValues,
         startDate: formatDateTimeRes(new Date()),
-        endDate: formatDateTimeRes(new Date())
+        endDate: formatDateTimeRes(new Date()),
     });
     const [isClearPreview, setIsClearPreview] = useState(false);
     const [resForHandleMsg, setResForHandleMsg] = useState<any>();
@@ -127,7 +128,7 @@ const ProgressCreate = (props: Props) => {
                     setTimeout(() => {
                         callBackFn();
                     }, 500);
-                };
+                }
             })
             .catch(() => {
                 setResForHandleMsg({
@@ -154,7 +155,9 @@ const ProgressCreate = (props: Props) => {
                             </Typography>
                         </Grid>
                         <Grid item xs={12} className="item">
-                            <div className="item-header">{t('project.progress.progressTitle')}</div>
+                            <InputLabel className="item-header" htmlFor="progressTitle">
+                                {t('project.progress.progressTitle')}
+                            </InputLabel>
                             <div className="content">
                                 <TextField
                                     size="small"
@@ -179,13 +182,17 @@ const ProgressCreate = (props: Props) => {
                             </div>
                         </Grid>
                         <Grid item xs={12} className="item">
-                            <div className="item-header">{t('project.progress.progressImg')}</div>
+                            <InputLabel className="item-header" htmlFor="progressImg">
+                                {t('project.progress.progressImg')}
+                            </InputLabel>
                             <div className="content">
                                 <MultipleFileUpload clearPreview={isClearPreview} callbackFunc={handleImageChange} />
                             </div>
                         </Grid>
                         <Grid item xs={12} className="item">
-                            <div className="item-header">{t('project.progress.date')}</div>
+                            <InputLabel className="item-header" htmlFor="date">
+                                {t('project.progress.date')}
+                            </InputLabel>
                             <div className="content">
                                 <InputLabel htmlFor="outlined-adornment-amount" error={Boolean(errors.startDate)}>
                                     {t('project.progress.startDate')} <span className="input-required">*</span>
@@ -238,7 +245,9 @@ const ProgressCreate = (props: Props) => {
                             </div>
                         </Grid>
                         <Grid item xs={12} className="item">
-                            <div className="item-header">{t('project.progress.status')}</div>
+                            <InputLabel className="item-header" htmlFor="status">
+                                {t('project.progress.status')}
+                            </InputLabel>
                             <div className="content">
                                 <FormControl
                                     size="small"
@@ -262,13 +271,18 @@ const ProgressCreate = (props: Props) => {
                                         })}
                                     >
                                         <MenuItem value="" selected={true} disabled>
-                                            <em>{t('message.statusLabel')}</em>
+                                            <em className="color-label-select-box">{t('message.statusLabel')}</em>
                                         </MenuItem>
                                         {progressStatus &&
                                             progressStatus.length > 0 &&
                                             progressStatus.map((status: any) => (
                                                 <MenuItem value={status.id} key={status.id}>
-                                                    <em>{status.status}</em>
+                                                    {/* <em>{status.status}</em> */}
+                                                    <HandleProjectStatus
+                                                        isSearch={true}
+                                                        statusList={progressStatus}
+                                                        statusId={status.id.toString()}
+                                                    />
                                                 </MenuItem>
                                             ))}
                                     </Select>
@@ -283,7 +297,9 @@ const ProgressCreate = (props: Props) => {
                             </div>
                         </Grid>
                         <Grid item xs={12} className="item">
-                            <div className="item-header">{t('project.progress.report')}</div>
+                            <InputLabel className="item-header" htmlFor="report">
+                                {t('project.progress.report')}
+                            </InputLabel>
                             <div className="content">
                                 <TextField
                                     size="small"
@@ -307,7 +323,9 @@ const ProgressCreate = (props: Props) => {
                             </div>
                         </Grid>
                         <Grid item xs={12} className="item">
-                            <div className="item-header">{t('project.progress.note')}</div>
+                            <InputLabel className="item-header" htmlFor="note">
+                                {t('project.progress.note')}
+                            </InputLabel>
                             <div className="content">
                                 <TextField
                                     size="small"
@@ -335,7 +353,7 @@ const ProgressCreate = (props: Props) => {
                                 <Button
                                     variant="contained"
                                     color="primary"
-                                    sx={{ ml: 1 }}
+                                    sx={{ mr: 1 }}
                                     disabled={isSubmitting}
                                     onClick={handleSubmit(handleSubmitForm)}
                                 >
