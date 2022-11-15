@@ -223,8 +223,8 @@ const initAwb = {
             ],
         },
         {
-            awbId: 1,
-            name: 'Air ALM LM 205',
+            awbId: 0,
+            name: 'Air ALM LM 119',
             description: 'Description',
             createDate: new Date().toISOString(),
             createBy: 'admin',
@@ -234,9 +234,96 @@ const initAwb = {
             },
             commercialInvoice: [
                 {
-                    postId: 4,
-                    description: 'commercialInvoice1',
-                    files: [],
+                    postId: 0,
+                    description: 'commercialInvoice',
+                    files: [
+                        {
+                            id: 55,
+                            name: 'vat-tu.pdf',
+                            file: 'data:application/pdf;base64',
+                            isActive: false,
+                        },
+                        {
+                            id: 66,
+                            name: 'du-an.xls',
+                            file: 'data:application/vnd.ms-excel;base64',
+                            isActive: true,
+                        },
+                    ],
+                    isOpenComment: false,
+                    comment: [
+                        {
+                            id: '',
+                            commentUser: {
+                                id: 0,
+                                name: 'Quách Tĩnh',
+                                avatar: '',
+                            },
+                            comment: '',
+                            dateTime: '',
+                            isLastSub: false,
+                            subComment: {},
+                        },
+                    ],
+                    postUser: {
+                        id: '0',
+                        name: 'Đông Tà',
+                    },
+                },
+                {
+                    postId: 1,
+                    description: 'commercialInvoice',
+                    files: [
+                        {
+                            id: 55,
+                            name: 'vat-tu.pdf',
+                            file: 'data:application/pdf;base64',
+                            isActive: false,
+                        },
+                        {
+                            id: 66,
+                            name: 'du-an.xls',
+                            file: 'data:application/vnd.ms-excel;base64',
+                            isActive: true,
+                        },
+                    ],
+                    isOpenComment: false,
+                    comment: [
+                        {
+                            id: '',
+                            commentUser: {
+                                id: 0,
+                                name: 'Quách Tĩnh',
+                                avatar: '',
+                            },
+                            comment: '',
+                            dateTime: '',
+                            isLastSub: false,
+                            subComment: {},
+                        },
+                    ],
+                    postUser: {
+                        id: '0',
+                        name: 'Đông Tà',
+                    },
+                },
+                {
+                    postId: 2,
+                    description: 'commercialInvoice',
+                    files: [
+                        {
+                            id: 55,
+                            name: 'vat-tu.pdf',
+                            file: 'data:application/pdf;base64',
+                            isActive: false,
+                        },
+                        {
+                            id: 66,
+                            name: 'du-an.xls',
+                            file: 'data:application/vnd.ms-excel;base64',
+                            isActive: true,
+                        },
+                    ],
                     isOpenComment: false,
                     comment: [
                         {
@@ -260,8 +347,8 @@ const initAwb = {
             ],
             packingList: [
                 {
-                    postId: 5,
-                    description: 'packingList1',
+                    postId: 1,
+                    description: 'packingList',
                     files: [],
                     isOpenComment: false,
                     comment: [
@@ -286,8 +373,8 @@ const initAwb = {
             ],
             imageBefore: [
                 {
-                    postId: 6,
-                    description: 'imageBefore1',
+                    postId: 2,
+                    description: 'imageBefore',
                     images: [],
                     isOpenComment: false,
                     comment: [
@@ -312,8 +399,8 @@ const initAwb = {
             ],
             imageAfter: [
                 {
-                    postId: 7,
-                    description: 'imageAfter1',
+                    postId: 3,
+                    description: 'imageAfter',
                     images: [],
                     isOpenComment: false,
                     comment: [
@@ -343,6 +430,12 @@ const initAwb = {
 const initialCustomsDeclaration = {
     awbId: 'Air ALM LM 119',
     commercialInvoice: [
+        {
+            id: 66,
+            name: 'du-an.xls',
+            file: 'data:application/vnd.ms-excel;base64',
+            isActive: true,
+        },
         {
             id: 66,
             name: 'du-an.xls',
@@ -456,131 +549,155 @@ export default function AirWayBillList() {
                                 {t('awb.createConstruction')}
                             </Button>
                         </div>
+                        <div className="col-sm-12 text-start d-block d-lg-none">
+                            <Button
+                                className="btn-create"
+                                variant="contained"
+                                color="primary"
+                                sx={{ textTransform: 'uppercase' }}
+                                onClick={() => {
+                                    alert('Do something...');
+                                }}
+                            >
+                                {t('awb.createConstruction')}
+                            </Button>
+                        </div>
                     </div>
                 </Grid>
-                <Grid item xs={12} md={12} lg={6} xl={6} sx={{ mt: 1, mb: 1 }} className="search-awb">
-                    <Grid item xs={12} md={12} lg={12} sx={{ mt: 1, mb: 1 }} className="search-awb">
-                        <Card w-full="true" style={{ height: 400 }}>
-                            <CardContent>
-                                <Box
-                                    component="form"
-                                    sx={{
-                                        '& > :not(style)': { m: 1 },
-                                    }}
-                                    noValidate
-                                    autoComplete="off"
-                                >
-                                    <div className="row">
-                                        <div className="col-xs-12">
-                                            <div className="search-area mb-3">
-                                                <TextField
-                                                    size="small"
-                                                    fullWidth
-                                                    sx={{
-                                                        mt: 1,
-                                                        mb: 1,
-                                                        '& legend': { display: 'none' },
-                                                        '& fieldset': { top: 0 },
-                                                    }}
-                                                    name="keyword"
-                                                    label=""
-                                                    placeholder={t('common.placeholder')}
-                                                    value={searchKeyword}
-                                                    onChange={(e) => setSearchKeyword(e.target.value)}
-                                                />
-                                                <Button variant="contained" onClick={handleSearch} color="primary">
-                                                    <SearchIcon />
-                                                </Button>
-                                            </div>
-                                            <Tabs
-                                                orientation="vertical"
-                                                value={currentAwb}
-                                                aria-label=""
-                                                sx={{
-                                                    borderRight: 1,
-                                                    borderColor: 'divider',
-                                                    height: 200,
-                                                }}
-                                            >
-                                                {awbListData.awbList.map((awb: any, index: any) => (
-                                                    <span
-                                                        style={{
-                                                            backgroundColor: `${
-                                                                currentAwb === index ? '#1976d22a' : ''
-                                                            }`,
-                                                            minWidth: '450px',
+                <Grid item xs={12} md={12} lg={7} xl={6} sx={{ mt: 1, mb: 1 }} className="search-awb">
+                    <Grid item xs={12} md={12} lg={12} sx={{ mb: 3 }} className="search-awb">
+                        <Card w-full="true" style={{ maxHeight: 600 }}>
+                            <Grid container direction="row" spacing={0}>
+                                <Grid item xs={12} className="bg-customTheme">
+                                    <Typography
+                                        color="white"
+                                        variant="h6"
+                                        gutterBottom
+                                        sx={{ textTransform: 'uppercase', textAlign: 'center', mt: 2 }}
+                                    >
+                                        {t('awb.awbTitle')}
+                                    </Typography>
+                                </Grid>
+                            </Grid>
+                            <Grid item xs={12} className="item">
+                                <CardContent>
+                                    <Box
+                                        // component="form"
+                                        sx={{
+                                            '& > :not(style)': { m: 1 },
+                                        }}
+                                        // noValidate
+                                        // autoComplete="off"
+                                    >
+                                        <div className="row">
+                                            <div className="col-xs-12">
+                                                <div className="search-area mb-3">
+                                                    <TextField
+                                                        size="small"
+                                                        fullWidth
+                                                        sx={{
+                                                            mt: 1,
+                                                            mb: 1,
+                                                            '& legend': { display: 'none' },
+                                                            '& fieldset': { top: 0 },
                                                         }}
-                                                        className="btn"
-                                                        onClick={() => handleChangeAwb(index)}
-                                                    >
-                                                        <Tab
-                                                            key={index}
-                                                            label={awb.name}
-                                                            className="awb-tab"
-                                                            onFocus={() => handleChangeAwb(index)}
-                                                            style={{ width: '25%' }}
-                                                        />
-                                                        <div
-                                                            className="float-end pt-2 m-auto"
-                                                            style={{ width: '20%' }}
+                                                        name="keyword"
+                                                        label=""
+                                                        placeholder={t('common.placeholder')}
+                                                        value={searchKeyword}
+                                                        onChange={(e) => setSearchKeyword(e.target.value)}
+                                                    />
+                                                    <Button variant="contained" onClick={handleSearch} color="primary">
+                                                        <SearchIcon />
+                                                    </Button>
+                                                </div>
+                                                <Tabs
+                                                    orientation="vertical"
+                                                    value={currentAwb}
+                                                    aria-label=""
+                                                    sx={{
+                                                        borderRight: 1,
+                                                        borderColor: 'divider',
+                                                        maxHeight: 320,
+                                                        '& .MuiTabs-scroller': { overflow: 'auto !important' },
+                                                    }}
+                                                >
+                                                    {awbListData.awbList.map((awb: any, index: any) => (
+                                                        <span
+                                                            style={{
+                                                                backgroundColor: `${
+                                                                    currentAwb === index ? '#1976d22a' : ''
+                                                                }`,
+                                                                minWidth: '450px',
+                                                            }}
+                                                            className="btn"
                                                             onClick={() => handleChangeAwb(index)}
                                                         >
-                                                            <Chip
-                                                                label={awb.status.status}
-                                                                color="secondary"
-                                                                size="small"
-                                                                className="btn"
-                                                            />
-                                                        </div>
-                                                        <div className="float-end" style={{ width: '35%' }}>
                                                             <Tab
                                                                 key={index}
-                                                                label={formatDateTimeResList(awb.createDate)}
+                                                                label={awb.name}
                                                                 className="awb-tab"
-                                                                onFocus={() => handleChangeAwb(index)}
+                                                                style={{ width: '25%' }}
                                                             />
-                                                        </div>
-                                                        <div className="float-end" style={{ width: '20%' }}>
-                                                            <Tab
-                                                                key={index}
-                                                                label={awb.createBy}
-                                                                className="awb-tab"
-                                                                onFocus={() => handleChangeAwb(index)}
-                                                            />
-                                                        </div>
-                                                    </span>
-                                                ))}
-                                            </Tabs>
-                                        </div>
-                                        <div className="text-center justify-center mt-4">
-                                            <ButtonGroup
-                                                disableElevation
-                                                variant="contained"
-                                                aria-label="Disabled elevation buttons"
-                                            >
-                                                <Button
-                                                    sx={{ mr: 1 }}
+                                                            <div
+                                                                className="float-end pt-2 m-auto"
+                                                                style={{ width: '20%' }}
+                                                            >
+                                                                <Chip
+                                                                    label={awb.status.status}
+                                                                    color="secondary"
+                                                                    size="small"
+                                                                    className="btn"
+                                                                />
+                                                            </div>
+                                                            <div className="float-end" style={{ width: '35%' }}>
+                                                                <Tab
+                                                                    key={index}
+                                                                    label={formatDateTimeResList(awb.createDate)}
+                                                                    className="awb-tab"
+                                                                />
+                                                            </div>
+                                                            <div className="float-end" style={{ width: '20%' }}>
+                                                                <Tab
+                                                                    key={index}
+                                                                    label={awb.createBy}
+                                                                    className="awb-tab"
+                                                                />
+                                                            </div>
+                                                        </span>
+                                                    ))}
+                                                </Tabs>
+                                            </div>
+                                            <div className="text-center justify-center mt-4">
+                                                <ButtonGroup
+                                                    disableElevation
                                                     variant="contained"
-                                                    onClick={() => toggleCreateModal(true)}
+                                                    aria-label="Disabled elevation buttons"
                                                 >
-                                                    {t('button.btnCreate')}
-                                                </Button>
-                                                <Button
-                                                    onClick={() => handleDeleteAwb()}
-                                                    variant="outlined"
-                                                    color="error"
-                                                >
-                                                    {t('button.btnDelete')}
-                                                </Button>
-                                            </ButtonGroup>
+                                                    <Button
+                                                        sx={{ mr: 1 }}
+                                                        variant="contained"
+                                                        onClick={() => toggleCreateModal(true)}
+                                                    >
+                                                        {t('button.btnCreate')}
+                                                    </Button>
+                                                    <Button
+                                                        onClick={() => handleDeleteAwb()}
+                                                        variant="outlined"
+                                                        color="error"
+                                                    >
+                                                        {t('button.btnDelete')}
+                                                    </Button>
+                                                </ButtonGroup>
+                                            </div>
                                         </div>
-                                    </div>
-                                </Box>
-                            </CardContent>
+                                    </Box>
+                                </CardContent>
+                            </Grid>
                         </Card>
                     </Grid>
                     <Grid item xs={12} md={12} lg={12} sx={{ mt: 1, mb: 1 }} className="content-awb">
-                        <Card sx={{ width: '100%' }} className="progress-drawer" style={{ maxHeight: 600 }}>
+                        <Card sx={{ width: '100%' }} className="progress-drawer" style={{ maxHeight: 800 }}>
                             <Grid container direction="row" spacing={0}>
                                 <Grid item xs={12} className="bg-customTheme">
                                     <Typography
@@ -601,9 +718,9 @@ export default function AirWayBillList() {
                                 <Grid item xs={12} className="item">
                                     <div className="item-header">{t('awb.commercialInvoice')}</div>
                                     <div
-                                        className="content"
+                                        className="content pt-3"
                                         style={{
-                                            height: 180,
+                                            height: 230,
                                             overflowX: 'auto',
                                             display: 'inline-block',
                                             width: '100%',
@@ -623,7 +740,7 @@ export default function AirWayBillList() {
                                 <Grid item xs={12} className="item">
                                     <div className="item-header">{t('awb.packingList')}</div>
                                 </Grid>
-                                <Grid item xs={12} sm={12} className="text-center" sx={{ mt: 1, mb: 1 }}>
+                                <Grid item xs={12} sm={12} className="text-center" sx={{ mt: 1, mb: 1, p: 2 }}>
                                     <ButtonGroup
                                         disableElevation
                                         variant="contained"
@@ -644,8 +761,7 @@ export default function AirWayBillList() {
                         </Card>
                     </Grid>
                 </Grid>
-
-                <Grid item xs={12} md={12} lg={6} xl={6} sx={{ mt: 1, mb: 1 }} className="content-awb">
+                <Grid item xs={12} md={12} lg={5} xl={6} sx={{ mt: 1, mb: 1 }} className="content-awb">
                     <Grid container direction="row" alignItems="center">
                         <Grid item xs={12}>
                             <Tabs value={value} aria-label="">

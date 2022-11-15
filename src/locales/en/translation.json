@@ -371,6 +371,7 @@
     },
     "awb": {
         "title": "Customs Clearance",
+        "awbTitle": "Air Way Bill",
         "commercialInvoice": "Commercial Invoice",
         "packingList": "Packing List",
         "imageBefore": "Image Before",
@@ -379,7 +380,7 @@
         "uploadImage": "Upload Image",
         "createConstruction": "Create Construction",
         "createAwb": "Create Air WayBill",
-        "AWBNo": "Air waybill",
+        "AWBNo": "Air way bill",
         "customsClearanceDocuments": "Customs Clearance Documents",
         "create": {
             "title": "Create air waybill",

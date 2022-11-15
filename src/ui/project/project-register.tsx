@@ -35,6 +35,7 @@ import { ProjectTypeDTO } from '../../models/project-res-dto';
 import { getAllCompanies } from '../../services/company-service';
 import { createProject, getProjectStatus, getProjectTypes } from '../../services/project-service';
 import ApiAlert from '../../shared-components/alert/api-alert';
+import HandleProjectStatus from '../../shared-components/status-handle/project-status-handle';
 import TabPanel from '../../shared-components/tab-manager/tab-panel';
 import Role from './project-role';
 
@@ -43,7 +44,7 @@ const initialValues: any = {
         projectName: '',
         projectType: '',
         description: '',
-        startDate: '',
+        startDate: formatDateTimeRes(new Date()),
         notificationFlag: true,
         isPaid: false,
         status: '',
@@ -56,7 +57,6 @@ export default function ProjectRegister() {
     const [formValues, setFormValues] = useState({
         project: {
             ...initialValues.project,
-            startDate: formatDateTimeRes(new Date()),
         },
     });
     const [value, setValue] = useState(0);
@@ -370,8 +370,16 @@ export default function ProjectRegister() {
                                                                     {projectStatus &&
                                                                         projectStatus.length > 0 &&
                                                                         projectStatus.map((item: any) => (
-                                                                            <MenuItem key={item.id} value={item.id}>
-                                                                                {item.status}
+                                                                            <MenuItem
+                                                                                key={item.id}
+                                                                                value={item.id}
+                                                                                className="text-center"
+                                                                            >
+                                                                                <HandleProjectStatus
+                                                                                    isSearch={true}
+                                                                                    statusList={projectStatus}
+                                                                                    statusId={item.id.toString()}
+                                                                                />
                                                                             </MenuItem>
                                                                         ))}
                                                                 </Select>
