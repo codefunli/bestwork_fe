@@ -12,7 +12,7 @@ import {
     Paper,
     Tooltip,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Comment } from '../../core/types/base';
@@ -20,42 +20,23 @@ import CommentEl from '../comment/comment';
 import ImageManager from '../images-manager/image-manager';
 import FileUploadModal from '../modal/file-upload-modal';
 import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove';
+import { CommercialInvoiceContext } from '../../ui/awb/awb-list';
 
 const initialValue = {
     description: '',
-    files: [],
-    projectId: '',
+    file: [],
     isOpenComment: false,
-    comment: [],
-    postUser: {},
-    ewbId: '',
 };
 
 export default function FileManagement(props: any) {
-    const { data } = props;
+    const { callBackFn } = props;
     const [isOpenModal, setIsOpenModal] = useState(false);
-    const [filesData, setFilesData] = useState<any>(data);
+    const [filesData, setFilesData] = useState<any>([]);
     const [comment, setComment] = useState<Comment[]>([]);
     const [content, setContent] = useState(initialValue);
     const params = useParams();
     const { t } = useTranslation();
-
-    useEffect(() => {
-        setFilesData(data);
-    }, [data]);
-
-    useEffect(() => {
-        fetchData();
-    }, [params.id]);
-
-    const fetchData = () => {
-        if (params.id) {
-            setContent({
-                ...content,
-                projectId: params.id,
-            });
-        }
-    };
+    const commercialInvoice = useContext(CommercialInvoiceContext);
 
     const enableComment = (data: any) => {
         const convertData = filesData.map((value: any) => {
@@ -70,16 +51,15 @@ export default function FileManagement(props: any) {
 
     const closeModal = () => {
         setIsOpenModal(false);
-        fetchData();
     };
 
     const openModal = () => {
         setIsOpenModal(true);
     };
 
-    const alertOkFunc = () => {
+    const alertOkFunc = (fileData: any) => {
+        callBackFn(fileData);
         setIsOpenModal(false);
-        fetchData();
     };
 
     useEffect(() => {
@@ -113,9 +93,9 @@ export default function FileManagement(props: any) {
                     </Paper>
                 </Grid>
             </Grid>
-            {filesData &&
-                filesData.length > 0 &&
-                filesData.map((data: any) => (
+            {commercialInvoice &&
+                commercialInvoice.length > 0 &&
+                commercialInvoice.map((data: any) => (
                     <Grid
                         key={data.id}
                         container
@@ -135,8 +115,8 @@ export default function FileManagement(props: any) {
                                 >
                                     <CardHeader
                                         avatar={<Avatar aria-label="recipe">MS</Avatar>}
-                                        title={data.postUser.name}
-                                        subheader={Date()}
+                                        title={data.createBy}
+                                        subheader={data.createDate}
                                         action={
                                             <Tooltip title={t('tooltip.addAll')} placement="left">
                                                 <IconButton color="primary" size="large">
@@ -146,9 +126,8 @@ export default function FileManagement(props: any) {
                                         }
                                     />
                                     <CardContent>
-                                        <h3>{data.eqBill}</h3>
                                         <p>{data.description}</p>
-                                        <ImageManager images={data.files} isFile={true} />
+                                        {/* <ImageManager images={data.fileStorages} isFile={true} /> */}
                                     </CardContent>
                                     <CardActions>
                                         <Button size="small" onClick={() => enableComment(data)}>

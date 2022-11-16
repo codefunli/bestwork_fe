@@ -109,6 +109,9 @@ export const UrlServer = {
     AWB: {
         GET_STATUS: `${PREFIX_SERVER_URL}/airway-bill/status`,
         CREATE_AWB: `${PREFIX_SERVER_URL}/airway-bill/create`,
+        GET_AWB_BY_PROJECT_ID: `${PREFIX_SERVER_URL}/airway-bill/list/by`,
+        UPDATE_INVOICE: `${PREFIX_SERVER_URL}/invoices/update-invoice`,
+        GET_ALL_INVOICE: `${PREFIX_SERVER_URL}/invoices/list/by`,
     },
 };
 
@@ -335,4 +338,33 @@ export const renderImage = (data: any, index: any) => {
             key={index}
         />
     );
+};
+
+export const renderFile = (data: any, index: any) => {
+    switch (data.type) {
+        case 'application/pdf':
+            return (
+                <img
+                    loading="lazy"
+                    className="imgTag"
+                    src={
+                        'https://play-lh.googleusercontent.com/9XKD5S7rwQ6FiPXSyp9SzLXfIue88ntf9sJ9K250IuHTL7pmn2-ZB0sngAX4A2Bw4w'
+                    }
+                    key={index}
+                />
+            );
+        case 'application/vnd.ms-excel':
+            return (
+                <img
+                    loading="lazy"
+                    className="imgTag"
+                    src={'https://cdn1.iconfinder.com/data/icons/famous-brand-apps/100/_-04-512.png'}
+                    key={index}
+                />
+            );
+        case 'image/jpeg' || 'image/png':
+            return <img loading="lazy" className="imgTag" src={URL.createObjectURL(data)} key={index} />;
+        default:
+            return <img loading="lazy" className="imgTag" src={URL.createObjectURL(data)} key={index} />;
+    }
 };

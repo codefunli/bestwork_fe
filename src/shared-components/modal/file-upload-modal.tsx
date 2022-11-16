@@ -15,8 +15,7 @@ import { forwardRef, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { getUserInfo } from '../../core/redux/user-slice';
-import UploadFile from '../file-management/upload-file';
-
+import UploadMultipartFile from '../file-management/upload-multipartfile';
 const Transition = forwardRef(function Transition(
     props: TransitionProps & {
         children: React.ReactElement<any, any>;
@@ -29,12 +28,9 @@ const Transition = forwardRef(function Transition(
 interface AlertDialogSlideProps {
     title: string;
     content: {
-        projectId: string;
         description: string;
-        files: any;
+        file: any;
         isOpenComment: boolean;
-        postUser: any;
-        ewbId: string;
     };
     isOpen: boolean;
     closeFunc: Function;
@@ -42,53 +38,33 @@ interface AlertDialogSlideProps {
 }
 const initialDataImg = {
     description: '',
-    files: [],
-    projectId: '',
+    file: [],
     isOpenComment: false,
-    postUser: {},
-    ewbId: '',
 };
 
 export default function FileUploadModal(props: AlertDialogSlideProps) {
     const { title, content, isOpen, closeFunc, okFunc } = props;
     const [open, setOpen] = useState(false);
-    const [imgData, setImgData] = useState(initialDataImg);
+    const [fileData, setFileData] = useState(initialDataImg);
     const { t } = useTranslation();
     const userInfo = useSelector(getUserInfo);
     const [eventImage, setEventImage] = useState<any>();
 
-    useEffect(() => {
-        if (isOpen)
-            setImgData({
-                ...content,
-                postUser: {
-                    id: userInfo.id,
-                    name: userInfo.userName,
-                },
-            });
-    }, [isOpen]);
-
     const clearEventImage = () => {
-        eventImage.target.value = '';
+        if (eventImage && eventImage.target && eventImage.target.value) eventImage.target.value = '';
     };
 
     const handleOkFunc = () => {
-        // postMaterialStatus(imgData).then((data: any) => {
-        //     setOpen(false);
-        //     okFunc();
-        // });
-        localStorage.setItem('imgData', JSON.stringify(imgData));
         setOpen(false);
-        okFunc();
+        okFunc(fileData);
         clearEventImage();
-
-        setImgData(content);
+        setFileData(content);
     };
 
     const handleClose = () => {
         setOpen(false);
         closeFunc();
-        setImgData(content);
+        setFileData(content);
         clearEventImage();
     };
 
@@ -99,16 +75,16 @@ export default function FileUploadModal(props: AlertDialogSlideProps) {
     }, [isOpen]);
 
     const onChangeImage = (data: any) => {
-        setImgData({
-            ...imgData,
-            files: data,
+        setFileData({
+            ...fileData,
+            file: data,
         });
     };
 
     const handleInputChange = (event: any) => {
         const { name, value } = event.target;
-        setImgData({
-            ...imgData,
+        setFileData({
+            ...fileData,
             [name]: value,
         });
     };
@@ -150,7 +126,7 @@ export default function FileUploadModal(props: AlertDialogSlideProps) {
                                         fullWidth
                                         multiline
                                         rows={3}
-                                        value={imgData.description}
+                                        value={fileData.description}
                                         sx={{
                                             mt: 1,
                                             mb: 1,
@@ -165,7 +141,7 @@ export default function FileUploadModal(props: AlertDialogSlideProps) {
                                 </div>
                             </Grid>
                             <Grid item xs={12} lg={12}>
-                                <UploadFile
+                                <UploadMultipartFile
                                     clearPreview={open}
                                     callbackFunc={onChangeImage}
                                     callBackClearEvent={handleClearEvent}

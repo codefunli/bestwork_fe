@@ -1,431 +1,22 @@
-import { CheckBox } from '@mui/icons-material';
 import DownloadIcon from '@mui/icons-material/Download';
 import SearchIcon from '@mui/icons-material/Search';
 import { Button, ButtonGroup, Card, CardContent, Grid, Tab, Tabs, TextField, Typography } from '@mui/material';
+import Chip from '@mui/material/Chip';
 import { Box } from '@mui/system';
-import { useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
+import '../../App.scss';
+import { StatusCode, UrlServer } from '../../core/constants/common';
+import { formatDateTimeResList } from '../../core/utils/get-current-datetime';
+import { getAirWayBillByProjectId, getAllCommercialInvoice, uploadCommercialInvoice } from '../../services/awb-service';
+import ApiAlert from '../../shared-components/alert/api-alert';
 import FileManagement from '../../shared-components/awb-management/file-management';
 import ImageManagement from '../../shared-components/awb-management/image-management';
 import QuiltedImage from '../../shared-components/images-manager/quilted-image';
 import TabPanel from '../../shared-components/tab-manager/tab-panel';
-import Chip from '@mui/material/Chip';
-import './awb.scss';
-import { getAwbStatus } from '../../services/awb-service';
 import CreateAwb from './awb-create';
-import { formatDateTimeRes, formatDateTimeResList } from '../../core/utils/get-current-datetime';
-import '../../App.scss';
-import { useParams } from 'react-router-dom';
-
-const initAwb = {
-    projectId: 0,
-    awbList: [
-        {
-            awbId: 0,
-            name: 'Air ALM LM 119',
-            description: 'Description',
-            createDate: new Date().toISOString(),
-            createBy: 'admin',
-            status: {
-                id: 0,
-                status: 'In progress',
-            },
-            commercialInvoice: [
-                {
-                    postId: 0,
-                    description: 'commercialInvoice',
-                    files: [
-                        {
-                            id: 55,
-                            name: 'vat-tu.pdf',
-                            file: 'data:application/pdf;base64',
-                            isActive: false,
-                        },
-                        {
-                            id: 66,
-                            name: 'du-an.xls',
-                            file: 'data:application/vnd.ms-excel;base64',
-                            isActive: true,
-                        },
-                    ],
-                    isOpenComment: false,
-                    comment: [
-                        {
-                            id: '',
-                            commentUser: {
-                                id: 0,
-                                name: 'Quách Tĩnh',
-                                avatar: '',
-                            },
-                            comment: '',
-                            dateTime: '',
-                            isLastSub: false,
-                            subComment: {},
-                        },
-                    ],
-                    postUser: {
-                        id: '0',
-                        name: 'Đông Tà',
-                    },
-                },
-                {
-                    postId: 1,
-                    description: 'commercialInvoice',
-                    files: [
-                        {
-                            id: 55,
-                            name: 'vat-tu.pdf',
-                            file: 'data:application/pdf;base64',
-                            isActive: false,
-                        },
-                        {
-                            id: 66,
-                            name: 'du-an.xls',
-                            file: 'data:application/vnd.ms-excel;base64',
-                            isActive: true,
-                        },
-                    ],
-                    isOpenComment: false,
-                    comment: [
-                        {
-                            id: '',
-                            commentUser: {
-                                id: 0,
-                                name: 'Quách Tĩnh',
-                                avatar: '',
-                            },
-                            comment: '',
-                            dateTime: '',
-                            isLastSub: false,
-                            subComment: {},
-                        },
-                    ],
-                    postUser: {
-                        id: '0',
-                        name: 'Đông Tà',
-                    },
-                },
-                {
-                    postId: 2,
-                    description: 'commercialInvoice',
-                    files: [
-                        {
-                            id: 55,
-                            name: 'vat-tu.pdf',
-                            file: 'data:application/pdf;base64',
-                            isActive: false,
-                        },
-                        {
-                            id: 66,
-                            name: 'du-an.xls',
-                            file: 'data:application/vnd.ms-excel;base64',
-                            isActive: true,
-                        },
-                    ],
-                    isOpenComment: false,
-                    comment: [
-                        {
-                            id: '',
-                            commentUser: {
-                                id: 0,
-                                name: 'Quách Tĩnh',
-                                avatar: '',
-                            },
-                            comment: '',
-                            dateTime: '',
-                            isLastSub: false,
-                            subComment: {},
-                        },
-                    ],
-                    postUser: {
-                        id: '0',
-                        name: 'Đông Tà',
-                    },
-                },
-            ],
-            packingList: [
-                {
-                    postId: 1,
-                    description: 'packingList',
-                    files: [],
-                    isOpenComment: false,
-                    comment: [
-                        {
-                            id: '',
-                            commentUser: {
-                                id: 0,
-                                name: 'Quách Tĩnh',
-                                avatar: '',
-                            },
-                            comment: '',
-                            dateTime: '',
-                            isLastSub: false,
-                            subComment: {},
-                        },
-                    ],
-                    postUser: {
-                        id: '0',
-                        name: 'Đông Tà',
-                    },
-                },
-            ],
-            imageBefore: [
-                {
-                    postId: 2,
-                    description: 'imageBefore',
-                    images: [],
-                    isOpenComment: false,
-                    comment: [
-                        {
-                            id: '',
-                            commentUser: {
-                                id: 0,
-                                name: 'Quách Tĩnh',
-                                avatar: '',
-                            },
-                            comment: '',
-                            dateTime: '',
-                            isLastSub: false,
-                            subComment: {},
-                        },
-                    ],
-                    postUser: {
-                        id: '0',
-                        name: 'Đông Tà',
-                    },
-                },
-            ],
-            imageAfter: [
-                {
-                    postId: 3,
-                    description: 'imageAfter',
-                    images: [],
-                    isOpenComment: false,
-                    comment: [
-                        {
-                            id: '',
-                            commentUser: {
-                                id: 0,
-                                name: 'Quách Tĩnh',
-                                avatar: '',
-                            },
-                            comment: '',
-                            dateTime: '',
-                            isLastSub: false,
-                            subComment: {},
-                        },
-                    ],
-                    postUser: {
-                        id: '0',
-                        name: 'Đông Tà',
-                    },
-                },
-            ],
-        },
-        {
-            awbId: 0,
-            name: 'Air ALM LM 119',
-            description: 'Description',
-            createDate: new Date().toISOString(),
-            createBy: 'admin',
-            status: {
-                id: 0,
-                status: 'In progress',
-            },
-            commercialInvoice: [
-                {
-                    postId: 0,
-                    description: 'commercialInvoice',
-                    files: [
-                        {
-                            id: 55,
-                            name: 'vat-tu.pdf',
-                            file: 'data:application/pdf;base64',
-                            isActive: false,
-                        },
-                        {
-                            id: 66,
-                            name: 'du-an.xls',
-                            file: 'data:application/vnd.ms-excel;base64',
-                            isActive: true,
-                        },
-                    ],
-                    isOpenComment: false,
-                    comment: [
-                        {
-                            id: '',
-                            commentUser: {
-                                id: 0,
-                                name: 'Quách Tĩnh',
-                                avatar: '',
-                            },
-                            comment: '',
-                            dateTime: '',
-                            isLastSub: false,
-                            subComment: {},
-                        },
-                    ],
-                    postUser: {
-                        id: '0',
-                        name: 'Đông Tà',
-                    },
-                },
-                {
-                    postId: 1,
-                    description: 'commercialInvoice',
-                    files: [
-                        {
-                            id: 55,
-                            name: 'vat-tu.pdf',
-                            file: 'data:application/pdf;base64',
-                            isActive: false,
-                        },
-                        {
-                            id: 66,
-                            name: 'du-an.xls',
-                            file: 'data:application/vnd.ms-excel;base64',
-                            isActive: true,
-                        },
-                    ],
-                    isOpenComment: false,
-                    comment: [
-                        {
-                            id: '',
-                            commentUser: {
-                                id: 0,
-                                name: 'Quách Tĩnh',
-                                avatar: '',
-                            },
-                            comment: '',
-                            dateTime: '',
-                            isLastSub: false,
-                            subComment: {},
-                        },
-                    ],
-                    postUser: {
-                        id: '0',
-                        name: 'Đông Tà',
-                    },
-                },
-                {
-                    postId: 2,
-                    description: 'commercialInvoice',
-                    files: [
-                        {
-                            id: 55,
-                            name: 'vat-tu.pdf',
-                            file: 'data:application/pdf;base64',
-                            isActive: false,
-                        },
-                        {
-                            id: 66,
-                            name: 'du-an.xls',
-                            file: 'data:application/vnd.ms-excel;base64',
-                            isActive: true,
-                        },
-                    ],
-                    isOpenComment: false,
-                    comment: [
-                        {
-                            id: '',
-                            commentUser: {
-                                id: 0,
-                                name: 'Quách Tĩnh',
-                                avatar: '',
-                            },
-                            comment: '',
-                            dateTime: '',
-                            isLastSub: false,
-                            subComment: {},
-                        },
-                    ],
-                    postUser: {
-                        id: '0',
-                        name: 'Đông Tà',
-                    },
-                },
-            ],
-            packingList: [
-                {
-                    postId: 1,
-                    description: 'packingList',
-                    files: [],
-                    isOpenComment: false,
-                    comment: [
-                        {
-                            id: '',
-                            commentUser: {
-                                id: 0,
-                                name: 'Quách Tĩnh',
-                                avatar: '',
-                            },
-                            comment: '',
-                            dateTime: '',
-                            isLastSub: false,
-                            subComment: {},
-                        },
-                    ],
-                    postUser: {
-                        id: '0',
-                        name: 'Đông Tà',
-                    },
-                },
-            ],
-            imageBefore: [
-                {
-                    postId: 2,
-                    description: 'imageBefore',
-                    images: [],
-                    isOpenComment: false,
-                    comment: [
-                        {
-                            id: '',
-                            commentUser: {
-                                id: 0,
-                                name: 'Quách Tĩnh',
-                                avatar: '',
-                            },
-                            comment: '',
-                            dateTime: '',
-                            isLastSub: false,
-                            subComment: {},
-                        },
-                    ],
-                    postUser: {
-                        id: '0',
-                        name: 'Đông Tà',
-                    },
-                },
-            ],
-            imageAfter: [
-                {
-                    postId: 3,
-                    description: 'imageAfter',
-                    images: [],
-                    isOpenComment: false,
-                    comment: [
-                        {
-                            id: '',
-                            commentUser: {
-                                id: 0,
-                                name: 'Quách Tĩnh',
-                                avatar: '',
-                            },
-                            comment: '',
-                            dateTime: '',
-                            isLastSub: false,
-                            subComment: {},
-                        },
-                    ],
-                    postUser: {
-                        id: '0',
-                        name: 'Đông Tà',
-                    },
-                },
-            ],
-        },
-    ],
-};
+import './awb.scss';
 
 const initialCustomsDeclaration = {
     awbId: 'Air ALM LM 119',
@@ -468,11 +59,15 @@ const initialCustomsDeclaration = {
     },
 };
 
+export const CommercialInvoiceContext = createContext([]);
+
 export default function AirWayBillList() {
     const { t } = useTranslation();
-    const [awbListData, setEwbListData] = useState<any>(initAwb);
-    const [pdfState, setPdfState] = useState<any>(initAwb.awbList[0].commercialInvoice);
-    const [imageState, setImageState] = useState<any>(initAwb.awbList[0].imageBefore);
+    const [awbListData, setEwbListData] = useState<any>([]);
+    const [commercialInvoice, setCommercialInvoice] = useState<any>([]);
+    const [packingList, setPackingList] = useState<any>([]);
+    const [imageBefore, setImageBefore] = useState<any>([]);
+    const [imageAfter, setImageAfter] = useState<any>([]);
     const [currentAwb, setCurrentAwb] = useState(0);
     const [searchKeyword, setSearchKeyword] = useState('');
     const [value, setValue] = useState(0);
@@ -481,22 +76,42 @@ export default function AirWayBillList() {
     const toggleCreateModal = (value: boolean) => setIsOpenCreateModal(value);
     const [projectId, setProjectId] = useState('');
     const params = useParams();
+    const [currentAwbCode, setCurrentAwbCode] = useState('');
+    const [resForHandleMsg, setResForHandleMsg] = useState<any>();
 
     useEffect(() => {
         if (params.id) setProjectId(params.id);
     }, [params.id]);
 
-    const handleChangeAwb = (newValue: number) => {
+    const fetchAwbData = (projectId: string) => {
+        getAirWayBillByProjectId(projectId).then((value: any) => {
+            if (value && value.data) {
+                setEwbListData(value.data);
+                setCurrentAwbCode(value.data[0].code);
+                fetchCommercialInvoice(value.data[0].code);
+            }
+        });
+    };
+
+    const fetchCommercialInvoice = (awbCode: string) => {
+        getAllCommercialInvoice(awbCode).then((value: any) => {
+            if (value) setCommercialInvoice(value.data ? value.data : []);
+        });
+    };
+
+    useEffect(() => {
+        if (params.id) fetchAwbData(params.id);
+    }, [params.id]);
+
+    const handleChangeAwb = (newValue: number, awbCode: string) => {
         setCurrentAwb(newValue);
-        if (value === 0) setPdfState(awbListData.awbList[newValue].commercialInvoice);
-        if (value === 1) setPdfState(awbListData.awbList[newValue].packingList);
-        if (value === 2) setImageState(awbListData.awbList[newValue].imageBefore);
-        if (value === 3) setImageState(awbListData.awbList[newValue].imageAfter);
+        setCurrentAwbCode(awbCode);
+        fetchCommercialInvoice(awbCode);
     };
 
     const handleSearch = () => {
-        const filterItems = initAwb.awbList.filter((data: any) => {
-            if (data.name.toLowerCase().indexOf(searchKeyword.toLowerCase()) !== -1) {
+        const filterItems = awbListData.filter((data: any) => {
+            if (data.code.toLowerCase().indexOf(searchKeyword.toLowerCase()) !== -1) {
                 return data;
             }
         });
@@ -508,10 +123,6 @@ export default function AirWayBillList() {
 
     const handleChangeAwbDetail = (newValue: number) => {
         setValue(newValue);
-        if (newValue === 0) setPdfState(awbListData.awbList[currentAwb].commercialInvoice);
-        if (newValue === 1) setPdfState(awbListData.awbList[currentAwb].packingList);
-        if (newValue === 2) setImageState(awbListData.awbList[currentAwb].imageBefore);
-        if (newValue === 3) setImageState(awbListData.awbList[currentAwb].imageAfter);
     };
 
     const handleDownload = () => {};
@@ -519,6 +130,32 @@ export default function AirWayBillList() {
     const handleDeleteAwb = () => {};
 
     const handleCreateAwb = () => {};
+
+    const handleUploadInvoice = (fileData: any) => {
+        let formData = new FormData();
+
+        if (fileData && fileData.file && fileData.file.length > 0)
+            fileData.file.forEach((data: any) => {
+                formData.append('file', data);
+            });
+
+        uploadCommercialInvoice(formData, fileData.description, currentAwbCode)
+            .then((res) => {
+                setResForHandleMsg({
+                    status: res.status,
+                    message: res.message,
+                });
+
+                if (res.status === StatusCode.OK) {
+                }
+            })
+            .catch(() => {
+                setResForHandleMsg({
+                    status: StatusCode.ERROR,
+                    message: t('message.error'),
+                });
+            });
+    };
 
     return (
         <div className="awb-list">
@@ -582,12 +219,9 @@ export default function AirWayBillList() {
                             <Grid item xs={12} className="item">
                                 <CardContent>
                                     <Box
-                                        // component="form"
                                         sx={{
                                             '& > :not(style)': { m: 1 },
                                         }}
-                                        // noValidate
-                                        // autoComplete="off"
                                     >
                                         <div className="row">
                                             <div className="col-xs-12">
@@ -622,50 +256,51 @@ export default function AirWayBillList() {
                                                         '& .MuiTabs-scroller': { overflow: 'auto !important' },
                                                     }}
                                                 >
-                                                    {awbListData.awbList.map((awb: any, index: any) => (
-                                                        <span
-                                                            style={{
-                                                                backgroundColor: `${
-                                                                    currentAwb === index ? '#1976d22a' : ''
-                                                                }`,
-                                                                minWidth: '450px',
-                                                            }}
-                                                            className="btn"
-                                                            onClick={() => handleChangeAwb(index)}
-                                                        >
-                                                            <Tab
-                                                                key={index}
-                                                                label={awb.name}
-                                                                className="awb-tab"
-                                                                style={{ width: '25%' }}
-                                                            />
-                                                            <div
-                                                                className="float-end pt-2 m-auto"
-                                                                style={{ width: '20%' }}
+                                                    {awbListData &&
+                                                        awbListData.map((awb: any, index: any) => (
+                                                            <span
+                                                                style={{
+                                                                    backgroundColor: `${
+                                                                        currentAwb === index ? '#1976d22a' : ''
+                                                                    }`,
+                                                                    minWidth: '450px',
+                                                                }}
+                                                                className="btn"
+                                                                onClick={() => handleChangeAwb(index, awb.code)}
                                                             >
-                                                                <Chip
-                                                                    label={awb.status.status}
-                                                                    color="secondary"
-                                                                    size="small"
-                                                                    className="btn"
-                                                                />
-                                                            </div>
-                                                            <div className="float-end" style={{ width: '35%' }}>
                                                                 <Tab
                                                                     key={index}
-                                                                    label={formatDateTimeResList(awb.createDate)}
+                                                                    label={awb.code}
                                                                     className="awb-tab"
+                                                                    style={{ width: '25%' }}
                                                                 />
-                                                            </div>
-                                                            <div className="float-end" style={{ width: '20%' }}>
-                                                                <Tab
-                                                                    key={index}
-                                                                    label={awb.createBy}
-                                                                    className="awb-tab"
-                                                                />
-                                                            </div>
-                                                        </span>
-                                                    ))}
+                                                                <div
+                                                                    className="float-end pt-2 m-auto"
+                                                                    style={{ width: '20%' }}
+                                                                >
+                                                                    <Chip
+                                                                        label={awb.status}
+                                                                        color="secondary"
+                                                                        size="small"
+                                                                        className="btn"
+                                                                    />
+                                                                </div>
+                                                                <div className="float-end" style={{ width: '35%' }}>
+                                                                    <Tab
+                                                                        key={index}
+                                                                        label={formatDateTimeResList(awb.createDate)}
+                                                                        className="awb-tab"
+                                                                    />
+                                                                </div>
+                                                                <div className="float-end" style={{ width: '20%' }}>
+                                                                    <Tab
+                                                                        key={index}
+                                                                        label={awb.createBy}
+                                                                        className="awb-tab"
+                                                                    />
+                                                                </div>
+                                                            </span>
+                                                        ))}
                                                 </Tabs>
                                             </div>
                                             <div className="text-center justify-center mt-4">
@@ -792,7 +427,11 @@ export default function AirWayBillList() {
                                         <TabPanel value={value} index={0}>
                                             <CardContent>
                                                 <Box>
-                                                    <FileManagement data={pdfState} />
+                                                    {commercialInvoice && (
+                                                        <CommercialInvoiceContext.Provider value={commercialInvoice}>
+                                                            <FileManagement callBackFn={handleUploadInvoice} />
+                                                        </CommercialInvoiceContext.Provider>
+                                                    )}
                                                 </Box>
                                             </CardContent>
                                         </TabPanel>
@@ -802,9 +441,7 @@ export default function AirWayBillList() {
                                     <Card w-full="true" className="content-item">
                                         <TabPanel value={value} index={1}>
                                             <CardContent>
-                                                <Box>
-                                                    <FileManagement data={pdfState} />
-                                                </Box>
+                                                <Box>{packingList && <FileManagement data={packingList} />}</Box>
                                             </CardContent>
                                         </TabPanel>
                                     </Card>
@@ -813,9 +450,7 @@ export default function AirWayBillList() {
                                     <Card w-full="true" className="content-item ">
                                         <TabPanel value={value} index={2}>
                                             <CardContent>
-                                                <Box>
-                                                    <ImageManagement data={imageState} />
-                                                </Box>
+                                                <Box>{imageBefore && <ImageManagement data={imageBefore} />}</Box>
                                             </CardContent>
                                         </TabPanel>
                                     </Card>
@@ -824,9 +459,7 @@ export default function AirWayBillList() {
                                     <Card w-full="true" className="content-item">
                                         <TabPanel value={value} index={3}>
                                             <CardContent>
-                                                <Box>
-                                                    <ImageManagement data={imageState} />
-                                                </Box>
+                                                <Box>{imageAfter && <ImageManagement data={imageAfter} />}</Box>
                                             </CardContent>
                                         </TabPanel>
                                     </Card>
@@ -842,6 +475,7 @@ export default function AirWayBillList() {
                 handleCreateNewAwb={handleCreateAwb}
                 projectId={projectId}
             />
+            <ApiAlert response={resForHandleMsg} />
         </div>
     );
 }
