@@ -392,9 +392,11 @@
             "colCttName": "Construction Name",
             "colCttCode": "Construction Code",
             "colStartDate": "Start Date",
+            "colEndDate": "End Date",
             "colAWB": "Air way bill",
             "colStatus": "Status",
-            "colLocation": "Location"
+            "colLocation": "Location",
+            "colDescription": "Description"
         },
         "search": {
             "title": "Construction Search",

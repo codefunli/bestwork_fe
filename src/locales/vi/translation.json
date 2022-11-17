@@ -394,7 +394,8 @@
             "colStartDate": "Ngày bắt đầu",
             "colAWB": "Hóa đơn vận chuyển",
             "colStatus": "Trạng thái",
-            "colLocation": "Địa điểm"
+            "colLocation": "Địa điểm",
+            "colDescription": "Mô tả"
         },
         "search": {
             "title": "Tìm kiếm thông tin công trình",

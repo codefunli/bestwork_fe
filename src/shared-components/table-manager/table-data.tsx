@@ -2,7 +2,7 @@ import ManageHistorySharpIcon from '@mui/icons-material/ManageHistorySharp';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import PostAddSharpIcon from '@mui/icons-material/PostAddSharp';
-import { IconButton, Tooltip } from '@mui/material';
+import { Chip, IconButton, Stack, Tooltip } from '@mui/material';
 import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
 import Paper from '@mui/material/Paper';
@@ -23,6 +23,7 @@ import { formatDateTimeResList } from '../../core/utils/get-current-datetime';
 import HandleProjectStatus from '../status-handle/project-status-handle';
 import HandleCompanyStatus from '../status-handle/company-status-handle';
 import HandleUserStatus from '../status-handle/user-status-handle';
+import HandleConstructionStatus from '../status-handle/construction-status-handle';
 
 export interface ArrayAction {
     nameFn: string;
@@ -37,11 +38,11 @@ interface EnhancedTable {
     arrButton: ArrayAction[];
     searchCallBack: Function;
     deleteCallBack: Function;
-    projectStatus?: any;
+    statusList?: any;
 }
 
 export default function EnhancedTable(props: EnhancedTable) {
-    const { headCells, rows, isLoading, arrButton, projectStatus } = props;
+    const { headCells, rows, isLoading, arrButton, statusList } = props;
     const { t } = useTranslation();
     const [order, setOrder] = React.useState<Order>('asc');
     const [orderBy, setOrderBy] = React.useState<string>('id');
@@ -120,6 +121,18 @@ export default function EnhancedTable(props: EnhancedTable) {
         func(event, id);
     };
 
+    const handleArrayValue = (data: any) => {
+        return (
+            <Stack direction="row" spacing={1}>
+                {data &&
+                    data.length > 0 &&
+                    data.map((el: any, index: any) => {
+                        return <Chip key={index} label={el} color="info" size="small" variant="outlined" />;
+                    })}
+            </Stack>
+        );
+    };
+
     const renderIcon = (iconFn: string) => {
         switch (iconFn) {
             case Item.ICON_BTN.MODE_EDIT_ICON:
@@ -194,6 +207,7 @@ export default function EnhancedTable(props: EnhancedTable) {
                                                         hidden={colValue.id === FieldConstants.ID}
                                                     >
                                                         {colValue.id === 'startDate' ||
+                                                        colValue.id === 'endDate' ||
                                                         colValue.id === 'createDate' ||
                                                         colValue.id === 'expiredDate' ? (
                                                             formatDateTimeResList(row[colValue.id])
@@ -207,14 +221,23 @@ export default function EnhancedTable(props: EnhancedTable) {
                                                             ) : colValue.label.includes('project') ? (
                                                                 <HandleProjectStatus
                                                                     statusList={
-                                                                        projectStatus && projectStatus.length > 0
-                                                                            ? projectStatus
+                                                                        statusList && statusList.length > 0
+                                                                            ? statusList
                                                                             : []
                                                                     }
                                                                     statusId={row[colValue.id]}
                                                                 />
                                                             ) : colValue.label.includes('user') ? (
                                                                 <HandleUserStatus
+                                                                    statusId={row[colValue.id].toString()}
+                                                                />
+                                                            ) : colValue.label.includes('construction') ? (
+                                                                <HandleConstructionStatus
+                                                                    statusList={
+                                                                        statusList && statusList.length > 0
+                                                                            ? statusList
+                                                                            : []
+                                                                    }
                                                                     statusId={row[colValue.id].toString()}
                                                                 />
                                                             ) : (
@@ -229,6 +252,8 @@ export default function EnhancedTable(props: EnhancedTable) {
                                                             ) : (
                                                                 t('user.search.notEnabled')
                                                             )
+                                                        ) : colValue.id === 'awbCodes' ? (
+                                                            handleArrayValue(row[colValue.id as string])
                                                         ) : (
                                                             row[colValue.id as string]
                                                         )}
@@ -268,7 +293,7 @@ export default function EnhancedTable(props: EnhancedTable) {
                                         minWidth: 300,
                                     }}
                                 >
-                                    <TableCell>{t('message.noData')}</TableCell>
+                                    <td>{t('message.noData')}</td>
                                 </TableRow>
                             )}
                         </TableBody>

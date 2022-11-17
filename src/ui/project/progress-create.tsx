@@ -277,7 +277,6 @@ const ProgressCreate = (props: Props) => {
                                             progressStatus.length > 0 &&
                                             progressStatus.map((status: any) => (
                                                 <MenuItem value={status.id} key={status.id}>
-                                                    {/* <em>{status.status}</em> */}
                                                     <HandleProjectStatus
                                                         isSearch={true}
                                                         statusList={progressStatus}

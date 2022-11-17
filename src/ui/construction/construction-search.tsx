@@ -22,10 +22,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ConfirmConstants, Item, UrlFeApp } from '../../core/constants/common';
 import { SUCCESS_MSG } from '../../core/constants/message';
 import { headConstructionCol } from '../../core/types/construction';
-import { deleteProjects, getProjects, getProjectStatus } from '../../services/project-service';
+import { deleteConstructions, getConstructions, getConstructionStatus } from '../../services/construction-service';
 import MessageShow from '../../shared-components/message/message';
 import AlertDialogSlide from '../../shared-components/modal/alert-dialog-slide';
-import HandleProjectStatus from '../../shared-components/status-handle/project-status-handle';
+import HandleConstructionStatus from '../../shared-components/status-handle/construction-status-handle';
 import EnhancedTable, { ArrayAction } from '../../shared-components/table-manager/table-data';
 import './construction.scss';
 
@@ -37,20 +37,6 @@ const initialValues = {
     keyword: '',
     status: '-1',
 };
-const initialDataTableSample = {
-    content: [
-        {
-            id: 31,
-            constructionCode: 'Cty test 1',
-            constructionName: 'Test',
-            startDate: '2022-02-02 08:10:09',
-            airWayBill: '1',
-            location: 'Test',
-            status: 0,
-        },
-    ],
-    metaData: { totalPages: 1, totalElements: 1, size: 5, number: 0 },
-};
 
 export default function ConstructionSearch() {
     const [isOpenModal, setIsOpenModal] = useState(false);
@@ -59,39 +45,39 @@ export default function ConstructionSearch() {
     const [typeCompanyMsg, setTypeCompanyMsg] = useState<AlertColor>('success');
     const [formValues, setFormValues] = useState(initialValues);
     const queryClient = useQueryClient();
-    const [state, setState] = useState<any>(initialDataTableSample);
+    const [state, setState] = useState<any>();
     const { t } = useTranslation();
-    const [id, setId] = useState<any>({
-        id: [],
+    const [listId, setListId] = useState<any>({
+        listId: [],
     });
-    const [projectStatus, setProjectStatus] = useState([]);
+    const [constructionStatus, setConstructionStatus] = useState([]);
 
     useEffect(() => {
-        getProjectStatus().then((status: any) => {
-            if (status && status.data) setProjectStatus(status.data);
+        getConstructionStatus().then((status: any) => {
+            if (status && status.data) setConstructionStatus(status.data);
         });
     }, []);
 
     const nativgate = useNavigate();
 
-    // const { data, isLoading } = useQuery(['getConstruction'], () => getProjects(formValues), {
-    //     staleTime: 10000,
-    //     onSuccess: (project: any) => {
-    //         setState(project.data);
-    //         project.data?.content?.forEach((companyEl: { id: any }) => {
-    //             queryClient.setQueryData(['companyEl', companyEl.id], companyEl);
-    //         });
-    //     },
-    // });
+    const { data, isLoading } = useQuery(['getConstruction'], () => getConstructions(formValues), {
+        staleTime: 10000,
+        onSuccess: (construction: any) => {
+            setState(construction.data);
+            construction.data?.content?.forEach((constructionEl: { id: any }) => {
+                queryClient.setQueryData(['constructionEl', constructionEl.id], constructionEl);
+            });
+        },
+    });
 
-    // useEffect(() => {
-    //     // do some checking here to ensure data exist
-    //     if (data && data.data && data.data.content) {
-    //         // mutate data if you need to
-    //         setState(data.data);
-    //     }
-    //     setIsShowMessage(false);
-    // }, [data]);
+    useEffect(() => {
+        // do some checking here to ensure data exist
+        if (data && data.data && data.data.content) {
+            // mutate data if you need to
+            setState(data.data);
+        }
+        setIsShowMessage(false);
+    }, [data]);
 
     const handleInputChange = (e: any) => {
         const { name, value } = e.target;
@@ -102,27 +88,28 @@ export default function ConstructionSearch() {
     };
 
     const handleSubmit = async (e: any) => {
-        let data = await getProjects(formValues);
+        let data = await getConstructions(formValues);
         if (data && data.data && data.data.content) {
             setState(data.data);
         }
     };
-    // const fetchData = async (obj: any) => {
-    //     const resp = await getProjects(obj);
-    //     if (resp && resp.data && resp.data.content) {
-    //         setState(resp.data);
-    //     }
-    // };
+
+    const fetchData = async (obj: any) => {
+        const resp = await getConstructions(obj);
+        if (resp && resp.data && resp.data.content) {
+            setState(resp.data);
+        }
+    };
 
     const handleSearchCallBack = (childData: any) => {
-        // fetchData({
-        //     ...formValues,
-        //     ...childData,
-        // });
-        // setFormValues({
-        //     ...formValues,
-        //     ...childData,
-        // });
+        fetchData({
+            ...formValues,
+            ...childData,
+        });
+        setFormValues({
+            ...formValues,
+            ...childData,
+        });
     };
 
     const handleMessage = (showMsg: boolean, msg: string, type: AlertColor) => {
@@ -135,8 +122,8 @@ export default function ConstructionSearch() {
         setTypeCompanyMsg('success');
         setCompanyMsg(t(SUCCESS_MSG.S01_004));
         setIsOpenModal(true);
-        setId({
-            id: [...childData.ids],
+        setListId({
+            listId: [...childData.ids],
         });
     };
 
@@ -144,9 +131,9 @@ export default function ConstructionSearch() {
         setFormValues({
             ...initialValues,
         });
-        // fetchData({
-        //     ...initialValues,
-        // });
+        fetchData({
+            ...initialValues,
+        });
     };
 
     // miss pass id with url
@@ -161,13 +148,13 @@ export default function ConstructionSearch() {
     };
 
     const alertOkFunc = () => {
-        deleteProjects(id)
+        deleteConstructions(listId)
             .then((value) => {
                 setIsOpenModal(false);
                 setIsShowMessage(true);
-                // fetchData({
-                //     ...formValues,
-                // });
+                fetchData({
+                    ...formValues,
+                });
             })
             .catch((err) => {
                 handleMessage(true, t('message.error'), 'error');
@@ -308,18 +295,18 @@ export default function ConstructionSearch() {
                                                                 {t('message.status')}
                                                             </em>
                                                         </MenuItem>
-                                                        {projectStatus &&
-                                                            projectStatus.length > 0 &&
-                                                            projectStatus.map((data: any, index: any) => {
+                                                        {constructionStatus &&
+                                                            constructionStatus.length > 0 &&
+                                                            constructionStatus.map((data: any, index: any) => {
                                                                 return (
                                                                     <MenuItem
                                                                         key={data.id}
                                                                         value={index}
                                                                         className="text-center"
                                                                     >
-                                                                        <HandleProjectStatus
+                                                                        <HandleConstructionStatus
                                                                             isSearch={true}
-                                                                            statusList={projectStatus}
+                                                                            statusList={constructionStatus}
                                                                             statusId={data.id.toString()}
                                                                         />
                                                                     </MenuItem>
@@ -375,7 +362,7 @@ export default function ConstructionSearch() {
                     }
                     isLoading={false}
                     arrButton={arrButton}
-                    projectStatus={projectStatus}
+                    statusList={constructionStatus}
                 />
             </Grid>
 
@@ -388,6 +375,7 @@ export default function ConstructionSearch() {
                 noBtn={t(ConfirmConstants.NO_BTN)}
                 okBtn={t(ConfirmConstants.OK_BTN)}
             />
+
             <MessageShow
                 message={companyMsg}
                 showMessage={isShowMessage}
