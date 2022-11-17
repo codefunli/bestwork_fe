@@ -1,5 +1,3 @@
-import { BaseDTO } from './base-dto';
-
 export interface CompanyReqDTO {
     id: number;
     version: number;

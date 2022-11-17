@@ -8,13 +8,7 @@ export const headConstructionCol: HeadColumn[] = [
         label: 'Id',
     },
     {
-        id: 'constructionCode',
-        numeric: false,
-        disablePadding: false,
-        label: 'construction.table.colCttCode',
-    },
-    {
-        id: 'constructionName',
+        id: 'name',
         numeric: false,
         disablePadding: false,
         label: 'construction.table.colCttName',
@@ -26,7 +20,13 @@ export const headConstructionCol: HeadColumn[] = [
         label: 'construction.table.colStartDate',
     },
     {
-        id: 'airWayBill',
+        id: 'endDate',
+        numeric: false,
+        disablePadding: false,
+        label: 'construction.table.colEndDate',
+    },
+    {
+        id: 'awbCodes',
         numeric: false,
         disablePadding: false,
         label: 'construction.table.colAWB',
@@ -42,5 +42,11 @@ export const headConstructionCol: HeadColumn[] = [
         numeric: false,
         disablePadding: false,
         label: 'construction.table.colStatus',
+    },
+    {
+        id: 'description',
+        numeric: false,
+        disablePadding: false,
+        label: 'construction.table.colDescription',
     },
 ];

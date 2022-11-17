@@ -371,7 +371,7 @@ export default function ProjectSearch() {
                     }
                     isLoading={isLoading}
                     arrButton={arrButton}
-                    projectStatus={projectStatus}
+                    statusList={projectStatus}
                 />
             </Grid>
 

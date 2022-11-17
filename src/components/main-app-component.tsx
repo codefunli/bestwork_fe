@@ -267,40 +267,38 @@ export default function MiniDrawer() {
                             <List>
                                 {menuItemLinkData.map((menuItem, index) => (
                                     <React.Fragment key={index}>
-                                        {userInfo?.uRole === RoleUser.SYS_ADMIN && (
-                                            <ListItem key={index} disablePadding sx={{ display: 'block' }}>
-                                                <ListItemButton
+                                        <ListItem disablePadding sx={{ display: 'block' }}>
+                                            <ListItemButton
+                                                sx={{
+                                                    minHeight: 48,
+                                                    justifyContent: open ? 'initial' : 'center',
+                                                    px: 2.5,
+                                                }}
+                                                onClick={(event) => {
+                                                    navigateByLink(menuItem.link);
+                                                }}
+                                            >
+                                                <ListItemIcon
                                                     sx={{
-                                                        minHeight: 48,
-                                                        justifyContent: open ? 'initial' : 'center',
-                                                        px: 2.5,
-                                                    }}
-                                                    onClick={(event) => {
-                                                        navigateByLink(menuItem.link);
+                                                        minWidth: 0,
+                                                        mr: open ? 3 : 'auto',
+                                                        justifyContent: 'center',
                                                     }}
                                                 >
-                                                    <ListItemIcon
-                                                        sx={{
-                                                            minWidth: 0,
-                                                            mr: open ? 3 : 'auto',
-                                                            justifyContent: 'center',
-                                                        }}
-                                                    >
-                                                        {renderIconLeftBar(menuItem.iconNm)}
-                                                    </ListItemIcon>
-                                                    <ListItemText
-                                                        primary={t(menuItem.name)}
-                                                        sx={{ opacity: open ? 1 : 0 }}
-                                                    />
-                                                </ListItemButton>
-                                            </ListItem>
-                                        )}
+                                                    {renderIconLeftBar(menuItem.iconNm)}
+                                                </ListItemIcon>
+                                                <ListItemText
+                                                    primary={t(menuItem.name)}
+                                                    sx={{ opacity: open ? 1 : 0 }}
+                                                />
+                                            </ListItemButton>
+                                        </ListItem>
 
                                         {userInfo?.uRole === RoleUser.COMPANY_ADMIN &&
                                             (menuItem.name === MenuItem.DASHBOARD ||
                                                 menuItem.name === MenuItem.USER ||
                                                 menuItem.name === MenuItem.PROJECT) && (
-                                                <ListItem key={index} disablePadding sx={{ display: 'block' }}>
+                                                <ListItem disablePadding sx={{ display: 'block' }}>
                                                     <ListItemButton
                                                         sx={{
                                                             minHeight: 48,
@@ -332,7 +330,7 @@ export default function MiniDrawer() {
                                             (menuItem.name === MenuItem.DASHBOARD ||
                                                 menuItem.name === MenuItem.USER ||
                                                 menuItem.name === MenuItem.PROJECT) && (
-                                                <ListItem key={index} disablePadding sx={{ display: 'block' }}>
+                                                <ListItem disablePadding sx={{ display: 'block' }}>
                                                     <ListItemButton
                                                         sx={{
                                                             minHeight: 48,
@@ -363,7 +361,7 @@ export default function MiniDrawer() {
                                         {userInfo?.uRole === RoleUser.COMPANY_USER &&
                                             (menuItem.name === MenuItem.DASHBOARD ||
                                                 menuItem.name === MenuItem.PROJECT) && (
-                                                <ListItem key={index} disablePadding sx={{ display: 'block' }}>
+                                                <ListItem disablePadding sx={{ display: 'block' }}>
                                                     <ListItemButton
                                                         sx={{
                                                             minHeight: 48,
