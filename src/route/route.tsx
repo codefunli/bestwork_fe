@@ -101,6 +101,10 @@ const listRouter: RouteObject[] = [
                 path: UrlFeApp.CONSTRUCTION.CREATE,
                 element: <ConstructionRegister />,
             },
+            {
+                path: UrlFeApp.CONSTRUCTION.CREATE_HAS_ID,
+                element: <ConstructionRegister />,
+            },
         ],
     },
     {

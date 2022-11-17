@@ -5,9 +5,9 @@ import Chip from '@mui/material/Chip';
 import { Box } from '@mui/system';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import '../../App.scss';
-import { StatusCode, UrlServer } from '../../core/constants/common';
+import { StatusCode, UrlFeApp, UrlServer } from '../../core/constants/common';
 import { formatDateTimeResList } from '../../core/utils/get-current-datetime';
 import { getAirWayBillByProjectId, getAllCommercialInvoice, uploadCommercialInvoice } from '../../services/awb-service';
 import ApiAlert from '../../shared-components/alert/api-alert';
@@ -78,6 +78,7 @@ export default function AirWayBillList() {
     const params = useParams();
     const [currentAwbCode, setCurrentAwbCode] = useState('');
     const [resForHandleMsg, setResForHandleMsg] = useState<any>();
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (params.id) setProjectId(params.id);
@@ -180,7 +181,7 @@ export default function AirWayBillList() {
                                 color="primary"
                                 sx={{ textTransform: 'uppercase' }}
                                 onClick={() => {
-                                    alert('Do something...');
+                                    navigate(`${UrlFeApp.CONSTRUCTION.CREATE}/${params.id}`);
                                 }}
                             >
                                 {t('awb.createConstruction')}
@@ -193,7 +194,7 @@ export default function AirWayBillList() {
                                 color="primary"
                                 sx={{ textTransform: 'uppercase' }}
                                 onClick={() => {
-                                    alert('Do something...');
+                                    navigate(`${UrlFeApp.CONSTRUCTION.CREATE}/${params.id}`);
                                 }}
                             >
                                 {t('awb.createConstruction')}
@@ -361,7 +362,7 @@ export default function AirWayBillList() {
                                             width: '100%',
                                         }}
                                     >
-                                        <QuiltedImage
+                                        {/* <QuiltedImage
                                             images={customsDeclaration.commercialInvoice}
                                             callBackFn={(index: number) => {
                                                 console.log(index);
@@ -369,7 +370,7 @@ export default function AirWayBillList() {
                                             isOpenModal={false}
                                             isFile={true}
                                             isFilePreview={true}
-                                        />
+                                        /> */}
                                     </div>
                                 </Grid>
                                 <Grid item xs={12} className="item">

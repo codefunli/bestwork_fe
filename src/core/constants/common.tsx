@@ -51,6 +51,7 @@ export const UrlFeApp = {
     CONSTRUCTION: {
         SEARCH: '/app/construction',
         CREATE: '/app/construction/register',
+        CREATE_HAS_ID: '/app/construction/register/:id',
         EDIT_HAS_ID: '/app/construction/edit/:id',
     },
 };
@@ -348,6 +349,17 @@ export const renderImage = (data: any, index: any) => {
 
 export const renderFile = (data: any, index: any) => {
     switch (data.type) {
+        case 'pdf':
+            return (
+                <img
+                    loading="lazy"
+                    className="imgTag"
+                    src={
+                        'https://play-lh.googleusercontent.com/9XKD5S7rwQ6FiPXSyp9SzLXfIue88ntf9sJ9K250IuHTL7pmn2-ZB0sngAX4A2Bw4w'
+                    }
+                    key={index}
+                />
+            );
         case 'application/pdf':
             return (
                 <img
@@ -356,6 +368,15 @@ export const renderFile = (data: any, index: any) => {
                     src={
                         'https://play-lh.googleusercontent.com/9XKD5S7rwQ6FiPXSyp9SzLXfIue88ntf9sJ9K250IuHTL7pmn2-ZB0sngAX4A2Bw4w'
                     }
+                    key={index}
+                />
+            );
+        case 'vnd.ms-excel':
+            return (
+                <img
+                    loading="lazy"
+                    className="imgTag"
+                    src={'https://cdn1.iconfinder.com/data/icons/famous-brand-apps/100/_-04-512.png'}
                     key={index}
                 />
             );
@@ -368,9 +389,15 @@ export const renderFile = (data: any, index: any) => {
                     key={index}
                 />
             );
-        case 'image/jpeg' || 'image/png':
+        case 'jpeg':
+            return <img loading="lazy" className="imgTag" src={data.content} key={index} />;
+        case 'png':
+            return <img loading="lazy" className="imgTag" src={data.content} key={index} />;
+        case 'image/jpeg':
+            return <img loading="lazy" className="imgTag" src={URL.createObjectURL(data)} key={index} />;
+        case 'image/png':
             return <img loading="lazy" className="imgTag" src={URL.createObjectURL(data)} key={index} />;
         default:
-            return <img loading="lazy" className="imgTag" src={URL.createObjectURL(data)} key={index} />;
+            return <img loading="lazy" className="imgTag" src={''} key={index} />;
     }
 };
