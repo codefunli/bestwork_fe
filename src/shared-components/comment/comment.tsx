@@ -170,7 +170,6 @@ export default function CommentEl(props: CommentProps) {
                                 value={newMsg}
                                 fullWidth
                                 sx={{ mt: 1, mb: 1 }}
-                                id="outlined-required"
                                 autoComplete="off"
                                 label={replyLabel}
                                 placeholder={t('material.placeholder')}

@@ -34,7 +34,7 @@ const initialValues: any = {
     projectId: '',
     aWBcode: '',
     note: '',
-    status: 0,
+    status: '',
 };
 
 export default function CreateAwb(props: CreateAwbProps) {

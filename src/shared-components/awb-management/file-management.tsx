@@ -44,7 +44,7 @@ export default function FileManagement(props: any) {
 
     const enableComment = (data: any) => {
         const convertData = filesData.map((value: any) => {
-            if (value.postId === data.postId) {
+            if (value.invoiceiId === data.invoiceiId) {
                 value.isOpenComment = !value.isOpenComment;
             }
             return value;
@@ -140,16 +140,16 @@ export default function FileManagement(props: any) {
                                     </CardActions>
                                 </Card>
                             </div>
-                            {data.comment && (
+                            {
                                 <div>
                                     <CommentEl
-                                        arrMsg={data.comment}
+                                        arrMsg={data.comment ? data.comment : []}
                                         pId={data.id}
                                         isEnabled={data.isOpenComment}
                                         projectId={params.id}
                                     />
                                 </div>
-                            )}
+                            }
                         </Grid>
                     </Grid>
                 ))}
