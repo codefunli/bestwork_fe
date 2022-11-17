@@ -348,7 +348,7 @@ export const renderImage = (data: any, index: any) => {
 };
 
 export const renderFile = (data: any, index: any) => {
-    switch (data.type) {
+    switch (data.type.toLowerCase()) {
         case 'pdf':
             return (
                 <img
@@ -371,7 +371,7 @@ export const renderFile = (data: any, index: any) => {
                     key={index}
                 />
             );
-        case 'vnd.ms-excel':
+        case 'xls':
             return (
                 <img
                     loading="lazy"

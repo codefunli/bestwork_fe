@@ -148,6 +148,7 @@ export default function AirWayBillList() {
                 });
 
                 if (res.status === StatusCode.OK) {
+                    if (params.id) fetchAwbData(params.id);
                 }
             })
             .catch(() => {
