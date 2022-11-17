@@ -148,7 +148,7 @@ export default function ImageManagement(props: any) {
                                     <CardContent>
                                         <h3>{data.eqBill}</h3>
                                         <p>{data.description}</p>
-                                        <ImageManager images={data.images} />
+                                        <ImageManager data={data.images} />
                                     </CardContent>
                                     <CardActions>
                                         <Button size="small" onClick={() => enableComment(data)}>

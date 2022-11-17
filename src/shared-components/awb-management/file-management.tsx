@@ -12,7 +12,7 @@ import {
     Paper,
     Tooltip,
 } from '@mui/material';
-import { useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Comment } from '../../core/types/base';
@@ -37,6 +37,10 @@ export default function FileManagement(props: any) {
     const params = useParams();
     const { t } = useTranslation();
     const commercialInvoice = useContext(CommercialInvoiceContext);
+
+    useEffect(() => {
+        if (commercialInvoice) setFilesData(commercialInvoice);
+    }, [commercialInvoice]);
 
     const enableComment = (data: any) => {
         const convertData = filesData.map((value: any) => {
@@ -93,9 +97,9 @@ export default function FileManagement(props: any) {
                     </Paper>
                 </Grid>
             </Grid>
-            {commercialInvoice &&
-                commercialInvoice.length > 0 &&
-                commercialInvoice.map((data: any) => (
+            {filesData &&
+                filesData.length > 0 &&
+                filesData.map((data: any) => (
                     <Grid
                         key={data.id}
                         container
@@ -127,7 +131,7 @@ export default function FileManagement(props: any) {
                                     />
                                     <CardContent>
                                         <p>{data.description}</p>
-                                        {/* <ImageManager images={data.fileStorages} isFile={true} /> */}
+                                        <ImageManager data={data.fileStorages} isFile={true} />
                                     </CardContent>
                                     <CardActions>
                                         <Button size="small" onClick={() => enableComment(data)}>

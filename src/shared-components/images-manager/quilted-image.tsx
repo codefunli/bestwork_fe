@@ -1,6 +1,6 @@
 import { Card, CardHeader, IconButton, ImageList, ImageListItem, Tooltip } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
-import { renderImage } from '../../core/constants/common';
+import { renderFile, renderImage } from '../../core/constants/common';
 import './image-manager.scss';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -61,7 +61,7 @@ export default function QuiltedImage(props: {
                                                     </Tooltip>
                                                 }
                                             />
-                                            {renderImage(item, index)}
+                                            {renderFile(item, index)}
                                         </Card>
                                         <span className="text-center">{item.name}</span>
                                     </ImageListItem>
@@ -71,16 +71,16 @@ export default function QuiltedImage(props: {
                                             <CardHeader
                                                 sx={{ padding: 0.5 }}
                                                 className={`card-img-overlay img-item ${
-                                                    item.isActive ? 'border border-2 border-danger rounded-3' : ''
+                                                    item.isChoosen ? 'border border-2 border-danger rounded-3' : ''
                                                 }`}
                                                 action={
                                                     <IconButton
                                                         aria-label="settings"
                                                         color="primary"
                                                         onClick={() => handleAddFile(item)}
-                                                        disabled={item.isActive}
+                                                        disabled={item.isChoosen}
                                                     >
-                                                        {item.isActive ? (
+                                                        {item.isChoosen ? (
                                                             <CheckCircleIcon color="primary" className="opacity-100" />
                                                         ) : (
                                                             <Tooltip title={t('tooltip.add')} placement="top">
@@ -90,7 +90,7 @@ export default function QuiltedImage(props: {
                                                     </IconButton>
                                                 }
                                             />
-                                            {renderImage(item, index)}
+                                            {renderFile(item, index)}
                                         </Card>
                                         <span className="text-center">{item.name}</span>
                                     </ImageListItem>

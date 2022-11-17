@@ -3,11 +3,11 @@ import { useTranslation } from 'react-i18next';
 import ShowImage from '../modal/show-image';
 import QuiltedImage from './quilted-image';
 interface ImageManager {
-    images: any[];
+    data: any[];
     isFile?: boolean;
 }
 export default function ImageManager(props: ImageManager) {
-    const { images, isFile } = props;
+    const { data, isFile } = props;
     const [isShowModal, setIsShowModal] = useState(false);
     const { t } = useTranslation();
 
@@ -31,7 +31,7 @@ export default function ImageManager(props: ImageManager) {
                 >
                     <QuiltedImage
                         callBackFn={() => {}}
-                        images={images}
+                        images={data}
                         isOpenModal={false}
                         isFile={false}
                         isFilePreview={false}
@@ -41,22 +41,22 @@ export default function ImageManager(props: ImageManager) {
                 <div className="border-0 bg-white d-flex align-items-center justify-content-center w-100">
                     <QuiltedImage
                         callBackFn={() => {}}
-                        images={images}
+                        images={data}
                         isOpenModal={false}
                         isFile={true}
                         isFilePreview={false}
                     />
                 </div>
             )}
-            <ShowImage
+            {/* <ShowImage
                 isOpen={isShowModal}
                 closeFunc={closeModal}
                 okFunc={alertOkFunc}
                 title={t('material.previewImage')}
-                content={{ images: images }}
+                content={data}
                 noBtn="NO"
                 okBtn="OK"
-            />
+            /> */}
         </>
     );
 }
