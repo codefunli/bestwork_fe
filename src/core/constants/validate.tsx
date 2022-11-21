@@ -185,6 +185,11 @@ export const validateCreateRoleForm = yup.object({
     description: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.DESCRIPTION])),
 });
 
+export const validateCreateScreenForm = yup.object({
+    name: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.SCREEN])),
+    icon: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.ICON])),
+});
+
 export const validateForgotPassword = yup.object({
     email: yup
         .string()

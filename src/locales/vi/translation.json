@@ -86,6 +86,7 @@
         "btnOk": "Đồng ý",
         "btnBack": "Quay lại",
         "btnCreate": "Tạo mới",
+        "btnCreateScreen": "Tạo màn hình mới",
         "btnActive": "Hoạt động",
         "btnPending": "Tạm dừng",
         "btnCancel": "Huỷ",
@@ -312,6 +313,13 @@
             "title": "Tạo phân quyền mới",
             "roleName": "Tên phân quyền",
             "description": "Mô tả"
+        }
+    },
+    "create_screen": {
+        "title": "Quản lý màn hình",
+        "modal": {
+            "name": "Tên màn hình",
+            "icon": "Icon"
         }
     },
     "error": {

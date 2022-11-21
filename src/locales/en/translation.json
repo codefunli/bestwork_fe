@@ -86,6 +86,7 @@
         "btnOk": "Ok",
         "btnBack": "Back",
         "btnCreate": "Create",
+        "btnCreateScreen": "Create Screen",
         "btnActive": "Active",
         "btnPending": "Pending",
         "btnCancel": "Cancel",
@@ -312,6 +313,13 @@
             "title": "Role Creation",
             "roleName": "Role Name",
             "description": "Description"
+        }
+    },
+    "create_screen": {
+        "title": "Screen Creation",
+        "modal": {
+            "name": "Screen Name",
+            "icon": "Icon"
         }
     },
     "error": {

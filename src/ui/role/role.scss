@@ -1,4 +1,8 @@
 .role {
+    .d-flex {
+        display: flex;
+        gap: 10px;
+    }
     .content-area {
         .search-area {
             display: flex;

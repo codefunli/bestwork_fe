@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
     AlertColor,
     Button,
@@ -22,9 +22,17 @@ import {
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/system';
 import CreateRoleModal from './create-modal';
+import CreateScreenModal from './create-screen-modal';
 import UpdateRoleModal from './update-modal';
 import SearchIcon from '@mui/icons-material/Search';
-import { getRoles, createRole, updateRole, deleteRole } from '../../services/role-service';
+import {
+    getRoles,
+    getPermissionsList,
+    createRole,
+    updateRole,
+    deleteRole,
+    createScreen,
+} from '../../services/role-service';
 import { AlertColorConstants, ConfirmConstants, StatusCode, Item } from '../../core/constants/common';
 import MessageShow from '../../shared-components/message/message';
 import AlertDialogSlide from '../../shared-components/modal/alert-dialog-slide';
@@ -529,28 +537,36 @@ export default function Role() {
     const [roleList, setRoleList] = useState<any[]>(JSON.parse(JSON.stringify(initRoleList)));
     const [currentTab, setCurrentTab] = useState(0);
     const [currentRole, setCurrentRole] = useState(initRoleList[0]);
+    const [permissionsList, setPermissionsList] = useState({});
+
     const [searchKeyword, setSearchKeyword] = useState('');
     const [roleMsg, setRoleMsg] = useState('');
     const [roleMsgType, setRoleMsgType] = useState<AlertColor>(AlertColorConstants.SUCCESS);
     const [isShowMsg, setIsShowMsg] = useState(false);
+
     const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
-
     const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);
-    const toggleCreateModal = (value: boolean) => setIsOpenCreateModal(value);
-
+    const [isOpenCreateScreenModal, setIsOpenCreateScreenModal] = useState(false);
     const [isOpenUpdateModal, setIsOpenUpdateModal] = useState(false);
+
+    const toggleCreateScreenModal = (value: boolean) => setIsOpenCreateScreenModal(value);
+    const toggleCreateModal = (value: boolean) => setIsOpenCreateModal(value);
     const toggleUpdateModal = (value: boolean) => setIsOpenUpdateModal(value);
 
     const fetchData = async () => {
         const res: any = await getRoles();
-        if (res && res.data && res.data.content) {
-            setRoleList(res.data);
+        const res2: any = await getPermissionsList();
+        if (res) {
+            setRoleList(res);
+        }
+        if (res2) {
         }
     };
 
     const handleChangeTab = (event: React.SyntheticEvent, newValue: number) => {
-        setCurrentTab(newValue);
-        setCurrentRole(roleList[newValue]);
+        console.log('tab');
+        // setCurrentTab(newValue);
+        // setCurrentRole(roleList[newValue]);
     };
 
     const handleChangeCheckbox = (
@@ -651,40 +667,50 @@ export default function Role() {
             });
 
         // Temp
-        setRoleList([
-            ...roleList,
-            {
-                id: roleList.length + 2,
-                name: roleName,
-                description: description,
-                permissions: [
-                    {
-                        screenId: 1,
-                        screenName: 'DashBoard',
-                        view: true,
-                        create: false,
-                        edit: true,
-                        delete: true,
-                    },
-                    {
-                        screenId: 2,
-                        screenName: 'Company',
-                        view: false,
-                        create: true,
-                        edit: true,
-                        delete: true,
-                    },
-                    {
-                        screenId: 3,
-                        screenName: 'User',
-                        view: true,
-                        create: false,
-                        edit: true,
-                        delete: false,
-                    },
-                ],
-            },
-        ]);
+        // setRoleList([
+        //     ...roleList,
+        //     {
+        //         id: roleList.length + 2,
+        //         name: roleName,
+        //         description: description,
+        //         permissions: [
+        //             {
+        //                 screenId: 1,
+        //                 screenName: 'DashBoard',
+        //                 view: true,
+        //                 create: false,
+        //                 edit: true,
+        //                 delete: true,
+        //             },
+        //             {
+        //                 screenId: 2,
+        //                 screenName: 'Company',
+        //                 view: false,
+        //                 create: true,
+        //                 edit: true,
+        //                 delete: true,
+        //             },
+        //             {
+        //                 screenId: 3,
+        //                 screenName: 'User',
+        //                 view: true,
+        //                 create: false,
+        //                 edit: true,
+        //                 delete: false,
+        //             },
+        //         ],
+        //     },
+        // ]);
+    };
+
+    const handleCreateNewSCreen = (name: string, icon: string) => {
+        createScreen({ name, icon })
+            .then((res) => {
+                handleResponse(res);
+            })
+            .catch((err) => {
+                handleMessage(true, err.message, AlertColorConstants.ERROR);
+            });
     };
 
     const handleUpdateRole = (roleName: string, description: string) => {
@@ -741,12 +767,16 @@ export default function Role() {
         setIsShowMsg(false);
     };
 
+    useEffect(() => {
+        fetchData();
+    }, []);
+
     return (
         <div className="role">
             <Grid container direction="row" spacing={3}>
                 <Grid item xs={12} sx={{ mt: 1 }}>
                     <div className="row">
-                        <div className="col-sm-12 col-md-6 text-start d-none d-lg-block">
+                        <div className="col-sm-12 col-md-9 text-start d-none d-lg-block">
                             <Typography
                                 variant="h5"
                                 color="textSecondary"
@@ -757,7 +787,18 @@ export default function Role() {
                                 <div className="particletext">{t('role.title')}</div>
                             </Typography>
                         </div>
-                        <div className="col-sm-12 col-md-6 text-end d-none d-lg-block">
+
+                        <div className="col-sm-12 col-md-3 text-end d-none d-lg-block">
+                            <Button
+                                className="btn-create btn-create-screen"
+                                variant="outlined"
+                                color="secondary"
+                                sx={{ textTransform: 'uppercase' }}
+                                onClick={() => toggleCreateScreenModal(true)}
+                                style={{ marginRight: '10px' }}
+                            >
+                                {t(Item.LABEL_BTN.CREATE_SCREEN)}
+                            </Button>
                             <Button
                                 className="btn-create"
                                 variant="contained"
@@ -768,6 +809,7 @@ export default function Role() {
                                 {t(Item.LABEL_BTN.CREATE)}
                             </Button>
                         </div>
+
                         <div className="col-sm-12 text-start d-block d-lg-none">
                             <Button
                                 className="btn-create"
@@ -779,6 +821,18 @@ export default function Role() {
                                 {t(Item.LABEL_BTN.CREATE)}
                             </Button>
                         </div>
+                        {/* 
+                        <div className="col-sm-12 text-start d-block d-lg-none">
+                            <Button
+                                className="btn-create-screen"
+                                variant="contained"
+                                color="secondary"
+                                sx={{ textTransform: 'uppercase' }}
+                                onClick={() => toggleCreateModal(true)}
+                            >
+                                Create Screen
+                            </Button>
+                        </div> */}
                     </div>
                 </Grid>
                 <Grid item xs={12} sx={{ mt: 1, mb: 1 }} className="content-area">
@@ -826,7 +880,7 @@ export default function Role() {
                                             className="role-list"
                                         >
                                             {roleList.map((role, index) => (
-                                                <Tab key={index} label={role.name} />
+                                                <Tab key={index} label={role.description} />
                                             ))}
                                         </Tabs>
                                         <div className="text-center justify-center mt-4">
@@ -997,8 +1051,15 @@ export default function Role() {
                 />
             )}
 
-            <MessageShow message={roleMsg} showMessage={isShowMsg} type={roleMsgType} handleCloseMsg={handleCloseMsg} />
+            {isOpenCreateScreenModal && (
+                <CreateScreenModal
+                    isOpen={isOpenCreateScreenModal}
+                    toggleOpen={toggleCreateScreenModal}
+                    handleCreateNewSCreen={handleCreateNewSCreen}
+                />
+            )}
 
+            <MessageShow message={roleMsg} showMessage={isShowMsg} type={roleMsgType} handleCloseMsg={handleCloseMsg} />
             <AlertDialogSlide
                 isOpen={isOpenDeleteModal}
                 closeFunc={closeDeleteModal}
