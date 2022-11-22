@@ -33,11 +33,13 @@ import {
 import { formatDateTimeResList } from '../../core/utils/get-current-datetime';
 import {
     addFileToCustomsClearance,
+    changeAwbStatus,
     downloadCCD,
     getAirWayBillByProjectId,
     getAllCommercialInvoice,
     getAllCustomsClearanceDocument,
     getAllPackingList,
+    getAwbStatus,
     uploadCommercialInvoice,
     uploadPackingList,
 } from '../../services/awb-service';
@@ -71,6 +73,7 @@ export default function AirWayBillList() {
     const [currentAwbCode, setCurrentAwbCode] = useState('');
     const [resForHandleMsg, setResForHandleMsg] = useState<any>();
     const navigate = useNavigate();
+    const [statusList, setStatusList] = useState<any>([]);
 
     const fetchAwbData = (projectId: string) => {
         getAirWayBillByProjectId(projectId).then((value: any) => {
@@ -250,7 +253,40 @@ export default function AirWayBillList() {
         handleAddFile(item);
     };
 
-    const handleStatusChange = (e: any) => {};
+    useEffect(() => {
+        getAwbStatus().then((value: any) => {
+            if (value && value.status === 'OK' && value.data) setStatusList(value.data);
+        });
+    }, []);
+
+    const handleStatusChange = (v: string, awbCode: string) => {
+        const status = statusList.filter((s: any) => {
+            return s.status === v;
+        });
+
+        const convertData = {
+            destinationStatus: status[0].id,
+        };
+
+        changeAwbStatus(convertData, awbCode)
+            .then((res) => {
+                setResForHandleMsg({
+                    status: res.status,
+                    message: res.message,
+                });
+
+                if (res.status === StatusCode.OK) {
+                    if (params.id) fetchAwbData(params.id);
+                    handleChangeAwb(0, currentAwbCode);
+                }
+            })
+            .catch(() => {
+                setResForHandleMsg({
+                    status: StatusCode.ERROR,
+                    message: t('message.error'),
+                });
+            });
+    };
 
     return (
         <div className="awb-list">
@@ -365,9 +401,38 @@ export default function AirWayBillList() {
                                                             >
                                                                 <div
                                                                     className="float-end"
-                                                                    style={{ width: '25%', paddingTop: '0.7rem' }}
+                                                                    style={{ width: '25%', paddingTop: '0.3rem' }}
                                                                 >
-                                                                    {renderChipAwbStatus(awb.status)}
+                                                                    <FormControl sx={{ width: '100%' }}>
+                                                                        <Select
+                                                                            labelId="demo-simple-select-autowidth-label"
+                                                                            id="demo-simple-select-autowidth"
+                                                                            value={awb.status}
+                                                                            onChange={(e) =>
+                                                                                handleStatusChange(
+                                                                                    e.target.value,
+                                                                                    awb.code,
+                                                                                )
+                                                                            }
+                                                                            label="status"
+                                                                            sx={{
+                                                                                '& .MuiSelect-select': {
+                                                                                    padding: 1,
+                                                                                },
+                                                                            }}
+                                                                        >
+                                                                            {statusList &&
+                                                                                statusList.map((s: any) => {
+                                                                                    return (
+                                                                                        <MenuItem value={s.status}>
+                                                                                            {renderChipAwbStatus(
+                                                                                                s.status,
+                                                                                            )}
+                                                                                        </MenuItem>
+                                                                                    );
+                                                                                })}
+                                                                        </Select>
+                                                                    </FormControl>
                                                                 </div>
                                                                 <div className="float-end" style={{ width: '25%' }}>
                                                                     <Tab
@@ -487,6 +552,7 @@ export default function AirWayBillList() {
                                             disableElevation
                                             variant="contained"
                                             aria-label="Disabled elevation buttons"
+                                            className="mt-2"
                                         >
                                             <Button
                                                 variant="contained"
@@ -498,20 +564,6 @@ export default function AirWayBillList() {
                                                 {t('button.btnDownload')}
                                             </Button>
                                         </ButtonGroup>
-                                        <FormControl fullWidth>
-                                            <InputLabel id="demo-simple-select-label">Age</InputLabel>
-                                            <Select
-                                                labelId="demo-simple-select-label"
-                                                id="demo-simple-select"
-                                                value={1}
-                                                label="Age"
-                                                onChange={handleStatusChange}
-                                            >
-                                                <MenuItem value={10}>Ten</MenuItem>
-                                                <MenuItem value={20}>Twenty</MenuItem>
-                                                <MenuItem value={30}>Thirty</MenuItem>
-                                            </Select>
-                                        </FormControl>
                                     </div>
                                 </Grid>
                             </Grid>

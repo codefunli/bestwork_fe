@@ -63,3 +63,8 @@ export const getPdfFile = async (object: any) => {
     const res = await apiClient.post<any>(`${UrlServer.AWB.GET_PDF_FILE}`, object);
     return res.data;
 };
+
+export const changeAwbStatus = async (object: any, awbCode: string) => {
+    const res = await apiClient.post<any>(`${UrlServer.AWB.CHANGE_AWB_STATUS}/${awbCode}/change-status`, object);
+    return res.data;
+};

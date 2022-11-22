@@ -46,8 +46,6 @@ export default function CreateAwb(props: CreateAwbProps) {
 
     useEffect(() => {
         getAwbStatus().then((value: any) => {
-            console.log(value.data);
-
             if (value && value.status === 'OK' && value.data) setStatus(value.data);
         });
     }, []);
