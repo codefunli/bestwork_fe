@@ -1,3 +1,4 @@
+import Chip from '@mui/material/Chip';
 import { PREFIX_SERVER_URL } from './urls';
 
 export const CharacterConstants = {
@@ -121,6 +122,12 @@ export const UrlServer = {
         GET_AWB_BY_PROJECT_ID: `${PREFIX_SERVER_URL}/airway-bill/list/by`,
         UPDATE_INVOICE: `${PREFIX_SERVER_URL}/invoices/update-invoice`,
         GET_ALL_INVOICE: `${PREFIX_SERVER_URL}/invoices/list/by`,
+        ADD_FILE_TO_CUSTOMS_CLEARANCE: `${PREFIX_SERVER_URL}/airway-bill/change-status-file`,
+        GET_ALL_CUSTOMS_CLEARANCE_DOCUMENT: `${PREFIX_SERVER_URL}/airway-bill`,
+        GET_ALL_PACKING_LIST: `${PREFIX_SERVER_URL}/packages/list/by`,
+        UPLOAD_PACKING_LIST: `${PREFIX_SERVER_URL}/packages/update-package`,
+        DOWNLOAD_CCD: `${PREFIX_SERVER_URL}/airway-bill`,
+        GET_PDF_FILE: `${PREFIX_SERVER_URL}/invoices/view-file-pdf`,
     },
 };
 
@@ -395,7 +402,23 @@ export const renderFile = (data: any, index: any) => {
                 />
             );
         case 'jpeg':
-            return <img loading="lazy" className="imgTag" src={data.content} key={index} />;
+            return (
+                <img
+                    loading="lazy"
+                    className="imgTag"
+                    src={`data:image/${data.type};base64,${data.content}`}
+                    key={index}
+                />
+            );
+        case 'jpg':
+            return (
+                <img
+                    loading="lazy"
+                    className="imgTag"
+                    src={`data:image/${data.type};base64,${data.content}`}
+                    key={index}
+                />
+            );
         case 'png':
             return <img loading="lazy" className="imgTag" src={data.content} key={index} />;
         case 'image/jpeg':
@@ -404,5 +427,110 @@ export const renderFile = (data: any, index: any) => {
             return <img loading="lazy" className="imgTag" src={URL.createObjectURL(data)} key={index} />;
         default:
             return <img loading="lazy" className="imgTag" src={''} key={index} />;
+    }
+};
+const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+
+export const arrayBufferToBase64 = (arraybuffer: ArrayBuffer): string => {
+    let bytes = new Uint8Array(arraybuffer),
+        i,
+        len = bytes.length,
+        base64 = '';
+
+    for (i = 0; i < len; i += 3) {
+        base64 += chars[bytes[i] >> 2];
+        base64 += chars[((bytes[i] & 3) << 4) | (bytes[i + 1] >> 4)];
+        base64 += chars[((bytes[i + 1] & 15) << 2) | (bytes[i + 2] >> 6)];
+        base64 += chars[bytes[i + 2] & 63];
+    }
+
+    if (len % 3 === 2) {
+        base64 = base64.substring(0, base64.length - 1) + '=';
+    } else if (len % 3 === 1) {
+        base64 = base64.substring(0, base64.length - 2) + '==';
+    }
+
+    return base64;
+};
+
+const lookup = typeof Uint8Array === 'undefined' ? [] : new Uint8Array(256);
+for (let i = 0; i < chars.length; i++) {
+    lookup[chars.charCodeAt(i)] = i;
+}
+
+export const Base64ToArrayBuffer = (base64: string): ArrayBuffer => {
+    let bufferLength = base64.length * 0.75,
+        len = base64.length,
+        i,
+        p = 0,
+        encoded1,
+        encoded2,
+        encoded3,
+        encoded4;
+
+    if (base64[base64.length - 1] === '=') {
+        bufferLength--;
+        if (base64[base64.length - 2] === '=') {
+            bufferLength--;
+        }
+    }
+
+    const arraybuffer = new ArrayBuffer(bufferLength),
+        bytes = new Uint8Array(arraybuffer);
+
+    for (i = 0; i < len; i += 4) {
+        encoded1 = lookup[base64.charCodeAt(i)];
+        encoded2 = lookup[base64.charCodeAt(i + 1)];
+        encoded3 = lookup[base64.charCodeAt(i + 2)];
+        encoded4 = lookup[base64.charCodeAt(i + 3)];
+
+        bytes[p++] = (encoded1 << 2) | (encoded2 >> 4);
+        bytes[p++] = ((encoded2 & 15) << 4) | (encoded3 >> 2);
+        bytes[p++] = ((encoded3 & 3) << 6) | (encoded4 & 63);
+    }
+
+    return arraybuffer;
+};
+
+export const prefixPdf = 'data:application/pdf;base64';
+
+export const prefixZip = 'data:application/zip;base64';
+
+export function downloadZIP(base64Data: any, name: string, prefix: string) {
+    const linkSource = `${prefix},${base64Data}`;
+    const downloadLink = document.createElement('a');
+    const fileName = `${name}.zip`;
+
+    downloadLink.href = linkSource;
+    downloadLink.download = fileName;
+    downloadLink.click();
+}
+
+export const renderChipAwbStatus = (value: any) => {
+    switch (value) {
+        case 'Not yet customs clearance':
+            return (
+                <Chip
+                    label="Not yet customs clearance"
+                    color="primary"
+                    size="small"
+                    className="btn"
+                    sx={{ width: '100%' }}
+                />
+            );
+        case 'In Customs Clearance Progress':
+            return (
+                <Chip
+                    label="In Customs Clearance Progress"
+                    color="secondary"
+                    size="small"
+                    className="btn"
+                    sx={{ width: '100%' }}
+                />
+            );
+        case 'Done':
+            return <Chip label="Done" color="success" size="small" className="btn" sx={{ width: '100%' }} />;
+        default:
+            break;
     }
 };

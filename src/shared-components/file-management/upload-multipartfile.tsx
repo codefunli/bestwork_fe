@@ -51,9 +51,9 @@ export default function UploadMultipartFile(props: props) {
     }, [currentFiles]);
 
     const removeImageItem = (index: number) => {
-        const deleteFile = currentFiles;
+        let deleteFile = [...currentFiles];
         deleteFile.splice(index, 1);
-        setCurrentFiles(deleteFile);
+        setCurrentFiles(() => deleteFile);
         eventFile.target.value = '';
     };
 

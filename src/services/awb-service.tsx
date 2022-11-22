@@ -28,3 +28,38 @@ export const getAllCommercialInvoice = async (awbCode: string) => {
     const res = await apiClient.get<any>(`${UrlServer.AWB.GET_ALL_INVOICE}/${awbCode}`);
     return res.data;
 };
+
+export const addFileToCustomsClearance = async (data: any) => {
+    const res = await apiClient.post<any>(`${UrlServer.AWB.ADD_FILE_TO_CUSTOMS_CLEARANCE}`, data);
+    return res.data;
+};
+
+export const getAllCustomsClearanceDocument = async (awbCode: any) => {
+    const res = await apiClient.get<any>(
+        `${UrlServer.AWB.GET_ALL_CUSTOMS_CLEARANCE_DOCUMENT}/${awbCode}/get-custom-clearance-doc`,
+    );
+    return res.data;
+};
+
+export const getAllPackingList = async (awbCode: string) => {
+    const res = await apiClient.get<any>(`${UrlServer.AWB.GET_ALL_PACKING_LIST}/${awbCode}`);
+    return res.data;
+};
+
+export const uploadPackingList = async (formData: any, description: any, awbCode: string) => {
+    const res = await apiClient.patch<any>(
+        `${UrlServer.AWB.UPLOAD_PACKING_LIST}/${awbCode}?packageDescription=${description}`,
+        formData,
+    );
+    return res.data;
+};
+
+export const downloadCCD = async (awbCode: string) => {
+    const res = await apiClient.get<any>(`${UrlServer.AWB.DOWNLOAD_CCD}/${awbCode}/download-clearance-doc`);
+    return res.data;
+};
+
+export const getPdfFile = async (object: any) => {
+    const res = await apiClient.post<any>(`${UrlServer.AWB.GET_PDF_FILE}`, object);
+    return res.data;
+};

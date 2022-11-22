@@ -21,7 +21,7 @@ import { validateCreateAwbForm, validateCreateRoleForm } from '../../core/consta
 import { createAirWayBill, getAwbStatus } from '../../services/awb-service';
 import Chip from '@mui/material/Chip';
 import ApiAlert from '../../shared-components/alert/api-alert';
-import { StatusCode } from '../../core/constants/common';
+import { renderChipAwbStatus, StatusCode } from '../../core/constants/common';
 
 interface CreateAwbProps {
     isOpen: boolean;
@@ -32,7 +32,7 @@ interface CreateAwbProps {
 
 const initialValues: any = {
     projectId: '',
-    aWBcode: '',
+    airWayBillCode: '',
     note: '',
     status: '',
 };
@@ -46,6 +46,8 @@ export default function CreateAwb(props: CreateAwbProps) {
 
     useEffect(() => {
         getAwbStatus().then((value: any) => {
+            console.log(value.data);
+
             if (value && value.status === 'OK' && value.data) setStatus(value.data);
         });
     }, []);
@@ -67,8 +69,6 @@ export default function CreateAwb(props: CreateAwbProps) {
     });
 
     const handleSubmitForm = () => {
-        console.log(formValues);
-
         createAirWayBill(formValues)
             .then((res: any) => {
                 setResForHandleMsg({
@@ -80,6 +80,7 @@ export default function CreateAwb(props: CreateAwbProps) {
                     setTimeout(() => {
                         toggleOpen(false);
                         setFormValues(initialValues);
+                        handleCreateNewAwb();
                         reset();
                     }, 1000);
                 }
@@ -106,42 +107,13 @@ export default function CreateAwb(props: CreateAwbProps) {
         });
     };
 
-    const renderChip = (value: any) => {
-        switch (value) {
-            case 'Not yet customs clearance':
-                return (
-                    <Chip
-                        label="Not yet customs clearance"
-                        color="primary"
-                        size="small"
-                        className="btn"
-                        sx={{ width: '100%' }}
-                    />
-                );
-            case 'In Customs Clearance Progess':
-                return (
-                    <Chip
-                        label="In Customs Clearance Progess"
-                        color="secondary"
-                        size="small"
-                        className="btn"
-                        sx={{ width: '100%' }}
-                    />
-                );
-            case 'Done':
-                return <Chip label="Done" color="success" size="small" className="btn" sx={{ width: '100%' }} />;
-            default:
-                break;
-        }
-    };
-
     return (
         <form>
             <Dialog open={isOpen} onClose={handleCancel} keepMounted fullWidth maxWidth="sm">
                 <DialogTitle className="text-uppercase">{t('awb.create.title')}</DialogTitle>
                 <DialogContent>
                     <div>
-                        <InputLabel htmlFor="aWBcode" error={Boolean(errors.aWBcode)}>
+                        <InputLabel htmlFor="airWayBillCode" error={Boolean(errors.airWayBillCode)}>
                             {t('awb.AWBNo')} <span className="input-required">*</span>
                         </InputLabel>
                         <TextField
@@ -154,13 +126,13 @@ export default function CreateAwb(props: CreateAwbProps) {
                                 '& fieldset': { top: 0 },
                             }}
                             required
-                            id="aWBcode"
+                            id="airWayBillCode"
                             label=""
                             placeholder={t('common.placeholder')}
-                            value={formValues.aWBcode}
-                            error={Boolean(errors.aWBcode)}
-                            helperText={t(errors.aWBcode?.message?.toString() as string)}
-                            {...register('aWBcode', {
+                            value={formValues.airWayBillCode}
+                            error={Boolean(errors.airWayBillCode)}
+                            helperText={t(errors.airWayBillCode?.message?.toString() as string)}
+                            {...register('airWayBillCode', {
                                 onChange: (e) => handleInputChange(e),
                             })}
                         />
@@ -206,7 +178,7 @@ export default function CreateAwb(props: CreateAwbProps) {
                                         status.length > 0 &&
                                         status.map((s: any) => (
                                             <MenuItem value={s.id} key={s.id}>
-                                                <em className="m-auto w-100">{renderChip(s.status)}</em>
+                                                <em className="m-auto w-100">{renderChipAwbStatus(s.status)}</em>
                                             </MenuItem>
                                         ))}
                                 </Select>
