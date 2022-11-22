@@ -20,7 +20,7 @@ import CommentEl from '../comment/comment';
 import ImageManager from '../images-manager/image-manager';
 import FileUploadModal from '../modal/file-upload-modal';
 import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove';
-import { CommercialInvoiceContext } from '../../ui/awb/awb-list';
+import { CommercialInvoiceContext, PackingListContext } from '../../ui/awb/awb-list';
 
 const initialValue = {
     description: '',
@@ -29,18 +29,23 @@ const initialValue = {
 };
 
 export default function FileManagement(props: any) {
-    const { callBackFn } = props;
+    const { callBackFn, callBackAddFile } = props;
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [filesData, setFilesData] = useState<any>([]);
     const [comment, setComment] = useState<Comment[]>([]);
     const [content, setContent] = useState(initialValue);
     const params = useParams();
     const { t } = useTranslation();
-    const commercialInvoice = useContext(CommercialInvoiceContext);
+    const commercialInvoice = useContext<any>(CommercialInvoiceContext);
+    const packingList = useContext<any>(PackingListContext);
 
     useEffect(() => {
-        if (commercialInvoice) setFilesData(commercialInvoice);
+        setFilesData(commercialInvoice);
     }, [commercialInvoice]);
+
+    useEffect(() => {
+        setFilesData(packingList);
+    }, [packingList]);
 
     const enableComment = (data: any) => {
         const convertData = filesData.map((value: any) => {
@@ -74,6 +79,36 @@ export default function FileManagement(props: any) {
         }
     }, [comment]);
 
+    const handleAddFile = (data: any) => {
+        callBackAddFile({ ...data, toStatus: true });
+    };
+
+    const handleAddAll = (value: any) => {
+        const fileId = value.fileStorages.map((file: any) => {
+            return file.fileId;
+        });
+
+        const convertData = {
+            postType: value.postType,
+            postId: value.invoiceiId ? value.invoiceiId : value.packageId,
+            fileId: [...fileId],
+            toStatus: true,
+        };
+
+        callBackAddFile(convertData);
+    };
+
+    const checkAddAllButton = (value: any) => {
+        let check = [];
+        if (value && value.fileStorages) {
+            check = value.fileStorages.filter((file: any) => {
+                return file.isChoosen === false;
+            });
+        }
+
+        return check.length <= 0;
+    };
+
     return (
         <div>
             <Grid container spacing={3} direction="row" justifyContent="center" alignItems="center" sx={{ mb: 3 }}>
@@ -89,10 +124,11 @@ export default function FileManagement(props: any) {
                             border: 2,
                             borderColor: 'primary.main',
                         }}
+                        onClick={openModal}
                     >
                         <InputLabel htmlFor="outlined-adornment-amount">{t('awb.uploadFile')}</InputLabel>
                         <IconButton color="primary" sx={{ p: '10px' }} aria-label="directions">
-                            <UploadFileIcon onClick={openModal} />
+                            <UploadFileIcon />
                         </IconButton>
                     </Paper>
                 </Grid>
@@ -122,16 +158,30 @@ export default function FileManagement(props: any) {
                                         title={data.createBy}
                                         subheader={data.createDate}
                                         action={
-                                            <Tooltip title={t('tooltip.addAll')} placement="left">
-                                                <IconButton color="primary" size="large">
+                                            <IconButton
+                                                color="primary"
+                                                size="large"
+                                                onClick={() => handleAddAll(data)}
+                                                disabled={checkAddAllButton(data)}
+                                            >
+                                                <Tooltip title={t('tooltip.addAll')} placement="left">
                                                     <DriveFileMoveIcon sx={{ fontSize: 50 }} />
-                                                </IconButton>
-                                            </Tooltip>
+                                                </Tooltip>
+                                            </IconButton>
                                         }
                                     />
                                     <CardContent>
                                         <p>{data.description}</p>
-                                        <ImageManager data={data.fileStorages} isFile={true} />
+                                        <ImageManager
+                                            data={{
+                                                files: data.fileStorages,
+                                                postType: data.postType,
+                                                postId: data.invoiceiId ? data.invoiceiId : data.packageId,
+                                                invoicePostId: data.invoiceiId,
+                                            }}
+                                            isFile={true}
+                                            callBackFn={handleAddFile}
+                                        />
                                     </CardContent>
                                     <CardActions>
                                         <Button size="small" onClick={() => enableComment(data)}>

@@ -1,65 +1,57 @@
+import { FileDownload } from '@mui/icons-material';
 import DownloadIcon from '@mui/icons-material/Download';
 import SearchIcon from '@mui/icons-material/Search';
-import { Button, ButtonGroup, Card, CardContent, Grid, Tab, Tabs, TextField, Typography } from '@mui/material';
+import {
+    Button,
+    ButtonGroup,
+    Card,
+    CardContent,
+    FormControl,
+    Grid,
+    InputLabel,
+    MenuItem,
+    Select,
+    Tab,
+    Tabs,
+    TextField,
+    Typography,
+} from '@mui/material';
 import Chip from '@mui/material/Chip';
 import { Box } from '@mui/system';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import '../../App.scss';
-import { StatusCode, UrlFeApp, UrlServer } from '../../core/constants/common';
+import {
+    arrayBufferToBase64,
+    downloadZIP,
+    prefixZip,
+    renderChipAwbStatus,
+    StatusCode,
+    UrlFeApp,
+} from '../../core/constants/common';
 import { formatDateTimeResList } from '../../core/utils/get-current-datetime';
-import { getAirWayBillByProjectId, getAllCommercialInvoice, uploadCommercialInvoice } from '../../services/awb-service';
+import {
+    addFileToCustomsClearance,
+    downloadCCD,
+    getAirWayBillByProjectId,
+    getAllCommercialInvoice,
+    getAllCustomsClearanceDocument,
+    getAllPackingList,
+    uploadCommercialInvoice,
+    uploadPackingList,
+} from '../../services/awb-service';
 import ApiAlert from '../../shared-components/alert/api-alert';
 import FileManagement from '../../shared-components/awb-management/file-management';
 import ImageManagement from '../../shared-components/awb-management/image-management';
-import QuiltedImage from '../../shared-components/images-manager/quilted-image';
+import ShowCustomsClearanceInvoice from '../../shared-components/file-management/show-cc-invoice';
+import ShowCustomsClearancePackingList from '../../shared-components/file-management/show-cc-packing-list';
 import TabPanel from '../../shared-components/tab-manager/tab-panel';
 import CreateAwb from './awb-create';
 import './awb.scss';
 
-const initialCustomsDeclaration = {
-    awbId: 'Air ALM LM 119',
-    commercialInvoice: [
-        {
-            id: 66,
-            name: 'du-an.xls',
-            file: 'data:application/vnd.ms-excel;base64',
-            isActive: true,
-        },
-        {
-            id: 66,
-            name: 'du-an.xls',
-            file: 'data:application/vnd.ms-excel;base64',
-            isActive: true,
-        },
-        {
-            id: 66,
-            name: 'du-an.xls',
-            file: 'data:application/vnd.ms-excel;base64',
-            isActive: true,
-        },
-        {
-            id: 66,
-            name: 'du-an.xls',
-            file: 'data:application/vnd.ms-excel;base64',
-            isActive: true,
-        },
-        {
-            id: 66,
-            name: 'du-an.xls',
-            file: 'data:application/vnd.ms-excel;base64',
-            isActive: true,
-        },
-    ],
-    packingList: [],
-    status: {
-        id: 0,
-        status: 'In progress',
-    },
-};
-
 export const CommercialInvoiceContext = createContext([]);
+export const PackingListContext = createContext([]);
 
 export default function AirWayBillList() {
     const { t } = useTranslation();
@@ -71,7 +63,7 @@ export default function AirWayBillList() {
     const [currentAwb, setCurrentAwb] = useState(0);
     const [searchKeyword, setSearchKeyword] = useState('');
     const [value, setValue] = useState(0);
-    const [customsDeclaration, setCustomsDeclaration] = useState(initialCustomsDeclaration);
+    const [customsDeclaration, setCustomsDeclaration] = useState<any>({});
     const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);
     const toggleCreateModal = (value: boolean) => setIsOpenCreateModal(value);
     const [projectId, setProjectId] = useState('');
@@ -80,25 +72,53 @@ export default function AirWayBillList() {
     const [resForHandleMsg, setResForHandleMsg] = useState<any>();
     const navigate = useNavigate();
 
-    useEffect(() => {
-        if (params.id) setProjectId(params.id);
-    }, [params.id]);
-
     const fetchAwbData = (projectId: string) => {
         getAirWayBillByProjectId(projectId).then((value: any) => {
             if (value && value.data) {
                 setEwbListData(value.data);
                 setCurrentAwbCode(value.data[0].code);
                 fetchCommercialInvoice(value.data[0].code);
+                fetchCustomsDeclaration(value.data[0].code);
             }
+        });
+    };
+
+    const fetchCustomsDeclaration = (awbCode: string) => {
+        getAllCustomsClearanceDocument(awbCode).then((res: any) => {
+            setCustomsDeclaration(res.data ? res.data : {});
         });
     };
 
     const fetchCommercialInvoice = (awbCode: string) => {
         getAllCommercialInvoice(awbCode).then((value: any) => {
-            if (value) setCommercialInvoice(value.data ? value.data : []);
+            if (value && value.data && value.data.length > 0) {
+                setCommercialInvoice(value.data);
+            } else {
+                setCommercialInvoice([]);
+            }
         });
     };
+
+    const fetchPackingList = (awbCode: string) => {
+        getAllPackingList(awbCode).then((value: any) => {
+            if (value && value.data && value.data.length > 0) {
+                setPackingList(value.data);
+            } else {
+                setPackingList([]);
+            }
+        });
+    };
+
+    const fetchDownloadFile = (awbCode: string) => {
+        downloadCCD(awbCode).then((response: any) => {
+            console.log(arrayBufferToBase64(response));
+            downloadZIP(arrayBufferToBase64(response), awbCode, prefixZip);
+        });
+    };
+
+    useEffect(() => {
+        if (params.id) setProjectId(params.id);
+    }, [params.id]);
 
     useEffect(() => {
         if (params.id) fetchAwbData(params.id);
@@ -108,6 +128,8 @@ export default function AirWayBillList() {
         setCurrentAwb(newValue);
         setCurrentAwbCode(awbCode);
         fetchCommercialInvoice(awbCode);
+        fetchCustomsDeclaration(awbCode);
+        fetchPackingList(awbCode);
     };
 
     const handleSearch = () => {
@@ -124,13 +146,31 @@ export default function AirWayBillList() {
 
     const handleChangeAwbDetail = (newValue: number) => {
         setValue(newValue);
+        handleCallApi(newValue);
     };
 
-    const handleDownload = () => {};
+    const handleCallApi = (tabValue: number) => {
+        switch (tabValue) {
+            case 1:
+                fetchPackingList(currentAwbCode);
+                break;
+            case 0:
+                fetchCommercialInvoice(currentAwbCode);
+                break;
+            default:
+                break;
+        }
+    };
+
+    const handleDownload = () => {
+        fetchDownloadFile(currentAwbCode);
+    };
 
     const handleDeleteAwb = () => {};
 
-    const handleCreateAwb = () => {};
+    const handleCreateAwb = () => {
+        if (params.id) fetchAwbData(params.id);
+    };
 
     const handleUploadInvoice = (fileData: any) => {
         let formData = new FormData();
@@ -148,7 +188,7 @@ export default function AirWayBillList() {
                 });
 
                 if (res.status === StatusCode.OK) {
-                    if (params.id) fetchAwbData(params.id);
+                    fetchCommercialInvoice(currentAwbCode);
                 }
             })
             .catch(() => {
@@ -158,6 +198,59 @@ export default function AirWayBillList() {
                 });
             });
     };
+
+    const handleUploadPackingList = (fileData: any) => {
+        let formData = new FormData();
+
+        if (fileData && fileData.file && fileData.file.length > 0)
+            fileData.file.forEach((data: any) => {
+                formData.append('file', data);
+            });
+        uploadPackingList(formData, fileData.description, currentAwbCode)
+            .then((res) => {
+                setResForHandleMsg({
+                    status: res.status,
+                    message: res.message,
+                });
+
+                if (res.status === StatusCode.OK) {
+                    fetchPackingList(currentAwbCode);
+                }
+            })
+            .catch(() => {
+                setResForHandleMsg({
+                    status: StatusCode.ERROR,
+                    message: t('message.error'),
+                });
+            });
+    };
+
+    const handleAddFile = (data: any) => {
+        addFileToCustomsClearance({ ...data })
+            .then((res) => {
+                setResForHandleMsg({
+                    status: res.status,
+                    message: res.message,
+                });
+
+                if (res.status === StatusCode.OK) {
+                    if (params.id) fetchAwbData(params.id);
+                    handleCallApi(value);
+                }
+            })
+            .catch(() => {
+                setResForHandleMsg({
+                    status: StatusCode.ERROR,
+                    message: t('message.error'),
+                });
+            });
+    };
+
+    const handleRemoveFile = (item: any) => {
+        handleAddFile(item);
+    };
+
+    const handleStatusChange = (e: any) => {};
 
     return (
         <div className="awb-list">
@@ -203,7 +296,7 @@ export default function AirWayBillList() {
                         </div>
                     </div>
                 </Grid>
-                <Grid item xs={12} md={12} lg={7} xl={6} sx={{ mt: 1, mb: 1 }} className="search-awb">
+                <Grid item xs={12} md={12} lg={12} xl={6} sx={{ mt: 1, mb: 1 }} className="search-awb">
                     <Grid item xs={12} md={12} lg={12} sx={{ mb: 3 }} className="search-awb">
                         <Card w-full="true" style={{ maxHeight: 600 }}>
                             <Grid container direction="row" spacing={0}>
@@ -270,34 +363,30 @@ export default function AirWayBillList() {
                                                                 className="btn"
                                                                 onClick={() => handleChangeAwb(index, awb.code)}
                                                             >
-                                                                <Tab
-                                                                    key={index}
-                                                                    label={awb.code}
-                                                                    className="awb-tab"
-                                                                    style={{ width: '25%' }}
-                                                                />
                                                                 <div
-                                                                    className="float-end pt-2 m-auto"
-                                                                    style={{ width: '20%' }}
+                                                                    className="float-end"
+                                                                    style={{ width: '25%', paddingTop: '0.7rem' }}
                                                                 >
-                                                                    <Chip
-                                                                        label={awb.status}
-                                                                        color="secondary"
-                                                                        size="small"
-                                                                        className="btn"
-                                                                    />
+                                                                    {renderChipAwbStatus(awb.status)}
                                                                 </div>
-                                                                <div className="float-end" style={{ width: '35%' }}>
+                                                                <div className="float-end" style={{ width: '25%' }}>
                                                                     <Tab
                                                                         key={index}
                                                                         label={formatDateTimeResList(awb.createDate)}
                                                                         className="awb-tab"
                                                                     />
                                                                 </div>
-                                                                <div className="float-end" style={{ width: '20%' }}>
+                                                                <div className="float-end" style={{ width: '25%' }}>
                                                                     <Tab
                                                                         key={index}
                                                                         label={awb.createBy}
+                                                                        className="awb-tab"
+                                                                    />
+                                                                </div>
+                                                                <div className="float-end" style={{ width: '25%' }}>
+                                                                    <Tab
+                                                                        key={index}
+                                                                        label={awb.code}
                                                                         className="awb-tab"
                                                                     />
                                                                 </div>
@@ -334,7 +423,7 @@ export default function AirWayBillList() {
                         </Card>
                     </Grid>
                     <Grid item xs={12} md={12} lg={12} sx={{ mt: 1, mb: 1 }} className="content-awb">
-                        <Card sx={{ width: '100%' }} className="progress-drawer" style={{ maxHeight: 800 }}>
+                        <Card sx={{ width: '100%' }} className="progress-drawer" style={{ maxHeight: 900 }}>
                             <Grid container direction="row" spacing={0}>
                                 <Grid item xs={12} className="bg-customTheme">
                                     <Typography
@@ -346,13 +435,11 @@ export default function AirWayBillList() {
                                         {t('awb.customsClearanceDocuments')}
                                     </Typography>
                                 </Grid>
-                                <Grid item xs={12} className="item">
+                                <Grid item xs={12} className="text-center item">
                                     <div className="item-header">{t('awb.AWBNo')}</div>
-                                    <div className="content text-center">
-                                        {customsDeclaration.awbId} - {customsDeclaration.status.status}
-                                    </div>
+                                    <div className="content text-center">{currentAwbCode}</div>
                                 </Grid>
-                                <Grid item xs={12} className="item">
+                                <Grid item xs={12} className="text-center item">
                                     <div className="item-header">{t('awb.commercialInvoice')}</div>
                                     <div
                                         className="content pt-3"
@@ -363,42 +450,75 @@ export default function AirWayBillList() {
                                             width: '100%',
                                         }}
                                     >
-                                        {/* <QuiltedImage
-                                            images={customsDeclaration.commercialInvoice}
-                                            callBackFn={(index: number) => {
-                                                console.log(index);
-                                            }}
-                                            isOpenModal={false}
-                                            isFile={true}
-                                            isFilePreview={true}
-                                        /> */}
+                                        <ShowCustomsClearanceInvoice
+                                            customsDeclaration={customsDeclaration}
+                                            callBackFn={handleRemoveFile}
+                                        />
                                     </div>
                                 </Grid>
-                                <Grid item xs={12} className="item">
+                                <Grid item xs={12} className="text-center item">
                                     <div className="item-header">{t('awb.packingList')}</div>
-                                </Grid>
-                                <Grid item xs={12} sm={12} className="text-center" sx={{ mt: 1, mb: 1, p: 2 }}>
-                                    <ButtonGroup
-                                        disableElevation
-                                        variant="contained"
-                                        aria-label="Disabled elevation buttons"
+                                    <div
+                                        className="content pt-3"
+                                        style={{
+                                            height: 230,
+                                            overflowX: 'auto',
+                                            display: 'inline-block',
+                                            width: '100%',
+                                        }}
                                     >
-                                        <Button
+                                        <ShowCustomsClearancePackingList
+                                            customsDeclaration={customsDeclaration}
+                                            callBackFn={handleRemoveFile}
+                                        />
+                                    </div>
+                                </Grid>
+                                <Grid item xs={12} sm={12} className="text-center item">
+                                    <div className="item-header">Action</div>
+                                    <div
+                                        className="content pt-3"
+                                        style={{
+                                            overflowX: 'auto',
+                                            display: 'inline-block',
+                                            width: '100%',
+                                        }}
+                                    >
+                                        <ButtonGroup
+                                            disableElevation
                                             variant="contained"
-                                            color="primary"
-                                            sx={{ ml: 1 }}
-                                            onClick={handleDownload}
-                                            startIcon={<DownloadIcon />}
+                                            aria-label="Disabled elevation buttons"
                                         >
-                                            {t('button.btnDownload')}
-                                        </Button>
-                                    </ButtonGroup>
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                sx={{ ml: 1 }}
+                                                onClick={handleDownload}
+                                                startIcon={<DownloadIcon />}
+                                            >
+                                                {t('button.btnDownload')}
+                                            </Button>
+                                        </ButtonGroup>
+                                        <FormControl fullWidth>
+                                            <InputLabel id="demo-simple-select-label">Age</InputLabel>
+                                            <Select
+                                                labelId="demo-simple-select-label"
+                                                id="demo-simple-select"
+                                                value={1}
+                                                label="Age"
+                                                onChange={handleStatusChange}
+                                            >
+                                                <MenuItem value={10}>Ten</MenuItem>
+                                                <MenuItem value={20}>Twenty</MenuItem>
+                                                <MenuItem value={30}>Thirty</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </div>
                                 </Grid>
                             </Grid>
                         </Card>
                     </Grid>
                 </Grid>
-                <Grid item xs={12} md={12} lg={5} xl={6} sx={{ mt: 1, mb: 1 }} className="content-awb">
+                <Grid item xs={12} md={12} lg={12} xl={6} sx={{ mt: 1, mb: 1 }} className="content-awb">
                     <Grid container direction="row" alignItems="center">
                         <Grid item xs={12}>
                             <Tabs value={value} aria-label="">
@@ -429,11 +549,14 @@ export default function AirWayBillList() {
                                         <TabPanel value={value} index={0}>
                                             <CardContent>
                                                 <Box>
-                                                    {commercialInvoice && (
+                                                    {
                                                         <CommercialInvoiceContext.Provider value={commercialInvoice}>
-                                                            <FileManagement callBackFn={handleUploadInvoice} />
+                                                            <FileManagement
+                                                                callBackFn={handleUploadInvoice}
+                                                                callBackAddFile={handleAddFile}
+                                                            />
                                                         </CommercialInvoiceContext.Provider>
-                                                    )}
+                                                    }
                                                 </Box>
                                             </CardContent>
                                         </TabPanel>
@@ -443,7 +566,17 @@ export default function AirWayBillList() {
                                     <Card w-full="true" className="content-item">
                                         <TabPanel value={value} index={1}>
                                             <CardContent>
-                                                <Box>{packingList && <FileManagement data={packingList} />}</Box>
+                                                <Box>
+                                                    {
+                                                        <PackingListContext.Provider value={packingList}>
+                                                            <FileManagement
+                                                                data={packingList}
+                                                                callBackAddFile={handleAddFile}
+                                                                callBackFn={handleUploadPackingList}
+                                                            />
+                                                        </PackingListContext.Provider>
+                                                    }
+                                                </Box>
                                             </CardContent>
                                         </TabPanel>
                                     </Card>
