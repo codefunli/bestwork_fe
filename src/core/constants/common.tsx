@@ -128,6 +128,7 @@ export const UrlServer = {
         UPLOAD_PACKING_LIST: `${PREFIX_SERVER_URL}/packages/update-package`,
         DOWNLOAD_CCD: `${PREFIX_SERVER_URL}/airway-bill`,
         GET_PDF_FILE: `${PREFIX_SERVER_URL}/invoices/view-file-pdf`,
+        CHANGE_AWB_STATUS: `${PREFIX_SERVER_URL}/airway-bill`,
     },
 };
 
