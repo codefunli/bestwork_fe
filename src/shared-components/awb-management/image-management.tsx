@@ -11,8 +11,9 @@ import {
     IconButton,
     InputLabel,
     Paper,
+    Typography,
 } from '@mui/material';
-import { useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Comment } from '../../core/types/base';
@@ -21,37 +22,20 @@ import ImageManager from '../../shared-components/images-manager/image-manager';
 import { ImageAfterContext, ImageBeforeContext } from '../../ui/awb/awb-list';
 import ImageUploadModal from '../modal/image-upload-modal';
 
-const initialDataImg = {
+const initialValue = {
     description: '',
-    images: [],
-    projectId: '',
+    file: [],
     isOpenComment: false,
-    comment: [
-        {
-            id: '',
-            commentUser: {
-                id: 0,
-                name: 'Quách Tĩnh',
-                avatar: '',
-            },
-            comment: '',
-            dateTime: '',
-            isLastSub: false,
-            subComment: {},
-        },
-    ],
-    postUser: {
-        id: '0',
-        name: 'Đông Tà',
-    },
-    awbId: '',
 };
+
+export const ImageContext = createContext<any>({});
+
 export default function ImageManagement(props: any) {
-    const { callBackFn } = props;
+    const { callBackFn, callBackAddComment } = props;
     const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);
     const [imagesData, setImagesData] = useState<any>([]);
     const [arrMsg, setArrMsg] = useState<Comment[]>([]);
-    const [contentCreate, setContentCreate] = useState(initialDataImg);
+    const [contentCreate, setContentCreate] = useState(initialValue);
     const params = useParams();
     const { t } = useTranslation();
     const imageBefore = useContext(ImageBeforeContext);
@@ -81,18 +65,7 @@ export default function ImageManagement(props: any) {
         }
     }, [imageBefore, imageAfter]);
 
-    useEffect(() => {
-        fetchData();
-    }, [params.id]);
-
-    const fetchData = () => {
-        if (params.id) {
-            setContentCreate({
-                ...contentCreate,
-                projectId: params.id,
-            });
-        }
-    };
+    useEffect(() => {}, [params.id]);
 
     const enableComment = (data: any) => {
         const convertData = imagesData.map((value: any) => {
@@ -107,7 +80,6 @@ export default function ImageManagement(props: any) {
 
     const closeModal = () => {
         setIsOpenCreateModal(false);
-        fetchData();
     };
 
     const openModal = () => {
@@ -115,8 +87,7 @@ export default function ImageManagement(props: any) {
     };
 
     const alertOkFunc = (data: any) => {
-        console.log({ data });
-
+        callBackFn(data);
         setIsOpenCreateModal(false);
     };
 
@@ -127,6 +98,10 @@ export default function ImageManagement(props: any) {
             setArrMsg(arrMsgSt);
         }
     }, [arrMsg]);
+
+    const handleAddImageComment = (data: any) => {
+        callBackAddComment(data);
+    };
 
     return (
         <div>
@@ -151,8 +126,7 @@ export default function ImageManagement(props: any) {
                     </Paper>
                 </Grid>
             </Grid>
-            {imagesData &&
-                imagesData.length > 0 &&
+            {imagesData && imagesData.length > 0 ? (
                 imagesData.map((data: any) => (
                     <Grid
                         key={data.id}
@@ -167,13 +141,18 @@ export default function ImageManagement(props: any) {
                                 <Card w-full="true">
                                     <CardHeader
                                         avatar={<Avatar aria-label="recipe">MS</Avatar>}
-                                        title={data.postUser.name}
-                                        subheader={Date()}
+                                        title={data.createBy}
+                                        subheader={data.createDate}
                                     />
                                     <CardContent>
-                                        <h3>{data.eqBill}</h3>
                                         <p>{data.description}</p>
-                                        <ImageManager data={data.images} callBackFn={() => {}} />
+                                        <ImageManager
+                                            data={{
+                                                files: data.fileStorages,
+                                            }}
+                                            isFile={false}
+                                            callBackFn={() => {}}
+                                        />
                                     </CardContent>
                                     <CardActions>
                                         <Button size="small" onClick={() => enableComment(data)}>
@@ -183,16 +162,21 @@ export default function ImageManagement(props: any) {
                                 </Card>
                             </div>
                             <div>
-                                <CommentEl
-                                    callBackFn={() => {}}
-                                    postId=""
-                                    isEnabled={data.isOpenComment}
-                                    postType={''}
-                                />
+                                <ImageContext.Provider value={data}>
+                                    <CommentEl
+                                        callBackFn={handleAddImageComment}
+                                        postId={data.evidenceBeforeId}
+                                        isEnabled={data.isOpenComment ? data.isOpenComment : false}
+                                        postType={'imageBefore'}
+                                    />
+                                </ImageContext.Provider>
                             </div>
                         </Grid>
                     </Grid>
-                ))}
+                ))
+            ) : (
+                <Typography>{t('message.noData')}</Typography>
+            )}
             <ImageUploadModal
                 isOpen={isOpenCreateModal}
                 closeFunc={closeModal}

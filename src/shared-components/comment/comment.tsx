@@ -11,12 +11,14 @@ import { useAppDispatch } from '../../core/hook/redux';
 import {
     customsClearanceActions,
     getCommercialInvoice,
+    getImageBefore,
     getPackingList,
 } from '../../core/redux/customs-clearance-slice';
 import { getUserInfo } from '../../core/redux/user-slice';
 import { Comment } from '../../core/types/base';
 import { STR_EMPTY } from '../../core/utils/object-utils';
 import { FileContext } from '../awb-management/file-management';
+import { ImageContext } from '../awb-management/image-management';
 import CommentLeft from './comment-left';
 import './comment.scss';
 
@@ -36,14 +38,22 @@ export default function CommentEl(props: CommentProps) {
     const [type, setType] = useState(CommentConstant.ADD);
     const { t } = useTranslation();
     const fileContext = useContext(FileContext);
+    const imageContext = useContext(ImageContext);
     const useInfo = useSelector(getUserInfo);
     const invoiceRedux = useSelector(getCommercialInvoice);
     const packingListRedux = useSelector(getPackingList);
+    const imageBeforeRedux = useSelector(getImageBefore);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        setArrMsgIn(fileContext.comment ? JSON.parse(fileContext.comment) : []);
-    }, [fileContext]);
+        if (fileContext.comment) {
+            setArrMsgIn(JSON.parse(fileContext.comment));
+        } else if (imageContext.comment) {
+            setArrMsgIn(JSON.parse(imageContext.comment));
+        } else {
+            setArrMsgIn([]);
+        }
+    }, [fileContext, imageContext]);
 
     const doReplyLabel = (replyLabel: string, id: string) => {
         setReplyLabel(replyLabel);
@@ -125,6 +135,8 @@ export default function CommentEl(props: CommentProps) {
             postType: postType,
         };
 
+        console.log(postType);
+
         switch (postType) {
             case CUSTOMS_CLEARANCE.INVOICE:
                 const handleInvoiceData = invoiceRedux.map((data: any) => {
@@ -149,6 +161,18 @@ export default function CommentEl(props: CommentProps) {
                     return data;
                 });
                 dispatch(customsClearanceActions.setPackingList(handlePackingData));
+                break;
+            case CUSTOMS_CLEARANCE.IMAGE_BEFORE:
+                const handleImageBeforeData = imageBeforeRedux.map((data: any) => {
+                    if (data.evidenceBeforeId === postId) {
+                        return {
+                            ...data,
+                            comment: JSON.stringify(arrMsgIn),
+                        };
+                    }
+                    return data;
+                });
+                dispatch(customsClearanceActions.setImageBefore(handleImageBeforeData));
                 break;
             default:
                 break;
