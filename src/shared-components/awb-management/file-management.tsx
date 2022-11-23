@@ -1,3 +1,4 @@
+import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import {
     Avatar,
@@ -11,16 +12,16 @@ import {
     InputLabel,
     Paper,
     Tooltip,
+    Typography,
 } from '@mui/material';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Comment } from '../../core/types/base';
+import { CommercialInvoiceContext, PackingListContext } from '../../ui/awb/awb-list';
 import CommentEl from '../comment/comment';
 import ImageManager from '../images-manager/image-manager';
 import FileUploadModal from '../modal/file-upload-modal';
-import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove';
-import { CommercialInvoiceContext, PackingListContext } from '../../ui/awb/awb-list';
 
 const initialValue = {
     description: '',
@@ -28,29 +29,49 @@ const initialValue = {
     isOpenComment: false,
 };
 
+export const FileContext = createContext<any>({});
+
 export default function FileManagement(props: any) {
-    const { callBackFn, callBackAddFile } = props;
+    const { callBackFn, callBackAddFile, callBackAddComment } = props;
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [filesData, setFilesData] = useState<any>([]);
     const [comment, setComment] = useState<Comment[]>([]);
     const [content, setContent] = useState(initialValue);
-    const params = useParams();
     const { t } = useTranslation();
     const commercialInvoice = useContext<any>(CommercialInvoiceContext);
     const packingList = useContext<any>(PackingListContext);
 
     useEffect(() => {
-        setFilesData(commercialInvoice);
-    }, [commercialInvoice]);
-
-    useEffect(() => {
-        setFilesData(packingList);
-    }, [packingList]);
+        if (commercialInvoice && commercialInvoice.length > 0) {
+            setFilesData(
+                commercialInvoice.map((data: any) => {
+                    return {
+                        ...data,
+                        isOpenComment: data.comment ? true : false,
+                    };
+                }),
+            );
+        } else if (packingList && packingList.length > 0) {
+            setFilesData(
+                packingList.map((data: any) => {
+                    return {
+                        ...data,
+                        isOpenComment: data.comment ? true : false,
+                    };
+                }),
+            );
+        } else {
+            setFilesData([]);
+        }
+    }, [commercialInvoice, packingList]);
 
     const enableComment = (data: any) => {
         const convertData = filesData.map((value: any) => {
-            if (value.invoiceiId === data.invoiceiId) {
-                value.isOpenComment = !value.isOpenComment;
+            if (value.invoiceId === data.invoiceId) {
+                return {
+                    ...value,
+                    isOpenComment: !value.isOpenComment,
+                };
             }
             return value;
         });
@@ -90,7 +111,7 @@ export default function FileManagement(props: any) {
 
         const convertData = {
             postType: value.postType,
-            postId: value.invoiceiId ? value.invoiceiId : value.packageId,
+            postId: value.invoiceId ? value.invoiceId : value.packageId,
             fileId: [...fileId],
             toStatus: true,
         };
@@ -107,6 +128,10 @@ export default function FileManagement(props: any) {
         }
 
         return check.length <= 0;
+    };
+
+    const handleAddComment = (data: any) => {
+        callBackAddComment(data);
     };
 
     return (
@@ -133,8 +158,7 @@ export default function FileManagement(props: any) {
                     </Paper>
                 </Grid>
             </Grid>
-            {filesData &&
-                filesData.length > 0 &&
+            {filesData && filesData.length > 0 ? (
                 filesData.map((data: any) => (
                     <Grid
                         key={data.id}
@@ -176,8 +200,8 @@ export default function FileManagement(props: any) {
                                             data={{
                                                 files: data.fileStorages,
                                                 postType: data.postType,
-                                                postId: data.invoiceiId ? data.invoiceiId : data.packageId,
-                                                invoicePostId: data.invoiceiId,
+                                                postId: data.invoiceId ? data.invoiceId : data.packageId,
+                                                invoicePostId: data.invoiceId,
                                             }}
                                             isFile={true}
                                             callBackFn={handleAddFile}
@@ -192,17 +216,22 @@ export default function FileManagement(props: any) {
                             </div>
                             {
                                 <div>
-                                    <CommentEl
-                                        arrMsg={data.comment ? data.comment : []}
-                                        pId={data.id}
-                                        isEnabled={data.isOpenComment}
-                                        projectId={params.id}
-                                    />
+                                    <FileContext.Provider value={data}>
+                                        <CommentEl
+                                            isEnabled={data.isOpenComment ? data.isOpenComment : false}
+                                            callBackFn={handleAddComment}
+                                            postId={data.invoiceId ? data.invoiceId : data.packageId}
+                                            postType={data.postType}
+                                        />
+                                    </FileContext.Provider>
                                 </div>
                             }
                         </Grid>
                     </Grid>
-                ))}
+                ))
+            ) : (
+                <Typography>{t('message.noData')}</Typography>
+            )}
             <FileUploadModal
                 isOpen={isOpenModal}
                 closeFunc={closeModal}

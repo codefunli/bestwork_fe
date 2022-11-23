@@ -8,7 +8,6 @@ import './comment.scss';
 interface CommentRightProps {
     msg: Comment;
     reply: Function;
-    edit: Function;
 }
 
 const message: Comment = {
@@ -26,23 +25,19 @@ const message: Comment = {
 };
 
 export default function CommentLeft(props: CommentRightProps) {
-    const { msg, reply, edit } = props;
+    const { msg, reply } = props;
     const [messages, setMessage] = useState(message);
     const { t } = useTranslation();
 
     useEffect(() => {
-        setMessage(msg);
+        setMessage((prev) => {
+            return { ...prev, ...msg };
+        });
     }, [msg]);
 
     const passIdMsg = (id: any) => {
         if (messages.id === id) {
             reply(t('material.responding') + ' ' + messages.commentUser.name, id);
-        }
-    };
-
-    const passIdMsgEdit = (id: any) => {
-        if (messages.id === id) {
-            edit(t('material.editFor') + ' ' + messages.commentUser.name, id, messages.comment);
         }
     };
 
@@ -102,9 +97,6 @@ export default function CommentLeft(props: CommentRightProps) {
                     </div>
                 </div>
                 <div className="msg-btn-reply text-end">
-                    <Button size="small" variant="text" onClick={() => passIdMsgEdit(messages.id)}>
-                        {t('material.edit')}
-                    </Button>
                     {!messages.isLastSub && (
                         <Button size="small" variant="text" onClick={() => passIdMsg(messages.id)}>
                             {t('material.reply')}
@@ -120,9 +112,7 @@ export default function CommentLeft(props: CommentRightProps) {
                     )}
                 </div>
                 {messages.isShowSubComment &&
-                    messages?.subComment.map((item: any) => (
-                        <CommentLeft key={item.id} msg={item} reply={reply} edit={edit} />
-                    ))}
+                    messages?.subComment.map((item: any) => <CommentLeft key={item.id} msg={item} reply={reply} />)}
             </div>
         </div>
     );

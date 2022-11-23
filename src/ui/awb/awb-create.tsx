@@ -1,27 +1,23 @@
-import { useEffect, useState } from 'react';
+import { yupResolver } from '@hookform/resolvers/yup';
 import {
-    AlertColor,
-    Avatar,
-    Box,
-    ButtonGroup,
-    Card,
-    CardContent,
-    CardHeader,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
     FormControl,
-    Grid,
+    InputLabel,
     MenuItem,
     Select,
-    Typography,
+    TextField,
 } from '@mui/material';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, InputLabel, TextField } from '@mui/material';
-import { useTranslation } from 'react-i18next';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { validateCreateAwbForm, validateCreateRoleForm } from '../../core/constants/validate';
-import { createAirWayBill, getAwbStatus } from '../../services/awb-service';
-import Chip from '@mui/material/Chip';
-import ApiAlert from '../../shared-components/alert/api-alert';
+import { useTranslation } from 'react-i18next';
 import { renderChipAwbStatus, StatusCode } from '../../core/constants/common';
+import { validateCreateAwbForm } from '../../core/constants/validate';
+import { createAirWayBill, getAwbStatus } from '../../services/awb-service';
+import ApiAlert from '../../shared-components/alert/api-alert';
 
 interface CreateAwbProps {
     isOpen: boolean;

@@ -69,7 +69,7 @@ export default function ImageUploadModal(props: AlertDialogSlideProps) {
 
     const handleOkFunc = () => {
         setOpen(false);
-        okFunc();
+        okFunc(imgData);
         clearEvent();
         setImgData(content);
     };

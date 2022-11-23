@@ -1,4 +1,3 @@
-import { FileDownload } from '@mui/icons-material';
 import DownloadIcon from '@mui/icons-material/Download';
 import SearchIcon from '@mui/icons-material/Search';
 import {
@@ -8,7 +7,6 @@ import {
     CardContent,
     FormControl,
     Grid,
-    InputLabel,
     MenuItem,
     Select,
     Tab,
@@ -16,28 +14,40 @@ import {
     TextField,
     Typography,
 } from '@mui/material';
-import Chip from '@mui/material/Chip';
 import { Box } from '@mui/system';
 import { createContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import '../../App.scss';
 import {
     arrayBufferToBase64,
+    CUSTOMS_CLEARANCE,
     downloadZIP,
     prefixZip,
     renderChipAwbStatus,
     StatusCode,
     UrlFeApp,
 } from '../../core/constants/common';
+import { useAppDispatch } from '../../core/hook/redux';
+import {
+    customsClearanceActions,
+    getAirWayBillList,
+    getCommercialInvoice,
+    getCustomsClearanceDocument,
+    getPackingList,
+} from '../../core/redux/customs-clearance-slice';
 import { formatDateTimeResList } from '../../core/utils/get-current-datetime';
 import {
     addFileToCustomsClearance,
+    addInvoicePostComment,
+    addPackingPostComment,
     changeAwbStatus,
     downloadCCD,
     getAirWayBillByProjectId,
     getAllCommercialInvoice,
     getAllCustomsClearanceDocument,
+    getAllImageBefore,
     getAllPackingList,
     getAwbStatus,
     uploadCommercialInvoice,
@@ -54,115 +64,143 @@ import './awb.scss';
 
 export const CommercialInvoiceContext = createContext([]);
 export const PackingListContext = createContext([]);
+export const ImageBeforeContext = createContext([]);
+export const ImageAfterContext = createContext([]);
 
 export default function AirWayBillList() {
     const { t } = useTranslation();
-    const [awbListData, setEwbListData] = useState<any>([]);
-    const [commercialInvoice, setCommercialInvoice] = useState<any>([]);
-    const [packingList, setPackingList] = useState<any>([]);
-    const [imageBefore, setImageBefore] = useState<any>([]);
+    const [awbListData, setAwbListState] = useState<any>([]);
+    const [commercialInvoiceState, setCommercialInvoiceState] = useState<any>([]);
+    const [packingListState, setPackingListState] = useState<any>([]);
+    const [imageBeforeState, setImageBeforeState] = useState<any>([]);
     const [imageAfter, setImageAfter] = useState<any>([]);
-    const [currentAwb, setCurrentAwb] = useState(0);
     const [searchKeyword, setSearchKeyword] = useState('');
-    const [value, setValue] = useState(0);
-    const [customsDeclaration, setCustomsDeclaration] = useState<any>({});
+    const [customsDeclarationDocumentState, setCustomsDeclarationDocumentState] = useState<any>({});
     const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);
     const toggleCreateModal = (value: boolean) => setIsOpenCreateModal(value);
+    const [resForHandleMsg, setResForHandleMsg] = useState<any>();
+    const [statusListState, setStatusListState] = useState<any>([]);
+    const airWayBillListRedux = useSelector(getAirWayBillList);
+    const invoiceRedux = useSelector(getCommercialInvoice);
+    const packingListRedux = useSelector(getPackingList);
+    const customsClearanceDocumentRedux = useSelector(getCustomsClearanceDocument);
     const [projectId, setProjectId] = useState('');
     const params = useParams();
+    const dispatch = useAppDispatch();
+    const [customsClearanceTab, setCustomsClearanceTab] = useState(0);
+    const [awbTab, setAwbTab] = useState(0);
     const [currentAwbCode, setCurrentAwbCode] = useState('');
-    const [resForHandleMsg, setResForHandleMsg] = useState<any>();
     const navigate = useNavigate();
-    const [statusList, setStatusList] = useState<any>([]);
 
-    const fetchAwbData = (projectId: string) => {
-        getAirWayBillByProjectId(projectId).then((value: any) => {
-            if (value && value.data) {
-                setEwbListData(value.data);
-                setCurrentAwbCode(value.data[0].code);
-                fetchCommercialInvoice(value.data[0].code);
-                fetchCustomsDeclaration(value.data[0].code);
-            }
-        });
+    const callInitAPI = async (projectId: string) => {
+        const awbList = await fetchAirWayBillAPI(projectId);
+        dispatch(customsClearanceActions.setAirWayBillList(awbList.data));
+        setCurrentAwbCode(awbList.data[0].code);
+        const res = await Promise.all([
+            fetchCommercialInvoiceAPI(awbList.data[0].code),
+            fetchPackingListApi(awbList.data[0].code),
+            fetchCustomsClearanceDocument(awbList.data[0].code),
+            fetchImageBefore(awbList.data[0].code),
+        ]);
+        dispatch(customsClearanceActions.setCommercialInvoice(res[0].data));
+        dispatch(customsClearanceActions.setPackingList(res[1].data));
+        dispatch(customsClearanceActions.setCustomsClearanceDocument(res[2].data));
+        console.log(res[3]);
     };
 
-    const fetchCustomsDeclaration = (awbCode: string) => {
-        getAllCustomsClearanceDocument(awbCode).then((res: any) => {
-            setCustomsDeclaration(res.data ? res.data : {});
-        });
+    useEffect(() => {
+        dispatch(customsClearanceActions.setAirWayBillList([]));
+        dispatch(customsClearanceActions.setCommercialInvoice([]));
+        dispatch(customsClearanceActions.setPackingList([]));
+        dispatch(
+            customsClearanceActions.setCustomsClearanceDocument({
+                invoiceDoc: [],
+                packagesDoc: [],
+            }),
+        );
+    }, []);
+
+    useEffect(() => {
+        if (params.id) callInitAPI(params.id);
+    }, [params.id]);
+
+    useEffect(() => {
+        setAwbListState(airWayBillListRedux ? airWayBillListRedux : []);
+    }, [airWayBillListRedux]);
+
+    useEffect(() => {
+        setCommercialInvoiceState(invoiceRedux ? invoiceRedux : []);
+    }, [invoiceRedux]);
+
+    useEffect(() => {
+        setPackingListState(packingListRedux ? packingListRedux : []);
+    }, [packingListRedux]);
+
+    useEffect(() => {
+        setCustomsDeclarationDocumentState(customsClearanceDocumentRedux ? customsClearanceDocumentRedux : []);
+    }, [customsClearanceDocumentRedux]);
+
+    const fetchAirWayBillAPI = async (projectId: string) => {
+        return await getAirWayBillByProjectId(projectId);
     };
 
-    const fetchCommercialInvoice = (awbCode: string) => {
-        getAllCommercialInvoice(awbCode).then((value: any) => {
-            if (value && value.data && value.data.length > 0) {
-                setCommercialInvoice(value.data);
-            } else {
-                setCommercialInvoice([]);
-            }
-        });
+    const fetchCommercialInvoiceAPI = async (awbCode: string) => {
+        return await getAllCommercialInvoice(awbCode);
     };
 
-    const fetchPackingList = (awbCode: string) => {
-        getAllPackingList(awbCode).then((value: any) => {
-            if (value && value.data && value.data.length > 0) {
-                setPackingList(value.data);
-            } else {
-                setPackingList([]);
-            }
-        });
+    const fetchPackingListApi = async (awbCode: string) => {
+        return await getAllPackingList(awbCode);
     };
 
-    const fetchDownloadFile = (awbCode: string) => {
-        downloadCCD(awbCode).then((response: any) => {
-            console.log(arrayBufferToBase64(response));
-            downloadZIP(arrayBufferToBase64(response), awbCode, prefixZip);
-        });
+    const fetchImageBefore = async (awbCode: string) => {
+        return await getAllImageBefore(awbCode);
+    };
+
+    const fetchCustomsClearanceDocument = async (awbCode: string) => {
+        return await getAllCustomsClearanceDocument(awbCode);
+    };
+
+    const filterByAirWayBillCode = async (awbCode: string) => {
+        const res = await Promise.all([
+            fetchCommercialInvoiceAPI(awbCode),
+            fetchPackingListApi(awbCode),
+            fetchCustomsClearanceDocument(awbCode),
+        ]);
+        dispatch(customsClearanceActions.setCommercialInvoice(res[0].data));
+        dispatch(customsClearanceActions.setPackingList(res[1].data));
+        dispatch(customsClearanceActions.setCustomsClearanceDocument(res[2].data));
     };
 
     useEffect(() => {
         if (params.id) setProjectId(params.id);
     }, [params.id]);
 
-    useEffect(() => {
-        if (params.id) fetchAwbData(params.id);
-    }, [params.id]);
+    const fetchDownloadFile = (awbCode: string) => {
+        downloadCCD(awbCode).then((response: any) => {
+            downloadZIP(arrayBufferToBase64(response), awbCode, prefixZip);
+        });
+    };
 
-    const handleChangeAwb = (newValue: number, awbCode: string) => {
-        setCurrentAwb(newValue);
+    const handleChangeAwbTab = (newValue: number, awbCode: string) => {
+        setAwbTab(newValue);
         setCurrentAwbCode(awbCode);
-        fetchCommercialInvoice(awbCode);
-        fetchCustomsDeclaration(awbCode);
-        fetchPackingList(awbCode);
+        filterByAirWayBillCode(awbCode);
     };
 
     const handleSearch = () => {
-        const filterItems = awbListData.filter((data: any) => {
-            if (data.code.toLowerCase().indexOf(searchKeyword.toLowerCase()) !== -1) {
-                return data;
-            }
-        });
-        setEwbListData({
-            ...awbListData,
-            awbList: [...filterItems],
-        });
-    };
-
-    const handleChangeAwbDetail = (newValue: number) => {
-        setValue(newValue);
-        handleCallApi(newValue);
-    };
-
-    const handleCallApi = (tabValue: number) => {
-        switch (tabValue) {
-            case 1:
-                fetchPackingList(currentAwbCode);
-                break;
-            case 0:
-                fetchCommercialInvoice(currentAwbCode);
-                break;
-            default:
-                break;
+        let filterItems = awbListData;
+        if (searchKeyword) {
+            filterItems = awbListData.filter((data: any) => {
+                if (data.code.toLowerCase().indexOf(searchKeyword.toLowerCase()) !== -1) {
+                    return data;
+                }
+            });
         }
+        setAwbListState(filterItems);
+    };
+
+    const handleChangeCustomsClearanceTab = (newValue: number) => {
+        setCustomsClearanceTab(newValue);
     };
 
     const handleDownload = () => {
@@ -172,7 +210,9 @@ export default function AirWayBillList() {
     const handleDeleteAwb = () => {};
 
     const handleCreateAwb = () => {
-        if (params.id) fetchAwbData(params.id);
+        fetchAirWayBillAPI(projectId).then((res: any) => {
+            dispatch(customsClearanceActions.setAirWayBillList(res.data));
+        });
     };
 
     const handleUploadInvoice = (fileData: any) => {
@@ -191,7 +231,9 @@ export default function AirWayBillList() {
                 });
 
                 if (res.status === StatusCode.OK) {
-                    fetchCommercialInvoice(currentAwbCode);
+                    fetchCommercialInvoiceAPI(currentAwbCode).then((res: any) => {
+                        dispatch(customsClearanceActions.setCommercialInvoice(res.data));
+                    });
                 }
             })
             .catch(() => {
@@ -217,7 +259,9 @@ export default function AirWayBillList() {
                 });
 
                 if (res.status === StatusCode.OK) {
-                    fetchPackingList(currentAwbCode);
+                    fetchPackingListApi(currentAwbCode).then((res: any) => {
+                        dispatch(customsClearanceActions.setPackingList(res.data));
+                    });
                 }
             })
             .catch(() => {
@@ -237,8 +281,9 @@ export default function AirWayBillList() {
                 });
 
                 if (res.status === StatusCode.OK) {
-                    if (params.id) fetchAwbData(params.id);
-                    handleCallApi(value);
+                    fetchCustomsClearanceDocument(currentAwbCode).then((res: any) => {
+                        dispatch(customsClearanceActions.setCustomsClearanceDocument(res.data));
+                    });
                 }
             })
             .catch(() => {
@@ -255,19 +300,29 @@ export default function AirWayBillList() {
 
     useEffect(() => {
         getAwbStatus().then((value: any) => {
-            if (value && value.status === 'OK' && value.data) setStatusList(value.data);
+            if (value && value.status === 'OK' && value.data) setStatusListState(value.data);
         });
     }, []);
 
-    const handleStatusChange = (v: string, awbCode: string) => {
-        const status = statusList.filter((s: any) => {
-            return s.status === v;
+    const handleStatusChange = (statusChange: string, awbCode: string) => {
+        const status = statusListState.filter((s: any) => {
+            return s.status === statusChange;
         });
 
         const convertData = {
             destinationStatus: status[0].id,
         };
 
+        let handleAirWayBillListRedux = airWayBillListRedux.map((currentAwb: any) => {
+            if (currentAwb.code === awbCode) {
+                return {
+                    ...currentAwb,
+                    status: statusChange,
+                };
+            }
+            return currentAwb;
+        });
+        dispatch(customsClearanceActions.setAirWayBillList(handleAirWayBillListRedux));
         changeAwbStatus(convertData, awbCode)
             .then((res) => {
                 setResForHandleMsg({
@@ -276,8 +331,10 @@ export default function AirWayBillList() {
                 });
 
                 if (res.status === StatusCode.OK) {
-                    if (params.id) fetchAwbData(params.id);
-                    handleChangeAwb(0, currentAwbCode);
+                } else {
+                    fetchAirWayBillAPI(projectId).then((res: any) => {
+                        dispatch(customsClearanceActions.setAirWayBillList(res.data));
+                    });
                 }
             })
             .catch(() => {
@@ -285,7 +342,69 @@ export default function AirWayBillList() {
                     status: StatusCode.ERROR,
                     message: t('message.error'),
                 });
+                fetchAirWayBillAPI(projectId).then((res: any) => {
+                    dispatch(customsClearanceActions.setAirWayBillList(res.data));
+                });
             });
+    };
+
+    const handleAddInvoiceComment = (data: any) => {
+        const convertData = {
+            airWayBillCode: currentAwbCode,
+            comment: data.comment,
+        };
+        switch (data.postType) {
+            case CUSTOMS_CLEARANCE.INVOICE:
+                addInvoicePostComment(convertData, data.postId)
+                    .then((res) => {
+                        setResForHandleMsg({
+                            status: res.status,
+                            message: res.message,
+                        });
+
+                        if (res.status !== StatusCode.OK) {
+                            fetchCommercialInvoiceAPI(currentAwbCode).then((res: any) => {
+                                dispatch(customsClearanceActions.setCommercialInvoice(res.data));
+                            });
+                        }
+                    })
+                    .catch(() => {
+                        fetchCommercialInvoiceAPI(currentAwbCode).then((res: any) => {
+                            dispatch(customsClearanceActions.setCommercialInvoice(res.data));
+                        });
+                        setResForHandleMsg({
+                            status: StatusCode.ERROR,
+                            message: t('message.error'),
+                        });
+                    });
+                break;
+            case CUSTOMS_CLEARANCE.PACKAGE:
+                addPackingPostComment(convertData, data.postId)
+                    .then((res) => {
+                        setResForHandleMsg({
+                            status: res.status,
+                            message: res.message,
+                        });
+
+                        if (res.status !== StatusCode.OK) {
+                            fetchPackingListApi(currentAwbCode).then((res: any) => {
+                                dispatch(customsClearanceActions.setPackingList(res.data));
+                            });
+                        }
+                    })
+                    .catch(() => {
+                        fetchPackingListApi(currentAwbCode).then((res: any) => {
+                            dispatch(customsClearanceActions.setPackingList(res.data));
+                        });
+                        setResForHandleMsg({
+                            status: StatusCode.ERROR,
+                            message: t('message.error'),
+                        });
+                    });
+                break;
+            default:
+                break;
+        }
     };
 
     return (
@@ -341,7 +460,7 @@ export default function AirWayBillList() {
                                         color="white"
                                         variant="h6"
                                         gutterBottom
-                                        sx={{ textTransform: 'uppercase', textAlign: 'center', mt: 2 }}
+                                        sx={{ textTransform: 'uppercase', textAlign: 'center', mt: 1 }}
                                     >
                                         {t('awb.awbTitle')}
                                     </Typography>
@@ -378,7 +497,7 @@ export default function AirWayBillList() {
                                                 </div>
                                                 <Tabs
                                                     orientation="vertical"
-                                                    value={currentAwb}
+                                                    value={awbTab}
                                                     aria-label=""
                                                     sx={{
                                                         borderRight: 1,
@@ -392,12 +511,12 @@ export default function AirWayBillList() {
                                                             <span
                                                                 style={{
                                                                     backgroundColor: `${
-                                                                        currentAwb === index ? '#1976d22a' : ''
+                                                                        awbTab === index ? '#1976d22a' : ''
                                                                     }`,
                                                                     minWidth: '450px',
                                                                 }}
                                                                 className="btn"
-                                                                onClick={() => handleChangeAwb(index, awb.code)}
+                                                                onClick={() => handleChangeAwbTab(index, awb.code)}
                                                             >
                                                                 <div
                                                                     className="float-end"
@@ -419,10 +538,12 @@ export default function AirWayBillList() {
                                                                                 '& .MuiSelect-select': {
                                                                                     padding: 1,
                                                                                 },
+                                                                                '& legend': { display: 'none' },
+                                                                                '& fieldset': { top: 0 },
                                                                             }}
                                                                         >
-                                                                            {statusList &&
-                                                                                statusList.map((s: any) => {
+                                                                            {statusListState &&
+                                                                                statusListState.map((s: any) => {
                                                                                     return (
                                                                                         <MenuItem value={s.status}>
                                                                                             {renderChipAwbStatus(
@@ -495,7 +616,7 @@ export default function AirWayBillList() {
                                         color="white"
                                         variant="h6"
                                         gutterBottom
-                                        sx={{ textTransform: 'uppercase', textAlign: 'center', mt: 2 }}
+                                        sx={{ textTransform: 'uppercase', textAlign: 'center', mt: 1 }}
                                     >
                                         {t('awb.customsClearanceDocuments')}
                                     </Typography>
@@ -516,7 +637,7 @@ export default function AirWayBillList() {
                                         }}
                                     >
                                         <ShowCustomsClearanceInvoice
-                                            customsDeclaration={customsDeclaration}
+                                            customsDeclaration={customsDeclarationDocumentState}
                                             callBackFn={handleRemoveFile}
                                         />
                                     </div>
@@ -533,7 +654,7 @@ export default function AirWayBillList() {
                                         }}
                                     >
                                         <ShowCustomsClearancePackingList
-                                            customsDeclaration={customsDeclaration}
+                                            customsDeclaration={customsDeclarationDocumentState}
                                             callBackFn={handleRemoveFile}
                                         />
                                     </div>
@@ -573,39 +694,42 @@ export default function AirWayBillList() {
                 <Grid item xs={12} md={12} lg={12} xl={6} sx={{ mt: 1, mb: 1 }} className="content-awb">
                     <Grid container direction="row" alignItems="center">
                         <Grid item xs={12}>
-                            <Tabs value={value} aria-label="">
+                            <Tabs value={customsClearanceTab} aria-label="">
                                 <Tab
                                     label={t('awb.commercialInvoice')}
                                     tabIndex={0}
-                                    onFocus={() => handleChangeAwbDetail(0)}
+                                    onFocus={() => handleChangeCustomsClearanceTab(0)}
                                 />
                                 <Tab
                                     label={t('awb.packingList')}
                                     tabIndex={1}
-                                    onFocus={() => handleChangeAwbDetail(1)}
+                                    onFocus={() => handleChangeCustomsClearanceTab(1)}
                                 />
                                 <Tab
                                     label={t('awb.imageBefore')}
                                     tabIndex={2}
-                                    onFocus={() => handleChangeAwbDetail(2)}
+                                    onFocus={() => handleChangeCustomsClearanceTab(2)}
                                 />
                                 <Tab
                                     label={t('awb.imageAfter')}
                                     tabIndex={3}
-                                    onFocus={() => handleChangeAwbDetail(3)}
+                                    onFocus={() => handleChangeCustomsClearanceTab(3)}
                                 />
                             </Tabs>
                             <Grid xs={12} className="position-relative">
                                 <div>
                                     <Card w-full="true" className="">
-                                        <TabPanel value={value} index={0}>
+                                        <TabPanel value={customsClearanceTab} index={0}>
                                             <CardContent>
                                                 <Box>
                                                     {
-                                                        <CommercialInvoiceContext.Provider value={commercialInvoice}>
+                                                        <CommercialInvoiceContext.Provider
+                                                            value={commercialInvoiceState}
+                                                        >
                                                             <FileManagement
                                                                 callBackFn={handleUploadInvoice}
                                                                 callBackAddFile={handleAddFile}
+                                                                callBackAddComment={handleAddInvoiceComment}
                                                             />
                                                         </CommercialInvoiceContext.Provider>
                                                     }
@@ -616,15 +740,15 @@ export default function AirWayBillList() {
                                 </div>
                                 <div>
                                     <Card w-full="true" className="content-item">
-                                        <TabPanel value={value} index={1}>
+                                        <TabPanel value={customsClearanceTab} index={1}>
                                             <CardContent>
                                                 <Box>
                                                     {
-                                                        <PackingListContext.Provider value={packingList}>
+                                                        <PackingListContext.Provider value={packingListState}>
                                                             <FileManagement
-                                                                data={packingList}
                                                                 callBackAddFile={handleAddFile}
                                                                 callBackFn={handleUploadPackingList}
+                                                                callBackAddComment={handleAddInvoiceComment}
                                                             />
                                                         </PackingListContext.Provider>
                                                     }
@@ -635,18 +759,30 @@ export default function AirWayBillList() {
                                 </div>
                                 <div>
                                     <Card w-full="true" className="content-item ">
-                                        <TabPanel value={value} index={2}>
+                                        <TabPanel value={customsClearanceTab} index={2}>
                                             <CardContent>
-                                                <Box>{imageBefore && <ImageManagement data={imageBefore} />}</Box>
+                                                <Box>
+                                                    {
+                                                        <ImageBeforeContext.Provider value={imageBeforeState}>
+                                                            <ImageManagement />
+                                                        </ImageBeforeContext.Provider>
+                                                    }
+                                                </Box>
                                             </CardContent>
                                         </TabPanel>
                                     </Card>
                                 </div>
                                 <div>
                                     <Card w-full="true" className="content-item">
-                                        <TabPanel value={value} index={3}>
+                                        <TabPanel value={customsClearanceTab} index={3}>
                                             <CardContent>
-                                                <Box>{imageAfter && <ImageManagement data={imageAfter} />}</Box>
+                                                <Box>
+                                                    {
+                                                        <ImageAfterContext.Provider value={imageAfter}>
+                                                            <ImageManagement />
+                                                        </ImageAfterContext.Provider>
+                                                    }
+                                                </Box>
                                             </CardContent>
                                         </TabPanel>
                                     </Card>

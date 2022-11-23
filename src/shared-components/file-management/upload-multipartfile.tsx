@@ -82,7 +82,14 @@ export default function UploadMultipartFile(props: props) {
                         ))}
                 </div>
             </div>
-            <input accept=".xls,.pdf,image/*" id="chosen-image" type="file" multiple hidden onChange={onChangeImage} />
+            <input
+                accept=".xlsx,.xls,.pdf,image/*"
+                id="chosen-image"
+                type="file"
+                multiple
+                hidden
+                onChange={onChangeImage}
+            />
         </div>
     );
 }

@@ -1,5 +1,8 @@
 import Chip from '@mui/material/Chip';
 import { PREFIX_SERVER_URL } from './urls';
+import pdf from '../../../src/assets/pdf.png';
+import excel from '../../../src/assets/excel.png';
+import unknown from '../../../src/assets/unknown.jpg';
 
 export const CharacterConstants = {
     SLASH: '/',
@@ -129,6 +132,9 @@ export const UrlServer = {
         DOWNLOAD_CCD: `${PREFIX_SERVER_URL}/airway-bill`,
         GET_PDF_FILE: `${PREFIX_SERVER_URL}/invoices/view-file-pdf`,
         CHANGE_AWB_STATUS: `${PREFIX_SERVER_URL}/airway-bill`,
+        ADD_INVOICE_POST_COMMENT: `${PREFIX_SERVER_URL}/invoices`,
+        ADD_PACKING_POST_COMMENT: `${PREFIX_SERVER_URL}/packages`,
+        GET_ALL_IMAGE_BEFORE: `${PREFIX_SERVER_URL}/evidence-before-post/list/by`,
     },
 };
 
@@ -363,45 +369,15 @@ export const renderImage = (data: any, index: any) => {
 export const renderFile = (data: any, index: any) => {
     switch (data.type.toLowerCase()) {
         case 'pdf':
-            return (
-                <img
-                    loading="lazy"
-                    className="imgTag"
-                    src={
-                        'https://play-lh.googleusercontent.com/9XKD5S7rwQ6FiPXSyp9SzLXfIue88ntf9sJ9K250IuHTL7pmn2-ZB0sngAX4A2Bw4w'
-                    }
-                    key={index}
-                />
-            );
+            return <img loading="lazy" className="imgTag" src={pdf} key={index} />;
         case 'application/pdf':
-            return (
-                <img
-                    loading="lazy"
-                    className="imgTag"
-                    src={
-                        'https://play-lh.googleusercontent.com/9XKD5S7rwQ6FiPXSyp9SzLXfIue88ntf9sJ9K250IuHTL7pmn2-ZB0sngAX4A2Bw4w'
-                    }
-                    key={index}
-                />
-            );
+            return <img loading="lazy" className="imgTag" src={pdf} key={index} />;
         case 'xls':
-            return (
-                <img
-                    loading="lazy"
-                    className="imgTag"
-                    src={'https://cdn1.iconfinder.com/data/icons/famous-brand-apps/100/_-04-512.png'}
-                    key={index}
-                />
-            );
+            return <img loading="lazy" className="imgTag" src={excel} key={index} />;
+        case 'xlsx':
+            return <img loading="lazy" className="imgTag" src={excel} key={index} />;
         case 'application/vnd.ms-excel':
-            return (
-                <img
-                    loading="lazy"
-                    className="imgTag"
-                    src={'https://cdn1.iconfinder.com/data/icons/famous-brand-apps/100/_-04-512.png'}
-                    key={index}
-                />
-            );
+            return <img loading="lazy" className="imgTag" src={excel} key={index} />;
         case 'jpeg':
             return (
                 <img
@@ -421,13 +397,20 @@ export const renderFile = (data: any, index: any) => {
                 />
             );
         case 'png':
-            return <img loading="lazy" className="imgTag" src={data.content} key={index} />;
+            return (
+                <img
+                    loading="lazy"
+                    className="imgTag"
+                    src={`data:image/${data.type};base64,${data.content}`}
+                    key={index}
+                />
+            );
         case 'image/jpeg':
             return <img loading="lazy" className="imgTag" src={URL.createObjectURL(data)} key={index} />;
         case 'image/png':
             return <img loading="lazy" className="imgTag" src={URL.createObjectURL(data)} key={index} />;
         default:
-            return <img loading="lazy" className="imgTag" src={''} key={index} />;
+            return <img loading="lazy" className="imgTag" src={unknown} key={index} />;
     }
 };
 const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
@@ -534,4 +517,9 @@ export const renderChipAwbStatus = (value: any) => {
         default:
             break;
     }
+};
+
+export const CUSTOMS_CLEARANCE = {
+    PACKAGE: 'package',
+    INVOICE: 'invoice',
 };

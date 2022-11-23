@@ -12,12 +12,13 @@ import {
     InputLabel,
     Paper,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Comment } from '../../core/types/base';
 import CommentEl from '../../shared-components/comment/comment';
 import ImageManager from '../../shared-components/images-manager/image-manager';
+import { ImageAfterContext, ImageBeforeContext } from '../../ui/awb/awb-list';
 import ImageUploadModal from '../modal/image-upload-modal';
 
 const initialDataImg = {
@@ -46,17 +47,39 @@ const initialDataImg = {
     awbId: '',
 };
 export default function ImageManagement(props: any) {
-    const { data } = props;
+    const { callBackFn } = props;
     const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);
-    const [imagesData, setImagesData] = useState<any>(data);
+    const [imagesData, setImagesData] = useState<any>([]);
     const [arrMsg, setArrMsg] = useState<Comment[]>([]);
     const [contentCreate, setContentCreate] = useState(initialDataImg);
     const params = useParams();
     const { t } = useTranslation();
+    const imageBefore = useContext(ImageBeforeContext);
+    const imageAfter = useContext(ImageAfterContext);
 
     useEffect(() => {
-        setImagesData(data);
-    }, [data]);
+        if (imageBefore && imageBefore.length > 0) {
+            setImagesData(
+                imageBefore.map((data: any) => {
+                    return {
+                        ...data,
+                        isOpenComment: data.comment ? true : false,
+                    };
+                }),
+            );
+        } else if (imageAfter && imageAfter.length > 0) {
+            setImagesData(
+                imageAfter.map((data: any) => {
+                    return {
+                        ...data,
+                        isOpenComment: data.comment ? true : false,
+                    };
+                }),
+            );
+        } else {
+            setImagesData([]);
+        }
+    }, [imageBefore, imageAfter]);
 
     useEffect(() => {
         fetchData();
@@ -91,9 +114,10 @@ export default function ImageManagement(props: any) {
         setIsOpenCreateModal(true);
     };
 
-    const alertOkFunc = () => {
+    const alertOkFunc = (data: any) => {
+        console.log({ data });
+
         setIsOpenCreateModal(false);
-        fetchData();
     };
 
     useEffect(() => {
@@ -127,7 +151,8 @@ export default function ImageManagement(props: any) {
                     </Paper>
                 </Grid>
             </Grid>
-            {imagesData.length > 0 &&
+            {imagesData &&
+                imagesData.length > 0 &&
                 imagesData.map((data: any) => (
                     <Grid
                         key={data.id}
@@ -159,10 +184,10 @@ export default function ImageManagement(props: any) {
                             </div>
                             <div>
                                 <CommentEl
-                                    arrMsg={data.comment}
-                                    pId={data.id}
+                                    callBackFn={() => {}}
+                                    postId=""
                                     isEnabled={data.isOpenComment}
-                                    projectId={params.id}
+                                    postType={''}
                                 />
                             </div>
                         </Grid>
