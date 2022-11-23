@@ -1,43 +1,55 @@
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
 import SendIcon from '@mui/icons-material/Send';
 import { Divider, IconButton, Paper, TextField } from '@mui/material';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
+import { CUSTOMS_CLEARANCE } from '../../core/constants/common';
 import { CommentConstant } from '../../core/constants/constant';
+import { useAppDispatch } from '../../core/hook/redux';
+import {
+    customsClearanceActions,
+    getCommercialInvoice,
+    getPackingList,
+} from '../../core/redux/customs-clearance-slice';
+import { getUserInfo } from '../../core/redux/user-slice';
 import { Comment } from '../../core/types/base';
 import { STR_EMPTY } from '../../core/utils/object-utils';
+import { FileContext } from '../awb-management/file-management';
 import CommentLeft from './comment-left';
 import './comment.scss';
 
 interface CommentProps {
-    arrMsg: Comment[];
     isEnabled: boolean;
-    pId: string;
-    projectId: any;
+    callBackFn: Function;
+    postId: string;
+    postType: string;
 }
 
 export default function CommentEl(props: CommentProps) {
-    const { arrMsg, isEnabled, pId, projectId } = props;
-    const [arrMsgIn, setArrMsgIn] = useState<Comment[]>(arrMsg);
+    const { isEnabled, callBackFn, postId, postType } = props;
+    const [arrMsgIn, setArrMsgIn] = useState<Comment[]>([]);
     const [newMsg, setNewMsg] = useState('');
     const [replyLabel, setReplyLabel] = useState('');
     const [currentId, setCurrentId] = useState('');
     const [type, setType] = useState(CommentConstant.ADD);
     const { t } = useTranslation();
+    const fileContext = useContext(FileContext);
+    const useInfo = useSelector(getUserInfo);
+    const invoiceRedux = useSelector(getCommercialInvoice);
+    const packingListRedux = useSelector(getPackingList);
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        setArrMsgIn(fileContext.comment ? JSON.parse(fileContext.comment) : []);
+    }, [fileContext]);
 
     const doReplyLabel = (replyLabel: string, id: string) => {
         setReplyLabel(replyLabel);
         setCurrentId(id);
         setType(CommentConstant.REPLY);
         setNewMsg('');
-    };
-
-    const doEditLabel = (editLabel: string, id: string, comment: string) => {
-        setReplyLabel(editLabel);
-        setCurrentId(id);
-        setType(CommentConstant.EDIT);
-        setNewMsg(comment);
     };
 
     const handleInputChange = (e: any) => {
@@ -56,9 +68,9 @@ export default function CommentEl(props: CommentProps) {
                 arrMsgIn.push({
                     id: uuidv4(),
                     commentUser: {
-                        id: 0,
-                        name: 'Nam đế',
-                        avatar: 'https://i.pinimg.com/474x/dc/fb/42/dcfb427e747a56047d46df17d621ed4b.jpg',
+                        id: `${useInfo.id}`,
+                        name: `${useInfo.userName}`,
+                        avatar: `${useInfo.avatar ? useInfo.avatar : ''}`,
                     },
                     comment: newMsg,
                     dateTime: `${new Date().toISOString()}`,
@@ -71,9 +83,9 @@ export default function CommentEl(props: CommentProps) {
                         cmt.subComment.push({
                             id: uuidv4(),
                             commentUser: {
-                                id: 0,
-                                name: 'Nam đế',
-                                avatar: 'https://i.pinimg.com/474x/dc/fb/42/dcfb427e747a56047d46df17d621ed4b.jpg',
+                                id: `${useInfo.id}`,
+                                name: `${useInfo.userName}`,
+                                avatar: `${useInfo.avatar ? useInfo.avatar : ''}`,
                             },
                             comment: newMsg,
                             dateTime: `${new Date().toISOString()}`,
@@ -87,9 +99,9 @@ export default function CommentEl(props: CommentProps) {
                                 subCmt.subComment.push({
                                     id: uuidv4(),
                                     commentUser: {
-                                        id: 0,
-                                        name: 'Nam đế',
-                                        avatar: 'https://saostyle.vn/wp-content/uploads/2020/10/Hermione-Granger-Emma-Watson.jpg',
+                                        id: `${useInfo.id}`,
+                                        name: `${useInfo.userName}`,
+                                        avatar: `${useInfo.avatar ? useInfo.avatar : ''}`,
                                     },
                                     comment: newMsg,
                                     dateTime: `${new Date().toISOString()}`,
@@ -97,24 +109,6 @@ export default function CommentEl(props: CommentProps) {
                                     subComment: [],
                                 });
                                 return cmt;
-                            }
-                        });
-                    }
-                });
-            } else if (CommentConstant.EDIT === type) {
-                arrMsgIn.map((cmt) => {
-                    if (cmt.id === currentId) {
-                        cmt.comment = newMsg;
-                    } else {
-                        cmt.subComment.map((subCmt: any) => {
-                            if (subCmt.id === currentId) {
-                                subCmt.comment = newMsg;
-                            } else {
-                                subCmt.subComment.map((subSubCmt: any) => {
-                                    if (subSubCmt.id === currentId) {
-                                        subSubCmt.comment = newMsg;
-                                    }
-                                });
                             }
                         });
                     }
@@ -127,7 +121,40 @@ export default function CommentEl(props: CommentProps) {
 
         const repObj = {
             comment: JSON.stringify(arrMsgIn),
+            postId: postId,
+            postType: postType,
         };
+
+        switch (postType) {
+            case CUSTOMS_CLEARANCE.INVOICE:
+                const handleInvoiceData = invoiceRedux.map((data: any) => {
+                    if (data.invoiceId === postId) {
+                        return {
+                            ...data,
+                            comment: JSON.stringify(arrMsgIn),
+                        };
+                    }
+                    return data;
+                });
+                dispatch(customsClearanceActions.setCommercialInvoice(handleInvoiceData));
+                break;
+            case CUSTOMS_CLEARANCE.PACKAGE:
+                const handlePackingData = packingListRedux.map((data: any) => {
+                    if (data.packageId === postId) {
+                        return {
+                            ...data,
+                            comment: JSON.stringify(arrMsgIn),
+                        };
+                    }
+                    return data;
+                });
+                dispatch(customsClearanceActions.setPackingList(handlePackingData));
+                break;
+            default:
+                break;
+        }
+
+        callBackFn(repObj);
 
         setArrMsgIn((prev) => {
             return [...prev];
@@ -144,12 +171,16 @@ export default function CommentEl(props: CommentProps) {
     return (
         <div className="mb-2 border shadow ">
             <div
-                className={` msg-wrapper-scroll pt-3 ${isEnabled && arrMsgIn.length > 0 ? 'msg-height-15rem' : ''}`}
+                className={` msg-wrapper-scroll pt-3 ${
+                    isEnabled && arrMsgIn && arrMsgIn.length > 0 ? 'msg-height-15rem' : ''
+                }`}
                 id="comment-box"
             >
                 {isEnabled &&
+                    arrMsgIn &&
+                    arrMsgIn.length > 0 &&
                     arrMsgIn.map((item: any) => {
-                        return <CommentLeft key={item.id} msg={item} reply={doReplyLabel} edit={doEditLabel} />;
+                        return <CommentLeft key={item.id} msg={item} reply={doReplyLabel} />;
                     })}
             </div>
             <div>

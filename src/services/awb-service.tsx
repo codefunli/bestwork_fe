@@ -68,3 +68,18 @@ export const changeAwbStatus = async (object: any, awbCode: string) => {
     const res = await apiClient.post<any>(`${UrlServer.AWB.CHANGE_AWB_STATUS}/${awbCode}/change-status`, object);
     return res.data;
 };
+
+export const addInvoicePostComment = async (object: any, postId: string) => {
+    const res = await apiClient.patch<any>(`${UrlServer.AWB.ADD_INVOICE_POST_COMMENT}/${postId}/comment`, object);
+    return res.data;
+};
+
+export const addPackingPostComment = async (object: any, postId: string) => {
+    const res = await apiClient.patch<any>(`${UrlServer.AWB.ADD_PACKING_POST_COMMENT}/${postId}/comment`, object);
+    return res.data;
+};
+
+export const getAllImageBefore = async (awbCode: string) => {
+    const res = await apiClient.get<any>(`${UrlServer.AWB.GET_ALL_IMAGE_BEFORE}/${awbCode}`);
+    return res.data;
+};
