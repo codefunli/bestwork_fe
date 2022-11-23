@@ -14,9 +14,7 @@ const Transition = forwardRef(function Transition(
 
 interface AlertDialogSlideProps {
     title: string;
-    content: {
-        images: any;
-    };
+    content: Array<any>;
     noBtn: string;
     okBtn: string;
     isOpen: boolean;
@@ -59,10 +57,14 @@ export default function ShowImage(props: AlertDialogSlideProps) {
                 <DialogContent>
                     <DialogContentText id="alert-dialog-slide-description" width={500} height={'auto'}>
                         {content &&
-                            content.images &&
-                            content.images.map((image: any, index: any) => (
+                            content.map((image: any, index: any) => (
                                 <div key={index}>
-                                    <img src={image.data} alt="" className="w-100 border" />
+                                    <img
+                                        loading="lazy"
+                                        className="imgTag w-100 border"
+                                        src={`data:image/${image.type};base64,${image.content}`}
+                                        key={index}
+                                    />
                                 </div>
                             ))}
                     </DialogContentText>

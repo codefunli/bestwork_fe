@@ -40,7 +40,7 @@ export default function ImageManager(props: ImageManager) {
                         isOpenModal={false}
                         isFile={false}
                         isFilePreview={false}
-                        invoicePostId={data.invoicePostId}
+                        invoicePostId={-1}
                     />
                 </button>
             ) : (
@@ -55,15 +55,15 @@ export default function ImageManager(props: ImageManager) {
                     />
                 </div>
             )}
-            {/* <ShowImage
+            <ShowImage
                 isOpen={isShowModal}
                 closeFunc={closeModal}
                 okFunc={alertOkFunc}
                 title={t('material.previewImage')}
-                content={data}
+                content={data.files}
                 noBtn="NO"
                 okBtn="OK"
-            /> */}
+            />
         </>
     );
 }

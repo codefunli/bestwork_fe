@@ -35,11 +35,13 @@ import {
     getAirWayBillList,
     getCommercialInvoice,
     getCustomsClearanceDocument,
+    getImageBefore,
     getPackingList,
 } from '../../core/redux/customs-clearance-slice';
 import { formatDateTimeResList } from '../../core/utils/get-current-datetime';
 import {
     addFileToCustomsClearance,
+    addImageBeforeComment,
     addInvoicePostComment,
     addPackingPostComment,
     changeAwbStatus,
@@ -51,6 +53,7 @@ import {
     getAllPackingList,
     getAwbStatus,
     uploadCommercialInvoice,
+    uploadImageBefore,
     uploadPackingList,
 } from '../../services/awb-service';
 import ApiAlert from '../../shared-components/alert/api-alert';
@@ -83,6 +86,7 @@ export default function AirWayBillList() {
     const airWayBillListRedux = useSelector(getAirWayBillList);
     const invoiceRedux = useSelector(getCommercialInvoice);
     const packingListRedux = useSelector(getPackingList);
+    const imageBeforeRedux = useSelector(getImageBefore);
     const customsClearanceDocumentRedux = useSelector(getCustomsClearanceDocument);
     const [projectId, setProjectId] = useState('');
     const params = useParams();
@@ -105,13 +109,14 @@ export default function AirWayBillList() {
         dispatch(customsClearanceActions.setCommercialInvoice(res[0].data));
         dispatch(customsClearanceActions.setPackingList(res[1].data));
         dispatch(customsClearanceActions.setCustomsClearanceDocument(res[2].data));
-        console.log(res[3]);
+        dispatch(customsClearanceActions.setImageBefore(res[3].data));
     };
 
     useEffect(() => {
         dispatch(customsClearanceActions.setAirWayBillList([]));
         dispatch(customsClearanceActions.setCommercialInvoice([]));
         dispatch(customsClearanceActions.setPackingList([]));
+        dispatch(customsClearanceActions.setImageBefore([]));
         dispatch(
             customsClearanceActions.setCustomsClearanceDocument({
                 invoiceDoc: [],
@@ -135,6 +140,10 @@ export default function AirWayBillList() {
     useEffect(() => {
         setPackingListState(packingListRedux ? packingListRedux : []);
     }, [packingListRedux]);
+
+    useEffect(() => {
+        setImageBeforeState(imageBeforeRedux ? imageBeforeRedux : []);
+    }, [imageBeforeRedux]);
 
     useEffect(() => {
         setCustomsDeclarationDocumentState(customsClearanceDocumentRedux ? customsClearanceDocumentRedux : []);
@@ -165,10 +174,12 @@ export default function AirWayBillList() {
             fetchCommercialInvoiceAPI(awbCode),
             fetchPackingListApi(awbCode),
             fetchCustomsClearanceDocument(awbCode),
+            fetchImageBefore(awbCode),
         ]);
         dispatch(customsClearanceActions.setCommercialInvoice(res[0].data));
         dispatch(customsClearanceActions.setPackingList(res[1].data));
         dispatch(customsClearanceActions.setCustomsClearanceDocument(res[2].data));
+        dispatch(customsClearanceActions.setImageBefore(res[3].data));
     };
 
     useEffect(() => {
@@ -272,6 +283,41 @@ export default function AirWayBillList() {
             });
     };
 
+    const handleUploadImageBefore = (imageData: any) => {
+        let formData = new FormData();
+
+        if (imageData && imageData.file && imageData.file.length > 0)
+            imageData.file.forEach((data: any) => {
+                formData.append('mFiles', data);
+            });
+        formData.append(
+            'evidenceBefore',
+            new Blob([JSON.stringify({ airWayBillCode: currentAwbCode, description: imageData.description })], {
+                type: 'application/json',
+            }),
+        );
+
+        uploadImageBefore(formData)
+            .then((res) => {
+                setResForHandleMsg({
+                    status: res.status,
+                    message: res.message,
+                });
+
+                if (res.status === StatusCode.OK) {
+                    fetchImageBefore(currentAwbCode).then((res: any) => {
+                        dispatch(customsClearanceActions.setImageBefore(res.data));
+                    });
+                }
+            })
+            .catch(() => {
+                setResForHandleMsg({
+                    status: StatusCode.ERROR,
+                    message: t('message.error'),
+                });
+            });
+    };
+
     const handleAddFile = (data: any) => {
         addFileToCustomsClearance({ ...data })
             .then((res) => {
@@ -348,7 +394,7 @@ export default function AirWayBillList() {
             });
     };
 
-    const handleAddInvoiceComment = (data: any) => {
+    const handleAddFileComment = (data: any) => {
         const convertData = {
             airWayBillCode: currentAwbCode,
             comment: data.comment,
@@ -401,6 +447,43 @@ export default function AirWayBillList() {
                             message: t('message.error'),
                         });
                     });
+                break;
+            default:
+                break;
+        }
+    };
+
+    const handleAddImageComment = (data: any) => {
+        const convertData = {
+            airWayBillCode: currentAwbCode,
+            comment: data.comment,
+        };
+        switch (data.postType) {
+            case CUSTOMS_CLEARANCE.IMAGE_BEFORE:
+                addImageBeforeComment(convertData, data.postId)
+                    .then((res) => {
+                        setResForHandleMsg({
+                            status: res.status,
+                            message: res.message,
+                        });
+
+                        if (res.status !== StatusCode.OK) {
+                            fetchImageBefore(currentAwbCode).then((res: any) => {
+                                dispatch(customsClearanceActions.setImageBefore(res.data));
+                            });
+                        }
+                    })
+                    .catch(() => {
+                        fetchImageBefore(currentAwbCode).then((res: any) => {
+                            dispatch(customsClearanceActions.setImageBefore(res.data));
+                        });
+                        setResForHandleMsg({
+                            status: StatusCode.ERROR,
+                            message: t('message.error'),
+                        });
+                    });
+                break;
+            case CUSTOMS_CLEARANCE.PACKAGE:
                 break;
             default:
                 break;
@@ -729,7 +812,7 @@ export default function AirWayBillList() {
                                                             <FileManagement
                                                                 callBackFn={handleUploadInvoice}
                                                                 callBackAddFile={handleAddFile}
-                                                                callBackAddComment={handleAddInvoiceComment}
+                                                                callBackAddComment={handleAddFileComment}
                                                             />
                                                         </CommercialInvoiceContext.Provider>
                                                     }
@@ -748,7 +831,7 @@ export default function AirWayBillList() {
                                                             <FileManagement
                                                                 callBackAddFile={handleAddFile}
                                                                 callBackFn={handleUploadPackingList}
-                                                                callBackAddComment={handleAddInvoiceComment}
+                                                                callBackAddComment={handleAddFileComment}
                                                             />
                                                         </PackingListContext.Provider>
                                                     }
@@ -764,7 +847,10 @@ export default function AirWayBillList() {
                                                 <Box>
                                                     {
                                                         <ImageBeforeContext.Provider value={imageBeforeState}>
-                                                            <ImageManagement />
+                                                            <ImageManagement
+                                                                callBackFn={handleUploadImageBefore}
+                                                                callBackAddComment={handleAddImageComment}
+                                                            />
                                                         </ImageBeforeContext.Provider>
                                                     }
                                                 </Box>

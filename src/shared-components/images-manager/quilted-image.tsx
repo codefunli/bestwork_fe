@@ -168,19 +168,19 @@ export default function QuiltedImage(props: {
                                         <CardHeader
                                             sx={{ padding: 0.5 }}
                                             className="card-img-overlay img-item"
-                                            action={
-                                                <IconButton
-                                                    aria-label="settings"
-                                                    color="primary"
-                                                    onClick={() => handleDeleteImage(index)}
-                                                >
-                                                    <Tooltip title={t('tooltip.remove')} placement="top">
-                                                        <RemoveCircleIcon />
-                                                    </Tooltip>
-                                                </IconButton>
-                                            }
+                                            // action={
+                                            //     <IconButton
+                                            //         aria-label="settings"
+                                            //         color="primary"
+                                            //         onClick={() => handleDeleteImage(index)}
+                                            //     >
+                                            //         <Tooltip title={t('tooltip.remove')} placement="top">
+                                            //             <RemoveCircleIcon />
+                                            //         </Tooltip>
+                                            //     </IconButton>
+                                            // }
                                         />
-                                        {renderImage(item, index)}
+                                        {renderFile(item, index)}
                                     </Card>
                                 </ImageListItem>
                             );

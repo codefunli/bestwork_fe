@@ -67,10 +67,22 @@ interface AirWayBill {
     updateDate: string;
 }
 
+interface ImageBefore {
+    evidenceBeforeId: number;
+    comment: string;
+    createBy: string;
+    createDate: string;
+    description: string;
+    fileStorages: Array<FileStorages>;
+    updateBy: string;
+    updateDate: string;
+}
+
 interface CustomsClearance {
     airWayBillList: Array<AirWayBill>;
     commercialInvoice: Array<CommercialInvoice>;
     packingList: Array<PackingList>;
+    imageBefore: Array<ImageBefore>;
     customsClearanceDocument: CustomsClearanceDocument;
 }
 
@@ -133,6 +145,29 @@ const initialState: CustomsClearance = {
             updateDate: '',
         },
     ],
+    imageBefore: [
+        {
+            evidenceBeforeId: -1,
+            comment: '',
+            createBy: '',
+            createDate: '',
+            description: '',
+            fileStorages: [
+                {
+                    fileId: -1,
+                    content: '',
+                    createDate: '',
+                    data: '',
+                    isChoosen: false,
+                    name: '',
+                    progressId: -1,
+                    type: '',
+                },
+            ],
+            updateBy: '',
+            updateDate: '',
+        },
+    ],
     customsClearanceDocument: {
         invoiceDoc: [
             {
@@ -170,6 +205,9 @@ export const customsClearanceSlice = createSlice({
         setPackingList(state, action: PayloadAction<Array<PackingList>>) {
             state.packingList = action.payload;
         },
+        setImageBefore(state, action: PayloadAction<Array<ImageBefore>>) {
+            state.imageBefore = action.payload;
+        },
         setCustomsClearanceDocument(state, action: PayloadAction<CustomsClearanceDocument>) {
             state.customsClearanceDocument = action.payload;
         },
@@ -183,6 +221,8 @@ export const getAirWayBillList = (state: any) => state.customsClearance.airWayBi
 export const getCommercialInvoice = (state: any) => state.customsClearance.commercialInvoice;
 
 export const getPackingList = (state: any) => state.customsClearance.packingList;
+
+export const getImageBefore = (state: any) => state.customsClearance.imageBefore;
 
 export const getCustomsClearanceDocument = (state: any) => state.customsClearance.customsClearanceDocument;
 

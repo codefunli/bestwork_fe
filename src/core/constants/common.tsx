@@ -135,6 +135,8 @@ export const UrlServer = {
         ADD_INVOICE_POST_COMMENT: `${PREFIX_SERVER_URL}/invoices`,
         ADD_PACKING_POST_COMMENT: `${PREFIX_SERVER_URL}/packages`,
         GET_ALL_IMAGE_BEFORE: `${PREFIX_SERVER_URL}/evidence-before-post/list/by`,
+        UPLOAD_IMAGE_BEFORE: `${PREFIX_SERVER_URL}/evidence-before-post/update`,
+        ADD_IMAGE_BEFORE_COMMENT: `${PREFIX_SERVER_URL}/evidence-before-post`,
     },
 };
 
@@ -522,4 +524,6 @@ export const renderChipAwbStatus = (value: any) => {
 export const CUSTOMS_CLEARANCE = {
     PACKAGE: 'package',
     INVOICE: 'invoice',
+    IMAGE_BEFORE: 'imageBefore',
+    IMAGE_AFTER: 'imageAfter',
 };
