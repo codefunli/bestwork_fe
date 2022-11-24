@@ -25,7 +25,7 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Outlet, useNavigate } from 'react-router-dom';
-import { ErrorPagePath, MenuItem, StatusCode, UrlFeApp } from '../core/constants/common';
+import { ErrorPagePath, MenuItem, StatusCode, UrlFeApp, UrlServer } from '../core/constants/common';
 import menuItemLinkData from '../core/constants/menu-item-link';
 import { useAppDispatch, useAppSelector } from '../core/hook/redux';
 import { appAction } from '../core/redux/app-slice';
@@ -42,6 +42,9 @@ import UserDropdown from '../ui/user-dropdown/user-dropdown';
 import CollapsedBreadcrumbs from './collapsed-breadcrumbs';
 import './main-app.scss';
 import '../App.scss';
+import axios from 'axios';
+import { stringify } from 'qs';
+import { BASE_API_PATH } from '../core/constants/urls';
 
 const drawerWidth = 240;
 
@@ -143,30 +146,86 @@ export default function MiniDrawer() {
             setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10));
         }, 1000);
 
-        isCheckLogined()
-            .then((resp) => {
-                if (resp.status === StatusCode.OK) {
-                    dispatch(userActions.setIsLogined(true));
-                    dispatch(appAction.setIsShowMsgErrLogin(false));
-                    clearInterval(timer);
-                    navigate(UrlFeApp.DASH_BOARD);
+        const accessToken = localStorage.getItem('access_token');
+        const refreshToken = localStorage.getItem('refresh_token');
 
-                    getCurrentUserInfo().then((res) => {
-                        dispatch(userActions.setUserInfo(res.data));
-                    });
-                } else {
-                    dispatch(appAction.setIsPageLoading(true));
-                    dispatch(userActions.setIsLogined(false));
-                    dispatch(appAction.setIsShowMsgErrLogin(true));
-                    navigate(UrlFeApp.LOGIN_URL);
-                }
-            })
-            .catch(() => {
-                dispatch(appAction.setIsPageLoading(true));
-                dispatch(appAction.setIsShowMsgErrLogin(false));
-                dispatch(userActions.setIsLogined(false));
-                navigate(UrlFeApp.LOGIN_URL);
+        if (accessToken && refreshToken) {
+            const apiClient = axios.create({
+                baseURL: BASE_API_PATH,
+                withCredentials: true,
+                headers: {
+                    'content-type': 'application/json',
+                    prefix: 'Bearer',
+                    access_token: accessToken ? accessToken : '',
+                    refresh_token: refreshToken ? refreshToken : '',
+                },
+                paramsSerializer(params: any) {
+                    return stringify(params);
+                },
             });
+            apiClient
+                .get(`${UrlServer.USER.IS_LOGINED}`)
+                .then((resp: any) => {
+                    if (resp.data.status === StatusCode.OK) {
+                        dispatch(userActions.setIsLogined(true));
+                        dispatch(appAction.setIsShowMsgErrLogin(false));
+                        clearInterval(timer);
+                        navigate(UrlFeApp.DASH_BOARD);
+                        getCurrentUserInfo().then((res) => {
+                            dispatch(userActions.setUserInfo(res.data));
+                        });
+                    } else {
+                        dispatch(appAction.setIsPageLoading(true));
+                        dispatch(userActions.setIsLogined(false));
+                        dispatch(appAction.setIsShowMsgErrLogin(true));
+                        navigate(UrlFeApp.LOGIN_URL);
+                    }
+                })
+                .catch((err: any) => {
+                    dispatch(appAction.setIsPageLoading(true));
+                    dispatch(appAction.setIsShowMsgErrLogin(false));
+                    dispatch(userActions.setIsLogined(false));
+                    navigate(UrlFeApp.LOGIN_URL);
+                });
+        } else {
+            const apiClient = axios.create({
+                baseURL: BASE_API_PATH,
+                withCredentials: true,
+                headers: {
+                    'content-type': 'application/json',
+                    prefix: 'Bearer',
+                    access_token: accessToken ? accessToken : '',
+                    refresh_token: refreshToken ? refreshToken : '',
+                },
+                paramsSerializer(params: any) {
+                    return stringify(params);
+                },
+            });
+            apiClient
+                .get(`${UrlServer.USER.IS_LOGINED}`)
+                .then((resp: any) => {
+                    if (resp.data.status === StatusCode.OK) {
+                        dispatch(userActions.setIsLogined(true));
+                        dispatch(appAction.setIsShowMsgErrLogin(false));
+                        clearInterval(timer);
+                        navigate(UrlFeApp.DASH_BOARD);
+                        getCurrentUserInfo().then((res) => {
+                            dispatch(userActions.setUserInfo(res.data));
+                        });
+                    } else {
+                        dispatch(appAction.setIsPageLoading(true));
+                        dispatch(userActions.setIsLogined(false));
+                        dispatch(appAction.setIsShowMsgErrLogin(true));
+                        navigate(UrlFeApp.LOGIN_URL);
+                    }
+                })
+                .catch((err: any) => {
+                    dispatch(appAction.setIsPageLoading(true));
+                    dispatch(appAction.setIsShowMsgErrLogin(false));
+                    dispatch(userActions.setIsLogined(false));
+                    navigate(UrlFeApp.LOGIN_URL);
+                });
+        }
     }, []);
 
     const StyledBadge = styled(Badge)(({ theme }) => ({
