@@ -118,10 +118,11 @@ export default function ImageManagement(props: any) {
                             border: 2,
                             borderColor: 'primary.main',
                         }}
+                        onClick={openModal}
                     >
                         <InputLabel htmlFor="outlined-adornment-amount">{t('awb.uploadImage')}</InputLabel>
                         <IconButton color="primary" sx={{ p: '10px' }} aria-label="directions">
-                            <AddPhotoAlternateIcon onClick={openModal} />
+                            <AddPhotoAlternateIcon />
                         </IconButton>
                     </Paper>
                 </Grid>
@@ -165,9 +166,9 @@ export default function ImageManagement(props: any) {
                                 <ImageContext.Provider value={data}>
                                     <CommentEl
                                         callBackFn={handleAddImageComment}
-                                        postId={data.evidenceBeforeId}
+                                        postId={data.evidenceBeforeId ? data.evidenceBeforeId : data.evidenceAfterId}
                                         isEnabled={data.isOpenComment ? data.isOpenComment : false}
-                                        postType={'imageBefore'}
+                                        postType={data.evidenceBeforeId ? 'imageBefore' : 'imageAfter'}
                                     />
                                 </ImageContext.Provider>
                             </div>

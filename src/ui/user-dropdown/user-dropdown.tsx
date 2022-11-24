@@ -1,7 +1,18 @@
 import LogoutIcon from '@mui/icons-material/Logout';
 import PersonIcon from '@mui/icons-material/Person';
 import SettingsIcon from '@mui/icons-material/Settings';
-import { Avatar, Badge, ClickAwayListener, Grid, Grow, MenuItem, MenuList, Paper, Popper, Tooltip } from '@mui/material';
+import {
+    Avatar,
+    Badge,
+    ClickAwayListener,
+    Grid,
+    Grow,
+    MenuItem,
+    MenuList,
+    Paper,
+    Popper,
+    Tooltip,
+} from '@mui/material';
 import { deepOrange } from '@mui/material/colors';
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -9,7 +20,7 @@ import { useNavigate } from 'react-router-dom';
 import { UrlFeApp } from '../../core/constants/common';
 import { logout } from '../../services/auth-service';
 import ChangePassword from '../change-password/change-password';
-import { useSelector } from "react-redux";
+import { useSelector } from 'react-redux';
 import { getUserInfo } from '../../core/redux/user-slice';
 import './user-dropdown.scss';
 
@@ -34,6 +45,8 @@ const UserDropdown = () => {
 
     const handleLogout = () => {
         logout().then(() => {
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('refresh_token');
             navigate(UrlFeApp.LOGIN_URL);
         });
     };
@@ -43,12 +56,7 @@ const UserDropdown = () => {
             <Grid container direction="column" alignItems="end">
                 <Grid item xs={12}>
                     <Tooltip title="" placement="bottom-start" ref={anchorRef}>
-                        <Badge
-                            sx={{ mr: 2 }}
-                            color="secondary"
-                            onClick={handleToggle}
-                            className="avatar"
-                        >
+                        <Badge sx={{ mr: 2 }} color="secondary" onClick={handleToggle} className="avatar">
                             <Avatar sx={{ bgcolor: deepOrange[500] }} src={userInfo?.avatar} />
                         </Badge>
                     </Tooltip>
@@ -70,14 +78,17 @@ const UserDropdown = () => {
                         style={{
                             transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
                             marginTop: '1.3rem',
-                            minWidth: '12rem'
+                            minWidth: '12rem',
                         }}
                     >
                         <Paper>
                             <ClickAwayListener onClickAway={handleClose}>
                                 <MenuList className="menu-list">
                                     <MenuItem>
-                                        <PersonIcon /> <span>{t('common.profile')} ({userInfo?.userName})</span>
+                                        <PersonIcon />{' '}
+                                        <span>
+                                            {t('common.profile')} ({userInfo?.userName})
+                                        </span>
                                     </MenuItem>
                                     <MenuItem onClick={() => toggleChangePasswordModal(true)}>
                                         <SettingsIcon /> <span>{t('common.changePassword')}</span>
@@ -92,10 +103,7 @@ const UserDropdown = () => {
                 )}
             </Popper>
 
-            <ChangePassword
-                isOpen={isOpenChangePasswordModal}
-                toggleOpen={toggleChangePasswordModal}
-            />
+            <ChangePassword isOpen={isOpenChangePasswordModal} toggleOpen={toggleChangePasswordModal} />
         </div>
     );
 };
