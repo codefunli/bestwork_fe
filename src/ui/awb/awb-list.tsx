@@ -42,6 +42,7 @@ import {
 import { formatDateTimeResList } from '../../core/utils/get-current-datetime';
 import {
     addFileToCustomsClearance,
+    addImageAfterComment,
     addImageBeforeComment,
     addInvoicePostComment,
     addPackingPostComment,
@@ -55,6 +56,7 @@ import {
     getAllPackingList,
     getAwbStatus,
     uploadCommercialInvoice,
+    uploadImageAfter,
     uploadImageBefore,
     uploadPackingList,
 } from '../../services/awb-service';
@@ -78,7 +80,7 @@ export default function AirWayBillList() {
     const [commercialInvoiceState, setCommercialInvoiceState] = useState<any>([]);
     const [packingListState, setPackingListState] = useState<any>([]);
     const [imageBeforeState, setImageBeforeState] = useState<any>([]);
-    const [imageAfter, setImageAfter] = useState<any>([]);
+    const [imageAfterState, setImageAfterState] = useState<any>([]);
     const [searchKeyword, setSearchKeyword] = useState('');
     const [customsDeclarationDocumentState, setCustomsDeclarationDocumentState] = useState<any>({});
     const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);
@@ -152,7 +154,7 @@ export default function AirWayBillList() {
     }, [imageBeforeRedux]);
 
     useEffect(() => {
-        setImageBeforeState(imageAfterRedux ? imageAfterRedux : []);
+        setImageAfterState(imageAfterRedux ? imageAfterRedux : []);
     }, [imageAfterRedux]);
 
     useEffect(() => {
@@ -189,11 +191,13 @@ export default function AirWayBillList() {
             fetchPackingListApi(awbCode),
             fetchCustomsClearanceDocument(awbCode),
             fetchImageBefore(awbCode),
+            fetchImageAfter(awbCode),
         ]);
         dispatch(customsClearanceActions.setCommercialInvoice(res[0].data));
         dispatch(customsClearanceActions.setPackingList(res[1].data));
         dispatch(customsClearanceActions.setCustomsClearanceDocument(res[2].data));
         dispatch(customsClearanceActions.setImageBefore(res[3].data));
+        dispatch(customsClearanceActions.setImageAfter(res[4].data));
     };
 
     useEffect(() => {
@@ -321,6 +325,41 @@ export default function AirWayBillList() {
                 if (res.status === StatusCode.OK) {
                     fetchImageBefore(currentAwbCode).then((res: any) => {
                         dispatch(customsClearanceActions.setImageBefore(res.data));
+                    });
+                }
+            })
+            .catch(() => {
+                setResForHandleMsg({
+                    status: StatusCode.ERROR,
+                    message: t('message.error'),
+                });
+            });
+    };
+
+    const handleUploadImageAfter = (imageData: any) => {
+        let formData = new FormData();
+
+        if (imageData && imageData.file && imageData.file.length > 0)
+            imageData.file.forEach((data: any) => {
+                formData.append('mFiles', data);
+            });
+        formData.append(
+            'evidenceAfter',
+            new Blob([JSON.stringify({ airWayBillCode: currentAwbCode, description: imageData.description })], {
+                type: 'application/json',
+            }),
+        );
+
+        uploadImageAfter(formData)
+            .then((res) => {
+                setResForHandleMsg({
+                    status: res.status,
+                    message: res.message,
+                });
+
+                if (res.status === StatusCode.OK) {
+                    fetchImageAfter(currentAwbCode).then((res: any) => {
+                        dispatch(customsClearanceActions.setImageAfter(res.data));
                     });
                 }
             })
@@ -472,6 +511,7 @@ export default function AirWayBillList() {
             airWayBillCode: currentAwbCode,
             comment: data.comment,
         };
+
         switch (data.postType) {
             case CUSTOMS_CLEARANCE.IMAGE_BEFORE:
                 addImageBeforeComment(convertData, data.postId)
@@ -497,7 +537,29 @@ export default function AirWayBillList() {
                         });
                     });
                 break;
-            case CUSTOMS_CLEARANCE.PACKAGE:
+            case CUSTOMS_CLEARANCE.IMAGE_AFTER:
+                addImageAfterComment(convertData, data.postId)
+                    .then((res) => {
+                        setResForHandleMsg({
+                            status: res.status,
+                            message: res.message,
+                        });
+
+                        if (res.status !== StatusCode.OK) {
+                            fetchImageAfter(currentAwbCode).then((res: any) => {
+                                dispatch(customsClearanceActions.setImageAfter(res.data));
+                            });
+                        }
+                    })
+                    .catch(() => {
+                        fetchImageAfter(currentAwbCode).then((res: any) => {
+                            dispatch(customsClearanceActions.setImageBefore(res.data));
+                        });
+                        setResForHandleMsg({
+                            status: StatusCode.ERROR,
+                            message: t('message.error'),
+                        });
+                    });
                 break;
             default:
                 break;
@@ -878,8 +940,11 @@ export default function AirWayBillList() {
                                             <CardContent>
                                                 <Box>
                                                     {
-                                                        <ImageAfterContext.Provider value={imageAfter}>
-                                                            <ImageManagement />
+                                                        <ImageAfterContext.Provider value={imageAfterState}>
+                                                            <ImageManagement
+                                                                callBackFn={handleUploadImageAfter}
+                                                                callBackAddComment={handleAddImageComment}
+                                                            />
                                                         </ImageAfterContext.Provider>
                                                     }
                                                 </Box>

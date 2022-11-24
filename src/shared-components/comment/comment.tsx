@@ -135,8 +135,6 @@ export default function CommentEl(props: CommentProps) {
             postType: postType,
         };
 
-        console.log(postType);
-
         switch (postType) {
             case CUSTOMS_CLEARANCE.INVOICE:
                 const handleInvoiceData = invoiceRedux.map((data: any) => {

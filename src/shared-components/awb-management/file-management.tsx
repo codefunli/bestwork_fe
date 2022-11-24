@@ -16,7 +16,6 @@ import {
 } from '@mui/material';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 import { Comment } from '../../core/types/base';
 import { CommercialInvoiceContext, PackingListContext } from '../../ui/awb/awb-list';
 import CommentEl from '../comment/comment';
@@ -34,7 +33,7 @@ export const FileContext = createContext<any>({});
 export default function FileManagement(props: any) {
     const { callBackFn, callBackAddFile, callBackAddComment } = props;
     const [isOpenModal, setIsOpenModal] = useState(false);
-    const [filesData, setFilesData] = useState<any>([]);
+    const [filesData, setFilesData] = useState<any>(null);
     const [comment, setComment] = useState<Comment[]>([]);
     const [content, setContent] = useState(initialValue);
     const { t } = useTranslation();
