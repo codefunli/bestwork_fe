@@ -156,8 +156,8 @@ export default function MiniDrawer() {
                 headers: {
                     'content-type': 'application/json',
                     prefix: 'Bearer',
-                    access_token: accessToken ? accessToken : '',
-                    refresh_token: refreshToken ? refreshToken : '',
+                    access_token: accessToken,
+                    refresh_token: refreshToken,
                 },
                 paramsSerializer(params: any) {
                     return stringify(params);
@@ -171,8 +171,8 @@ export default function MiniDrawer() {
                         dispatch(appAction.setIsShowMsgErrLogin(false));
                         clearInterval(timer);
                         navigate(UrlFeApp.DASH_BOARD);
-                        getCurrentUserInfo().then((res) => {
-                            dispatch(userActions.setUserInfo(res.data));
+                        apiClient.get(`${UrlServer.USER.INFO}`).then((res: any) => {
+                            dispatch(userActions.setUserInfo(res.data.data));
                         });
                     } else {
                         dispatch(appAction.setIsPageLoading(true));
@@ -209,8 +209,8 @@ export default function MiniDrawer() {
                         dispatch(appAction.setIsShowMsgErrLogin(false));
                         clearInterval(timer);
                         navigate(UrlFeApp.DASH_BOARD);
-                        getCurrentUserInfo().then((res) => {
-                            dispatch(userActions.setUserInfo(res.data));
+                        apiClient.get(`${UrlServer.USER.INFO}`).then((res: any) => {
+                            dispatch(userActions.setUserInfo(res.data.data));
                         });
                     } else {
                         dispatch(appAction.setIsPageLoading(true));
