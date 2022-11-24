@@ -78,11 +78,23 @@ interface ImageBefore {
     updateDate: string;
 }
 
+interface ImageAfter {
+    evidenceAfterId: number;
+    comment: string;
+    createBy: string;
+    createDate: string;
+    description: string;
+    fileStorages: Array<FileStorages>;
+    updateBy: string;
+    updateDate: string;
+}
+
 interface CustomsClearance {
     airWayBillList: Array<AirWayBill>;
     commercialInvoice: Array<CommercialInvoice>;
     packingList: Array<PackingList>;
     imageBefore: Array<ImageBefore>;
+    imageAfter: Array<ImageAfter>;
     customsClearanceDocument: CustomsClearanceDocument;
 }
 
@@ -168,6 +180,29 @@ const initialState: CustomsClearance = {
             updateDate: '',
         },
     ],
+    imageAfter: [
+        {
+            evidenceAfterId: -1,
+            comment: '',
+            createBy: '',
+            createDate: '',
+            description: '',
+            fileStorages: [
+                {
+                    fileId: -1,
+                    content: '',
+                    createDate: '',
+                    data: '',
+                    isChoosen: false,
+                    name: '',
+                    progressId: -1,
+                    type: '',
+                },
+            ],
+            updateBy: '',
+            updateDate: '',
+        },
+    ],
     customsClearanceDocument: {
         invoiceDoc: [
             {
@@ -208,6 +243,9 @@ export const customsClearanceSlice = createSlice({
         setImageBefore(state, action: PayloadAction<Array<ImageBefore>>) {
             state.imageBefore = action.payload;
         },
+        setImageAfter(state, action: PayloadAction<Array<ImageAfter>>) {
+            state.imageAfter = action.payload;
+        },
         setCustomsClearanceDocument(state, action: PayloadAction<CustomsClearanceDocument>) {
             state.customsClearanceDocument = action.payload;
         },
@@ -223,6 +261,8 @@ export const getCommercialInvoice = (state: any) => state.customsClearance.comme
 export const getPackingList = (state: any) => state.customsClearance.packingList;
 
 export const getImageBefore = (state: any) => state.customsClearance.imageBefore;
+
+export const getImageAfter = (state: any) => state.customsClearance.imageAfter;
 
 export const getCustomsClearanceDocument = (state: any) => state.customsClearance.customsClearanceDocument;
 

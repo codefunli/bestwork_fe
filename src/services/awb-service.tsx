@@ -93,3 +93,8 @@ export const addImageBeforeComment = async (object: any, postId: string) => {
     const res = await apiClient.patch<any>(`${UrlServer.AWB.ADD_IMAGE_BEFORE_COMMENT}/${postId}/comment`, object);
     return res.data;
 };
+
+export const getAllImageAfter = async (awbCode: string) => {
+    const res = await apiClient.get<any>(`${UrlServer.AWB.GET_ALL_IMAGE_AFTER}/${awbCode}`);
+    return res.data;
+};

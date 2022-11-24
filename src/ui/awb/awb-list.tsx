@@ -35,6 +35,7 @@ import {
     getAirWayBillList,
     getCommercialInvoice,
     getCustomsClearanceDocument,
+    getImageAfter,
     getImageBefore,
     getPackingList,
 } from '../../core/redux/customs-clearance-slice';
@@ -49,6 +50,7 @@ import {
     getAirWayBillByProjectId,
     getAllCommercialInvoice,
     getAllCustomsClearanceDocument,
+    getAllImageAfter,
     getAllImageBefore,
     getAllPackingList,
     getAwbStatus,
@@ -87,6 +89,7 @@ export default function AirWayBillList() {
     const invoiceRedux = useSelector(getCommercialInvoice);
     const packingListRedux = useSelector(getPackingList);
     const imageBeforeRedux = useSelector(getImageBefore);
+    const imageAfterRedux = useSelector(getImageAfter);
     const customsClearanceDocumentRedux = useSelector(getCustomsClearanceDocument);
     const [projectId, setProjectId] = useState('');
     const params = useParams();
@@ -105,11 +108,13 @@ export default function AirWayBillList() {
             fetchPackingListApi(awbList.data[0].code),
             fetchCustomsClearanceDocument(awbList.data[0].code),
             fetchImageBefore(awbList.data[0].code),
+            fetchImageAfter(awbList.data[0].code),
         ]);
         dispatch(customsClearanceActions.setCommercialInvoice(res[0].data));
         dispatch(customsClearanceActions.setPackingList(res[1].data));
         dispatch(customsClearanceActions.setCustomsClearanceDocument(res[2].data));
         dispatch(customsClearanceActions.setImageBefore(res[3].data));
+        dispatch(customsClearanceActions.setImageAfter(res[4].data));
     };
 
     useEffect(() => {
@@ -117,6 +122,7 @@ export default function AirWayBillList() {
         dispatch(customsClearanceActions.setCommercialInvoice([]));
         dispatch(customsClearanceActions.setPackingList([]));
         dispatch(customsClearanceActions.setImageBefore([]));
+        dispatch(customsClearanceActions.setImageAfter([]));
         dispatch(
             customsClearanceActions.setCustomsClearanceDocument({
                 invoiceDoc: [],
@@ -146,6 +152,10 @@ export default function AirWayBillList() {
     }, [imageBeforeRedux]);
 
     useEffect(() => {
+        setImageBeforeState(imageAfterRedux ? imageAfterRedux : []);
+    }, [imageAfterRedux]);
+
+    useEffect(() => {
         setCustomsDeclarationDocumentState(customsClearanceDocumentRedux ? customsClearanceDocumentRedux : []);
     }, [customsClearanceDocumentRedux]);
 
@@ -163,6 +173,10 @@ export default function AirWayBillList() {
 
     const fetchImageBefore = async (awbCode: string) => {
         return await getAllImageBefore(awbCode);
+    };
+
+    const fetchImageAfter = async (awbCode: string) => {
+        return await getAllImageAfter(awbCode);
     };
 
     const fetchCustomsClearanceDocument = async (awbCode: string) => {
