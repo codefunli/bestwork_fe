@@ -137,6 +137,7 @@ export const UrlServer = {
         GET_ALL_IMAGE_BEFORE: `${PREFIX_SERVER_URL}/evidence-before-post/list/by`,
         UPLOAD_IMAGE_BEFORE: `${PREFIX_SERVER_URL}/evidence-before-post/update`,
         ADD_IMAGE_BEFORE_COMMENT: `${PREFIX_SERVER_URL}/evidence-before-post`,
+        GET_ALL_IMAGE_AFTER: `${PREFIX_SERVER_URL}/evidence-after-post/list/by`,
     },
 };
 
