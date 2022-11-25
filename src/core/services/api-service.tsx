@@ -2,8 +2,8 @@ import axios from 'axios';
 import { stringify } from 'qs';
 import { BASE_API_PATH } from '../constants/urls';
 
-let accessToken = localStorage.getItem('access_token');
-let refreshToken = localStorage.getItem('refresh_token');
+let accessToken = window.localStorage.getItem('access_token');
+let refreshToken = window.localStorage.getItem('refresh_token');
 
 let apiClient = axios.create({
     baseURL: BASE_API_PATH,
@@ -19,25 +19,37 @@ let apiClient = axios.create({
     },
 });
 
+apiClient.interceptors.request.use((res: any) => {
+    if (!(res.headers.access_token && res.headers.refresh_token)) {
+        res.headers.access_token = accessToken;
+        res.headers.refresh_token = refreshToken;
+    }
+    return res;
+});
+
 apiClient.interceptors.response.use(
     (res) => {
-        const accessTokenRes = res.headers.access_token;
-        const refreshTokenRes = res.headers.refresh_token;
-        localStorage.setItem('access_token', accessTokenRes);
-        localStorage.setItem('refresh_token', refreshTokenRes);
-        apiClient = axios.create({
-            baseURL: BASE_API_PATH,
-            withCredentials: true,
-            headers: {
-                'content-type': 'application/json',
-                prefix: 'Bearer',
-                access_token: accessTokenRes,
-                refresh_token: refreshTokenRes,
-            },
-            paramsSerializer(params: any) {
-                return stringify(params);
-            },
-        });
+        if (res.headers.access_token && res.headers.refresh_token) {
+            localStorage.setItem('access_token', res.headers.access_token);
+            localStorage.setItem('refresh_token', res.headers.refresh_token);
+            accessToken = res.headers.access_token;
+            refreshToken = res.headers.refresh_token;
+
+            apiClient = axios.create({
+                baseURL: BASE_API_PATH,
+                withCredentials: true,
+                headers: {
+                    'content-type': 'application/json',
+                    prefix: 'Bearer',
+                    access_token: res.headers.access_token,
+                    refresh_token: res.headers.refresh_token,
+                },
+                paramsSerializer(params: any) {
+                    return stringify(params);
+                },
+            });
+        }
+
         return res;
     },
     (err) => {
