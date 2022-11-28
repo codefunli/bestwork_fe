@@ -17,6 +17,7 @@ import {
 import { Box } from '@mui/system';
 import { createContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useQuery } from 'react-query';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import '../../App.scss';
@@ -112,6 +113,7 @@ export default function AirWayBillList() {
             fetchImageBefore(awbList.data[0].code),
             fetchImageAfter(awbList.data[0].code),
         ]);
+
         dispatch(customsClearanceActions.setCommercialInvoice(res[0].data));
         dispatch(customsClearanceActions.setPackingList(res[1].data));
         dispatch(customsClearanceActions.setCustomsClearanceDocument(res[2].data));
@@ -121,6 +123,10 @@ export default function AirWayBillList() {
 
     useEffect(() => {
         dispatch(customsClearanceActions.setAirWayBillList([]));
+        clearData();
+    }, []);
+
+    const clearData = () => {
         dispatch(customsClearanceActions.setCommercialInvoice([]));
         dispatch(customsClearanceActions.setPackingList([]));
         dispatch(customsClearanceActions.setImageBefore([]));
@@ -131,7 +137,7 @@ export default function AirWayBillList() {
                 packagesDoc: [],
             }),
         );
-    }, []);
+    };
 
     useEffect(() => {
         if (params.id) callInitAPI(params.id);
@@ -211,6 +217,7 @@ export default function AirWayBillList() {
     };
 
     const handleChangeAwbTab = (newValue: number, awbCode: string) => {
+        clearData();
         setAwbTab(newValue);
         setCurrentAwbCode(awbCode);
         filterByAirWayBillCode(awbCode);
@@ -383,6 +390,16 @@ export default function AirWayBillList() {
                     fetchCustomsClearanceDocument(currentAwbCode).then((res: any) => {
                         dispatch(customsClearanceActions.setCustomsClearanceDocument(res.data));
                     });
+
+                    if (data.postType === 'invoice') {
+                        fetchCommercialInvoiceAPI(currentAwbCode).then((res: any) => {
+                            dispatch(customsClearanceActions.setCommercialInvoice(res.data));
+                        });
+                    } else if (data.postType === 'package') {
+                        fetchPackingListApi(currentAwbCode).then((res: any) => {
+                            dispatch(customsClearanceActions.setPackingList(res.data));
+                        });
+                    }
                 }
             })
             .catch(() => {
@@ -752,13 +769,6 @@ export default function AirWayBillList() {
                                                     >
                                                         {t('button.btnCreate')}
                                                     </Button>
-                                                    <Button
-                                                        onClick={() => handleDeleteAwb()}
-                                                        variant="outlined"
-                                                        color="error"
-                                                    >
-                                                        {t('button.btnDelete')}
-                                                    </Button>
                                                 </ButtonGroup>
                                             </div>
                                         </div>
@@ -840,6 +850,10 @@ export default function AirWayBillList() {
                                                 sx={{ ml: 1 }}
                                                 onClick={handleDownload}
                                                 startIcon={<DownloadIcon />}
+                                                disabled={
+                                                    !customsClearanceDocumentRedux ||
+                                                    customsClearanceDocumentRedux.length <= 0
+                                                }
                                             >
                                                 {t('button.btnDownload')}
                                             </Button>
@@ -886,6 +900,7 @@ export default function AirWayBillList() {
                                                             value={commercialInvoiceState}
                                                         >
                                                             <FileManagement
+                                                                awbCode={currentAwbCode}
                                                                 callBackFn={handleUploadInvoice}
                                                                 callBackAddFile={handleAddFile}
                                                                 callBackAddComment={handleAddFileComment}
