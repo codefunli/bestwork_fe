@@ -24,7 +24,7 @@ export default function ShowCustomsClearancePackingList(props: { callBackFn: Fun
                     customsDeclaration.packagesDoc.length > 0 &&
                     customsDeclaration.packagesDoc.map((item: any, index: number) => {
                         return (
-                            <ImageListItem className="m-1">
+                            <ImageListItem className="m-1" key={item.postPackageId}>
                                 <Card>
                                     <CardHeader
                                         sx={{ padding: 0.5 }}

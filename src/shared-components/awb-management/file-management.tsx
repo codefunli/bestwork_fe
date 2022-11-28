@@ -31,7 +31,7 @@ const initialValue = {
 export const FileContext = createContext<any>({});
 
 export default function FileManagement(props: any) {
-    const { callBackFn, callBackAddFile, callBackAddComment } = props;
+    const { callBackFn, callBackAddFile, callBackAddComment, awbCode } = props;
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [filesData, setFilesData] = useState<any>(null);
     const [comment, setComment] = useState<Comment[]>([]);
@@ -41,24 +41,32 @@ export default function FileManagement(props: any) {
     const packingList = useContext<any>(PackingListContext);
 
     useEffect(() => {
-        if (commercialInvoice && commercialInvoice.length > 0) {
-            setFilesData(
-                commercialInvoice.map((data: any) => {
-                    return {
-                        ...data,
-                        isOpenComment: data.comment ? true : false,
-                    };
-                }),
-            );
-        } else if (packingList && packingList.length > 0) {
-            setFilesData(
-                packingList.map((data: any) => {
-                    return {
-                        ...data,
-                        isOpenComment: data.comment ? true : false,
-                    };
-                }),
-            );
+        if (commercialInvoice) {
+            if (commercialInvoice.length > 0) {
+                setFilesData(
+                    commercialInvoice.map((data: any) => {
+                        return {
+                            ...data,
+                            isOpenComment: data.comment ? true : false,
+                        };
+                    }),
+                );
+            } else {
+                setFilesData([]);
+            }
+        } else if (packingList) {
+            if (packingList.length > 0) {
+                setFilesData(
+                    packingList.map((data: any) => {
+                        return {
+                            ...data,
+                            isOpenComment: data.comment ? true : false,
+                        };
+                    }),
+                );
+            } else {
+                setFilesData([]);
+            }
         } else {
             setFilesData([]);
         }
@@ -235,7 +243,7 @@ export default function FileManagement(props: any) {
                 isOpen={isOpenModal}
                 closeFunc={closeModal}
                 okFunc={alertOkFunc}
-                title="Tải lên file"
+                title={t('awb.uploadFile')}
                 content={content}
             />
         </div>
