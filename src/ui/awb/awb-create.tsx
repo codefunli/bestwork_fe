@@ -107,7 +107,7 @@ export default function CreateAwb(props: CreateAwbProps) {
                 <DialogTitle className="text-uppercase">{t('awb.create.title')}</DialogTitle>
                 <DialogContent>
                     <div>
-                        <InputLabel htmlFor="airWayBillCode" error={Boolean(errors.airWayBillCode)}>
+                        <InputLabel htmlFor="code" error={Boolean(errors.code)}>
                             {t('awb.AWBNo')} <span className="input-required">*</span>
                         </InputLabel>
                         <TextField
@@ -120,13 +120,13 @@ export default function CreateAwb(props: CreateAwbProps) {
                                 '& fieldset': { top: 0 },
                             }}
                             required
-                            id="airWayBillCode"
+                            id="code"
                             label=""
                             placeholder={t('common.placeholder')}
-                            value={formValues.airWayBillCode}
-                            error={Boolean(errors.airWayBillCode)}
-                            helperText={t(errors.airWayBillCode?.message?.toString() as string)}
-                            {...register('airWayBillCode', {
+                            value={formValues.code}
+                            error={Boolean(errors.code)}
+                            helperText={t(errors.code?.message?.toString() as string)}
+                            {...register('code', {
                                 onChange: (e) => handleInputChange(e),
                             })}
                         />
