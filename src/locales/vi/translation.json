@@ -1,0 +1,432 @@
+{
+    "login": {
+        "title": "Đăng nhập",
+        "userName": "Tài khoản",
+        "password": "Mật khẩu",
+        "btnLogin": "Đăng nhập"
+    },
+    "company": {
+        "title": "Tìm Kiếm Công ty",
+        "search": {
+            "title": "Tim kiếm thông tin công ty của bạn",
+            "name": "Tên công ty",
+            "email": "Thư điện tử",
+            "telNo": "Số điện thoại",
+            "taxNo": "Mã số thuế",
+            "keyword": "Từ khóa",
+            "status": "Trạng thái"
+        },
+        "table": {
+            "colCpName": "Tên công ty",
+            "colCpAddress": "Địa chỉ",
+            "colCpStartDate": "Ngày bắt đầu",
+            "colCpExpired": "Trạng thái",
+            "colCpEmail": "Thư điện tử",
+            "colCpExpiredDate": "Ngày kết thúc"
+        },
+        "register": {
+            "title": "Đăng Ký Công Ty",
+            "title_card": "Đăng ký công ty mới",
+            "name": "Tên công ty",
+            "email": "Thư điện tử",
+            "telNo": "Số điện thoại",
+            "taxNo": "Mã số thuế",
+            "national": "Quốc gia",
+            "city": "Tỉnh/Thành phố",
+            "district": "Quận/Huyện",
+            "ward": "Phường/Xã",
+            "street": "Tên đường",
+            "startDate": "Ngày bắt đầu/Thời gian (UTC)",
+            "endDate": "Ngày kết thúc/Thời gian (UTC)"
+        }
+    },
+    "register": {
+        "title": "Đăng Ký Công Ty",
+        "company": {
+            "title": "Đăng ký công ty mới",
+            "name": "Tên công ty",
+            "email": "Thư điện tử",
+            "telNo": "Số điện thoại",
+            "taxNo": "Mã số thuế",
+            "city": "Tỉnh/Thành phố",
+            "district": "Quận/Huyện",
+            "ward": "Phường/Xã",
+            "street": "Tên đường",
+            "startDate": "Ngày bắt đầu/Thời gian (UTC)",
+            "endDate": "Ngày kết thúc/Thời gian (UTC)"
+        },
+        "user": {
+            "title": "Đăng ký tài khoản quản trị viên mới",
+            "userName": "Tên tài khoản",
+            "password": "Mật khẩu",
+            "firstName": "Tên",
+            "lastName": "Họ",
+            "telNo": "Số điện thoại",
+            "email": "Thư điện tử",
+            "allowLogin": "Chấp nhận đăng nhập",
+            "roleAssigned": "Vai trò"
+        }
+    },
+    "radio": {
+        "enabled": "Bật",
+        "admin": "Quản trị viên",
+        "user": "Người dùng",
+        "accept": "Chấp nhận",
+        "deny": "Từ chối",
+        "paid": "Đã thanh toán",
+        "unPaid": "Chưa thanh toán"
+    },
+    "button": {
+        "btnRegister": "Đăng kí",
+        "btnSearch": "Tìm kiếm",
+        "btnClear": "Nhập lại",
+        "btnSave": "Lưu",
+        "btnDelete": "Xóa",
+        "btnNo": "Hủy",
+        "btnOk": "Đồng ý",
+        "btnBack": "Quay lại",
+        "btnCreate": "Tạo mới",
+        "btnCreateScreen": "Tạo màn hình mới",
+        "btnActive": "Hoạt động",
+        "btnPending": "Tạm dừng",
+        "btnCancel": "Huỷ",
+        "btnReset": "Đặt lại",
+        "btnResetAll": "Đặt lại tất cả",
+        "btnUpdate": "Cập nhật",
+        "btnBackToHome": "Quay về trang chủ",
+        "btnUpload": "Đăng",
+        "btnClose": "Đóng",
+        "btnFinish": "Hoàn thành",
+        "btnDownload": "Tải xuống",
+        "btnConstruction": "Bản vẽ"
+    },
+    "common": {
+        "placeholder": "Nhập một giá trị mới",
+        "label": "Không yêu cầu",
+        "nonRequired": "Không bắt buộc",
+        "required": "Bắt buộc",
+        "action": "Thao tác",
+        "none": "Không có giá trị",
+        "start": "Bắt đầu",
+        "end": "Kết thúc",
+        "selectLanguage": "Chọn ngôn ngữ",
+        "notification": "Thông báo",
+        "noNotification": "Không có thông báo",
+        "clearAll": "Dọn tất cả",
+        "viewAll": "Xem tất cả",
+        "profile": "Hồ sơ",
+        "changePassword": "Đổi mật khẩu",
+        "logout": "Đăng xuất",
+        "status": "Trạng thái",
+        "enable": "Đã kích hoạt",
+        "disable": "Chưa kích hoạt"
+    },
+    "message": {
+        "required": "là bắt buộc.",
+        "noData": "KHÔNG CÓ DỮ LIỆU",
+        "rowsPerPage": "Hàng trên mỗi trang",
+        "selected": "lựa chọn",
+        "data": "DỮ LIỆU",
+        "delete": "Bạn có chắc chắn rằng bạn muốn xóa các bản ghi này!",
+        "error": "Một lỗi đã xảy ra. Xin vui lòng liên hệ với quản trị viên!",
+        "cityLabel": "Chọn tỉnh/thành phố",
+        "districtLabel": "Chọn quận/huyện",
+        "wardLabel": "Chọn phường/xã",
+        "status": "Trạng thái",
+        "statusLabel": "Chọn trạng thái",
+        "typeLabel": "Chọn kiểu",
+        "loginFailed": "Tài khoản và mật khẩu không chính xác",
+        "accessDenied": "Từ chối truy cập, bạn không có quyền truy cập hệ thống",
+        "deleteSuccess": "Xóa dữ liệu thành công",
+        "retriveSuccess": "Lấy dữ liệu thành công",
+        "registrationSuccess": "Đăng kí dữ liệu thành công",
+        "updateSuccess": "Cập nhật dữ liệu thành công",
+        "awbs": "Chọn mã hóa đơn"
+    },
+    "bread_crumbs": {
+        "home": "Trang chủ",
+        "company": "Công ty",
+        "user": "Người dùng",
+        "dashboard": "Bảng điều khiển",
+        "register": "Đăng kí",
+        "edit": "Chỉnh sửa",
+        "info": "Thông tin",
+        "create": "Tạo mới",
+        "project": "Dự án",
+        "role": "Phân quyền",
+        "material": "Vật liệu",
+        "status": "Trạng thái",
+        "detail": "Chi tiết",
+        "construction": "Công trình",
+        "customsClearance": "Hồ sơ thông quan",
+        "progress": "Tiến độ"
+    },
+    "user": {
+        "title": "Thông tin người dùng",
+        "search": {
+            "title": "Tìm kiếm người dùng",
+            "subtitle": "Tìm kiếm người dùng thông qua bộ lọc",
+            "keyword": "Từ khoá",
+            "companyName": "Tên công ty",
+            "status": "Trạng thái",
+            "enabled": "Đã kích hoạt",
+            "notEnabled": "Chưa kích hoạt",
+            "selectCompanyName": "Chọn tên công ty",
+            "selectRole": "Chọn vai trò",
+            "selectStatus": "Chọn trạng thái"
+        },
+        "table": {
+            "userName": "Tên người dùng",
+            "email": "Thư điện tử",
+            "firstName": "Tên",
+            "lastName": "Họ",
+            "telNo": "Số điện thoại",
+            "status": "Trạng thái"
+        },
+        "info": {
+            "userName": "Tên người dùng",
+            "email": "Thư điện tử",
+            "firstName": "Tên",
+            "lastName": "Họ",
+            "company": "Công ty",
+            "countLoginFailed": "Số lần đăng nhập thất bại",
+            "enabled": "Kích hoạt",
+            "role": "Vai trò",
+            "deleted": "Đã xoá",
+            "blocked": "Đã khoá"
+        },
+        "create": {
+            "title": "Tạo mới người dùng"
+        },
+        "register": {
+            "title": "Tạo mới người dùng",
+            "title_card": "Đăng ký tài khoản quản trị viên mới",
+            "userName": "Tên tài khoản",
+            "password": "Mật khẩu",
+            "firstName": "Tên",
+            "lastName": "Họ",
+            "telNo": "Số điện thoại",
+            "email": "Thư điện tử",
+            "allowLogin": "Chấp nhận đăng nhập",
+            "roleAssigned": "Vai trò"
+        }
+    },
+    "title": {
+        "delete": "XÓA"
+    },
+    "tooltip": {
+        "edit": "Chỉnh sửa",
+        "addUser": "Thêm người dùng",
+        "materialStatus": "Thêm trạng thái vật tư",
+        "projectDetail": "Thêm tiến độ thi công",
+        "addAll": "Thêm tất cả",
+        "add": "Thêm",
+        "remove": "Gỡ"
+    },
+    "edit": {
+        "title": "Chỉnh sửa công ty",
+        "company": {
+            "title": "Chỉnh sửa công ty",
+            "name": "Tên công ty",
+            "email": "Thư điện tử",
+            "telNo": "Số điện thoại",
+            "taxNo": "Mã số thuế",
+            "city": "Tỉnh/Thành phố",
+            "district": "Quận/Huyện",
+            "ward": "Phường/Xã",
+            "street": "Tên đường",
+            "startDate": "Ngày bắt đầu/Thời gian (UTC)",
+            "endDate": "Ngày kết thúc/Thời gian (UTC)"
+        },
+        "user": {
+            "title": "Chỉnh sửa thông tin tài khoản",
+            "userName": "Tên tài khoản",
+            "password": "Mật khẩu",
+            "firstName": "Tên",
+            "lastName": "Họ",
+            "telNo": "Số điện thoại",
+            "email": "Thư điện tử",
+            "allowLogin": "Chấp nhận đăng nhập",
+            "roleAssigned": "Vai trò"
+        }
+    },
+    "project": {
+        "title": "Tìm kiếm dự án",
+        "registerTitle": "Tạo dự án",
+        "editTitle": "Chỉnh sửa dự án",
+        "tab": {
+            "register": "Đăng ký dự án",
+            "assign": "Chỉ định người dùng"
+        },
+        "search": {
+            "title": "Tìm kiếm thông tin về dự án của bạn",
+            "prjName": "Tên dự án",
+            "prjType": "Loại dự án",
+            "prjTitle": "Tiêu đề",
+            "description": "Mô tả"
+        },
+        "table": {
+            "colPrjName": "Tên dự án",
+            "colPrjType": "Loại dự án",
+            "colStartDate": "Ngày bắt đầu",
+            "colDescription": "Mô tả",
+            "colStatus": "Trạng thái"
+        },
+        "register": {
+            "title": "Thêm thông tin dự án",
+            "name": "Tên dự án",
+            "type": "Loại dự án",
+            "description": "Mô tả",
+            "comment": "Nhận xét",
+            "startDate": "Ngày bắt đầu",
+            "status": "Trạng thái",
+            "notificationFlag": "Tự động gửi mail",
+            "isPaid": "Trạng thái thanh toán"
+        },
+        "edit": {
+            "title": "Chỉnh sửa thông tin dự án",
+            "updateDate": "Ngày cập nhật"
+        },
+        "progress": {
+            "title": "Tiến độ thi công",
+            "create": "Tạo mới tiến độ",
+            "edit": "Chỉnh sửa tiến độ",
+            "progressTitle": "Tiêu đề",
+            "progressImg": "Hình ảnh công trường",
+            "date": "Ngày bắt đầu/kết thúc",
+            "startDate": "Ngày bắt đầu",
+            "endDate": "Ngày kết thúc",
+            "status": "Trạng thái",
+            "report": "Báo cáo",
+            "note": "Ghi chú"
+        }
+    },
+    "role": {
+        "title": "Quản lý phân quyền",
+        "tab": {
+            "screen": "Màn hình",
+            "all": "Tất cả",
+            "view": "Xem",
+            "create": "Tạo",
+            "edit": "Chỉnh sửa",
+            "delete": "Xoá"
+        },
+        "modal": {
+            "title": "Tạo phân quyền mới",
+            "roleName": "Tên phân quyền",
+            "description": "Mô tả"
+        }
+    },
+    "create_screen": {
+        "title": "Quản lý màn hình",
+        "modal": {
+            "name": "Tên màn hình",
+            "icon": "Icon"
+        }
+    },
+    "error": {
+        "pageNotFound": {
+            "label": "404",
+            "msg_title": "Đáng tiếc! Trang này không tồn tại!",
+            "msg_content": "Trang web bạn muốn tìm kiếm hiện không tồn tại"
+        }
+    },
+    "forgotPassword": {
+        "title": "Quên mật khẩu",
+        "resetTitle": "Đặt lại mật khẩu",
+        "description": "Vui lòng nhập địa chỉ email được liên kết với tài khoản của bạn và Chúng tôi sẽ gửi cho bạn một liên kết qua email để đặt lại mật khẩu của bạn.",
+        "email": "Thư điện tử",
+        "password": "Mật khẩu",
+        "confirmPassword": "Xác nhận mật khẩu",
+        "btnSend": "Gửi yêu cầu",
+        "btnConfirm": "Xác nhận",
+        "sentEmail": "Vui lòng kiểm tra thư điện tử của bạn",
+        "notReceive": "Bạn không nhận được thư điện tử",
+        "btnResend": "Gửi lại",
+        "success": "Đặt lại mật khẩu thành công"
+    },
+    "changePassword": {
+        "title": "Đổi mật khẩu",
+        "currentPassword": "Mật khẩu hiện tại",
+        "newPassword": "Mật khẩu mới",
+        "confirmPassword": "Xác nhận mật khẩu"
+    },
+    "material": {
+        "title": "Quản lý vật tư",
+        "uploadTitle": "Tải lên hình ảnh cho dự án",
+        "editTitle": "Chỉnh sửa hình ảnh cho dự án",
+        "comment": "Bình luận",
+        "edit": "Sửa",
+        "reply": "Trả Lời",
+        "show": "Hiện",
+        "hide": "Ẩn",
+        "placeholder": "Vui lòng nhập giá trị",
+        "secondAgo": "giây trước",
+        "minuteAgo": "phút trước",
+        "hourAgo": "giờ trước",
+        "dayAgo": "ngày trước",
+        "responding": "Trả lời",
+        "editFor": "Chỉnh sửa cho",
+        "previewImage": "Danh sách ảnh",
+        "descriptionPlaceHolder": "Mô tả...",
+        "eqBillPlaceHolder": "Hóa đơn thiết bị..."
+    },
+    "menu": {
+        "dashboard": "Bảng điều khiển",
+        "company": "Hãng",
+        "user": "Nhân viên",
+        "project": "Dự án",
+        "construction": "Công trình",
+        "role": "Quyền hạn"
+    },
+    "awb": {
+        "title": "Hồ sơ thông quan",
+        "awbTitle": "Mã vận chuyển",
+        "commercialInvoice": "Hóa đơn thương mại",
+        "packingList": "Chi tiết đóng gói",
+        "imageBefore": "Hình ảnh trước",
+        "imageAfter": "Hình ảnh sau",
+        "uploadFile": "Tải lên tập tin",
+        "uploadImage": "Tải lên hình ảnh",
+        "createConstruction": "Tạo công trình",
+        "createAwb": "Tạo mã vận chuyển",
+        "AWBNo": "Mã vận chuyển",
+        "customsClearanceDocuments": "Hồ sơ thông quan",
+        "create": {
+            "title": "Thêm air waybill",
+            "note": "Ghi chú"
+        }
+    },
+    "construction": {
+        "table": {
+            "colCttName": "Tên công trình",
+            "colCttCode": "Mã công trình",
+            "colStartDate": "Ngày bắt đầu",
+            "colAWB": "Hóa đơn vận chuyển",
+            "colStatus": "Trạng thái",
+            "colLocation": "Địa điểm",
+            "colDescription": "Mô tả"
+        },
+        "search": {
+            "title": "Tìm kiếm thông tin công trình",
+            "title_card": "Tim kiếm thông tin công trình của bạn",
+            "constructionName": "Tên công trình",
+            "constructionTitle": "Title"
+        },
+        "register": {
+            "title": "Đăng kí công trình",
+            "cttName": "Tên công trình",
+            "cttCode": "Mã công trinh",
+            "cttStartDate": "Ngày bắt đầu",
+            "cttEndDate": "Ngày kết thúc",
+            "cttStatus": "Trạng thái",
+            "cttLocation": "Địa điểm",
+            "cttDraw": "Bản vẽ",
+            "cttAwb": "Hóa đơn vận chuyển",
+            "cttDescription": "Mô tả"
+        },
+        "edit": {
+            "title": "Chỉnh sửa công trình"
+        }
+    }
+}

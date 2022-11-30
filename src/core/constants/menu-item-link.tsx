@@ -1,19 +1,42 @@
-import { UrlFeApp } from "./common";
+import { UrlFeApp, MenuItem } from './common';
 
 export type MenuItemLink = {
-    name:string;
-    link:string;
-}
+    name: string;
+    link: string;
+    iconNm: string;
+};
 
-const menuItemLinkData:MenuItemLink[] = [
+const menuItemLinkData: MenuItemLink[] = [
     {
-        name:"DashBoard",
-        link:UrlFeApp.DASH_BOARD
+        name: MenuItem.DASHBOARD,
+        link: UrlFeApp.DASH_BOARD,
+        iconNm: 'DashBoardIcon',
     },
     {
-        name:"Company",
-        link:UrlFeApp.COMPANY
-    }
-]
+        name: MenuItem.COMPANY,
+        link: UrlFeApp.COMPANY.SEARCH,
+        iconNm: 'CompanyIcon',
+    },
+    {
+        name: MenuItem.USER,
+        link: UrlFeApp.USER.SEARCH,
+        iconNm: 'UserIcon',
+    },
+    {
+        name: MenuItem.PROJECT,
+        link: UrlFeApp.PROJECT.SEARCH,
+        iconNm: 'ProjectIcon',
+    },
+    {
+        name: MenuItem.CONSTRUCTION,
+        link: UrlFeApp.CONSTRUCTION.SEARCH,
+        iconNm: 'ConstructionIcon',
+    },
+    {
+        name: MenuItem.ROLE,
+        link: UrlFeApp.ROLE.INDEX,
+        iconNm: 'RoleIcon',
+    },
+];
 
 export default menuItemLinkData;

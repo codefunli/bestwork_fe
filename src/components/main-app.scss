@@ -1,0 +1,12 @@
+.progress-wrapper {
+    display: inline-block;
+    height: 100%;
+    margin: auto;
+    width: 100%;
+    text-align: center;
+    background: {
+        image: url('../assets/background.png');
+        repeat: no-repeat;
+        size: cover;
+    }
+}

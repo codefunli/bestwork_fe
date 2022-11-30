@@ -1,180 +1,374 @@
-import * as React from 'react';
-import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import MuiDrawer from '@mui/material/Drawer';
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import CssBaseline from '@mui/material/CssBaseline';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import MenuIcon from '@mui/icons-material/Menu';
+import {
+    Avatar,
+    CssBaseline,
+    Divider,
+    IconButton,
+    List,
+    ListItem,
+    ListItemButton,
+    ListItemIcon,
+    ListItemText,
+    Toolbar,
+    Typography,
+} from '@mui/material';
+import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
+import Badge from '@mui/material/Badge';
+import Box from '@mui/material/Box';
+import MuiDrawer from '@mui/material/Drawer';
+import Stack from '@mui/material/Stack';
+import { CSSObject, styled, Theme, useTheme } from '@mui/material/styles';
+import * as React from 'react';
+import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import { Outlet, useNavigate } from 'react-router-dom';
-import { isEmpty } from '../core/utils/ObjectUtils'
+import { ErrorPagePath, MenuItem, StatusCode, UrlFeApp, UrlServer } from '../core/constants/common';
 import menuItemLinkData from '../core/constants/menu-item-link';
+import { useAppDispatch, useAppSelector } from '../core/hook/redux';
+import { appAction } from '../core/redux/app-slice';
+import { getUserInfo, userActions } from '../core/redux/user-slice';
+import { RoleUser } from '../core/types/user';
+import { isObjectEmpty } from '../core/utils/object-utils';
+import { renderIconLeftBar } from '../core/utils/render-utils';
+import { getCurrentUserInfo } from '../services/auth-service';
+import { isCheckLogined } from '../services/user-service';
+import MLanguage from '../shared-components/language/m-language';
+import LinearProgressWithLabel from '../shared-components/progress/linear-progress-with-label';
+import Notification from '../ui/notification/notification';
+import UserDropdown from '../ui/user-dropdown/user-dropdown';
+import CollapsedBreadcrumbs from './collapsed-breadcrumbs';
+import './main-app.scss';
+import '../App.scss';
+import axios from 'axios';
+import { stringify } from 'qs';
+import { BASE_API_PATH } from '../core/constants/urls';
 
 const drawerWidth = 240;
 
 const openedMixin = (theme: Theme): CSSObject => ({
-  width: drawerWidth,
-  transition: theme.transitions.create('width', {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.enteringScreen,
-  }),
-  overflowX: 'hidden',
+    width: drawerWidth,
+    transition: theme.transitions.create('width', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen,
+    }),
+    overflowX: 'hidden',
 });
 
 const closedMixin = (theme: Theme): CSSObject => ({
-  transition: theme.transitions.create('width', {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  overflowX: 'hidden',
-  width: `calc(${theme.spacing(7)} + 1px)`,
-  [theme.breakpoints.up('sm')]: {
-    width: `calc(${theme.spacing(8)} + 1px)`,
-  },
+    transition: theme.transitions.create('width', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+    }),
+    overflowX: 'hidden',
+    width: `calc(${theme.spacing(7)} + 1px)`,
+    [theme.breakpoints.up('sm')]: {
+        width: `calc(${theme.spacing(8)} + 1px)`,
+    },
 });
 
 const DrawerHeader = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'flex-end',
-  padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
-  ...theme.mixins.toolbar,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    padding: theme.spacing(0, 1),
+    ...theme.mixins.toolbar,
 }));
 
 interface AppBarProps extends MuiAppBarProps {
-  open?: boolean;
+    open?: boolean;
 }
 
 const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== 'open',
+    shouldForwardProp: (prop) => prop !== 'open',
 })<AppBarProps>(({ theme, open }) => ({
-  zIndex: theme.zIndex.drawer + 1,
-  transition: theme.transitions.create(['width', 'margin'], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
+    zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
     }),
-  }),
+    ...(open && {
+        marginLeft: drawerWidth,
+        width: `calc(100% - ${drawerWidth}px)`,
+        transition: theme.transitions.create(['width', 'margin'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+    }),
 }));
 
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
-  ({ theme, open }) => ({
+const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
     width: drawerWidth,
     flexShrink: 0,
     whiteSpace: 'nowrap',
     boxSizing: 'border-box',
     ...(open && {
-      ...openedMixin(theme),
-      '& .MuiDrawer-paper': openedMixin(theme),
+        ...openedMixin(theme),
+        '& .MuiDrawer-paper': openedMixin(theme),
     }),
     ...(!open && {
-      ...closedMixin(theme),
-      '& .MuiDrawer-paper': closedMixin(theme),
+        ...closedMixin(theme),
+        '& .MuiDrawer-paper': closedMixin(theme),
     }),
-  }),
-);
+}));
 
 export default function MiniDrawer() {
-  const navigate = useNavigate();
-  const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+    const navigate = useNavigate();
+    const theme = useTheme();
+    const [open, setOpen] = React.useState(false);
+    const { t } = useTranslation();
+    const isUserLogged = useAppSelector((state) => state.user.isLogined);
+    const dispatch = useAppDispatch();
+    const [progress, setProgress] = React.useState(10);
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
+    const userInfo = useSelector(getUserInfo);
 
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
+    const handleDrawerOpen = () => {
+        setOpen(true);
+    };
 
-  const navigateByLink = (link:any) => {
-      if (!isEmpty(link)) {
-        navigate(link);
-      } else {
-        navigate(link);
-      }
-  }
-  return (
-    <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
-      <AppBar position="fixed" open={open}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{
-              marginRight: 5,
-              ...(open && { display: 'none' }),
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Mini variant drawer
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Drawer variant="permanent" open={open}>
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-          </IconButton>
-        </DrawerHeader>
-        <Divider />
-        <List>
-          {menuItemLinkData.map((menuItem, index) => (
-            <ListItem key={menuItem.name} disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
-                }}
-                onClick={(event) => {
-                  console.log("top suggestion clicked")
-                  navigateByLink(menuItem.link);
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={menuItem.name} sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        <DrawerHeader />
-        <Outlet/>
-      </Box>
-    </Box>
-  );
+    const handleDrawerClose = () => {
+        setOpen(false);
+    };
+
+    const navigateByLink = (link: any) => {
+        if (!isObjectEmpty(link)) {
+            navigate(link);
+        } else {
+            navigate(ErrorPagePath.PAGE_404_NOT_FOUND);
+        }
+    };
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10));
+        }, 1000);
+
+        const accessToken = localStorage.getItem('access_token');
+        const refreshToken = localStorage.getItem('refresh_token');
+
+        if (accessToken && refreshToken) {
+            const apiClient = axios.create({
+                baseURL: BASE_API_PATH,
+                withCredentials: true,
+                headers: {
+                    'content-type': 'application/json',
+                    prefix: 'Bearer',
+                    access_token: accessToken,
+                    refresh_token: refreshToken,
+                },
+                paramsSerializer(params: any) {
+                    return stringify(params);
+                },
+            });
+            apiClient
+                .get(`${UrlServer.USER.IS_LOGINED}`)
+                .then((resp: any) => {
+                    if (resp.data.status === StatusCode.OK) {
+                        dispatch(userActions.setIsLogined(true));
+                        dispatch(appAction.setIsShowMsgErrLogin(false));
+                        clearInterval(timer);
+                        navigate(UrlFeApp.DASH_BOARD);
+                        apiClient.get(`${UrlServer.USER.INFO}`).then((res: any) => {
+                            dispatch(userActions.setUserInfo(res.data.data));
+                        });
+                    } else {
+                        dispatch(appAction.setIsPageLoading(true));
+                        dispatch(userActions.setIsLogined(false));
+                        dispatch(appAction.setIsShowMsgErrLogin(true));
+                        navigate(UrlFeApp.LOGIN_URL);
+                    }
+                })
+                .catch((err: any) => {
+                    dispatch(appAction.setIsPageLoading(true));
+                    dispatch(appAction.setIsShowMsgErrLogin(false));
+                    dispatch(userActions.setIsLogined(false));
+                    navigate(UrlFeApp.LOGIN_URL);
+                });
+        } else {
+            const apiClient = axios.create({
+                baseURL: BASE_API_PATH,
+                withCredentials: true,
+                headers: {
+                    'content-type': 'application/json',
+                    prefix: 'Bearer',
+                    access_token: accessToken ? accessToken : '',
+                    refresh_token: refreshToken ? refreshToken : '',
+                },
+                paramsSerializer(params: any) {
+                    return stringify(params);
+                },
+            });
+            apiClient
+                .get(`${UrlServer.USER.IS_LOGINED}`)
+                .then((resp: any) => {
+                    if (resp.data.status === StatusCode.OK) {
+                        dispatch(userActions.setIsLogined(true));
+                        dispatch(appAction.setIsShowMsgErrLogin(false));
+                        clearInterval(timer);
+                        navigate(UrlFeApp.DASH_BOARD);
+                        apiClient.get(`${UrlServer.USER.INFO}`).then((res: any) => {
+                            dispatch(userActions.setUserInfo(res.data.data));
+                        });
+                    } else {
+                        dispatch(appAction.setIsPageLoading(true));
+                        dispatch(userActions.setIsLogined(false));
+                        dispatch(appAction.setIsShowMsgErrLogin(true));
+                        navigate(UrlFeApp.LOGIN_URL);
+                    }
+                })
+                .catch((err: any) => {
+                    dispatch(appAction.setIsPageLoading(true));
+                    dispatch(appAction.setIsShowMsgErrLogin(false));
+                    dispatch(userActions.setIsLogined(false));
+                    navigate(UrlFeApp.LOGIN_URL);
+                });
+        }
+    }, []);
+
+    const StyledBadge = styled(Badge)(({ theme }) => ({
+        '& .MuiBadge-badge': {
+            backgroundColor: '#44b700',
+            color: '#44b700',
+            boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+            '&::after': {
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                borderRadius: '50%',
+                animation: 'ripple 1.2s infinite ease-in-out',
+                border: '1px solid currentColor',
+                content: '""',
+            },
+        },
+        '@keyframes ripple': {
+            '0%': {
+                transform: 'scale(.8)',
+                opacity: 1,
+            },
+            '100%': {
+                transform: 'scale(2.4)',
+                opacity: 0,
+            },
+        },
+    }));
+
+    return (
+        <div className="h-100">
+            {isUserLogged ? (
+                <React.Fragment>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            '&::-webkit-scrollbar': {
+                                width: 20,
+                            },
+                            '&::-webkit-scrollbar-track': {
+                                backgroundColor: 'orange',
+                            },
+                            '&::-webkit-scrollbar-thumb': {
+                                backgroundColor: 'red',
+                                borderRadius: 2,
+                            },
+                        }}
+                    >
+                        <CssBaseline />
+                        <AppBar position="fixed" open={open}>
+                            <div className="d-flex justify-content-between">
+                                <Toolbar>
+                                    <IconButton
+                                        color="inherit"
+                                        aria-label="open drawer"
+                                        onClick={handleDrawerOpen}
+                                        edge="start"
+                                        sx={{
+                                            marginRight: 5,
+                                            ...(open && { display: 'none' }),
+                                        }}
+                                    >
+                                        <MenuIcon />
+                                    </IconButton>
+                                    <CollapsedBreadcrumbs />
+                                </Toolbar>
+                                <Toolbar>
+                                    <MLanguage />
+                                    <Notification />
+                                    <UserDropdown />
+                                </Toolbar>
+                            </div>
+                        </AppBar>
+                        <Drawer variant="permanent" open={open}>
+                            <DrawerHeader className="p-1 ">
+                                <Stack direction="row" spacing={3} className="p-1">
+                                    <StyledBadge
+                                        overlap="circular"
+                                        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                                        variant="dot"
+                                    >
+                                        <Avatar alt="Remy Sharp" src={userInfo?.avatar} />
+                                    </StyledBadge>
+                                </Stack>
+                                <Typography>
+                                    <span className="p-2">
+                                        <span className="d-block fw-bold text-customTheme ">{`${userInfo.firstName} ${userInfo.lastName}`}</span>
+                                        <span className="fst-italic">{`${userInfo.uRole}`}</span>
+                                    </span>
+                                </Typography>
+                                <IconButton onClick={handleDrawerClose}>
+                                    {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+                                </IconButton>
+                            </DrawerHeader>
+                            <Divider />
+                            <List>
+                                {menuItemLinkData.map((menuItem, index) => (
+                                    <React.Fragment key={index}>
+                                        <ListItem disablePadding sx={{ display: 'block' }}>
+                                            <ListItemButton
+                                                sx={{
+                                                    minHeight: 48,
+                                                    justifyContent: open ? 'initial' : 'center',
+                                                    px: 2.5,
+                                                }}
+                                                onClick={(event) => {
+                                                    navigateByLink(menuItem.link);
+                                                }}
+                                            >
+                                                <ListItemIcon
+                                                    sx={{
+                                                        minWidth: 0,
+                                                        mr: open ? 3 : 'auto',
+                                                        justifyContent: 'center',
+                                                    }}
+                                                >
+                                                    {renderIconLeftBar(menuItem.iconNm)}
+                                                </ListItemIcon>
+                                                <ListItemText
+                                                    primary={t(menuItem.name)}
+                                                    sx={{ opacity: open ? 1 : 0 }}
+                                                />
+                                            </ListItemButton>
+                                        </ListItem>
+                                    </React.Fragment>
+                                ))}
+                            </List>
+                        </Drawer>
+                        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+                            <DrawerHeader />
+                            <Outlet />
+                        </Box>
+                    </Box>
+                </React.Fragment>
+            ) : (
+                <div className="progress-wrapper">
+                    <Box sx={{ width: '50%', display: 'inherit' }}>
+                        <LinearProgressWithLabel value={progress} color="warning" />
+                    </Box>
+                </div>
+            )}
+        </div>
+    );
 }

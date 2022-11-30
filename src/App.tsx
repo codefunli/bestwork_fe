@@ -1,24 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { useAppSelector } from './core/hook/redux';
 import { Suspense } from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import './App.scss';
 import RootAppComponent from './core/layout/root-app-component';
 import RenderRouter from './route/route';
+import { ThemeProvider } from '@mui/material';
+import { customTheme } from './customTheme';
 
 const queryClient = new QueryClient();
 function App() {
-  //const isLoadingApp = useAppSelector(state => state.app.isAppLoading);
-  return (
-    <QueryClientProvider client={queryClient}>
-      {/* provides a uniform configuration support for components */}
-        <Suspense>
-					<RootAppComponent>
-              <RenderRouter/>
-					</RootAppComponent>  
-				</Suspense>
-    </QueryClientProvider>
-  );
+    return (
+        <QueryClientProvider client={queryClient}>
+            <ThemeProvider theme={customTheme}>
+                <Suspense>
+                    <RootAppComponent>
+                        <RenderRouter />
+                    </RootAppComponent>
+                </Suspense>
+            </ThemeProvider>
+        </QueryClientProvider>
+    );
 }
 
 export default App;

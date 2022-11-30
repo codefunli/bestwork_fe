@@ -1,0 +1,29 @@
+.construction-register {
+    .construction-info {
+        .info-item {
+            font-size: 14px;
+
+            &:not(:last-child) {
+                border-bottom: 1px solid #f5f5f5;
+            }
+        }
+    }
+
+    .MuiSelect-select {
+        padding: 9.5px 14px;
+    }
+
+    .progress-item {
+        display: block;
+        padding: 1rem;
+        border-radius: 1rem;
+        color: rgba(0, 0, 0, 0.6);
+        font-style: italic;
+        word-wrap: break-word;
+        cursor: pointer;
+    }
+
+    .progress-item:hover {
+        background-color: #d49699;
+    }
+}

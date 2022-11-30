@@ -1,30 +1,60 @@
 import axios from 'axios';
-import { CharacterConstants } from '../constants/common';
+import { stringify } from 'qs';
+import { BASE_API_PATH } from '../constants/urls';
 
-export const get = (url:string, param:any) => {
-    axios.get(url, param).then(res => {
-        return res;
-    }).catch(error => console.log(error));
-}
+let accessToken = window.localStorage.getItem('access_token');
+let refreshToken = window.localStorage.getItem('refresh_token');
 
-export const post = (url:string, data: any) => {
-    axios.post(url, data)
-    .then(res => {
-        return res;
-    }).catch(error => console.log(error));
-}
+let apiClient = axios.create({
+    baseURL: BASE_API_PATH,
+    withCredentials: true,
+    headers: {
+        'content-type': 'application/json',
+        prefix: 'Bearer',
+        access_token: accessToken ? accessToken : '',
+        refresh_token: refreshToken ? refreshToken : '',
+    },
+    paramsSerializer(params: any) {
+        return stringify(params);
+    },
+});
 
-export const put = (url:string, data: any) => {
-    axios.put(url, data)
-    .then(res => {
-        return res;
-    }).catch(error => console.log(error));
-}
+apiClient.interceptors.request.use((res: any) => {
+    if (!(res.headers.access_token && res.headers.refresh_token)) {
+        res.headers.access_token = accessToken;
+        res.headers.refresh_token = refreshToken;
+    }
+    return res;
+});
 
-export const deleteById = (url:string, id:number) => {
-    var urlDelete = url + CharacterConstants.SLASH + id;
-    axios.delete(urlDelete)
-    .then(res => {
+apiClient.interceptors.response.use(
+    (res) => {
+        if (res.headers.access_token && res.headers.refresh_token) {
+            localStorage.setItem('access_token', res.headers.access_token);
+            localStorage.setItem('refresh_token', res.headers.refresh_token);
+            accessToken = res.headers.access_token;
+            refreshToken = res.headers.refresh_token;
+
+            apiClient = axios.create({
+                baseURL: BASE_API_PATH,
+                withCredentials: true,
+                headers: {
+                    'content-type': 'application/json',
+                    prefix: 'Bearer',
+                    access_token: res.headers.access_token,
+                    refresh_token: res.headers.refresh_token,
+                },
+                paramsSerializer(params: any) {
+                    return stringify(params);
+                },
+            });
+        }
+
         return res;
-    }).catch(error => console.log(error));
-}
+    },
+    (err) => {
+        return Promise.reject(err);
+    },
+);
+
+export default apiClient;

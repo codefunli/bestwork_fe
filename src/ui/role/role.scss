@@ -1,0 +1,82 @@
+.role {
+    .d-flex {
+        display: flex;
+        gap: 10px;
+    }
+    .content-area {
+        .search-area {
+            display: flex;
+
+            fieldset {
+                border-top-right-radius: 0 !important;
+                border-bottom-right-radius: 0 !important;
+            }
+
+            .MuiTextField-root {
+                margin: 0 !important;
+            }
+
+            button {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0 !important;
+                border-top-left-radius: 0 !important;
+                border-bottom-left-radius: 0 !important;
+                border-top-right-radius: 0.5rem !important;
+                border-bottom-right-radius: 0.5rem !important;
+                box-shadow: none !important;
+            }
+        }
+
+        .role-list {
+            height: 58vh;
+        }
+
+        .MuiCard-root {
+            height: 100%;
+            overflow: auto;
+        }
+
+        .MuiTabs-flexContainerVertical {
+            overflow-y: auto;
+            max-height: 60vh;
+            width: 100%;
+
+            button.MuiTab-textColorPrimary {
+                max-width: 100% !important;
+            }
+        }
+
+        .MuiTabs-indicator {
+            display: none;
+        }
+
+        .reset-all {
+            display: flex;
+            justify-content: end;
+        }
+    }
+
+    button.MuiButtonBase-root {
+        align-items: start;
+    }
+
+    .role-content {
+        width: 100%;
+        height: 58vh;
+        overflow-y: auto;
+        border: 1px solid #1976d213;
+        border-radius: 0.5rem;
+
+        .role-table {
+            width: 100%;
+        }
+    }
+
+    button.Mui-selected {
+        background-color: #1976d22a;
+        border-top-left-radius: 0.5rem;
+        border-bottom-left-radius: 0.5rem;
+    }
+}

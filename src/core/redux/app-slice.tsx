@@ -1,34 +1,36 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface InitialState {
-    isAppLoading: boolean;
+    isShowMsgErrLogin: boolean;
     isPageLoading: boolean;
     header: {};
     config: {
-		language: string;
-	};
-	errCode: string;
+        language: string;
+    };
+    errCode: string;
 }
 
-const initialState : InitialState = {
-    isAppLoading: true,
+const initialState: InitialState = {
+    isShowMsgErrLogin: false,
     isPageLoading: false,
     header: {},
     config: {
         language: '',
     },
     errCode: '',
-}
+};
 
 export const appSlice = createSlice({
-    name: "app",
+    name: 'app',
     initialState,
     reducers: {
-        setAppLoading(state, action: PayloadAction<boolean>) {
-            console.log("Action: " + action.payload);
-            state.isAppLoading = action.payload;
-        }
-    }
+        setIsPageLoading(state, action: PayloadAction<boolean>) {
+            state.isPageLoading = action.payload;
+        },
+        setIsShowMsgErrLogin(state, action: PayloadAction<boolean>) {
+            state.isShowMsgErrLogin = action.payload;
+        },
+    },
 });
 
 export const appAction = appSlice.actions;
