@@ -4,8 +4,8 @@ import TimelineConnector from '@mui/lab/TimelineConnector';
 import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
 import TimelineItem from '@mui/lab/TimelineItem';
-import TimelineSeparator from '@mui/lab/TimelineSeparator';
 import TimelineOppositeContent, { timelineOppositeContentClasses } from '@mui/lab/TimelineOppositeContent';
+import TimelineSeparator from '@mui/lab/TimelineSeparator';
 import {
     Avatar,
     Button,
@@ -17,23 +17,26 @@ import {
     Chip,
     Divider,
     Grid,
+    Stack,
     Typography,
 } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { ProjectProgressDTO } from '../../models/project-res-dto';
-import { getProgressByProjectId, getProgressStatus, getProjectStatus } from '../../services/project-service';
+import { formatDateTimeResList } from '../../../core/utils/get-current-datetime';
+import { ProjectProgressDTO } from '../../../models/project-res-dto';
+import { getProgressByProjectId, getProgressStatus, getProjectStatus } from '../../../services/project-service';
+import HandleProgressStatus from '../../../shared-components/status-handle/progress-status-handle';
+import HandleProjectStatus from '../../../shared-components/status-handle/project-status-handle';
 import ProgressCreate from './progress-create';
 import ProgressEdit from './progress-edit';
-import HandleProgressStatus from '../../shared-components/status-handle/progress-status-handle';
-import HandleProjectStatus from '../../shared-components/status-handle/project-status-handle';
-import { formatDateTimeResList } from '../../core/utils/get-current-datetime';
-import './project.scss';
+import '../../project/project.scss';
+import { getConstruction, getConstructionStatus, getProgressByConstruction } from '../../../services/construction-service';
+import HandleConstructionStatus from '../../../shared-components/status-handle/construction-status-handle';
 
-export default function ProjectEdit() {
-    const [projectData, setProjectData] = useState<any>({});
+export default function ProgressDetail() {
+    const [constructionData, setConstructionData] = useState<any>({});
     const { t } = useTranslation();
     const params = useParams();
     const [isOpenCreateProgress, setOpenCreateProgress] = useState(false);
@@ -41,7 +44,7 @@ export default function ProjectEdit() {
     const [selectedProgress, setSelectedProgress] = useState<any>();
     const [progressList, setProgressList] = useState<ProjectProgressDTO[]>([]);
     const [progressStatus, setProgressStatus] = useState([]);
-    const [projectStatus, setProjectStatus] = useState([]);
+    const [constructionStatus, setConstructionStatus] = useState([]);
 
     useEffect(() => {
         if (params.id) fetchData();
@@ -50,16 +53,20 @@ export default function ProjectEdit() {
             if (value && value.data) setProgressStatus(value.data);
         });
 
-        getProjectStatus().then((status: any) => {
-            if (status && status.data) setProjectStatus(status.data);
+        getConstructionStatus().then((status: any) => {
+            if (status && status.data) setConstructionStatus(status.data);
         });
     }, [params.id]);
 
     const fetchData = async () => {
-        const value: any = await getProgressByProjectId(params.id);
+        const value: any = await getProgressByConstruction(params.id);
         if (value && value.data) {
-            setProjectData(value.data.project);
-            setProgressList(value.data.progress);
+            setProgressList(value.data);
+        }
+
+        const result: any = await getConstruction(params.id);
+        if(result && result.data){
+            setConstructionData(result.data)
         }
     };
 
@@ -97,6 +104,18 @@ export default function ProjectEdit() {
     };
 
     const handleCloseProject = (project: any) => {};
+    const handleArrayValue = (data: any) => {
+        return (
+            <Stack direction="row" spacing={1}>
+                {data &&
+                    data.length > 0 &&
+                    data.map((el: any) => {
+                        return <Chip key={el.id} label={el.code} color="info" size="small" variant="outlined" />;
+                    })}
+            </Stack>
+        );
+    };
+
 
     return (
         <div className="project-detail">
@@ -108,16 +127,16 @@ export default function ProjectEdit() {
                                 <CardMedia
                                     component="img"
                                     height="auto"
-                                    image="https://cdn.pixabay.com/photo/2016/03/29/08/48/project-1287781__340.jpg"
+                                    image={require('../../../assets/construction_img.jpg')}
                                     alt="green iguana"
                                 />
-                                {projectData && (
+                                {constructionData && (
                                     <div className="project-info">
                                         <CardHeader
                                             action={
                                                 <Button
                                                     variant="contained"
-                                                    onClick={() => handleCloseProject(projectData)}
+                                                    onClick={() => handleCloseProject(constructionData)}
                                                 >
                                                     Close
                                                 </Button>
@@ -126,30 +145,32 @@ export default function ProjectEdit() {
                                         ></CardHeader>
                                         <CardContent>
                                             <Typography gutterBottom variant="h3" component="div">
-                                                {projectData.projectName}
+                                                {constructionData.constructionName}
                                             </Typography>
                                             <div className="d-flex justify-content-start flex-column p-3 info-item">
-                                                <div className="title">{t('message.status')}:</div>
-                                                <HandleProjectStatus
+                                                <div className="title">{t('construction.register.cttStatus')}:</div>
+                                                <HandleConstructionStatus
                                                     statusList={
-                                                        projectStatus && projectStatus.length > 0 ? projectStatus : []
+                                                        constructionStatus && constructionStatus.length > 0 ? constructionStatus : []
                                                     }
-                                                    statusId={projectData?.status}
+                                                    statusId={constructionData?.status}
                                                 />
                                             </div>
                                             <div className="d-flex justify-content-start flex-column p-3 info-item">
-                                                <div className="title">{t('project.register.type')}:</div>
-                                                <div>{projectData?.projectType?.name}</div>
+                                                <div className="title">{t('construction.register.cttLocation')}:</div>
+                                                <div>{constructionData?.location}</div>
                                             </div>
                                             <div className="d-flex justify-content-start flex-column p-3 info-item">
-                                                <div className="title">{t('radio.paid')}:</div>
-                                                <div>
-                                                    {projectData?.isPaid === 1 ? t('radio.paid') : t('radio.unPaid')}
-                                                </div>
+                                                <div className="title">{t('construction.register.cttStartDate')}:</div>
+                                                <div>{formatDateTimeResList(constructionData?.startDate)}</div>
                                             </div>
                                             <div className="d-flex justify-content-start flex-column p-3 info-item">
-                                                <div className="title">{t('project.register.startDate')}:</div>
-                                                <div>{formatDateTimeResList(projectData?.startDate)}</div>
+                                                <div className="title">{t('construction.register.cttEndDate')}:</div>
+                                                <div>{formatDateTimeResList(constructionData?.endDate)}</div>
+                                            </div>
+                                            <div className="d-flex justify-content-start flex-column p-3 info-item">
+                                                <div className="title">{t('construction.register.cttAwb')}:</div>
+                                                <div> {handleArrayValue(constructionData?.awbCodes)}</div>
                                             </div>
                                         </CardContent>
                                     </div>
@@ -177,7 +198,7 @@ export default function ProjectEdit() {
                                     },
                                 }}
                             >
-                                {progressList.map((progress: ProjectProgressDTO | any, index: number) => (
+                                {progressList && progressList.length > 0 && progressList.map((progress: ProjectProgressDTO | any, index: number) => (
                                     <div key={index}>
                                         <TimelineItem>
                                             <TimelineOppositeContent color="textSecondary">

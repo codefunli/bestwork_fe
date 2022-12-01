@@ -123,11 +123,11 @@ export default function EnhancedTable(props: EnhancedTable) {
 
     const handleArrayValue = (data: any) => {
         return (
-            <Stack direction="row" spacing={1}>
+            <Stack direction="column" spacing={1}>
                 {data &&
                     data.length > 0 &&
-                    data.map((el: any, index: any) => {
-                        return <Chip key={index} label={el} color="info" size="small" variant="outlined" />;
+                    data.map((el: any) => {
+                        return <Chip key={el.id} label={el.code} color="info" size="small" variant="outlined" />;
                     })}
             </Stack>
         );

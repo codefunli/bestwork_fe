@@ -223,7 +223,6 @@ export const validateCreateAwbForm = yup.object({
 });
 
 export const validateConstruction = yup.object({
-    constructionCode: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.CONSTRUCTION_CODE])),
     constructionName: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.CONSTRUCTION_NAME])),
     startDate: yup
         .date()
@@ -235,5 +234,5 @@ export const validateConstruction = yup.object({
         .typeError(getMessage(ERROR_MSG.E01_001, [FieldConstants.END_DATE]))
         .min(yup.ref('startDate'), getMessage(ERROR_MSG.E01_003, [FieldConstants.END_DATE, FieldConstants.START_DATE])),
     status: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.STATUS])),
-    awb: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.AWB])),
+    awbCodes: yup.array().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.AIR_WAY_BILL])).min(1).nullable(),
 });

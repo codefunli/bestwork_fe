@@ -140,7 +140,8 @@
         "deleteSuccess": "Xóa dữ liệu thành công",
         "retriveSuccess": "Lấy dữ liệu thành công",
         "registrationSuccess": "Đăng kí dữ liệu thành công",
-        "updateSuccess": "Cập nhật dữ liệu thành công"
+        "updateSuccess": "Cập nhật dữ liệu thành công",
+        "awbs": "Chọn mã hóa đơn"
     },
     "bread_crumbs": {
         "home": "Trang chủ",
@@ -157,7 +158,8 @@
         "status": "Trạng thái",
         "detail": "Chi tiết",
         "construction": "Công trình",
-        "customsClearance": "Hồ sơ thông quan"
+        "customsClearance": "Hồ sơ thông quan",
+        "progress": "Tiến độ"
     },
     "user": {
         "title": "Thông tin người dùng",
@@ -420,7 +422,11 @@
             "cttStatus": "Trạng thái",
             "cttLocation": "Địa điểm",
             "cttDraw": "Bản vẽ",
-            "cttAwb": "Hóa đơn vận chuyển"
+            "cttAwb": "Hóa đơn vận chuyển",
+            "cttDescription": "Mô tả"
+        },
+        "edit": {
+            "title": "Chỉnh sửa công trình"
         }
     }
 }

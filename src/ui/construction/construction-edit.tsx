@@ -1,7 +1,12 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import Timeline from '@mui/lab/Timeline';
-import { timelineOppositeContentClasses } from '@mui/lab/TimelineOppositeContent';
+import TimelineConnector from '@mui/lab/TimelineConnector';
+import TimelineContent from '@mui/lab/TimelineContent';
+import TimelineDot from '@mui/lab/TimelineDot';
+import TimelineItem from '@mui/lab/TimelineItem';
+import TimelineSeparator from '@mui/lab/TimelineSeparator';
+import TimelineOppositeContent, { timelineOppositeContentClasses } from '@mui/lab/TimelineOppositeContent';
 import {
     Avatar,
     Box,
@@ -30,14 +35,23 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Item, StatusCode, UrlFeApp } from '../../core/constants/common';
 import { validateConstruction } from '../../core/constants/validate';
-import { formatDateTimeRes } from '../../core/utils/get-current-datetime';
-import { AWBCode } from '../../models/construction-res-dto';
+import { formatDateTimeRes, formatDateTimeResList, formatDateTimeResNoneSuffixes } from '../../core/utils/get-current-datetime';
+import { ProjectProgressDTO } from '../../models/project-res-dto';
 import { getAirWayBillByProjectId } from '../../services/awb-service';
-import { getConstructionStatus, registerConstruction } from '../../services/construction-service';
+import {
+    getConstruction,
+    getConstructionStatus,
+    getProgressByConstruction,
+    updateConstruction,
+} from '../../services/construction-service';
+import { getProgressByProjectId, getProgressStatus } from '../../services/project-service';
 import ApiAlert from '../../shared-components/alert/api-alert';
-import UploadMultipartFile from '../../shared-components/file-management/upload-multipartfile';
+import MultipleFileUpload from '../../shared-components/file-upload/multiple-file-upload';
 import HandleConstructionStatus from '../../shared-components/status-handle/construction-status-handle';
 import './construction.scss';
+import HandleProgressStatus from '../../shared-components/status-handle/progress-status-handle';
+import UploadMultipartFile from '../../shared-components/file-management/upload-multipartfile';
+import { AWBCode, ContructionProgressResDTO, ProgressByConstrucionDTO } from '../../models/construction-res-dto';
 
 const initialValues = {
     fileStorages: [],
@@ -45,10 +59,10 @@ const initialValues = {
     status: '',
     location: '',
     awbCodes: [] as AWBCode[],
-    description: '',
     startDate: formatDateTimeRes(new Date()),
     endDate: formatDateTimeRes(new Date()),
     projectCode: '',
+    description: '',
 };
 
 const initialDataImg = {
@@ -57,19 +71,20 @@ const initialDataImg = {
     isOpenComment: false,
 };
 
-export default function ConstructionRegister() {
+export default function ConstructionEdit() {
     const { t } = useTranslation();
+    const navigate = useNavigate();
     const params = useParams();
     const [constructionStatus, setConstructionStatus] = useState([]);
     const [awbCodesList, setAwbCodesList] = useState([]);
     const [formValues, setFormValues] = useState(initialValues);
-    const navigate = useNavigate();
     const [isClearPreview, setIsClearPreview] = useState(false);
     const [resForHandleMsg, setResForHandleMsg] = useState<any>();
-    const [selectValue, setSelectValue] = useState<string[]>([]);
+    const [progressList, setProgressList] = useState<ContructionProgressResDTO[]>([]);
+    const [progressStatus, setProgressStatus] = useState([]);
     const [fileData, setFileData] = useState(initialDataImg);
     const [eventImage, setEventImage] = useState<any>();
-
+    const [isOpenProgress, setIsOpenProgress] = useState(false);
     const {
         register,
         handleSubmit,
@@ -79,34 +94,52 @@ export default function ConstructionRegister() {
         resolver: yupResolver(validateConstruction),
     });
 
+    const [selectValue, setSelectValue] = useState<string[]>([]);
+
     const handleChange = (event: SelectChangeEvent<typeof selectValue>) => {
         const {
             target: { value },
         } = event;
-
         let selectValueTmp = typeof value === 'string' ? value.split(',') : value;
         setSelectValue(selectValueTmp);
         setFormValues({
             ...formValues,
-            awbCodes: awbCodesList.filter(awbCodes => selectValueTmp.includes(awbCodes["id"] as string)),
+            awbCodes: awbCodesList.filter(id => selectValueTmp.includes(id)),
         });
     };
 
     useEffect(() => {
+        getConstruction(params.id).then((result: any) => {
+            if (result && result.data) {
+                setFormValues({
+                    ...result.data,
+                    startDate:  formatDateTimeResNoneSuffixes(result.data.startDate),
+                    endDate: formatDateTimeResNoneSuffixes(result.data.endDate),
+                });
+                let awbCodeArr: string[] = [];
+                result.data.awbCodes.map((target: AWBCode) => {
+                    awbCodeArr.push(target.code);
+                });
+                setSelectValue(awbCodeArr);
+                getAirWayBillByProjectId(result.data.projectCode).then((result: any) => {
+                    if (result && result.data) setAwbCodesList(result.data);
+                });
+                getProgressByConstruction(result.data.id).then((value: any) => {
+                    if (value && value.data) {
+                        setProgressList(value.data);
+                    }
+                });
+                reset()
+            }
+        });
+        
         getConstructionStatus().then((result: any) => {
             if (result && result.data) setConstructionStatus(result.data);
         });
 
-        if (params.id) {
-            setFormValues({
-                ...formValues,
-                projectCode: params.id,
-            });
-
-            getAirWayBillByProjectId(params.id).then((result: any) => {
-                if (result && result.data) setAwbCodesList(result.data);
-            });
-        }
+        getProgressStatus().then((value: any) => {
+            if (value && value.data) setProgressStatus(value.data);
+        });
     }, []);
 
     const handleInputChange = (e: any) => {
@@ -128,31 +161,6 @@ export default function ConstructionRegister() {
         }
     };
 
-    const getValueFromAwbCode = (id: any) => {
-        let result = awbCodesList.map((awbCode: any) => {
-            if (awbCode.id === id) {
-                return awbCode.code;
-            }
-        });
-
-        return result;
-    };
-
-    const onChangeImage = (data: any) => {
-        setFileData({
-            ...fileData,
-            file: data,
-        });
-    };
-
-    const handleClearEvent = (event: any) => {
-        setEventImage(event);
-    };
-
-    const clearEventImage = () => {
-        if (eventImage && eventImage.target && eventImage.target.value) eventImage.target.value = '';
-    };
-
     const handleSubmitForm = async (event: any) => {
         let formData = new FormData();
 
@@ -170,8 +178,7 @@ export default function ConstructionRegister() {
                 type: 'application/json',
             }),
         );
-
-        registerConstruction(formData)
+        updateConstruction(params.id, formData)
             .then((res: any) => {
                 setResForHandleMsg({
                     status: res.status,
@@ -195,6 +202,21 @@ export default function ConstructionRegister() {
         clearEventImage();
     };
 
+    const onChangeImage = (data: any) => {
+        setFileData({
+            ...fileData,
+            file: data,
+        });
+    };
+
+    const handleClearEvent = (event: any) => {
+        setEventImage(event);
+    };
+
+    const clearEventImage = () => {
+        if (eventImage && eventImage.target && eventImage.target.value) eventImage.target.value = '';
+    };
+
     return (
         <div className="construction-register">
             <form onSubmit={handleSubmitForm}>
@@ -206,7 +228,7 @@ export default function ConstructionRegister() {
                         gutterBottom
                         sx={{ textTransform: 'uppercase' }}
                     >
-                        <div className="particletext">{t('construction.register.title')}</div>
+                        <div className="particletext">{t('construction.edit.title')}</div>
                         <Divider />
                     </Typography>
                 </div>
@@ -242,7 +264,6 @@ export default function ConstructionRegister() {
                                             <span className="input-required p-1">*</span>
                                         </InputLabel>
                                         <TextField
-                                            autoComplete="off"
                                             size="small"
                                             value={formValues.constructionName}
                                             fullWidth
@@ -268,7 +289,6 @@ export default function ConstructionRegister() {
                                             {t(Item.CONSTRUCTION.RU_DESCRIPTION)}
                                         </InputLabel>
                                         <TextField
-                                            autoComplete="off"
                                             size="small"
                                             value={formValues.description}
                                             fullWidth
@@ -292,7 +312,6 @@ export default function ConstructionRegister() {
                                             <span className="input-required p-1">*</span>
                                         </InputLabel>
                                         <TextField
-                                            autoComplete="off"
                                             fullWidth
                                             size="small"
                                             sx={{
@@ -320,7 +339,6 @@ export default function ConstructionRegister() {
                                             <span className="input-required p-1">*</span>
                                         </InputLabel>
                                         <TextField
-                                            autoComplete="off"
                                             fullWidth
                                             size="small"
                                             sx={{
@@ -345,7 +363,6 @@ export default function ConstructionRegister() {
                                     <div className="d-flex justify-content-start flex-column p-2 info-item">
                                         <InputLabel htmlFor="location">{t(Item.CONSTRUCTION.RU_LOCATION)}</InputLabel>
                                         <TextField
-                                            autoComplete="off"
                                             size="small"
                                             value={formValues.location}
                                             fullWidth
@@ -361,8 +378,9 @@ export default function ConstructionRegister() {
                                             placeholder={t(Item.COMMON.PLACE_HOLDER)}
                                             error={Boolean(errors.location)}
                                             helperText={errors.location?.message?.toString()}
-                                            name="location"
-                                            onChange={(e) => handleInputChange(e)}
+                                            {...register('location', {
+                                                onChange: (e) => handleInputChange(e),
+                                            })}
                                         />
                                     </div>
                                     <div className="d-flex justify-content-start flex-column p-2 info-item">
@@ -409,13 +427,13 @@ export default function ConstructionRegister() {
                                         )}
                                     </div>
                                     <div className="d-flex justify-content-start flex-column p-2 info-item">
-                                        <InputLabel htmlFor="awb" error={Boolean(errors.awbCodes)}>
+                                        <InputLabel htmlFor="awb" error={Boolean(errors.awb)}>
                                             {t(Item.CONSTRUCTION.RU_AWB)}
                                             <span className="input-required p-1">*</span>
                                         </InputLabel>
                                         <Select
                                             labelId="demo-simple-select-outlined-label"
-                                            id="awbCodes"
+                                            id="awb"
                                             multiple
                                             value={selectValue}
                                             sx={{
@@ -425,23 +443,21 @@ export default function ConstructionRegister() {
                                             renderValue={(selected) => (
                                                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                                                     {selected.map((value) => (
-                                                        <Chip key={value} label={getValueFromAwbCode(value)} />
+                                                        <Chip key={value} label={value} />
                                                     ))}
                                                 </Box>
                                             )}
-                                            {...register('awbCodes', {
-                                                onChange: (e) => handleChange(e),
-                                            })}
+                                            onChange={(e) => handleChange(e)}
                                         >
                                             {awbCodesList.map((awbCode: any) => (
-                                                <MenuItem key={awbCode.id} value={awbCode.id}>
+                                                <MenuItem key={awbCode.id} value={awbCode.code}>
                                                     {awbCode.code}
                                                 </MenuItem>
                                             ))}
                                         </Select>
-                                        {Boolean(errors.awbCodes) && (
+                                        {Boolean(errors.status) && (
                                             <FormHelperText id="component-error-text">
-                                                {errors?.awbCodes?.message as string}
+                                                {errors?.awb?.message as string}
                                             </FormHelperText>
                                         )}
                                     </div>
@@ -460,7 +476,7 @@ export default function ConstructionRegister() {
                                         disabled={isSubmitting}
                                         onClick={handleSubmit(handleSubmitForm)}
                                     >
-                                        {t(Item.LABEL_BTN.CREATE)}
+                                        {t(Item.LABEL_BTN.SAVE)}
                                     </Button>
                                 </ButtonGroup>
                                 <Button variant="outlined" type="button" onClick={handleClear}>
@@ -476,7 +492,7 @@ export default function ConstructionRegister() {
                                 title="Progress daily"
                                 subheader={new Date().toLocaleDateString()}
                                 action={
-                                    <IconButton disabled color="primary" size="large">
+                                    <IconButton color="primary" size="large" disabled>
                                         <AddCircleIcon fontSize="inherit" />
                                     </IconButton>
                                 }
@@ -488,7 +504,39 @@ export default function ConstructionRegister() {
                                         flex: 0.2,
                                     },
                                 }}
-                            ></Timeline>
+                            >
+                                {progressList && progressList.length > 0 && progressList.map((progress: ProgressByConstrucionDTO | any, index: number) => (
+                                    <div key={index}>
+                                        <TimelineItem>
+                                            <TimelineOppositeContent color="textSecondary">
+                                                <div style={{ minWidth: '200px' }}>
+                                                    {formatDateTimeResList(progress.startDate)}
+                                                </div>
+                                            </TimelineOppositeContent>
+                                            <TimelineSeparator className="h-40">
+                                                <TimelineDot />
+                                                <TimelineConnector />
+                                            </TimelineSeparator>
+                                            <TimelineContent>
+                                                <div className="mb-4 pb-2">
+                                                    <div className="pb-2 h4 fw-bold">{progress.title}</div>
+                                                    <div className="pb-2">{progress.report}</div>
+                                                    <div className="pb-2">
+                                                        <HandleProgressStatus
+                                                            statusList={
+                                                                progressStatus && progressStatus.length > 0
+                                                                    ? progressStatus
+                                                                    : []
+                                                            }
+                                                            statusId={progress.status}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </TimelineContent>
+                                        </TimelineItem>
+                                    </div>
+                                ))}
+                            </Timeline>
                         </Card>
                     </Grid>
                 </Grid>

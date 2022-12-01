@@ -1,4 +1,4 @@
-import { Chip } from "@mui/material";
+import { Chip } from '@mui/material';
 
 interface Props {
     statusList: any;
@@ -11,10 +11,12 @@ const HandleProgressStatus = (props: Props) => {
     const handleStatus = () => {
         let status: string = '';
         if (statusId) {
-            (statusList && statusList.length > 0) && statusList.forEach((value: any) => {
-                if (statusId.toString() === value.id.toString()) status = value.status;
-            });
-        };
+            statusList &&
+                statusList.length > 0 &&
+                statusList.forEach((value: any) => {
+                    if (statusId.toString() === value.id.toString()) status = value.status;
+                });
+        }
 
         switch (statusId) {
             case '0':
@@ -32,11 +34,7 @@ const HandleProgressStatus = (props: Props) => {
         }
     };
 
-    return (
-        <div>
-            {handleStatus()}
-        </div>
-    );
+    return <div>{handleStatus()}</div>;
 };
 
 export default HandleProgressStatus;

@@ -31,7 +31,7 @@
             "email": "Email",
             "telNo": "Tel-No",
             "taxNo": "Tax-No",
-            "national": "National",
+            "national": "Nation",
             "city": "City/Province",
             "district": "District/Town",
             "ward": "Ward/Township",
@@ -140,7 +140,8 @@
         "deleteSuccess": "Deletion data is successfully",
         "retriveSuccess": "Retrieve data is successfully",
         "registrationSuccess": "Registration data is successfully",
-        "updateSuccess": "Update data is successfully"
+        "updateSuccess": "Update data is successfully",
+        "awbs": "Please choose awb"
     },
     "bread_crumbs": {
         "home": "Home",
@@ -157,7 +158,8 @@
         "status": "Status",
         "detail": "Detail",
         "construction": "Construction",
-        "customsClearance": "Customs Clearance"
+        "customsClearance": "Customs Clearance",
+        "progress": "Progress"
     },
     "user": {
         "title": "User Information",
@@ -421,7 +423,11 @@
             "cttStatus": "Status",
             "cttLocation": "Location",
             "cttDraw": "Construction drawing",
-            "cttAwb": "Air way bill"
+            "cttAwb": "Air way bill",
+            "cttDescription": "Description"
+        },
+        "edit": {
+            "title": "Construction Edition"
         }
     }
 }

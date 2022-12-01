@@ -17,21 +17,21 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { StatusCode } from '../../core/constants/common';
-import { validateProjectProgress } from '../../core/constants/validate';
-import { formatDateTimeRes, formatDateTimeReq } from '../../core/utils/get-current-datetime';
-import { ProjectProgressDTO } from '../../models/project-res-dto';
-import { createProgress, getProgressStatus } from '../../services/project-service';
-import ApiAlert from '../../shared-components/alert/api-alert';
-import MultipleFileUpload from '../../shared-components/file-upload/multiple-file-upload';
-import HandleProjectStatus from '../../shared-components/status-handle/project-status-handle';
+import { StatusCode } from '../../../core/constants/common';
+import { validateProjectProgress } from '../../../core/constants/validate';
+import { formatDateTimeReq, formatDateTimeRes } from '../../../core/utils/get-current-datetime';
+import { ContructionProgressDTO } from '../../../models/construction-res-dto';
+import { createProgress, getProgressStatus } from '../../../services/construction-service';
+import ApiAlert from '../../../shared-components/alert/api-alert';
+import UploadMultipartFile from '../../../shared-components/file-management/upload-multipartfile';
+import HandleProjectStatus from '../../../shared-components/status-handle/project-status-handle';
 
-const progressInitValues: ProjectProgressDTO = {
-    projectId: '',
+const progressInitValues: ContructionProgressDTO = {
+    constructionId: '',
     title: '',
     fileStorages: [],
-    startDate: '',
-    endDate: '',
+    startDate: formatDateTimeRes(new Date()),
+    endDate: formatDateTimeRes(new Date()),
     status: '',
     report: '',
     note: '',
@@ -44,24 +44,28 @@ interface Props {
     callBackFn: Function;
 }
 
+const initialDataImg = {
+    description: '',
+    file: [],
+    isOpenComment: false,
+};
+
 const ProgressCreate = (props: Props) => {
     const { isOpen, setIsOpen, toggleDrawer, callBackFn } = props;
     const { t } = useTranslation();
     const params = useParams();
-    const [progressData, setProgressData] = useState({
-        ...progressInitValues,
-        startDate: formatDateTimeRes(new Date()),
-        endDate: formatDateTimeRes(new Date()),
-    });
+    const [progressData, setProgressData] = useState(progressInitValues);
     const [isClearPreview, setIsClearPreview] = useState(false);
     const [resForHandleMsg, setResForHandleMsg] = useState<any>();
     const [progressStatus, setProgressStatus] = useState([]);
+    const [fileData, setFileData] = useState(initialDataImg);
+    const [eventImage, setEventImage] = useState<any>();
 
     useEffect(() => {
         if (params.id) {
             setProgressData({
                 ...progressData,
-                projectId: params.id,
+                constructionId: params.id,
             });
         }
         getProgressStatus().then((value: any) => {
@@ -88,7 +92,7 @@ const ProgressCreate = (props: Props) => {
         if (params.id) {
             setProgressData({
                 ...progressInitValues,
-                projectId: params.id,
+                constructionId: params.id,
             });
         }
     };
@@ -101,23 +105,45 @@ const ProgressCreate = (props: Props) => {
         });
     };
 
-    const handleImageChange = (data: any) => {
-        const convertedImages = data.map((image: any) => {
-            return { data: image };
-        });
-
-        setProgressData({
-            ...progressData,
-            fileStorages: convertedImages,
+    const onChangeImage = (data: any) => {
+        setFileData({
+            ...fileData,
+            file: data,
         });
     };
 
-    const handleSubmitForm = async () => {
-        createProgress({
+    const handleClearEvent = (event: any) => {
+        setEventImage(event);
+    };
+
+    const clearEventImage = () => {
+        if (eventImage && eventImage.target && eventImage.target.value) eventImage.target.value = '';
+    };
+
+    const handleSubmitForm = async (event: any) => {
+        let formData = new FormData();
+        
+        const progressValue: any ={
             ...progressData,
             startDate: formatDateTimeReq(progressData.startDate),
-            endDate: formatDateTimeReq(progressData.endDate),
-        })
+            endDate: formatDateTimeReq(progressData.endDate)
+        }
+        
+        if (fileData && fileData.file && fileData.file.length > 0) {
+            fileData.file.forEach((data: any) => {
+                formData.append('files', data);
+            });
+        } else {
+            formData.append('files', new Blob());
+        }
+
+        formData.append(
+            'progressReqDto',
+            new Blob([JSON.stringify(progressValue)], {
+                type: 'application/json',
+            }),
+        );
+        createProgress(formData)
             .then((res: any) => {
                 setResForHandleMsg({
                     status: res.status,
@@ -137,6 +163,7 @@ const ProgressCreate = (props: Props) => {
                 });
             });
         handleClear();
+        clearEventImage();
     };
 
     return (
@@ -186,7 +213,12 @@ const ProgressCreate = (props: Props) => {
                                 {t('project.progress.progressImg')}
                             </InputLabel>
                             <div className="content">
-                                <MultipleFileUpload clearPreview={isClearPreview} callbackFunc={handleImageChange} />
+                                <UploadMultipartFile
+                                    imgData={progressData.fileStorages}
+                                    clearPreview={true}
+                                    callbackFunc={onChangeImage}
+                                    callBackClearEvent={handleClearEvent}
+                                />
                             </div>
                         </Grid>
                         <Grid item xs={12} className="item">

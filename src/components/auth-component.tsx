@@ -28,7 +28,6 @@ export default function AuthComponent() {
     };
 
     useEffect(() => {
-        navigate(UrlFeApp.MAIN_APP);
         if (!isPageLoading) {
             navigate(UrlFeApp.MAIN_APP);
         }
