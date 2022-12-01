@@ -1,6 +1,7 @@
 import { lazy } from 'react';
 import { UrlFeApp } from '../core/constants/common';
 import { RouteObject, useRoutes } from 'react-router-dom';
+import ProgressDetail from '../ui/construction/progress/progress-detail';
 
 const AuthComponent = lazy(() => import('../components/auth-component'));
 const Login = lazy(() => import('../ui/login/login'));
@@ -14,7 +15,6 @@ const UserInfo = lazy(() => import('../ui/user/user-info'));
 const UserCreate = lazy(() => import('../ui/user/user-create'));
 const ProjectSearch = lazy(() => import('../ui/project/project-search'));
 const ProjectEdit = lazy(() => import('../ui/project/project-edit'));
-const ProjectDetail = lazy(() => import('../ui/project/project-detail'));
 const Role = lazy(() => import('../ui/role/role'));
 const Page404NotFound = lazy(() => import('../ui/error-page/404NotFound'));
 const ProjectRegister = lazy(() => import('../ui/project/project-register'));
@@ -22,6 +22,7 @@ const ForgotPassword = lazy(() => import('../ui/forgot-password/forgot-password'
 const ResetPassword = lazy(() => import('../ui/forgot-password/reset-password'));
 const ConstructionSearch = lazy(() => import('../ui/construction/construction-search'));
 const ConstructionRegister = lazy(() => import('../ui/construction/construction-register'));
+const ConstructionEdit = lazy(() => import('../ui/construction/construction-edit'));
 const AirWayBillList = lazy(() => import('../ui/awb/awb-list'));
 
 const listRouter: RouteObject[] = [
@@ -70,20 +71,12 @@ const listRouter: RouteObject[] = [
                 element: <ProjectEdit />,
             },
             {
-                path: UrlFeApp.PROJECT.DETAIL_HAS_ID,
-                element: <ProjectDetail />,
-            },
-            {
                 path: UrlFeApp.ROLE.INDEX,
                 element: <Role />,
             },
             {
                 path: UrlFeApp.PROJECT.CREATE,
                 element: <ProjectRegister />,
-            },
-            {
-                path: UrlFeApp.PROJECT.DETAIL,
-                element: <ProjectDetail />,
             },
             {
                 path: UrlFeApp.AWB.LIST,
@@ -104,6 +97,18 @@ const listRouter: RouteObject[] = [
             {
                 path: UrlFeApp.CONSTRUCTION.CREATE_HAS_ID,
                 element: <ConstructionRegister />,
+            },
+            {
+                path: UrlFeApp.CONSTRUCTION.EDIT_HAS_ID,
+                element: <ConstructionEdit />,
+            },
+            {
+                path: UrlFeApp.CONSTRUCTION.DETAIL,
+                element: <ConstructionEdit />,
+            },
+            {
+                path: UrlFeApp.CONSTRUCTION.DETAIL_HAS_ID,
+                element: <ProgressDetail />,
             },
         ],
     },

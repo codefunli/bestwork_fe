@@ -56,7 +56,10 @@ export const UrlFeApp = {
         SEARCH: '/app/construction',
         CREATE: '/app/construction/register',
         CREATE_HAS_ID: '/app/construction/register/:id',
+        EDIT: '/app/construction/edit',
         EDIT_HAS_ID: '/app/construction/edit/:id',
+        DETAIL: '/app/construction/progress/detail',
+        DETAIL_HAS_ID: '/app/construction/progress/detail/:id',
     },
 };
 
@@ -106,6 +109,12 @@ export const UrlServer = {
         GET_STATUS: `${PREFIX_SERVER_URL}/constructions/status`,
         DELETE: `${PREFIX_SERVER_URL}/constructions/delete`,
         DETAIL: `${PREFIX_SERVER_URL}/constructions/detail`,
+        CREATE: `${PREFIX_SERVER_URL}/constructions/create`,
+        UPDATE: `${PREFIX_SERVER_URL}/constructions/update`,
+        PROGRESS_BY_CONSTRUCTION: `${PREFIX_SERVER_URL}/progress/by/construction`,
+        CREATE_PROGRESS: `${PREFIX_SERVER_URL}/progress/create`,
+        GET_PROGRESS_STATUS: `${PREFIX_SERVER_URL}/progress/status`,
+        UPDATE_PROGRESS: `${PREFIX_SERVER_URL}/progress/update`,
     },
     ROLE: {
         GET: `${PREFIX_SERVER_URL}/users/roles`,
@@ -318,6 +327,7 @@ export const Item = {
         RU_LOCATION: 'construction.register.cttLocation',
         RU_DRAWING: 'construction.register.cttDraw',
         RU_AWB: 'construction.register.cttAwb',
+        RU_DESCRIPTION: 'construction.register.cttDescription',
     },
 };
 
@@ -411,6 +421,7 @@ export const renderFile = (data: any, index: any) => {
                 />
             );
         case 'image/jpeg':
+        case 'image/jpg':
             return <img loading="lazy" className="imgTag" src={URL.createObjectURL(data)} key={index} />;
         case 'image/png':
             return <img loading="lazy" className="imgTag" src={URL.createObjectURL(data)} key={index} />;
@@ -480,6 +491,21 @@ export const Base64ToArrayBuffer = (base64: string): ArrayBuffer => {
 
     return arraybuffer;
 };
+
+export const dataURLtoFile = (dataurl: any, filename: any) => {
+ 
+    var arr = dataurl.split(','),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]), 
+        n = bstr.length, 
+        u8arr = new Uint8Array(n);
+        
+    while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    
+    return new File([u8arr], filename, {type:mime});
+}
 
 export const prefixPdf = 'data:application/pdf;base64';
 

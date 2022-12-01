@@ -139,12 +139,12 @@ export default function ConstructionSearch() {
     // miss pass id with url
     const handleEditData = (e: any, id: number) => {
         e.preventDefault();
-        nativgate(`${UrlFeApp.PROJECT.EDIT}/${id}`);
+        nativgate(`${UrlFeApp.CONSTRUCTION.EDIT}/${id}`);
     };
 
     const handleAddProjectDetail = (e: any, id: string) => {
         e.preventDefault();
-        nativgate(`${UrlFeApp.PROJECT.DETAIL}/${id}`);
+        nativgate(`${UrlFeApp.CONSTRUCTION.DETAIL}/${id}`);
     };
 
     const alertOkFunc = () => {
@@ -197,18 +197,6 @@ export default function ConstructionSearch() {
                         >
                             <div className="particletext">{t('construction.search.title')}</div>
                         </Typography>
-                    </div>
-                    <div className="col-sm-12 col-md-6 text-end d-none d-lg-block">
-                        <Button
-                            className="btn-create"
-                            variant="contained"
-                            color="primary"
-                            component={Link}
-                            to={UrlFeApp.CONSTRUCTION.CREATE}
-                            sx={{ textTransform: 'uppercase' }}
-                        >
-                            {t(Item.LABEL_BTN.CREATE)}
-                        </Button>
                     </div>
                     <div className="col-sm-12 text-start d-block d-lg-none">
                         <Button

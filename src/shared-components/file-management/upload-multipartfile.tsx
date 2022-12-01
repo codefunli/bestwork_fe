@@ -1,7 +1,7 @@
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import { useEffect, useState } from 'react';
-import { renderFile, renderImage } from '../../core/constants/common';
+import { dataURLtoFile, renderFile, renderImage } from '../../core/constants/common';
 import './upload-file.scss';
 
 interface props {
@@ -16,6 +16,16 @@ export default function UploadMultipartFile(props: props) {
     const { clearPreview, callbackFunc, imgData, callBackClearEvent } = props;
     const [currentFiles, setCurrentFiles] = useState<any[]>([]);
     const [eventFile, setEventFile] = useState<any>();
+
+
+    useEffect(()=>{
+        if (imgData) {
+            const temp = imgData.map((data: any) => {
+                return dataURLtoFile(`data:image/${data.type};base64,${data.content}`, data.name)
+            })
+            setCurrentFiles([...temp])
+        }
+    },[imgData])
 
     const onChangeImage = (event: any) => {
         if (currentFiles.length > 0) {
