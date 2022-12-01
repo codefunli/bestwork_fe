@@ -3,6 +3,7 @@ import { FieldConstants } from '../../core/constants/common';
 import { HeadColumn } from '../../core/types/base';
 import {} from '../../ui/company/company-search';
 import { useTranslation } from 'react-i18next';
+import { Permission } from '../../core/types/permission';
 
 export type Order = 'asc' | 'desc';
 
@@ -14,10 +15,11 @@ interface EnhancedTableProps {
     rowCount: number;
     onSelectAllProps: Function;
     sortCallBack: Function;
+    permission?: Permission;
 }
 
 export function EnhancedTableHead(props: EnhancedTableProps) {
-    const { order, orderBy, numSelected, rowCount, headCells, onSelectAllProps } = props;
+    const { order, orderBy, numSelected, rowCount, headCells, onSelectAllProps, permission } = props;
     const onSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
         onSelectAllProps(event);
     };
@@ -30,17 +32,19 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
     return (
         <TableHead>
             <TableRow>
-                <TableCell padding="checkbox">
-                    <Checkbox
-                        color="primary"
-                        indeterminate={numSelected > 0 && numSelected < rowCount}
-                        checked={rowCount > 0 && numSelected === rowCount}
-                        onChange={(event) => onSelectAllClick(event)}
-                        inputProps={{
-                            'aria-label': 'select all desserts',
-                        }}
-                    />
-                </TableCell>
+                {permission?.canDelete && (
+                    <TableCell padding="checkbox">
+                        <Checkbox
+                            color="primary"
+                            indeterminate={numSelected > 0 && numSelected < rowCount}
+                            checked={rowCount > 0 && numSelected === rowCount}
+                            onChange={(event) => onSelectAllClick(event)}
+                            inputProps={{
+                                'aria-label': 'select all desserts',
+                            }}
+                        />
+                    </TableCell>
+                )}
                 {headCells.map((headCell) => (
                     <TableCell
                         key={headCell.id as string}

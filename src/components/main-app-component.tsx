@@ -122,7 +122,6 @@ export default function MiniDrawer() {
     const isUserLogged = useAppSelector((state) => state.user.isLogined);
     const dispatch = useAppDispatch();
     const [progress, setProgress] = React.useState(10);
-
     const userInfo = useSelector(getUserInfo);
 
     const handleDrawerOpen = () => {
@@ -133,9 +132,13 @@ export default function MiniDrawer() {
         setOpen(false);
     };
 
-    const navigateByLink = (link: any) => {
+    const navigateByLink = (link: any, data: any) => {
         if (!isObjectEmpty(link)) {
-            navigate(link);
+            navigate(link, {
+                state: {
+                    permission: data,
+                },
+            });
         } else {
             navigate(ErrorPagePath.PAGE_404_NOT_FOUND);
         }
@@ -257,6 +260,10 @@ export default function MiniDrawer() {
         },
     }));
 
+    const filterRoleByMonitorId = (id: number) => {
+        if (userInfo && userInfo.permissions) return userInfo.permissions[id][0];
+    };
+
     return (
         <div className="h-100">
             {isUserLogged ? (
@@ -326,32 +333,38 @@ export default function MiniDrawer() {
                             <List>
                                 {menuItemLinkData.map((menuItem, index) => (
                                     <React.Fragment key={index}>
-                                        <ListItem disablePadding sx={{ display: 'block' }}>
-                                            <ListItemButton
-                                                sx={{
-                                                    minHeight: 48,
-                                                    justifyContent: open ? 'initial' : 'center',
-                                                    px: 2.5,
-                                                }}
-                                                onClick={(event) => {
-                                                    navigateByLink(menuItem.link);
-                                                }}
-                                            >
-                                                <ListItemIcon
-                                                    sx={{
-                                                        minWidth: 0,
-                                                        mr: open ? 3 : 'auto',
-                                                        justifyContent: 'center',
-                                                    }}
-                                                >
-                                                    {renderIconLeftBar(menuItem.iconNm)}
-                                                </ListItemIcon>
-                                                <ListItemText
-                                                    primary={t(menuItem.name)}
-                                                    sx={{ opacity: open ? 1 : 0 }}
-                                                />
-                                            </ListItemButton>
-                                        </ListItem>
+                                        {filterRoleByMonitorId(menuItem.id) &&
+                                            filterRoleByMonitorId(menuItem.id).canAccess && (
+                                                <ListItem disablePadding sx={{ display: 'block' }}>
+                                                    <ListItemButton
+                                                        sx={{
+                                                            minHeight: 48,
+                                                            justifyContent: open ? 'initial' : 'center',
+                                                            px: 2.5,
+                                                        }}
+                                                        onClick={(event) => {
+                                                            navigateByLink(
+                                                                menuItem.link,
+                                                                filterRoleByMonitorId(menuItem.id),
+                                                            );
+                                                        }}
+                                                    >
+                                                        <ListItemIcon
+                                                            sx={{
+                                                                minWidth: 0,
+                                                                mr: open ? 3 : 'auto',
+                                                                justifyContent: 'center',
+                                                            }}
+                                                        >
+                                                            {renderIconLeftBar(menuItem.iconNm)}
+                                                        </ListItemIcon>
+                                                        <ListItemText
+                                                            primary={t(menuItem.name)}
+                                                            sx={{ opacity: open ? 1 : 0 }}
+                                                        />
+                                                    </ListItemButton>
+                                                </ListItem>
+                                            )}
                                     </React.Fragment>
                                 ))}
                             </List>

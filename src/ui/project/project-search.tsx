@@ -18,9 +18,10 @@ import {
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from 'react-query';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ConfirmConstants, UrlFeApp, Item } from '../../core/constants/common';
 import { SUCCESS_MSG } from '../../core/constants/message';
+import { Permission } from '../../core/types/permission';
 import { headProjectCol } from '../../core/types/project';
 import { deleteProjects, getProjects, getProjectStatus } from '../../services/project-service';
 import MessageShow from '../../shared-components/message/message';
@@ -51,6 +52,12 @@ export default function ProjectSearch() {
         id: [],
     });
     const [projectStatus, setProjectStatus] = useState([]);
+    const location = useLocation();
+    const [permission, setPermission] = useState<Permission>();
+
+    useEffect(() => {
+        if (location.state && location.state.permission) setPermission(location.state.permission);
+    }, [location.state.permission]);
 
     useEffect(() => {
         getProjectStatus().then((status: any) => {
@@ -207,30 +214,34 @@ export default function ProjectSearch() {
                             <div className="particletext">{t('project.title')}</div>
                         </Typography>
                     </div>
-                    <div className="col-sm-12 col-md-6 text-end d-none d-lg-block">
-                        <Button
-                            className="btn-create"
-                            variant="contained"
-                            color="primary"
-                            component={Link}
-                            to={UrlFeApp.PROJECT.CREATE}
-                            sx={{ textTransform: 'uppercase' }}
-                        >
-                            {t(Item.LABEL_BTN.CREATE)}
-                        </Button>
-                    </div>
-                    <div className="col-sm-12 text-start d-block d-lg-none">
-                        <Button
-                            className="btn-create"
-                            variant="contained"
-                            color="primary"
-                            component={Link}
-                            to={UrlFeApp.PROJECT.CREATE}
-                            sx={{ textTransform: 'uppercase' }}
-                        >
-                            {t(Item.LABEL_BTN.CREATE)}
-                        </Button>
-                    </div>
+                    {permission && permission.canAdd && (
+                        <div className="col-sm-12 col-md-6 text-end d-none d-lg-block">
+                            <Button
+                                className="btn-create"
+                                variant="contained"
+                                color="primary"
+                                component={Link}
+                                to={UrlFeApp.PROJECT.CREATE}
+                                sx={{ textTransform: 'uppercase' }}
+                            >
+                                {t(Item.LABEL_BTN.CREATE)}
+                            </Button>
+                        </div>
+                    )}
+                    {permission && permission.canAdd && (
+                        <div className="col-sm-12 text-start d-block d-lg-none">
+                            <Button
+                                className="btn-create"
+                                variant="contained"
+                                color="primary"
+                                component={Link}
+                                to={UrlFeApp.PROJECT.CREATE}
+                                sx={{ textTransform: 'uppercase' }}
+                            >
+                                {t(Item.LABEL_BTN.CREATE)}
+                            </Button>
+                        </div>
+                    )}
                 </div>
             </Grid>
             <Grid item lg={3} xs={12}>
@@ -372,6 +383,7 @@ export default function ProjectSearch() {
                     isLoading={isLoading}
                     arrButton={arrButton}
                     statusList={projectStatus}
+                    permission={permission}
                 />
             </Grid>
 

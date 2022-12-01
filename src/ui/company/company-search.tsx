@@ -19,7 +19,7 @@ import {
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from 'react-query';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AlertColorConstants, ConfirmConstants, Item, UrlFeApp } from '../../core/constants/common';
 import { ERROR_MSG, SUCCESS_MSG } from '../../core/constants/message';
 import { headCompanyCol } from '../../core/types/company';
@@ -31,6 +31,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import { green } from '@mui/material/colors';
 import './company.scss';
+import { Permission } from '../../core/types/permission';
 
 const initialValues = {
     keyword: '',
@@ -45,7 +46,7 @@ const initialIds = {
     lstCompanyId: [],
 };
 
-export default function CompanySearch() {
+export default function CompanySearch(props: any) {
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [isShowMessage, setIsShowMessage] = useState(false);
     const [companyMsg, setCompanyMsg] = useState('');
@@ -55,6 +56,12 @@ export default function CompanySearch() {
     const [state, setState] = useState<any>();
     const { t } = useTranslation();
     const [ids, setIds] = useState<any>(initialIds);
+    const location = useLocation();
+    const [permission, setPermission] = useState<Permission>();
+
+    useEffect(() => {
+        if (location.state && location.state.permission) setPermission(location.state.permission);
+    }, [location.state.permission]);
 
     const nativgate = useNavigate();
 
@@ -196,30 +203,34 @@ export default function CompanySearch() {
                             <div className="particletext">{t(Item.COMPANY.TITLE)}</div>
                         </Typography>
                     </div>
-                    <div className="col-sm-12 col-md-6 text-end d-none d-lg-block">
-                        <Button
-                            className="btn-create"
-                            variant="contained"
-                            color="primary"
-                            component={Link}
-                            to={UrlFeApp.COMPANY.CREATE}
-                            sx={{ textTransform: 'uppercase' }}
-                        >
-                            {t(Item.LABEL_BTN.CREATE)}
-                        </Button>
-                    </div>
-                    <div className="col-sm-12 text-start d-block d-lg-none">
-                        <Button
-                            className="btn-create"
-                            variant="contained"
-                            color="primary"
-                            component={Link}
-                            to={UrlFeApp.COMPANY.CREATE}
-                            sx={{ textTransform: 'uppercase' }}
-                        >
-                            {t(Item.LABEL_BTN.CREATE)}
-                        </Button>
-                    </div>
+                    {permission && permission.canAdd && (
+                        <div className="col-sm-12 col-md-6 text-end d-none d-lg-block">
+                            <Button
+                                className="btn-create"
+                                variant="contained"
+                                color="primary"
+                                component={Link}
+                                to={UrlFeApp.COMPANY.CREATE}
+                                sx={{ textTransform: 'uppercase' }}
+                            >
+                                {t(Item.LABEL_BTN.CREATE)}
+                            </Button>
+                        </div>
+                    )}
+                    {permission && permission.canAdd && (
+                        <div className="col-sm-12 text-start d-block d-lg-none">
+                            <Button
+                                className="btn-create"
+                                variant="contained"
+                                color="primary"
+                                component={Link}
+                                to={UrlFeApp.COMPANY.CREATE}
+                                sx={{ textTransform: 'uppercase' }}
+                            >
+                                {t(Item.LABEL_BTN.CREATE)}
+                            </Button>
+                        </div>
+                    )}
                 </div>
             </Grid>
             <Grid item lg={3} xs={12}>
@@ -363,6 +374,7 @@ export default function CompanySearch() {
                     }
                     isLoading={isLoading}
                     arrButton={arrButton}
+                    permission={permission}
                 />
             </Grid>
 

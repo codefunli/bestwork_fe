@@ -24,6 +24,7 @@ import HandleProjectStatus from '../status-handle/project-status-handle';
 import HandleCompanyStatus from '../status-handle/company-status-handle';
 import HandleUserStatus from '../status-handle/user-status-handle';
 import HandleConstructionStatus from '../status-handle/construction-status-handle';
+import { Permission } from '../../core/types/permission';
 
 export interface ArrayAction {
     nameFn: string;
@@ -39,10 +40,11 @@ interface EnhancedTable {
     searchCallBack: Function;
     deleteCallBack: Function;
     statusList?: any;
+    permission?: Permission;
 }
 
 export default function EnhancedTable(props: EnhancedTable) {
-    const { headCells, rows, isLoading, arrButton, statusList } = props;
+    const { headCells, rows, isLoading, arrButton, statusList, permission } = props;
     const { t } = useTranslation();
     const [order, setOrder] = React.useState<Order>('asc');
     const [orderBy, setOrderBy] = React.useState<string>('id');
@@ -173,6 +175,7 @@ export default function EnhancedTable(props: EnhancedTable) {
                             rowCount={rows.content.length}
                             headCells={headCells !== undefined ? headCells : []}
                             onSelectAllProps={handleSelectAllClick}
+                            permission={permission}
                         />
                         <TableBody>
                             {rows.content.map((row: any, index: any) => {
@@ -187,16 +190,18 @@ export default function EnhancedTable(props: EnhancedTable) {
                                         key={row.id as string}
                                         selected={isItemSelected}
                                     >
-                                        <TableCell padding="checkbox">
-                                            <Checkbox
-                                                color="primary"
-                                                checked={isItemSelected}
-                                                inputProps={{
-                                                    'aria-labelledby': labelId,
-                                                }}
-                                                onClick={(event) => handleClick(event, row.id as string)}
-                                            />
-                                        </TableCell>
+                                        {permission && permission.canDelete && (
+                                            <TableCell padding="checkbox">
+                                                <Checkbox
+                                                    color="primary"
+                                                    checked={isItemSelected}
+                                                    inputProps={{
+                                                        'aria-labelledby': labelId,
+                                                    }}
+                                                    onClick={(event) => handleClick(event, row.id as string)}
+                                                />
+                                            </TableCell>
+                                        )}
                                         {headCells !== undefined &&
                                             headCells.map((colValue) => {
                                                 return (
@@ -262,7 +267,9 @@ export default function EnhancedTable(props: EnhancedTable) {
                                             })}
                                         <TableCell padding="normal">
                                             {arrButton.map((arrBtn) => {
-                                                return (
+                                                return permission && !permission.canEdit && arrBtn.nameFn === 'Edit' ? (
+                                                    <div></div>
+                                                ) : (
                                                     <Tooltip
                                                         key={arrBtn.nameFn}
                                                         title={arrBtn.nameFn}

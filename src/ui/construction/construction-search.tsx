@@ -18,10 +18,11 @@ import {
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from 'react-query';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ConfirmConstants, Item, UrlFeApp } from '../../core/constants/common';
 import { SUCCESS_MSG } from '../../core/constants/message';
 import { headConstructionCol } from '../../core/types/construction';
+import { Permission } from '../../core/types/permission';
 import { deleteConstructions, getConstructions, getConstructionStatus } from '../../services/construction-service';
 import MessageShow from '../../shared-components/message/message';
 import AlertDialogSlide from '../../shared-components/modal/alert-dialog-slide';
@@ -51,6 +52,12 @@ export default function ConstructionSearch() {
         listId: [],
     });
     const [constructionStatus, setConstructionStatus] = useState([]);
+    const location = useLocation();
+    const [permission, setPermission] = useState<Permission>();
+
+    useEffect(() => {
+        if (location.state && location.state.permission) setPermission(location.state.permission);
+    }, [location.state.permission]);
 
     useEffect(() => {
         getConstructionStatus().then((status: any) => {
@@ -224,14 +231,11 @@ export default function ConstructionSearch() {
                                 />
                                 <CardContent>
                                     <Box
-                                        // component="form"
                                         sx={{
                                             '& > :not(style)': {
                                                 m: 1,
                                             },
                                         }}
-                                        // noValidate
-                                        // autoComplete="off"
                                     >
                                         <div className="row justify-center m-1">
                                             <div className="col-12 d-block p-1">
@@ -351,6 +355,7 @@ export default function ConstructionSearch() {
                     isLoading={false}
                     arrButton={arrButton}
                     statusList={constructionStatus}
+                    permission={permission}
                 />
             </Grid>
 
