@@ -17,7 +17,7 @@ import {
     Grid,
     Chip,
 } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AlertColorConstants, UrlFeApp, ConfirmConstants, Item } from '../../core/constants/common';
 import { useQuery, useQueryClient } from 'react-query';
 import EnhancedTable, { ArrayAction } from '../../shared-components/table-manager/table-data';
@@ -31,6 +31,7 @@ import './user.scss';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import { green } from '@mui/material/colors';
+import { Permission } from '../../core/types/permission';
 
 const initialValues = {
     page: '0',
@@ -53,6 +54,12 @@ export default function UserSearch() {
     const [typeUserMsg, setTypeUserMsg] = useState<AlertColor>(AlertColorConstants.SUCCESS);
     const [selectedUserIdList, setSelectedUserIdList] = useState({});
     const [roles, setRoles] = useState([]);
+    const location = useLocation();
+    const [permission, setPermission] = useState<Permission>();
+
+    useEffect(() => {
+        if (location.state && location.state.permission) setPermission(location.state.permission);
+    }, [location.state.permission]);
 
     const navigate = useNavigate();
 
@@ -188,30 +195,34 @@ export default function UserSearch() {
                                 <div className="particletext">{t('user.search.title')}</div>
                             </Typography>
                         </div>
-                        <div className="col-sm-12 col-md-6 text-end d-none d-lg-block">
-                            <Button
-                                className="btn-create"
-                                variant="contained"
-                                color="primary"
-                                component={Link}
-                                to={UrlFeApp.USER.CREATE}
-                                sx={{ textTransform: 'uppercase' }}
-                            >
-                                {t(Item.LABEL_BTN.CREATE)}
-                            </Button>
-                        </div>
-                        <div className="col-sm-12 text-start d-block d-lg-none">
-                            <Button
-                                className="btn-create"
-                                variant="contained"
-                                color="primary"
-                                component={Link}
-                                to={UrlFeApp.USER.CREATE}
-                                sx={{ textTransform: 'uppercase' }}
-                            >
-                                {t(Item.LABEL_BTN.CREATE)}
-                            </Button>
-                        </div>
+                        {permission && permission.canAdd && (
+                            <div className="col-sm-12 col-md-6 text-end d-none d-lg-block">
+                                <Button
+                                    className="btn-create"
+                                    variant="contained"
+                                    color="primary"
+                                    component={Link}
+                                    to={UrlFeApp.USER.CREATE}
+                                    sx={{ textTransform: 'uppercase' }}
+                                >
+                                    {t(Item.LABEL_BTN.CREATE)}
+                                </Button>
+                            </div>
+                        )}
+                        {permission && permission.canAdd && (
+                            <div className="col-sm-12 text-start d-block d-lg-none">
+                                <Button
+                                    className="btn-create"
+                                    variant="contained"
+                                    color="primary"
+                                    component={Link}
+                                    to={UrlFeApp.USER.CREATE}
+                                    sx={{ textTransform: 'uppercase' }}
+                                >
+                                    {t(Item.LABEL_BTN.CREATE)}
+                                </Button>
+                            </div>
+                        )}
                     </div>
                 </Grid>
                 <Grid item xs={12} lg={3} sx={{ mt: 1, mb: 1 }}>
@@ -351,6 +362,7 @@ export default function UserSearch() {
                         }
                         isLoading={isLoading}
                         arrButton={arrButton}
+                        permission={permission}
                     />
                 </Grid>
             </Grid>
