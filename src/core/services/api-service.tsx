@@ -20,6 +20,12 @@ let apiClient = axios.create({
 });
 
 apiClient.interceptors.request.use((res: any) => {
+    let at = window.localStorage.getItem('access_token');
+    let rt = window.localStorage.getItem('refresh_token');
+    if (at && rt) {
+        res.headers.access_token = at;
+        res.headers.refresh_token = rt;
+    }
     if (!(res.headers.access_token && res.headers.refresh_token)) {
         res.headers.access_token = accessToken;
         res.headers.refresh_token = refreshToken;
