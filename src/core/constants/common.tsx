@@ -545,6 +545,8 @@ export const renderChipAwbStatus = (value: any) => {
             );
         case 'Done':
             return <Chip label="Done" color="success" size="small" className="btn" sx={{ width: '100%' }} />;
+        case 'Cancel':
+            return <Chip label="Cancel" color="default" size="small" className="btn" sx={{ width: '100%' }} />;
         default:
             break;
     }
@@ -555,4 +557,16 @@ export const CUSTOMS_CLEARANCE = {
     INVOICE: 'invoice',
     IMAGE_BEFORE: 'imageBefore',
     IMAGE_AFTER: 'imageAfter',
+};
+
+export const AWB_LOADING = {
+    SUCCESS_INVOICE: 'Get list invoice successfully',
+    SUCCESS_PACKAGE: 'Get list package successfully',
+    SUCCESS_EVIDENCE_BEFORE: 'Get list evidence before successfully',
+    SUCCESS_EVIDENCE_AFTER: 'Get list evidence after successfully',
+    SUCCESS_CCD: 'Get customs clearance documents successfully',
+    DATA_NOT_FOUND: 'Data is not found',
+    HAS_DATA: 'HasData',
+    NO_DATA: 'NoData',
+    LOADING: 'Loading',
 };

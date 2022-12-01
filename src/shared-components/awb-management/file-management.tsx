@@ -20,6 +20,7 @@ import { Comment } from '../../core/types/base';
 import { CommercialInvoiceContext, PackingListContext } from '../../ui/awb/awb-list';
 import CommentEl from '../comment/comment';
 import ImageManager from '../images-manager/image-manager';
+import Loading from '../loading-page/Loading';
 import FileUploadModal from '../modal/file-upload-modal';
 
 const initialValue = {
@@ -31,7 +32,7 @@ const initialValue = {
 export const FileContext = createContext<any>({});
 
 export default function FileManagement(props: any) {
-    const { callBackFn, callBackAddFile, callBackAddComment, awbCode } = props;
+    const { callBackFn, callBackAddFile, callBackAddComment, awbCode, isLoading } = props;
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [filesData, setFilesData] = useState<any>(null);
     const [comment, setComment] = useState<Comment[]>([]);
@@ -41,7 +42,7 @@ export default function FileManagement(props: any) {
     const packingList = useContext<any>(PackingListContext);
 
     useEffect(() => {
-        if (commercialInvoice) {
+        if (commercialInvoice || packingList) {
             if (commercialInvoice.length > 0) {
                 setFilesData(
                     commercialInvoice.map((data: any) => {
@@ -51,11 +52,7 @@ export default function FileManagement(props: any) {
                         };
                     }),
                 );
-            } else {
-                setFilesData([]);
-            }
-        } else if (packingList) {
-            if (packingList.length > 0) {
+            } else if (packingList.length > 0) {
                 setFilesData(
                     packingList.map((data: any) => {
                         return {
@@ -67,8 +64,6 @@ export default function FileManagement(props: any) {
             } else {
                 setFilesData([]);
             }
-        } else {
-            setFilesData([]);
         }
     }, [commercialInvoice, packingList]);
 
@@ -165,10 +160,12 @@ export default function FileManagement(props: any) {
                     </Paper>
                 </Grid>
             </Grid>
-            {filesData && filesData.length > 0 ? (
+            {isLoading === 'HasData' ? (
+                filesData &&
+                filesData.length > 0 &&
                 filesData.map((data: any) => (
                     <Grid
-                        key={data.id}
+                        key={data.packageId ? data.packageId : data.invoiceId}
                         container
                         spacing={3}
                         direction="row"
@@ -236,8 +233,10 @@ export default function FileManagement(props: any) {
                         </Grid>
                     </Grid>
                 ))
+            ) : isLoading === 'Loading' ? (
+                <Loading />
             ) : (
-                <Typography>{t('message.noData')}</Typography>
+                isLoading === 'NoData' && <Typography>{t('message.noData')}</Typography>
             )}
             <FileUploadModal
                 isOpen={isOpenModal}

@@ -15,14 +15,15 @@ import {
     Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
+import { is } from 'immer/dist/internal';
 import { createContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQuery } from 'react-query';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import '../../App.scss';
 import {
     arrayBufferToBase64,
+    AWB_LOADING,
     CUSTOMS_CLEARANCE,
     downloadZIP,
     prefixZip,
@@ -101,6 +102,8 @@ export default function AirWayBillList() {
     const [awbTab, setAwbTab] = useState(0);
     const [currentAwbCode, setCurrentAwbCode] = useState('');
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(AWB_LOADING.LOADING);
+    const [isLoadingCCD, setIsLoadingCCD] = useState(AWB_LOADING.LOADING);
 
     const callInitAPI = async (projectId: string) => {
         const awbList = await fetchAirWayBillAPI(projectId);
@@ -113,7 +116,7 @@ export default function AirWayBillList() {
             fetchImageBefore(awbList.data[0].code),
             fetchImageAfter(awbList.data[0].code),
         ]);
-
+        checkIsLoading(res);
         dispatch(customsClearanceActions.setCommercialInvoice(res[0].data));
         dispatch(customsClearanceActions.setPackingList(res[1].data));
         dispatch(customsClearanceActions.setCustomsClearanceDocument(res[2].data));
@@ -199,11 +202,53 @@ export default function AirWayBillList() {
             fetchImageBefore(awbCode),
             fetchImageAfter(awbCode),
         ]);
+        checkIsLoading(res);
         dispatch(customsClearanceActions.setCommercialInvoice(res[0].data));
         dispatch(customsClearanceActions.setPackingList(res[1].data));
         dispatch(customsClearanceActions.setCustomsClearanceDocument(res[2].data));
         dispatch(customsClearanceActions.setImageBefore(res[3].data));
         dispatch(customsClearanceActions.setImageAfter(res[4].data));
+    };
+
+    const checkIsLoading = (res: any) => {
+        if (res[2].message === AWB_LOADING.SUCCESS_CCD) {
+            setIsLoadingCCD(AWB_LOADING.HAS_DATA);
+        } else if (res[2].message === AWB_LOADING.DATA_NOT_FOUND) {
+            setIsLoadingCCD(AWB_LOADING.NO_DATA);
+        }
+
+        switch (customsClearanceTab) {
+            case 0:
+                if (res[0].message === AWB_LOADING.SUCCESS_INVOICE) {
+                    setIsLoading(AWB_LOADING.HAS_DATA);
+                } else if (res[0].message === AWB_LOADING.DATA_NOT_FOUND) {
+                    setIsLoading(AWB_LOADING.NO_DATA);
+                }
+                break;
+            case 1:
+                if (res[1].message === AWB_LOADING.SUCCESS_PACKAGE) {
+                    setIsLoading(AWB_LOADING.HAS_DATA);
+                } else if (res[1].message === AWB_LOADING.DATA_NOT_FOUND) {
+                    setIsLoading(AWB_LOADING.NO_DATA);
+                }
+                break;
+            case 2:
+                if (res[3].message === AWB_LOADING.SUCCESS_EVIDENCE_BEFORE) {
+                    setIsLoading(AWB_LOADING.HAS_DATA);
+                } else if (res[4].message === AWB_LOADING.DATA_NOT_FOUND) {
+                    setIsLoading(AWB_LOADING.NO_DATA);
+                }
+                break;
+            case 3:
+                if (res[3].message === AWB_LOADING.SUCCESS_EVIDENCE_AFTER) {
+                    setIsLoading(AWB_LOADING.HAS_DATA);
+                } else if (res[4].message === AWB_LOADING.DATA_NOT_FOUND) {
+                    setIsLoading(AWB_LOADING.NO_DATA);
+                }
+                break;
+            default:
+                break;
+        }
     };
 
     useEffect(() => {
@@ -217,6 +262,8 @@ export default function AirWayBillList() {
     };
 
     const handleChangeAwbTab = (newValue: number, awbCode: string) => {
+        setIsLoading(AWB_LOADING.LOADING);
+        setIsLoadingCCD(AWB_LOADING.LOADING);
         clearData();
         setAwbTab(newValue);
         setCurrentAwbCode(awbCode);
@@ -391,11 +438,11 @@ export default function AirWayBillList() {
                         dispatch(customsClearanceActions.setCustomsClearanceDocument(res.data));
                     });
 
-                    if (data.postType === 'invoice') {
+                    if (data.postType === CUSTOMS_CLEARANCE.INVOICE) {
                         fetchCommercialInvoiceAPI(currentAwbCode).then((res: any) => {
                             dispatch(customsClearanceActions.setCommercialInvoice(res.data));
                         });
-                    } else if (data.postType === 'package') {
+                    } else if (data.postType === CUSTOMS_CLEARANCE.PACKAGE) {
                         fetchPackingListApi(currentAwbCode).then((res: any) => {
                             dispatch(customsClearanceActions.setPackingList(res.data));
                         });
@@ -806,6 +853,7 @@ export default function AirWayBillList() {
                                         }}
                                     >
                                         <ShowCustomsClearanceInvoice
+                                            isLoading={isLoadingCCD}
                                             customsDeclaration={customsDeclarationDocumentState}
                                             callBackFn={handleRemoveFile}
                                         />
@@ -823,6 +871,7 @@ export default function AirWayBillList() {
                                         }}
                                     >
                                         <ShowCustomsClearancePackingList
+                                            isLoading={isLoadingCCD}
                                             customsDeclaration={customsDeclarationDocumentState}
                                             callBackFn={handleRemoveFile}
                                         />
@@ -900,6 +949,7 @@ export default function AirWayBillList() {
                                                             value={commercialInvoiceState}
                                                         >
                                                             <FileManagement
+                                                                isLoading={isLoading}
                                                                 awbCode={currentAwbCode}
                                                                 callBackFn={handleUploadInvoice}
                                                                 callBackAddFile={handleAddFile}
@@ -920,6 +970,7 @@ export default function AirWayBillList() {
                                                     {
                                                         <PackingListContext.Provider value={packingListState}>
                                                             <FileManagement
+                                                                isLoading={isLoading}
                                                                 callBackAddFile={handleAddFile}
                                                                 callBackFn={handleUploadPackingList}
                                                                 callBackAddComment={handleAddFileComment}
@@ -939,6 +990,7 @@ export default function AirWayBillList() {
                                                     {
                                                         <ImageBeforeContext.Provider value={imageBeforeState}>
                                                             <ImageManagement
+                                                                isLoading={isLoading}
                                                                 callBackFn={handleUploadImageBefore}
                                                                 callBackAddComment={handleAddImageComment}
                                                             />
@@ -957,6 +1009,7 @@ export default function AirWayBillList() {
                                                     {
                                                         <ImageAfterContext.Provider value={imageAfterState}>
                                                             <ImageManagement
+                                                                isLoading={isLoading}
                                                                 callBackFn={handleUploadImageAfter}
                                                                 callBackAddComment={handleAddImageComment}
                                                             />

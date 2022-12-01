@@ -16,10 +16,12 @@ import {
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import { AWB_LOADING, CUSTOMS_CLEARANCE } from '../../core/constants/common';
 import { Comment } from '../../core/types/base';
 import CommentEl from '../../shared-components/comment/comment';
 import ImageManager from '../../shared-components/images-manager/image-manager';
 import { ImageAfterContext, ImageBeforeContext } from '../../ui/awb/awb-list';
+import Loading from '../loading-page/Loading';
 import ImageUploadModal from '../modal/image-upload-modal';
 
 const initialValue = {
@@ -31,7 +33,7 @@ const initialValue = {
 export const ImageContext = createContext<any>({});
 
 export default function ImageManagement(props: any) {
-    const { callBackFn, callBackAddComment } = props;
+    const { callBackFn, callBackAddComment, isLoading } = props;
     const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);
     const [imagesData, setImagesData] = useState<any>([]);
     const [arrMsg, setArrMsg] = useState<Comment[]>([]);
@@ -127,7 +129,9 @@ export default function ImageManagement(props: any) {
                     </Paper>
                 </Grid>
             </Grid>
-            {imagesData && imagesData.length > 0 ? (
+            {isLoading === AWB_LOADING.HAS_DATA ? (
+                imagesData &&
+                imagesData.length > 0 &&
                 imagesData.map((data: any) => (
                     <Grid
                         key={data.id}
@@ -168,15 +172,21 @@ export default function ImageManagement(props: any) {
                                         callBackFn={handleAddImageComment}
                                         postId={data.evidenceBeforeId ? data.evidenceBeforeId : data.evidenceAfterId}
                                         isEnabled={data.isOpenComment ? data.isOpenComment : false}
-                                        postType={data.evidenceBeforeId ? 'imageBefore' : 'imageAfter'}
+                                        postType={
+                                            data.evidenceBeforeId
+                                                ? CUSTOMS_CLEARANCE.IMAGE_BEFORE
+                                                : CUSTOMS_CLEARANCE.IMAGE_AFTER
+                                        }
                                     />
                                 </ImageContext.Provider>
                             </div>
                         </Grid>
                     </Grid>
                 ))
+            ) : isLoading === AWB_LOADING.LOADING ? (
+                <Loading />
             ) : (
-                <Typography>{t('message.noData')}</Typography>
+                isLoading === AWB_LOADING.NO_DATA && <Typography>{t('message.noData')}</Typography>
             )}
             <ImageUploadModal
                 isOpen={isOpenCreateModal}
