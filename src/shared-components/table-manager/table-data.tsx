@@ -266,7 +266,7 @@ export default function EnhancedTable(props: EnhancedTable) {
                                                     </TableCell>
                                                 );
                                             })}
-                                        {arrButton && arrButton.length <= 0 && (
+                                        {arrButton && arrButton.length > 0 && (
                                             <TableCell padding="normal">
                                                 {arrButton.map((arrBtn) => {
                                                     return permission &&

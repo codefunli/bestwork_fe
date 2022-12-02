@@ -63,7 +63,7 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
                         </TableSortLabel>
                     </TableCell>
                 ))}
-                <TableCell padding="normal">{!hasNoAction ? t('common.action') : ''}</TableCell>
+                {!hasNoAction && <TableCell padding="normal">{t('common.action')}</TableCell>}
             </TableRow>
         </TableHead>
     );
