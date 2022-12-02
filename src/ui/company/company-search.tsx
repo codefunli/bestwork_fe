@@ -32,6 +32,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import { green } from '@mui/material/colors';
 import './company.scss';
 import { Permission } from '../../core/types/permission';
+import { useSelector } from 'react-redux';
+import { getUserInfo } from '../../core/redux/user-slice';
 
 const initialValues = {
     keyword: '',
@@ -58,8 +60,10 @@ export default function CompanySearch(props: any) {
     const [ids, setIds] = useState<any>(initialIds);
     const location = useLocation();
     const [permission, setPermission] = useState<Permission>();
+    const userInfo = useSelector(getUserInfo);
 
     useEffect(() => {
+        if (userInfo && userInfo.permissions && userInfo.permissions[2][0]) setPermission(userInfo.permissions[2][0]);
         if (location.state && location.state.permission) setPermission(location.state.permission);
     }, [location.state.permission]);
 

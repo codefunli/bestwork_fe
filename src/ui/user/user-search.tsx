@@ -32,6 +32,8 @@ import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import { green } from '@mui/material/colors';
 import { Permission } from '../../core/types/permission';
+import { useSelector } from 'react-redux';
+import { getUserInfo } from '../../core/redux/user-slice';
 
 const initialValues = {
     page: '0',
@@ -56,10 +58,12 @@ export default function UserSearch() {
     const [roles, setRoles] = useState([]);
     const location = useLocation();
     const [permission, setPermission] = useState<Permission>();
+    const userInfo = useSelector(getUserInfo);
 
     useEffect(() => {
+        if (userInfo && userInfo.permissions && userInfo.permissions[3][0]) setPermission(userInfo.permissions[3][0]);
         if (location.state && location.state.permission) setPermission(location.state.permission);
-    }, [location.state.permission]);
+    }, [location]);
 
     const navigate = useNavigate();
 

@@ -18,9 +18,11 @@ import {
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from 'react-query';
+import { useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ConfirmConstants, Item, UrlFeApp } from '../../core/constants/common';
 import { SUCCESS_MSG } from '../../core/constants/message';
+import { getUserInfo } from '../../core/redux/user-slice';
 import { headConstructionCol } from '../../core/types/construction';
 import { Permission } from '../../core/types/permission';
 import { deleteConstructions, getConstructions, getConstructionStatus } from '../../services/construction-service';
@@ -54,10 +56,12 @@ export default function ConstructionSearch() {
     const [constructionStatus, setConstructionStatus] = useState([]);
     const location = useLocation();
     const [permission, setPermission] = useState<Permission>();
+    const userInfo = useSelector(getUserInfo);
 
     useEffect(() => {
+        if (userInfo && userInfo.permissions && userInfo.permissions[5][0]) setPermission(userInfo.permissions[5][0]);
         if (location.state && location.state.permission) setPermission(location.state.permission);
-    }, [location.state.permission]);
+    }, [location]);
 
     useEffect(() => {
         getConstructionStatus().then((status: any) => {
