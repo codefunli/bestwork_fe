@@ -118,11 +118,12 @@ export const UrlServer = {
     },
     ROLE: {
         GET: `${PREFIX_SERVER_URL}/users/roles`,
-        CREATE: `${PREFIX_SERVER_URL}/roles/create`,
-        UPDATE: `${PREFIX_SERVER_URL}/roles/update`,
-        DELETE: `${PREFIX_SERVER_URL}/roles/delete`,
+        CREATE: `${PREFIX_SERVER_URL}/role`,
+        UPDATE: `${PREFIX_SERVER_URL}/role`,
+        DELETE: `${PREFIX_SERVER_URL}/role`,
         SCREEN: `${PREFIX_SERVER_URL}/monitor`,
-        PERMISSIONS: `${PREFIX_SERVER_URL}/permission/1`,
+        PERMISSIONS: `${PREFIX_SERVER_URL}/permission`,
+        GET_ALL: `${PREFIX_SERVER_URL}/role/all`,
     },
     AUTH: {
         FORGOT_PASSWORD: `${PREFIX_SERVER_URL}/auth/forgot-password`,
@@ -253,6 +254,7 @@ export const Item = {
         SAVE: 'button.btnSave',
         CREATE: 'button.btnCreate',
         CREATE_SCREEN: 'button.btnCreateScreen',
+        CREATE_ROLE: 'button.btnCreateRole',
         BACK: 'button.btnBack',
         FINISH: 'button.btnFinish',
         UPLOAD_CONSTRUCTION: 'button.btnConstruction',
@@ -493,19 +495,18 @@ export const Base64ToArrayBuffer = (base64: string): ArrayBuffer => {
 };
 
 export const dataURLtoFile = (dataurl: any, filename: any) => {
- 
     var arr = dataurl.split(','),
         mime = arr[0].match(/:(.*?);/)[1],
-        bstr = atob(arr[1]), 
-        n = bstr.length, 
+        bstr = atob(arr[1]),
+        n = bstr.length,
         u8arr = new Uint8Array(n);
-        
-    while(n--){
+
+    while (n--) {
         u8arr[n] = bstr.charCodeAt(n);
     }
-    
-    return new File([u8arr], filename, {type:mime});
-}
+
+    return new File([u8arr], filename, { type: mime });
+};
 
 export const prefixPdf = 'data:application/pdf;base64';
 

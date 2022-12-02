@@ -19,7 +19,10 @@ export const getProject = async (id: string) => {
 };
 
 export const updateProject = async (object: any, projectId: any) => {
-    const res = await apiClient.post<PageableDataResSuccess<ProjectResDTO[]>>(`${UrlServer.PROJECT.UPDATE}/${projectId}`, object);
+    const res = await apiClient.post<PageableDataResSuccess<ProjectResDTO[]>>(
+        `${UrlServer.PROJECT.UPDATE}/${projectId}`,
+        object,
+    );
     return res.data;
 };
 
