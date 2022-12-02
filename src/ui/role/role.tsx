@@ -609,7 +609,7 @@ export default function Role() {
                                                             currentRole.permissions.map((row, index) => {
                                                                 return row.monitorId !== -1 ? (
                                                                     <TableRow
-                                                                        key={row.monitorId}
+                                                                        key={`${currentRole.id}_${row.monitorId}_${index}`}
                                                                         sx={{
                                                                             '&:last-child td, &:last-child th': {
                                                                                 border: 0,
@@ -699,7 +699,9 @@ export default function Role() {
                                                                         </TableCell>
                                                                     </TableRow>
                                                                 ) : (
-                                                                    <tr></tr>
+                                                                    <tr>
+                                                                        <td></td>
+                                                                    </tr>
                                                                 );
                                                             })}
                                                     </TableBody>

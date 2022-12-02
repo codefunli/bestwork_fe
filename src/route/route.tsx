@@ -2,6 +2,7 @@ import { lazy } from 'react';
 import { UrlFeApp } from '../core/constants/common';
 import { RouteObject, useRoutes } from 'react-router-dom';
 import ProgressDetail from '../ui/construction/progress/progress-detail';
+import NotificationsList from '../ui/notification/notification-list';
 
 const AuthComponent = lazy(() => import('../components/auth-component'));
 const Login = lazy(() => import('../ui/login/login'));
@@ -24,7 +25,6 @@ const ConstructionSearch = lazy(() => import('../ui/construction/construction-se
 const ConstructionRegister = lazy(() => import('../ui/construction/construction-register'));
 const ConstructionEdit = lazy(() => import('../ui/construction/construction-edit'));
 const AirWayBillList = lazy(() => import('../ui/awb/awb-list'));
-
 const listRouter: RouteObject[] = [
     {
         path: UrlFeApp.MAIN_APP,
@@ -109,6 +109,10 @@ const listRouter: RouteObject[] = [
             {
                 path: UrlFeApp.CONSTRUCTION.DETAIL_HAS_ID,
                 element: <ProgressDetail />,
+            },
+            {
+                path: UrlFeApp.NOTIFICATIONS.LIST,
+                element: <NotificationsList />,
             },
         ],
     },

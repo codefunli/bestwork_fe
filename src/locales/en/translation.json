@@ -99,7 +99,9 @@
         "btnFinish": "Finish",
         "btnDownload": "Download",
         "btnConstruction": "Construction drawing",
-        "btnCreateRole": "Create Role"
+        "btnCreateRole": "Create Role",
+        "btnRead": "Read",
+        "btnUnread": "Unread"
     },
     "common": {
         "placeholder": "Please input a new value",
@@ -160,7 +162,8 @@
         "detail": "Detail",
         "construction": "Construction",
         "customsClearance": "Customs Clearance",
-        "progress": "Progress"
+        "progress": "Progress",
+        "notifications": "Notifications"
     },
     "user": {
         "title": "User Information",

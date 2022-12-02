@@ -61,6 +61,9 @@ export const UrlFeApp = {
         DETAIL: '/app/construction/progress/detail',
         DETAIL_HAS_ID: '/app/construction/progress/detail/:id',
     },
+    NOTIFICATIONS: {
+        LIST: '/app/notifications'
+    }
 };
 
 export const UrlServer = {
@@ -150,6 +153,10 @@ export const UrlServer = {
         GET_ALL_IMAGE_AFTER: `${PREFIX_SERVER_URL}/evidence-after-post/list/by`,
         UPLOAD_IMAGE_AFTER: `${PREFIX_SERVER_URL}/evidence-after-post/update`,
         ADD_IMAGE_AFTER_COMMENT: `${PREFIX_SERVER_URL}/evidence-after-post`,
+    },
+    NOTIFICATIONS: {
+        GET_LIST: `${PREFIX_SERVER_URL}/notifications/list`,
+        CHANGE_STATUS: `${PREFIX_SERVER_URL}/notifications/read`
     },
 };
 
@@ -258,6 +265,8 @@ export const Item = {
         BACK: 'button.btnBack',
         FINISH: 'button.btnFinish',
         UPLOAD_CONSTRUCTION: 'button.btnConstruction',
+        READ: 'button.btnRead',
+        UNREAD: 'button.btnUnread',
     },
     COMPANY: {
         TITLE: 'company.title',

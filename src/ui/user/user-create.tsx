@@ -163,7 +163,7 @@ export default function UserAdd() {
                 <Grid container direction="row" spacing={3}>
                     <Grid item xs={12} md={5} lg={3} sx={{ mt: 1, mb: 1 }}>
                         <Card className="general-info">
-                            <FileUpload defaultImage={DefaultImage.USER_AVATAR} callbackFunc={onChangeAvatar} />
+                            <FileUpload defaultImage={DefaultImage.USER_AVATAR} callbackFunc={onChangeAvatar} isDisabled={false}/>
                             <CardContent className="info">
                                 <Typography gutterBottom variant="h5" component="div">
                                     {formValues.firstName} {formValues.lastName}

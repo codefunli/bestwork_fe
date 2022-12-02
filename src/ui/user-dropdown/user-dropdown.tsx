@@ -51,6 +51,11 @@ const UserDropdown = () => {
         });
     };
 
+    const handleDisplayProfile = (id: any) => {
+        navigate(`${UrlFeApp.USER.INFO}/${id}`);
+        setOpen(false);
+    }
+
     return (
         <div className="user-dropdown">
             <Grid container direction="column" alignItems="end">
@@ -84,7 +89,7 @@ const UserDropdown = () => {
                         <Paper>
                             <ClickAwayListener onClickAway={handleClose}>
                                 <MenuList className="menu-list">
-                                    <MenuItem>
+                                    <MenuItem onClick={() => handleDisplayProfile(userInfo?.id)}>
                                         <PersonIcon />{' '}
                                         <span>
                                             {t('common.profile')} ({userInfo?.userName})

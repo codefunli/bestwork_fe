@@ -19,9 +19,11 @@ import { Box } from '@mui/system';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { DefaultImage, StatusCode, UrlFeApp } from '../../core/constants/common';
 import { validateUserEditForm } from '../../core/constants/validate';
+import { getUserInfo } from '../../core/redux/user-slice';
 import { getCompaniesByUser } from '../../services/company-service';
 import { getRoles, getUser, putUser } from '../../services/user-service';
 import ApiAlert from '../../shared-components/alert/api-alert';
@@ -52,7 +54,7 @@ export default function UserInfo() {
     const [companies, setCompanies] = useState<any>();
     const [roles, setRoles] = useState([]);
     const [resForHandleMsg, setResForHandleMsg] = useState<any>();
-
+    const userInfo = useSelector(getUserInfo);
     const {
         register,
         reset,
@@ -61,6 +63,7 @@ export default function UserInfo() {
     } = useForm({
         resolver: yupResolver(validateUserEditForm),
     });
+    const [isLogedInUser, setIsLogedInUser] = useState(false);
 
     useEffect(() => {
         getCompaniesByUser().then((companies) => {
@@ -86,6 +89,9 @@ export default function UserInfo() {
         };
 
         fetchUserInfo();
+        if(userInfo.id === Number(userId)){
+            setIsLogedInUser(true);
+        }
     }, [reset, userId]);
 
     const handleCancelChange = () => {
@@ -169,7 +175,7 @@ export default function UserInfo() {
                 <Grid container direction="row" spacing={3}>
                     <Grid item xs={12} md={5} lg={3} sx={{ mt: 1, mb: 1 }}>
                         <Card className="general-info">
-                            <FileUpload defaultImage={formValues.avatar} callbackFunc={onChangeAvatar} />
+                            <FileUpload defaultImage={formValues.avatar} callbackFunc={onChangeAvatar} isDisabled={isLogedInUser}/>
                             <CardContent className="info">
                                 <Typography gutterBottom variant="h5" component="div">
                                     {formValues.firstName} {formValues.lastName}
@@ -215,6 +221,7 @@ export default function UserInfo() {
                                                 {...register('userName', {
                                                     onChange: (e) => handleInputChange(e),
                                                 })}
+                                                disabled={isLogedInUser}
                                             />
                                         </div>
                                         <div className="col-12 col-sm-6 d-block p-1">
@@ -240,6 +247,7 @@ export default function UserInfo() {
                                                 {...register('uEmail', {
                                                     onChange: (e) => handleInputChange(e),
                                                 })}
+                                                disabled={isLogedInUser}
                                             />
                                         </div>
                                         <div className="col-12 col-sm-6 d-block p-1">
@@ -265,6 +273,7 @@ export default function UserInfo() {
                                                 {...register('uTelNo', {
                                                     onChange: (e) => handleInputChange(e),
                                                 })}
+                                                disabled={isLogedInUser}
                                             />
                                         </div>
                                         <div className="col-12 col-sm-6 d-block p-1">
@@ -314,6 +323,7 @@ export default function UserInfo() {
                                                 {...register('firstName', {
                                                     onChange: (e) => handleInputChange(e),
                                                 })}
+                                                disabled={isLogedInUser}
                                             />
                                         </div>
                                         <div className="col-12 col-sm-6 d-block p-1">
@@ -339,6 +349,7 @@ export default function UserInfo() {
                                                 {...register('lastName', {
                                                     onChange: (e) => handleInputChange(e),
                                                 })}
+                                                disabled={isLogedInUser}
                                             />
                                         </div>
                                     </div>
@@ -353,6 +364,7 @@ export default function UserInfo() {
                                                 sx={{ mt: 1, mb: 1 }}
                                                 variant="outlined"
                                                 error
+                                                disabled={isLogedInUser}
                                             >
                                                 <Select
                                                     value={formValues.role}
@@ -392,6 +404,7 @@ export default function UserInfo() {
                                                 checked={formValues.enabled === 1 ? true : false}
                                                 name="enabled"
                                                 onChange={handleSwitchChange}
+                                                disabled={isLogedInUser}
                                             />
                                         </div>
                                     </div>
@@ -406,6 +419,7 @@ export default function UserInfo() {
                                                 variant="contained"
                                                 disabled={isSubmitting}
                                                 onClick={handleSubmit(handleSubmitForm)}
+                                                hidden={isLogedInUser}
                                             >
                                                 {t('button.btnSave')}
                                             </Button>

@@ -3,7 +3,7 @@ import LocalSeeIcon from '@mui/icons-material/LocalSee';
 import './file-upload.scss';
 
 export default function FileUpload(props: any) {
-    const { defaultImage, callbackFunc } = props;
+    const { defaultImage, callbackFunc, isDisabled } = props;
     const [imagePreview, setImagePreview] = useState(defaultImage);
 
     useEffect(() => {
@@ -31,7 +31,7 @@ export default function FileUpload(props: any) {
                     <LocalSeeIcon />
                 </span>
             </label>
-            <input accept="image/*" id="chosen-image" type="file" hidden onChange={onChangeImage} />
+            <input accept="image/*" id="chosen-image" type="file" hidden onChange={onChangeImage} disabled={isDisabled}/>
         </div>
     );
 }
