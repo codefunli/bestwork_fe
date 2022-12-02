@@ -65,7 +65,7 @@ export default function CompanySearch(props: any) {
     useEffect(() => {
         if (userInfo && userInfo.permissions && userInfo.permissions[2][0]) setPermission(userInfo.permissions[2][0]);
         if (location.state && location.state.permission) setPermission(location.state.permission);
-    }, [location.state.permission]);
+    }, [location]);
 
     const nativgate = useNavigate();
 
