@@ -18,9 +18,11 @@ import {
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from 'react-query';
+import { useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ConfirmConstants, UrlFeApp, Item } from '../../core/constants/common';
 import { SUCCESS_MSG } from '../../core/constants/message';
+import { getUserInfo } from '../../core/redux/user-slice';
 import { Permission } from '../../core/types/permission';
 import { headProjectCol } from '../../core/types/project';
 import { deleteProjects, getProjects, getProjectStatus } from '../../services/project-service';
@@ -54,10 +56,12 @@ export default function ProjectSearch() {
     const [projectStatus, setProjectStatus] = useState([]);
     const location = useLocation();
     const [permission, setPermission] = useState<Permission>();
+    const userInfo = useSelector(getUserInfo);
 
     useEffect(() => {
+        if (userInfo && userInfo.permissions && userInfo.permissions[4][0]) setPermission(userInfo.permissions[4][0]);
         if (location.state && location.state.permission) setPermission(location.state.permission);
-    }, [location.state.permission]);
+    }, [location]);
 
     useEffect(() => {
         getProjectStatus().then((status: any) => {
@@ -188,7 +192,7 @@ export default function ProjectSearch() {
             iconFn: 'ModeEditIcon',
         },
         {
-            nameFn: t('tooltip.materialStatus'),
+            nameFn: t('tooltip.customsClearance'),
             acFn: handleAddMaterialStatus,
             iconFn: 'AddMaterialStatus',
         },

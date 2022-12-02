@@ -393,6 +393,8 @@ export const renderFile = (data: any, index: any) => {
             return <img loading="lazy" className="imgTag" src={excel} key={index} />;
         case 'application/vnd.ms-excel':
             return <img loading="lazy" className="imgTag" src={excel} key={index} />;
+        case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+            return <img loading="lazy" className="imgTag" src={excel} key={index} />;
         case 'jpeg':
             return (
                 <img
@@ -493,19 +495,18 @@ export const Base64ToArrayBuffer = (base64: string): ArrayBuffer => {
 };
 
 export const dataURLtoFile = (dataurl: any, filename: any) => {
- 
     var arr = dataurl.split(','),
         mime = arr[0].match(/:(.*?);/)[1],
-        bstr = atob(arr[1]), 
-        n = bstr.length, 
+        bstr = atob(arr[1]),
+        n = bstr.length,
         u8arr = new Uint8Array(n);
-        
-    while(n--){
+
+    while (n--) {
         u8arr[n] = bstr.charCodeAt(n);
     }
-    
-    return new File([u8arr], filename, {type:mime});
-}
+
+    return new File([u8arr], filename, { type: mime });
+};
 
 export const prefixPdf = 'data:application/pdf;base64';
 
