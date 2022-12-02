@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import SearchIcon from '@mui/icons-material/Search';
 import {
     AlertColor,
     Button,
@@ -19,514 +19,46 @@ import {
     TextField,
     Typography,
 } from '@mui/material';
-import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/system';
-import CreateRoleModal from './create-modal';
-import CreateScreenModal from './create-screen-modal';
-import UpdateRoleModal from './update-modal';
-import SearchIcon from '@mui/icons-material/Search';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { AlertColorConstants, ConfirmConstants, Item, StatusCode } from '../../core/constants/common';
+import { CommentConstant } from '../../core/constants/constant';
+import { SUCCESS_MSG } from '../../core/constants/message';
+import { PermissionResDTO } from '../../models/permission-res-dto';
+import { RoleHasPermissionResDto, RoleResDto } from '../../models/role-res-dto';
 import {
-    getRoles,
-    getPermissionsList,
     createRole,
-    updateRole,
-    deleteRole,
     createScreen,
+    deleteRole,
+    getPermissionsList,
+    getRoles,
+    updatePermissions,
+    updateRole,
 } from '../../services/role-service';
-import { AlertColorConstants, ConfirmConstants, StatusCode, Item } from '../../core/constants/common';
 import MessageShow from '../../shared-components/message/message';
 import AlertDialogSlide from '../../shared-components/modal/alert-dialog-slide';
-import { SUCCESS_MSG } from '../../core/constants/message';
+import CreateRoleModal from './create-modal';
+import CreateScreenModal from './create-screen-modal';
 import './role.scss';
+import UpdateRoleModal from './update-modal';
 
 const initRoleList = [
     {
-        id: 1,
-        name: 'Super Admin',
-        description: 'Description',
+        id: -1,
+        roleName: '',
+        description: '',
         permissions: [
             {
-                screenId: 1,
-                screenName: 'DashBoard',
-                view: true,
-                create: true,
-                edit: true,
-                delete: true,
-            },
-            {
-                screenId: 2,
-                screenName: 'Company',
-                view: true,
-                create: true,
-                edit: true,
-                delete: true,
-            },
-            {
-                screenId: 3,
-                screenName: 'User',
-                view: true,
-                create: true,
-                edit: true,
-                delete: false,
-            },
-        ],
-    },
-    {
-        id: 2,
-        name: 'Admin',
-        description: 'Description',
-        permissions: [
-            {
-                screenId: 1,
-                screenName: 'DashBoard',
-                view: true,
-                create: false,
-                edit: false,
-                delete: true,
-            },
-            {
-                screenId: 2,
-                screenName: 'Company',
-                view: false,
-                create: false,
-                edit: false,
-                delete: false,
-            },
-            {
-                screenId: 3,
-                screenName: 'User',
-                view: true,
-                create: false,
-                edit: true,
-                delete: false,
-            },
-            {
-                screenId: 1,
-                screenName: 'DashBoard',
-                view: true,
-                create: false,
-                edit: false,
-                delete: true,
-            },
-            {
-                screenId: 2,
-                screenName: 'Company',
-                view: false,
-                create: false,
-                edit: false,
-                delete: false,
-            },
-            {
-                screenId: 3,
-                screenName: 'User',
-                view: true,
-                create: false,
-                edit: true,
-                delete: false,
-            },
-            {
-                screenId: 3,
-                screenName: 'User',
-                view: true,
-                create: false,
-                edit: true,
-                delete: false,
-            },
-            {
-                screenId: 1,
-                screenName: 'DashBoard',
-                view: true,
-                create: false,
-                edit: false,
-                delete: true,
-            },
-            {
-                screenId: 2,
-                screenName: 'Company',
-                view: false,
-                create: false,
-                edit: false,
-                delete: false,
-            },
-            {
-                screenId: 3,
-                screenName: 'User',
-                view: true,
-                create: false,
-                edit: true,
-                delete: false,
-            },
-        ],
-    },
-    {
-        id: 3,
-        name: 'User',
-        description: 'Description',
-        permissions: [
-            {
-                screenId: 1,
-                screenName: 'DashBoard',
-                view: true,
-                create: false,
-                edit: false,
-                delete: false,
-            },
-            {
-                screenId: 2,
-                screenName: 'Company',
-                view: true,
-                create: true,
-                edit: false,
-                delete: false,
-            },
-            {
-                screenId: 3,
-                screenName: 'User',
-                view: true,
-                create: false,
-                edit: true,
-                delete: false,
-            },
-        ],
-    },
-    {
-        id: 4,
-        name: 'Super Man',
-        description: 'Description',
-        permissions: [
-            {
-                screenId: 1,
-                screenName: 'DashBoard',
-                view: true,
-                create: false,
-                edit: false,
-                delete: false,
-            },
-            {
-                screenId: 2,
-                screenName: 'Company',
-                view: true,
-                create: true,
-                edit: false,
-                delete: false,
-            },
-            {
-                screenId: 3,
-                screenName: 'User',
-                view: true,
-                create: false,
-                edit: true,
-                delete: false,
-            },
-        ],
-    },
-    {
-        id: 5,
-        name: 'Batman',
-        description: 'Description',
-        permissions: [
-            {
-                screenId: 1,
-                screenName: 'DashBoard',
-                view: true,
-                create: false,
-                edit: false,
-                delete: true,
-            },
-            {
-                screenId: 2,
-                screenName: 'Company',
-                view: false,
-                create: false,
-                edit: false,
-                delete: false,
-            },
-            {
-                screenId: 3,
-                screenName: 'User',
-                view: true,
-                create: false,
-                edit: true,
-                delete: false,
-            },
-        ],
-    },
-    {
-        id: 1,
-        name: 'Super Admin',
-        description: 'Description',
-        permissions: [
-            {
-                screenId: 1,
-                screenName: 'DashBoard',
-                view: true,
-                create: true,
-                edit: true,
-                delete: true,
-            },
-            {
-                screenId: 2,
-                screenName: 'Company',
-                view: true,
-                create: true,
-                edit: true,
-                delete: true,
-            },
-            {
-                screenId: 3,
-                screenName: 'User',
-                view: true,
-                create: true,
-                edit: true,
-                delete: false,
-            },
-        ],
-    },
-    {
-        id: 2,
-        name: 'Admin',
-        description: 'Description',
-        permissions: [
-            {
-                screenId: 1,
-                screenName: 'DashBoard',
-                view: true,
-                create: true,
-                edit: false,
-                delete: false,
-            },
-            {
-                screenId: 2,
-                screenName: 'Company',
-                view: true,
-                create: true,
-                edit: true,
-                delete: false,
-            },
-            {
-                screenId: 3,
-                screenName: 'User',
-                view: true,
-                create: false,
-                edit: true,
-                delete: false,
-            },
-        ],
-    },
-    {
-        id: 3,
-        name: 'User',
-        description: 'Description',
-        permissions: [
-            {
-                screenId: 1,
-                screenName: 'DashBoard',
-                view: true,
-                create: false,
-                edit: false,
-                delete: false,
-            },
-            {
-                screenId: 2,
-                screenName: 'Company',
-                view: true,
-                create: true,
-                edit: false,
-                delete: false,
-            },
-            {
-                screenId: 3,
-                screenName: 'User',
-                view: true,
-                create: false,
-                edit: true,
-                delete: false,
-            },
-        ],
-    },
-    {
-        id: 4,
-        name: 'Super Man',
-        description: 'Description',
-        permissions: [
-            {
-                screenId: 1,
-                screenName: 'DashBoard',
-                view: true,
-                create: false,
-                edit: false,
-                delete: false,
-            },
-            {
-                screenId: 2,
-                screenName: 'Company',
-                view: true,
-                create: true,
-                edit: false,
-                delete: false,
-            },
-            {
-                screenId: 3,
-                screenName: 'User',
-                view: true,
-                create: false,
-                edit: true,
-                delete: false,
-            },
-        ],
-    },
-    {
-        id: 5,
-        name: 'Batman',
-        description: 'Description',
-        permissions: [
-            {
-                screenId: 1,
-                screenName: 'DashBoard',
-                view: true,
-                create: false,
-                edit: false,
-                delete: true,
-            },
-            {
-                screenId: 2,
-                screenName: 'Company',
-                view: false,
-                create: false,
-                edit: false,
-                delete: false,
-            },
-            {
-                screenId: 3,
-                screenName: 'User',
-                view: true,
-                create: false,
-                edit: true,
-                delete: false,
-            },
-        ],
-    },
-    {
-        id: 1,
-        name: 'Super Admin',
-        description: 'Description',
-        permissions: [
-            {
-                screenId: 1,
-                screenName: 'DashBoard',
-                view: true,
-                create: true,
-                edit: true,
-                delete: true,
-            },
-            {
-                screenId: 2,
-                screenName: 'Company',
-                view: true,
-                create: true,
-                edit: true,
-                delete: true,
-            },
-            {
-                screenId: 3,
-                screenName: 'User',
-                view: true,
-                create: true,
-                edit: true,
-                delete: false,
-            },
-        ],
-    },
-    {
-        id: 2,
-        name: 'Admin',
-        description: 'Description',
-        permissions: [
-            {
-                screenId: 1,
-                screenName: 'DashBoard',
-                view: true,
-                create: true,
-                edit: false,
-                delete: false,
-            },
-            {
-                screenId: 2,
-                screenName: 'Company',
-                view: true,
-                create: true,
-                edit: true,
-                delete: false,
-            },
-            {
-                screenId: 3,
-                screenName: 'User',
-                view: true,
-                create: false,
-                edit: true,
-                delete: false,
-            },
-        ],
-    },
-    {
-        id: 3,
-        name: 'User',
-        description: 'Description',
-        permissions: [
-            {
-                screenId: 1,
-                screenName: 'DashBoard',
-                view: true,
-                create: false,
-                edit: false,
-                delete: false,
-            },
-            {
-                screenId: 2,
-                screenName: 'Company',
-                view: true,
-                create: true,
-                edit: false,
-                delete: false,
-            },
-            {
-                screenId: 3,
-                screenName: 'User',
-                view: true,
-                create: false,
-                edit: true,
-                delete: false,
-            },
-        ],
-    },
-    {
-        id: 4,
-        name: 'Super Man',
-        description: 'Description',
-        permissions: [
-            {
-                screenId: 1,
-                screenName: 'DashBoard',
-                view: true,
-                create: false,
-                edit: false,
-                delete: false,
-            },
-            {
-                screenId: 2,
-                screenName: 'Company',
-                view: true,
-                create: true,
-                edit: false,
-                delete: false,
-            },
-            {
-                screenId: 3,
-                screenName: 'User',
-                view: true,
-                create: false,
-                edit: true,
-                delete: false,
+                id: -1,
+                canAccess: false,
+                canAdd: false,
+                canEdit: false,
+                canDelete: false,
+                status: -1,
+                monitorId: -1,
+                monitorName: '',
+                roleId: -1,
             },
         ],
     },
@@ -534,10 +66,13 @@ const initRoleList = [
 
 export default function Role() {
     const { t } = useTranslation();
-    const [roleList, setRoleList] = useState<any[]>(JSON.parse(JSON.stringify(initRoleList)));
+    const [roleList, setRoleList] = useState<RoleResDto[]>();
+    const [rolePrimitiveList, setRolePrimitiveList] = useState<RoleResDto[]>();
+
+    const [roleRegisterList, setRoleRegisterList] = useState<RoleHasPermissionResDto[]>();
+
     const [currentTab, setCurrentTab] = useState(0);
-    const [currentRole, setCurrentRole] = useState(initRoleList[0]);
-    const [permissionsList, setPermissionsList] = useState({});
+    const [currentRole, setCurrentRole] = useState<RoleHasPermissionResDto>(initRoleList[0]);
 
     const [searchKeyword, setSearchKeyword] = useState('');
     const [roleMsg, setRoleMsg] = useState('');
@@ -549,24 +84,96 @@ export default function Role() {
     const [isOpenCreateScreenModal, setIsOpenCreateScreenModal] = useState(false);
     const [isOpenUpdateModal, setIsOpenUpdateModal] = useState(false);
 
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
     const toggleCreateScreenModal = (value: boolean) => setIsOpenCreateScreenModal(value);
     const toggleCreateModal = (value: boolean) => setIsOpenCreateModal(value);
     const toggleUpdateModal = (value: boolean) => setIsOpenUpdateModal(value);
 
     const fetchData = async () => {
-        const res: any = await getRoles();
-        const res2: any = await getPermissionsList();
-        if (res) {
-            setRoleList(res);
-        }
-        if (res2) {
+        const roles: any = await getRoles();
+        if (roles) {
+            let tmpRoleList: RoleResDto[] = [];
+            let tmpRoleRegisterList: RoleHasPermissionResDto[] = [];
+            roles.data.map((target: RoleResDto) => {
+                tmpRoleList.push({
+                    id: target.id,
+                    roleName: target.roleName,
+                    description: target.description,
+                });
+
+                tmpRoleRegisterList.push({
+                    id: target.id,
+                    roleName: target.roleName,
+                    description: target.description,
+                    permissions: [],
+                });
+            });
+
+            setRoleList(tmpRoleList);
+            setRolePrimitiveList(tmpRoleList);
+
+            setRoleRegisterList(tmpRoleRegisterList);
+
+            if (tmpRoleList && tmpRoleList.length > 0) {
+                getPermissionsList(tmpRoleList[0].id)
+                    .then((res) => {
+                        if (res.status === StatusCode.OK && res.data) {
+                            setCurrentRole({
+                                ...currentRole,
+                                id: tmpRoleList[0].id,
+                                roleName: tmpRoleList[0].roleName,
+                                description: tmpRoleList[0].description,
+                                permissions: res.data,
+                            });
+                        }
+                    })
+                    .catch((err) => {
+                        handleMessage(true, err.message, AlertColorConstants.ERROR);
+                    });
+            }
         }
     };
 
-    const handleChangeTab = (event: React.SyntheticEvent, newValue: number) => {
-        console.log('tab');
-        // setCurrentTab(newValue);
-        // setCurrentRole(roleList[newValue]);
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const handleChangeCurrentTab = (event: React.SyntheticEvent, newValue: number) => {
+        setCurrentTab(newValue);
+    };
+
+    const handleChangeTab = (id: number) => {
+        if (roleRegisterList) {
+            roleRegisterList.map((target, index) => {
+                if (target.id === id) {
+                    let currId = target.id;
+                    let currRoleName = target.roleName;
+                    let description = target.description;
+
+                    if (target.permissions && target.permissions.length > 0) {
+                        setCurrentRole(target);
+                    } else {
+                        getPermissionsList(currId)
+                            .then((res) => {
+                                if (res.status === StatusCode.OK && res.data) {
+                                    setCurrentRole({
+                                        id: currId,
+                                        roleName: currRoleName,
+                                        description: description,
+                                        permissions: res.data,
+                                    });
+                                }
+                            })
+                            .catch((err) => {
+                                handleMessage(true, err.message, AlertColorConstants.ERROR);
+                            });
+                    }
+                }
+
+                return;
+            });
+        }
     };
 
     const handleChangeCheckbox = (
@@ -577,60 +184,69 @@ export default function Role() {
         allStatus?: boolean,
     ) => {
         // Change selected screen in current role (tab)
-        let selectedScreen = currentRole.permissions.find((permission) => permission.screenId === parseInt(screenId));
-        let tempPermission: any;
+        let selectedScreen = currentRole?.permissions.find((permission) => permission.monitorId === parseInt(screenId));
+        let tempPermission: PermissionResDTO;
 
         // If select all permissions
-        if (activeAll) {
-            if (allStatus) {
-                tempPermission = {
-                    ...selectedScreen,
-                    view: false,
-                    create: false,
-                    edit: false,
-                    delete: false,
-                };
+        if (selectedScreen) {
+            if (activeAll) {
+                if (allStatus) {
+                    tempPermission = {
+                        ...selectedScreen,
+                        canAccess: false,
+                        canAdd: false,
+                        canEdit: false,
+                        canDelete: false,
+                    };
+                } else {
+                    tempPermission = {
+                        ...selectedScreen,
+                        canAccess: true,
+                        canAdd: true,
+                        canEdit: true,
+                        canDelete: true,
+                    };
+                }
             } else {
                 tempPermission = {
                     ...selectedScreen,
-                    view: true,
-                    create: true,
-                    edit: true,
-                    delete: true,
+                    [event.target.name]: event.target.checked,
                 };
-            }
-        } else {
-            tempPermission = {
-                ...selectedScreen,
-                [event.target.name]: event.target.checked,
-            };
 
-            if (event.target.name === 'view' && event.target.checked === false) {
-                tempPermission = {
-                    ...tempPermission,
-                    view: false,
-                    create: false,
-                    edit: false,
-                    delete: false,
-                };
+                if (event.target.name === 'canAccess' && event.target.checked === false) {
+                    tempPermission = {
+                        ...tempPermission,
+                        canAccess: false,
+                        canAdd: false,
+                        canEdit: false,
+                        canDelete: false,
+                    };
+                }
+            }
+
+            // Update permissions of selected screen
+            if (currentRole) {
+                let permissions: any = [...currentRole.permissions];
+                permissions[index] = tempPermission;
+                setCurrentRole({
+                    ...currentRole,
+                    permissions,
+                });
+
+                let tmpRoleList = roleRegisterList;
+                if (tmpRoleList) {
+                    tmpRoleList.map((tmpTarget, index) => {
+                        if (tmpRoleList && tmpTarget.id === currentRole.id) {
+                            tmpRoleList[index] = {
+                                ...currentRole,
+                                permissions,
+                            };
+                            setRoleRegisterList(tmpRoleList);
+                        }
+                    });
+                }
             }
         }
-
-        // Update permissions of selected screen
-        let permissions: any = [...currentRole.permissions];
-        permissions[index] = tempPermission;
-        setCurrentRole({
-            ...currentRole,
-            permissions,
-        });
-
-        // Update role list
-        let tmpRoleList = roleList;
-        tmpRoleList[currentTab] = {
-            ...currentRole,
-            permissions,
-        };
-        setRoleList(tmpRoleList);
     };
 
     const handleMessage = (showMsg: boolean, msg: string, type: AlertColor) => {
@@ -658,108 +274,147 @@ export default function Role() {
     };
 
     const handleCreateNewRole = (roleName: string, description: string) => {
-        createRole({ roleName, description })
+        createRole({ name: roleName, description })
             .then((res) => {
                 handleResponse(res);
+                fetchData();
             })
             .catch((err) => {
                 handleMessage(true, err.message, AlertColorConstants.ERROR);
             });
-
-        // Temp
-        // setRoleList([
-        //     ...roleList,
-        //     {
-        //         id: roleList.length + 2,
-        //         name: roleName,
-        //         description: description,
-        //         permissions: [
-        //             {
-        //                 screenId: 1,
-        //                 screenName: 'DashBoard',
-        //                 view: true,
-        //                 create: false,
-        //                 edit: true,
-        //                 delete: true,
-        //             },
-        //             {
-        //                 screenId: 2,
-        //                 screenName: 'Company',
-        //                 view: false,
-        //                 create: true,
-        //                 edit: true,
-        //                 delete: true,
-        //             },
-        //             {
-        //                 screenId: 3,
-        //                 screenName: 'User',
-        //                 view: true,
-        //                 create: false,
-        //                 edit: true,
-        //                 delete: false,
-        //             },
-        //         ],
-        //     },
-        // ]);
     };
 
-    const handleCreateNewSCreen = (name: string, icon: string) => {
+    const handleCreateNewScreen = (name: string, icon: string) => {
         createScreen({ name, icon })
             .then((res) => {
                 handleResponse(res);
+                fetchData();
             })
             .catch((err) => {
                 handleMessage(true, err.message, AlertColorConstants.ERROR);
             });
     };
 
-    const handleUpdateRole = (roleName: string, description: string) => {
-        updateRole(roleList[currentTab].id, { roleName, description })
+    const handleUpdateRole = (id: number, roleName: string, description: string) => {
+        updateRole({ id: id, name: roleName, description })
             .then((res) => {
                 handleResponse(res);
+                if (roleList) {
+                    roleList.map((target, index) => {
+                        if (target.id === id) {
+                            roleList[index] = {
+                                id: id,
+                                roleName: roleName,
+                                description: description,
+                            };
+                        }
+                    });
+                }
             })
             .catch((err) => {
                 handleMessage(true, err.message, AlertColorConstants.ERROR);
             });
     };
 
-    const handleSaveChange = () => {};
+    const handleSaveChange = (e: any) => {
+        setIsSubmitting(true);
+        updatePermissions(roleRegisterList)
+            .then((res) => {
+                handleResponse(res);
+                setIsSubmitting(false);
+            })
+            .catch((err) => {
+                handleMessage(true, err.message, AlertColorConstants.ERROR);
+                setIsSubmitting(false);
+            });
+    };
 
     const handleResetCurrentRoleChange = () => {
-        setCurrentRole(JSON.parse(JSON.stringify(initRoleList[currentTab])));
-        let tempRoleList = roleList;
-        tempRoleList[currentTab] = initRoleList[currentTab];
-        setRoleList(tempRoleList);
+        if (currentRole) {
+            getPermissionsList(currentRole.id)
+                .then((res) => {
+                    if (res.status === StatusCode.OK && res.data) {
+                        setCurrentRole({
+                            id: currentRole.id,
+                            roleName: currentRole.roleName,
+                            description: currentRole.description,
+                            permissions: res.data,
+                        });
+
+                        let tmpRoleList = roleRegisterList;
+                        if (tmpRoleList) {
+                            tmpRoleList.map((tmpTarget, index) => {
+                                if (tmpRoleList && tmpTarget.id === currentRole.id && res.data) {
+                                    tmpRoleList[index] = {
+                                        ...currentRole,
+                                        permissions: res.data,
+                                    };
+                                    setRoleRegisterList(tmpRoleList);
+                                }
+                            });
+                        }
+                    }
+                })
+                .catch((err) => {
+                    handleMessage(true, err.message, AlertColorConstants.ERROR);
+                });
+        }
     };
 
     const handleResetAllChange = () => {
-        setRoleList(JSON.parse(JSON.stringify(initRoleList)));
-        setCurrentRole(initRoleList[currentTab]);
+        fetchData();
+        setCurrentTab(0);
     };
 
     const handleSearch = () => {
-        const filterItems = () => {
-            return initRoleList.filter((role) => role.name.toLowerCase().indexOf(searchKeyword.toLowerCase()) !== -1);
-        };
-        setRoleList(filterItems);
+        if (searchKeyword.trim() === '') {
+            setRoleList(rolePrimitiveList);
+        } else {
+            const filterItems = roleList?.filter(
+                (role: RoleResDto) => role.roleName.toLowerCase().indexOf(searchKeyword.toLowerCase()) !== -1,
+            );
+            setRoleList(filterItems);
+            if (filterItems && filterItems.length > 0) {
+                let currId = filterItems[0].id;
+                let currRoleName = filterItems[0].roleName;
+                let description = filterItems[0].description;
+                getPermissionsList(currId)
+                    .then((res) => {
+                        if (res.status === StatusCode.OK && res.data) {
+                            setCurrentRole({
+                                id: currId,
+                                roleName: currRoleName,
+                                description: description,
+                                permissions: res.data,
+                            });
+                        }
+                    })
+                    .catch((err) => {
+                        handleMessage(true, err.message, AlertColorConstants.ERROR);
+                    });
+            }
+        }
     };
 
-    const handleDeleteRole = () => {
+    const handleDeleteRole = (event: any) => {
+        event.preventDefault();
         setRoleMsg(SUCCESS_MSG.S01_004);
         setRoleMsgType(AlertColorConstants.SUCCESS);
         setIsOpenDeleteModal(true);
     };
 
     const alertConfirmDelete = () => {
-        deleteRole(roleList[currentTab].id)
-            .then((value) => {
-                setIsShowMsg(true);
-                fetchData();
-            })
-            .catch((err) => {
-                handleMessage(true, t('message.error'), AlertColorConstants.ERROR);
-            });
-        setIsOpenDeleteModal(false);
+        if (roleRegisterList) {
+            deleteRole(roleRegisterList[currentTab].id)
+                .then((value) => {
+                    setIsShowMsg(true);
+                    fetchData();
+                })
+                .catch((err) => {
+                    handleMessage(true, t('message.error'), AlertColorConstants.ERROR);
+                });
+            setIsOpenDeleteModal(false);
+        }
     };
 
     const closeDeleteModal = () => {
@@ -767,16 +422,18 @@ export default function Role() {
         setIsShowMsg(false);
     };
 
-    useEffect(() => {
-        fetchData();
-    }, []);
+    const handleKeyDown = (event: any) => {
+        if (event.key === CommentConstant.ENTER) {
+            event.preventDefault();
+        }
+    };
 
     return (
         <div className="role">
             <Grid container direction="row" spacing={3}>
                 <Grid item xs={12} sx={{ mt: 1 }}>
                     <div className="row">
-                        <div className="col-sm-12 col-md-9 text-start d-none d-lg-block">
+                        <div className="col-sm-12 col-md-4 text-start d-none d-lg-block">
                             <Typography
                                 variant="h5"
                                 color="textSecondary"
@@ -788,11 +445,12 @@ export default function Role() {
                             </Typography>
                         </div>
 
-                        <div className="col-sm-12 col-md-3 text-end d-none d-lg-block">
+                        <div className="col-sm-12 col-md-8 text-end d-none d-lg-block">
                             <Button
+                                disabled={isSubmitting}
                                 className="btn-create btn-create-screen"
-                                variant="outlined"
-                                color="secondary"
+                                variant="contained"
+                                color="primary"
                                 sx={{ textTransform: 'uppercase' }}
                                 onClick={() => toggleCreateScreenModal(true)}
                                 style={{ marginRight: '10px' }}
@@ -803,36 +461,37 @@ export default function Role() {
                                 className="btn-create"
                                 variant="contained"
                                 color="primary"
+                                disabled={isSubmitting}
                                 sx={{ textTransform: 'uppercase' }}
                                 onClick={() => toggleCreateModal(true)}
                             >
-                                {t(Item.LABEL_BTN.CREATE)}
+                                {t(Item.LABEL_BTN.CREATE_ROLE)}
                             </Button>
                         </div>
 
                         <div className="col-sm-12 text-start d-block d-lg-none">
+                            <Button
+                                className="btn-create btn-create-screen"
+                                variant="contained"
+                                color="primary"
+                                sx={{ textTransform: 'uppercase' }}
+                                onClick={() => toggleCreateScreenModal(true)}
+                                style={{ marginRight: '10px' }}
+                                disabled={isSubmitting}
+                            >
+                                {t(Item.LABEL_BTN.CREATE_SCREEN)}
+                            </Button>
                             <Button
                                 className="btn-create"
                                 variant="contained"
                                 color="primary"
                                 sx={{ textTransform: 'uppercase' }}
                                 onClick={() => toggleCreateModal(true)}
+                                disabled={isSubmitting}
                             >
-                                {t(Item.LABEL_BTN.CREATE)}
+                                {t(Item.LABEL_BTN.CREATE_ROLE)}
                             </Button>
                         </div>
-                        {/* 
-                        <div className="col-sm-12 text-start d-block d-lg-none">
-                            <Button
-                                className="btn-create-screen"
-                                variant="contained"
-                                color="secondary"
-                                sx={{ textTransform: 'uppercase' }}
-                                onClick={() => toggleCreateModal(true)}
-                            >
-                                Create Screen
-                            </Button>
-                        </div> */}
                     </div>
                 </Grid>
                 <Grid item xs={12} sx={{ mt: 1, mb: 1 }} className="content-area">
@@ -863,15 +522,21 @@ export default function Role() {
                                                 placeholder={t('common.placeholder')}
                                                 value={searchKeyword}
                                                 onChange={(e) => setSearchKeyword(e.target.value)}
+                                                onKeyDown={handleKeyDown}
                                             />
-                                            <Button variant="contained" onClick={handleSearch} color="primary">
+                                            <Button
+                                                variant="contained"
+                                                onClick={handleSearch}
+                                                color="primary"
+                                                disabled={isSubmitting}
+                                            >
                                                 <SearchIcon />
                                             </Button>
                                         </div>
                                         <Tabs
                                             orientation="vertical"
                                             value={currentTab}
-                                            onChange={handleChangeTab}
+                                            onChange={handleChangeCurrentTab}
                                             aria-label=""
                                             sx={{
                                                 borderRight: 1,
@@ -879,9 +544,14 @@ export default function Role() {
                                             }}
                                             className="role-list"
                                         >
-                                            {roleList.map((role, index) => (
-                                                <Tab key={index} label={role.description} />
-                                            ))}
+                                            {roleList &&
+                                                roleList.map((role, index) => (
+                                                    <Tab
+                                                        key={role.id}
+                                                        label={role.roleName}
+                                                        onClick={() => handleChangeTab(role.id)}
+                                                    />
+                                                ))}
                                         </Tabs>
                                         <div className="text-center justify-center mt-4">
                                             <ButtonGroup
@@ -893,13 +563,15 @@ export default function Role() {
                                                     sx={{ mr: 1 }}
                                                     variant="contained"
                                                     onClick={() => toggleUpdateModal(true)}
+                                                    disabled={isSubmitting}
                                                 >
                                                     {t('button.btnUpdate')}
                                                 </Button>
                                                 <Button
-                                                    onClick={() => handleDeleteRole()}
+                                                    onClick={(e) => handleDeleteRole(e)}
                                                     variant="outlined"
                                                     color="error"
+                                                    disabled={true}
                                                 >
                                                     {t('button.btnDelete')}
                                                 </Button>
@@ -933,80 +605,103 @@ export default function Role() {
                                                         </TableRow>
                                                     </TableHead>
                                                     <TableBody>
-                                                        {currentRole.permissions.map((row, index) => (
-                                                            <TableRow
-                                                                key={row.screenId}
-                                                                sx={{
-                                                                    '&:last-child td, &:last-child th': { border: 0 },
-                                                                }}
-                                                            >
-                                                                <TableCell component="th" scope="row">
-                                                                    {row.screenName}
-                                                                </TableCell>
-                                                                <TableCell align="center">
-                                                                    <Checkbox
-                                                                        checked={
-                                                                            row.view &&
-                                                                            row.create &&
-                                                                            row.edit &&
-                                                                            row.delete
-                                                                        }
-                                                                        onChange={(e) =>
-                                                                            handleChangeCheckbox(
-                                                                                e,
-                                                                                row.screenId,
-                                                                                index,
-                                                                                true,
-                                                                                row.view &&
-                                                                                    row.create &&
-                                                                                    row.edit &&
-                                                                                    row.delete,
-                                                                            )
-                                                                        }
-                                                                        name="all"
-                                                                    />
-                                                                </TableCell>
-                                                                <TableCell align="center">
-                                                                    <Checkbox
-                                                                        checked={row.view}
-                                                                        onChange={(e) =>
-                                                                            handleChangeCheckbox(e, row.screenId, index)
-                                                                        }
-                                                                        name="view"
-                                                                    />
-                                                                </TableCell>
-                                                                <TableCell align="center">
-                                                                    <Checkbox
-                                                                        checked={row.create}
-                                                                        onChange={(e) =>
-                                                                            handleChangeCheckbox(e, row.screenId, index)
-                                                                        }
-                                                                        name="create"
-                                                                        disabled={!row.view}
-                                                                    />
-                                                                </TableCell>
-                                                                <TableCell align="center">
-                                                                    <Checkbox
-                                                                        checked={row.edit}
-                                                                        onChange={(e) =>
-                                                                            handleChangeCheckbox(e, row.screenId, index)
-                                                                        }
-                                                                        name="edit"
-                                                                        disabled={!row.view}
-                                                                    />
-                                                                </TableCell>
-                                                                <TableCell align="center">
-                                                                    <Checkbox
-                                                                        checked={row.delete}
-                                                                        onChange={(e) =>
-                                                                            handleChangeCheckbox(e, row.screenId, index)
-                                                                        }
-                                                                        name="delete"
-                                                                        disabled={!row.view}
-                                                                    />
-                                                                </TableCell>
-                                                            </TableRow>
-                                                        ))}
+                                                        {currentRole &&
+                                                            currentRole.permissions.map((row, index) => {
+                                                                return row.monitorId !== -1 ? (
+                                                                    <TableRow
+                                                                        key={row.monitorId}
+                                                                        sx={{
+                                                                            '&:last-child td, &:last-child th': {
+                                                                                border: 0,
+                                                                            },
+                                                                        }}
+                                                                    >
+                                                                        <TableCell component="th" scope="row">
+                                                                            {row.monitorName}
+                                                                        </TableCell>
+                                                                        <TableCell align="center">
+                                                                            <Checkbox
+                                                                                checked={
+                                                                                    row.canAccess &&
+                                                                                    row.canAdd &&
+                                                                                    row.canEdit &&
+                                                                                    row.canDelete
+                                                                                }
+                                                                                onChange={(e) =>
+                                                                                    handleChangeCheckbox(
+                                                                                        e,
+                                                                                        row.monitorId,
+                                                                                        index,
+                                                                                        true,
+                                                                                        row.canAccess &&
+                                                                                            row.canAdd &&
+                                                                                            row.canEdit &&
+                                                                                            row.canDelete,
+                                                                                    )
+                                                                                }
+                                                                                name="all"
+                                                                            />
+                                                                        </TableCell>
+                                                                        <TableCell align="center">
+                                                                            <Checkbox
+                                                                                checked={row.canAccess}
+                                                                                onChange={(e) =>
+                                                                                    handleChangeCheckbox(
+                                                                                        e,
+                                                                                        row.monitorId,
+                                                                                        index,
+                                                                                    )
+                                                                                }
+                                                                                name="canAccess"
+                                                                            />
+                                                                        </TableCell>
+                                                                        <TableCell align="center">
+                                                                            <Checkbox
+                                                                                checked={row.canAdd}
+                                                                                onChange={(e) =>
+                                                                                    handleChangeCheckbox(
+                                                                                        e,
+                                                                                        row.monitorId,
+                                                                                        index,
+                                                                                    )
+                                                                                }
+                                                                                name="canAdd"
+                                                                                disabled={!row.canAccess}
+                                                                            />
+                                                                        </TableCell>
+                                                                        <TableCell align="center">
+                                                                            <Checkbox
+                                                                                checked={row.canEdit}
+                                                                                onChange={(e) =>
+                                                                                    handleChangeCheckbox(
+                                                                                        e,
+                                                                                        row.monitorId,
+                                                                                        index,
+                                                                                    )
+                                                                                }
+                                                                                name="canEdit"
+                                                                                disabled={!row.canAccess}
+                                                                            />
+                                                                        </TableCell>
+                                                                        <TableCell align="center">
+                                                                            <Checkbox
+                                                                                checked={row.canDelete}
+                                                                                onChange={(e) =>
+                                                                                    handleChangeCheckbox(
+                                                                                        e,
+                                                                                        row.monitorId,
+                                                                                        index,
+                                                                                    )
+                                                                                }
+                                                                                name="canDelete"
+                                                                                disabled={!row.canAccess}
+                                                                            />
+                                                                        </TableCell>
+                                                                    </TableRow>
+                                                                ) : (
+                                                                    <tr></tr>
+                                                                );
+                                                            })}
                                                     </TableBody>
                                                 </Table>
                                             </TableContainer>
@@ -1017,10 +712,16 @@ export default function Role() {
                                                 variant="contained"
                                                 aria-label="Disabled elevation buttons"
                                             >
-                                                <Button sx={{ mr: 1 }} variant="contained" onClick={handleSaveChange}>
+                                                <Button
+                                                    disabled={isSubmitting}
+                                                    sx={{ mr: 1 }}
+                                                    variant="contained"
+                                                    onClick={(e) => handleSaveChange(e)}
+                                                >
                                                     {t('button.btnSave')}
                                                 </Button>
                                                 <Button
+                                                    disabled={isSubmitting}
                                                     onClick={() => handleResetCurrentRoleChange()}
                                                     variant="outlined"
                                                 >
@@ -1055,7 +756,7 @@ export default function Role() {
                 <CreateScreenModal
                     isOpen={isOpenCreateScreenModal}
                     toggleOpen={toggleCreateScreenModal}
-                    handleCreateNewSCreen={handleCreateNewSCreen}
+                    handleCreateNewScreen={handleCreateNewScreen}
                 />
             )}
 

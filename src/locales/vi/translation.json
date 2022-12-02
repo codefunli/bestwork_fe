@@ -98,7 +98,8 @@
         "btnClose": "Đóng",
         "btnFinish": "Hoàn thành",
         "btnDownload": "Tải xuống",
-        "btnConstruction": "Bản vẽ"
+        "btnConstruction": "Bản vẽ",
+        "btnCreateRole": "Tạo quyền mới"
     },
     "common": {
         "placeholder": "Nhập một giá trị mới",

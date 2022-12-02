@@ -1,14 +1,25 @@
-import { useState } from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, InputLabel, TextField } from '@mui/material';
-import { useTranslation } from 'react-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
+import {
+    Box,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    Divider,
+    InputLabel,
+    TextField,
+} from '@mui/material';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { CommentConstant } from '../../core/constants/constant';
 import { validateCreateScreenForm } from '../../core/constants/validate';
 
 interface CreateRoleModalProps {
     isOpen: boolean;
     toggleOpen: Function;
-    handleCreateNewSCreen: Function;
+    handleCreateNewScreen: Function;
 }
 
 const initialValues: any = {
@@ -18,7 +29,7 @@ const initialValues: any = {
 
 export default function CreateScreenModal(props: CreateRoleModalProps) {
     const { t } = useTranslation();
-    const { isOpen, toggleOpen, handleCreateNewSCreen } = props;
+    const { isOpen, toggleOpen, handleCreateNewScreen } = props;
     const [formValues, setFormValues] = useState(initialValues);
 
     const {
@@ -31,7 +42,7 @@ export default function CreateScreenModal(props: CreateRoleModalProps) {
     });
 
     const handleSubmitForm = () => {
-        handleCreateNewSCreen(formValues.name, formValues.icon);
+        handleCreateNewScreen(formValues.name, formValues.icon);
         toggleOpen(false);
         setFormValues(initialValues);
         reset();
@@ -49,6 +60,16 @@ export default function CreateScreenModal(props: CreateRoleModalProps) {
             ...formValues,
             [name]: value,
         });
+    };
+
+    const goToFontAnwesomePage = (e: any) => {
+        window.open('https://fontawesome.com/icons', '_blank');
+    };
+
+    const handleKeyDown = (event: any) => {
+        if (event.key === CommentConstant.ENTER) {
+            event.preventDefault();
+        }
     };
 
     return (
@@ -85,26 +106,41 @@ export default function CreateScreenModal(props: CreateRoleModalProps) {
                         <InputLabel htmlFor="icon" error={Boolean(errors.description)}>
                             {t('create_screen.modal.icon')}
                         </InputLabel>
-                        <TextField
-                            size="small"
-                            fullWidth
+                        <Box
+                            w-fullWidth
+                            component="form"
                             sx={{
-                                mt: 1,
-                                mb: 1,
-                                '& legend': { display: 'none' },
-                                '& fieldset': { top: 0 },
+                                p: '2px 4px',
+                                display: 'flex',
+                                alignItems: 'center',
                             }}
-                            required
-                            id="icon"
-                            label=""
-                            placeholder={t('common.placeholder')}
-                            value={formValues.icon}
-                            error={Boolean(errors.icon)}
-                            helperText={t(errors.icon?.message?.toString() as string)}
-                            {...register('icon', {
-                                onChange: (e) => handleInputChange(e),
-                            })}
-                        />
+                        >
+                            <TextField
+                                size="small"
+                                value={formValues.icon}
+                                error={Boolean(errors.icon)}
+                                helperText={t(errors.icon?.message?.toString() as string)}
+                                {...register('icon', {
+                                    onChange: (e) => handleInputChange(e),
+                                })}
+                                fullWidth
+                                sx={{
+                                    mt: 1,
+                                    mb: 1,
+                                    '& legend': { display: 'none' },
+                                    '& fieldset': { top: 0 },
+                                }}
+                                autoComplete="off"
+                                label=""
+                                placeholder={t('common.placeholder')}
+                                onChange={handleInputChange}
+                                onKeyDown={handleKeyDown}
+                            />
+                            <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+                            <Button variant="outlined" onClick={goToFontAnwesomePage}>
+                                FontAwesome
+                            </Button>
+                        </Box>
                     </div>
                 </DialogContent>
                 <DialogActions>

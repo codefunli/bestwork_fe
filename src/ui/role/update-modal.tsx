@@ -10,22 +10,22 @@ interface UpdateRoleModalProps {
     toggleOpen: Function;
     currentRole: any;
     handleUpdateRole: Function;
-};
+}
 
 export default function UpdateRoleModal(props: UpdateRoleModalProps) {
     const { t } = useTranslation();
     const { isOpen, toggleOpen, currentRole, handleUpdateRole } = props;
 
     const [formValues, setFormValues] = useState({
-        roleName: currentRole.name,
-        description: currentRole.description
+        roleName: currentRole.roleName,
+        description: currentRole.description,
     });
 
     useEffect(() => {
         setFormValues({
-            roleName: currentRole.name,
-            description: currentRole.description
-        })
+            roleName: currentRole.roleName,
+            description: currentRole.description,
+        });
     }, [currentRole]);
 
     const {
@@ -38,7 +38,7 @@ export default function UpdateRoleModal(props: UpdateRoleModalProps) {
     });
 
     const handleSubmitForm = () => {
-        handleUpdateRole(formValues.roleName, formValues.description);
+        handleUpdateRole(currentRole.id, formValues.roleName, formValues.description);
         toggleOpen(false);
         reset();
     };
@@ -58,21 +58,12 @@ export default function UpdateRoleModal(props: UpdateRoleModalProps) {
 
     return (
         <form>
-            <Dialog
-                open={isOpen}
-                onClose={handleCancel}
-                keepMounted
-                fullWidth
-                maxWidth="sm"
-            >
+            <Dialog open={isOpen} onClose={handleCancel} keepMounted fullWidth maxWidth="sm">
                 <DialogTitle>{t('role.modal.title')}</DialogTitle>
                 <DialogContent>
                     <div>
-                        <InputLabel
-                            htmlFor="roleName"
-                            error={Boolean(errors.roleName)}
-                        >
-                            {t("role.modal.roleName")} <span className="input-required">*</span>
+                        <InputLabel htmlFor="roleName" error={Boolean(errors.roleName)}>
+                            {t('role.modal.roleName')} <span className="input-required">*</span>
                         </InputLabel>
                         <TextField
                             size="small"
@@ -81,7 +72,7 @@ export default function UpdateRoleModal(props: UpdateRoleModalProps) {
                                 mt: 1,
                                 mb: 1,
                                 '& legend': { display: 'none' },
-                                '& fieldset': { top: 0 }
+                                '& fieldset': { top: 0 },
                             }}
                             required
                             id="roleName"
@@ -96,11 +87,8 @@ export default function UpdateRoleModal(props: UpdateRoleModalProps) {
                         />
                     </div>
                     <div>
-                        <InputLabel
-                            htmlFor="description"
-                            error={Boolean(errors.description)}
-                        >
-                            {t("role.modal.description")} <span className="input-required">*</span>
+                        <InputLabel htmlFor="description" error={Boolean(errors.description)}>
+                            {t('role.modal.description')} <span className="input-required">*</span>
                         </InputLabel>
                         <TextField
                             size="small"
@@ -109,7 +97,7 @@ export default function UpdateRoleModal(props: UpdateRoleModalProps) {
                                 mt: 1,
                                 mb: 1,
                                 '& legend': { display: 'none' },
-                                '& fieldset': { top: 0 }
+                                '& fieldset': { top: 0 },
                             }}
                             required
                             id="description"
@@ -129,7 +117,7 @@ export default function UpdateRoleModal(props: UpdateRoleModalProps) {
                         {t('button.btnCancel')}
                     </Button>
                     <Button variant="contained" disabled={isSubmitting} onClick={handleSubmit(handleSubmitForm)}>
-                        {t('button.btnCreate')}
+                        {t('button.btnSave')}
                     </Button>
                 </DialogActions>
             </Dialog>

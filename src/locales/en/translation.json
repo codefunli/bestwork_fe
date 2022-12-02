@@ -98,7 +98,8 @@
         "btnClose": "Close",
         "btnFinish": "Finish",
         "btnDownload": "Download",
-        "btnConstruction": "Construction drawing"
+        "btnConstruction": "Construction drawing",
+        "btnCreateRole": "Create Role"
     },
     "common": {
         "placeholder": "Please input a new value",
