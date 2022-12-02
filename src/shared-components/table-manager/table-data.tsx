@@ -268,7 +268,20 @@ export default function EnhancedTable(props: EnhancedTable) {
                                         <TableCell padding="normal">
                                             {arrButton.map((arrBtn) => {
                                                 return permission && !permission.canEdit && arrBtn.nameFn === 'Edit' ? (
-                                                    <div></div>
+                                                    <Tooltip
+                                                        key={arrBtn.nameFn}
+                                                        title={arrBtn.nameFn}
+                                                        placement="top-start"
+                                                    >
+                                                        <IconButton
+                                                            size="small"
+                                                            color="primary"
+                                                            aria-label="add to shopping cart"
+                                                            disabled
+                                                        >
+                                                            {renderIcon(arrBtn.iconFn)}
+                                                        </IconButton>
+                                                    </Tooltip>
                                                 ) : (
                                                     <Tooltip
                                                         key={arrBtn.nameFn}
