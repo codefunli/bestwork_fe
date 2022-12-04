@@ -16,10 +16,11 @@ interface EnhancedTableProps {
     onSelectAllProps: Function;
     sortCallBack: Function;
     permission?: Permission;
+    hasNoAction: boolean;
 }
 
 export function EnhancedTableHead(props: EnhancedTableProps) {
-    const { order, orderBy, numSelected, rowCount, headCells, onSelectAllProps, permission } = props;
+    const { order, orderBy, numSelected, rowCount, headCells, onSelectAllProps, permission, hasNoAction } = props;
     const onSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
         onSelectAllProps(event);
     };
@@ -62,7 +63,7 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
                         </TableSortLabel>
                     </TableCell>
                 ))}
-                <TableCell padding="normal">{t('common.action')}</TableCell>
+                {!hasNoAction && <TableCell padding="normal">{t('common.action')}</TableCell>}
             </TableRow>
         </TableHead>
     );

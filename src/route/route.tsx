@@ -24,6 +24,7 @@ const ConstructionSearch = lazy(() => import('../ui/construction/construction-se
 const ConstructionRegister = lazy(() => import('../ui/construction/construction-register'));
 const ConstructionEdit = lazy(() => import('../ui/construction/construction-edit'));
 const AirWayBillList = lazy(() => import('../ui/awb/awb-list'));
+const NotificationsSearch = lazy(() => import('../ui/notification/notification-search'));
 
 const listRouter: RouteObject[] = [
     {
@@ -109,6 +110,10 @@ const listRouter: RouteObject[] = [
             {
                 path: UrlFeApp.CONSTRUCTION.DETAIL_HAS_ID,
                 element: <ProgressDetail />,
+            },
+            {
+                path: UrlFeApp.NOTIFICATIONS.SEARCH,
+                element: <NotificationsSearch />,
             },
         ],
     },

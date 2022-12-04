@@ -176,6 +176,7 @@ export default function EnhancedTable(props: EnhancedTable) {
                             headCells={headCells !== undefined ? headCells : []}
                             onSelectAllProps={handleSelectAllClick}
                             permission={permission}
+                            hasNoAction={arrButton.length <= 0}
                         />
                         <TableBody>
                             {rows.content.map((row: any, index: any) => {
@@ -265,43 +266,51 @@ export default function EnhancedTable(props: EnhancedTable) {
                                                     </TableCell>
                                                 );
                                             })}
-                                        <TableCell padding="normal">
-                                            {arrButton.map((arrBtn) => {
-                                                return permission && !permission.canEdit && arrBtn.nameFn === 'Edit' ? (
-                                                    <Tooltip
-                                                        key={arrBtn.nameFn}
-                                                        title={arrBtn.nameFn}
-                                                        placement="top-start"
-                                                    >
-                                                        <IconButton
-                                                            size="small"
-                                                            color="primary"
-                                                            aria-label="add to shopping cart"
-                                                            disabled
+                                        {arrButton && arrButton.length > 0 && (
+                                            <TableCell padding="normal">
+                                                {arrButton.map((arrBtn) => {
+                                                    return permission &&
+                                                        !permission.canEdit &&
+                                                        arrBtn.nameFn === 'Edit' ? (
+                                                        <Tooltip
+                                                            key={arrBtn.nameFn}
+                                                            title={arrBtn.nameFn}
+                                                            placement="top-start"
                                                         >
-                                                            {renderIcon(arrBtn.iconFn)}
-                                                        </IconButton>
-                                                    </Tooltip>
-                                                ) : (
-                                                    <Tooltip
-                                                        key={arrBtn.nameFn}
-                                                        title={arrBtn.nameFn}
-                                                        placement="top-start"
-                                                    >
-                                                        <IconButton
-                                                            size="small"
-                                                            color="primary"
-                                                            aria-label="add to shopping cart"
-                                                            onClick={(event) =>
-                                                                handlePropsEdit(event, row.id as string, arrBtn.acFn)
-                                                            }
+                                                            <IconButton
+                                                                size="small"
+                                                                color="primary"
+                                                                aria-label="add to shopping cart"
+                                                                disabled
+                                                            >
+                                                                {renderIcon(arrBtn.iconFn)}
+                                                            </IconButton>
+                                                        </Tooltip>
+                                                    ) : (
+                                                        <Tooltip
+                                                            key={arrBtn.nameFn}
+                                                            title={arrBtn.nameFn}
+                                                            placement="top-start"
                                                         >
-                                                            {renderIcon(arrBtn.iconFn)}
-                                                        </IconButton>
-                                                    </Tooltip>
-                                                );
-                                            })}
-                                        </TableCell>
+                                                            <IconButton
+                                                                size="small"
+                                                                color="primary"
+                                                                aria-label="add to shopping cart"
+                                                                onClick={(event) =>
+                                                                    handlePropsEdit(
+                                                                        event,
+                                                                        row.id as string,
+                                                                        arrBtn.acFn,
+                                                                    )
+                                                                }
+                                                            >
+                                                                {renderIcon(arrBtn.iconFn)}
+                                                            </IconButton>
+                                                        </Tooltip>
+                                                    );
+                                                })}
+                                            </TableCell>
+                                        )}
                                     </TableRow>
                                 );
                             })}

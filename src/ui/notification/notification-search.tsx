@@ -7,6 +7,7 @@ import {
     Card,
     CardContent,
     CardHeader,
+    Chip,
     FormControl,
     Grid,
     InputLabel,
@@ -15,22 +16,17 @@ import {
     TextField,
     Typography,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { green } from '@mui/material/colors';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from 'react-query';
-import { useSelector } from 'react-redux';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ConfirmConstants, Item, UrlFeApp } from '../../core/constants/common';
+import { ConfirmConstants, Item } from '../../core/constants/common';
 import { SUCCESS_MSG } from '../../core/constants/message';
-import { getUserInfo } from '../../core/redux/user-slice';
-import { headConstructionCol } from '../../core/types/construction';
-import { Permission } from '../../core/types/permission';
-import { deleteConstructions, getConstructions, getConstructionStatus } from '../../services/construction-service';
+import { headNotiCol } from '../../core/types/notifications';
+import { deleteNotifications, getNotifications } from '../../services/notifications-service';
 import MessageShow from '../../shared-components/message/message';
 import AlertDialogSlide from '../../shared-components/modal/alert-dialog-slide';
-import HandleConstructionStatus from '../../shared-components/status-handle/construction-status-handle';
-import EnhancedTable, { ArrayAction } from '../../shared-components/table-manager/table-data';
-import './construction.scss';
+import EnhancedTable from '../../shared-components/table-manager/table-data';
 
 const initialValues = {
     page: '0',
@@ -41,54 +37,28 @@ const initialValues = {
     status: '-1',
 };
 
-export default function ConstructionSearch() {
+export default function NotificationsSearch() {
+    const [state, setState] = useState<any>();
+    const { t } = useTranslation();
+    const [formValues, setFormValues] = useState(initialValues);
+    const queryClient = useQueryClient();
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [isShowMessage, setIsShowMessage] = useState(false);
     const [companyMsg, setCompanyMsg] = useState('');
     const [typeCompanyMsg, setTypeCompanyMsg] = useState<AlertColor>('success');
-    const [formValues, setFormValues] = useState(initialValues);
-    const queryClient = useQueryClient();
-    const [state, setState] = useState<any>();
-    const { t } = useTranslation();
     const [listId, setListId] = useState<any>({
         listId: [],
     });
-    const [constructionStatus, setConstructionStatus] = useState([]);
-    const location = useLocation();
-    const [permission, setPermission] = useState<Permission>();
-    const userInfo = useSelector(getUserInfo);
 
-    useEffect(() => {
-        if (userInfo && userInfo.permissions && userInfo.permissions[5][0]) setPermission(userInfo.permissions[5][0]);
-        if (location.state && location.state.permission) setPermission(location.state.permission);
-    }, [location]);
-
-    useEffect(() => {
-        getConstructionStatus().then((status: any) => {
-            if (status && status.data) setConstructionStatus(status.data);
-        });
-    }, []);
-
-    const nativgate = useNavigate();
-
-    const { data, isLoading } = useQuery(['getConstruction'], () => getConstructions(formValues), {
+    const { data, isLoading } = useQuery(['getConstruction'], () => getNotifications(formValues), {
         staleTime: 10000,
-        onSuccess: (construction: any) => {
-            setState(construction.data);
-            construction.data?.content?.forEach((constructionEl: { id: any }) => {
-                queryClient.setQueryData(['constructionEl', constructionEl.id], constructionEl);
+        onSuccess: (noti: any) => {
+            setState(noti.data);
+            noti.data?.content?.forEach((notiEl: { id: any }) => {
+                queryClient.setQueryData(['notiEl', notiEl.id], notiEl);
             });
         },
     });
-
-    useEffect(() => {
-        // do some checking here to ensure data exist
-        if (data && data.data && data.data.content) {
-            // mutate data if you need to
-            setState(data.data);
-        }
-        setIsShowMessage(false);
-    }, [data]);
 
     const handleInputChange = (e: any) => {
         const { name, value } = e.target;
@@ -99,15 +69,23 @@ export default function ConstructionSearch() {
     };
 
     const handleSubmit = async (e: any) => {
-        let data = await getConstructions(formValues);
-        if (data && data.data && data.data.content) {
-            setState(data.data);
-        }
+        fetchData({
+            ...formValues,
+        });
+    };
+
+    const handleClearData = (e: any) => {
+        setFormValues({
+            ...initialValues,
+        });
+        fetchData({
+            ...initialValues,
+        });
     };
 
     const fetchData = async (obj: any) => {
-        const resp = await getConstructions(obj);
-        if (resp && resp.data && resp.data.content) {
+        const resp = await getNotifications(obj);
+        if (resp && resp.data) {
             setState(resp.data);
         }
     };
@@ -121,6 +99,11 @@ export default function ConstructionSearch() {
             ...formValues,
             ...childData,
         });
+    };
+
+    const closeModal = () => {
+        setIsOpenModal(false);
+        setIsShowMessage(false);
     };
 
     const handleMessage = (showMsg: boolean, msg: string, type: AlertColor) => {
@@ -138,28 +121,8 @@ export default function ConstructionSearch() {
         });
     };
 
-    const handleClearData = (e: any) => {
-        setFormValues({
-            ...initialValues,
-        });
-        fetchData({
-            ...initialValues,
-        });
-    };
-
-    // miss pass id with url
-    const handleEditData = (e: any, id: number) => {
-        e.preventDefault();
-        nativgate(`${UrlFeApp.CONSTRUCTION.EDIT}/${id}`);
-    };
-
-    const handleAddProjectDetail = (e: any, id: string) => {
-        e.preventDefault();
-        nativgate(`${UrlFeApp.CONSTRUCTION.DETAIL}/${id}`);
-    };
-
     const alertOkFunc = () => {
-        deleteConstructions(listId)
+        deleteNotifications(listId)
             .then((value) => {
                 setIsOpenModal(false);
                 setIsShowMessage(true);
@@ -172,27 +135,9 @@ export default function ConstructionSearch() {
             });
     };
 
-    const closeModal = () => {
-        setIsOpenModal(false);
-        setIsShowMessage(false);
-    };
-
     const handleCloseMsg = () => {
         setIsShowMessage(false);
     };
-
-    const arrButton: ArrayAction[] = [
-        {
-            nameFn: t('tooltip.edit'),
-            acFn: handleEditData,
-            iconFn: 'ModeEditIcon',
-        },
-        {
-            nameFn: t('tooltip.projectDetail'),
-            acFn: handleAddProjectDetail,
-            iconFn: 'AddProjectDetail',
-        },
-    ];
 
     return (
         <Grid container direction="row" spacing={3} className="project-search">
@@ -206,7 +151,7 @@ export default function ConstructionSearch() {
                             sx={{ textTransform: 'uppercase' }}
                             className="btn disabled text-white bg-light opacity-100 border-customTheme"
                         >
-                            <div className="particletext">{t('construction.search.title')}</div>
+                            <div className="particletext">Notifications Search</div>
                         </Typography>
                     </div>
                 </div>
@@ -274,28 +219,33 @@ export default function ConstructionSearch() {
                                                         value={formValues.status}
                                                         onChange={handleInputChange}
                                                     >
-                                                        <MenuItem value="-1">
-                                                            <em className="m-auto color-label-select-box">
-                                                                {t('message.status')}
+                                                        <MenuItem value={2}>
+                                                            <em
+                                                                style={{ margin: '0 auto' }}
+                                                                className="placeholder-color"
+                                                            >
+                                                                {t(Item.COMMON.STATUS)}
                                                             </em>
                                                         </MenuItem>
-                                                        {constructionStatus &&
-                                                            constructionStatus.length > 0 &&
-                                                            constructionStatus.map((data: any, index: any) => {
-                                                                return (
-                                                                    <MenuItem
-                                                                        key={data.id}
-                                                                        value={index}
-                                                                        className="text-center"
-                                                                    >
-                                                                        <HandleConstructionStatus
-                                                                            isSearch={true}
-                                                                            statusList={constructionStatus}
-                                                                            statusId={data.id.toString()}
-                                                                        />
-                                                                    </MenuItem>
-                                                                );
-                                                            })}
+                                                        <MenuItem value={0}>
+                                                            <Chip
+                                                                sx={{
+                                                                    backgroundColor: green[400],
+                                                                    width: '100%',
+                                                                }}
+                                                                className="btn btn-outline-success"
+                                                                label={t(Item.LABEL_BTN.UNREAD)}
+                                                                size="small"
+                                                            />
+                                                        </MenuItem>
+                                                        <MenuItem value={1}>
+                                                            <Chip
+                                                                sx={{ width: '100%' }}
+                                                                label={t(Item.LABEL_BTN.READ)}
+                                                                size="small"
+                                                                className="btn btn-outline-secondary"
+                                                            />
+                                                        </MenuItem>
                                                     </Select>
                                                 </FormControl>
                                             </div>
@@ -338,16 +288,17 @@ export default function ConstructionSearch() {
                 <EnhancedTable
                     deleteCallBack={handleDeleteCallBack}
                     searchCallBack={handleSearchCallBack}
-                    headCells={headConstructionCol}
+                    headCells={headNotiCol}
                     rows={
                         state || {
                             content: [],
                         }
                     }
                     isLoading={false}
-                    arrButton={arrButton}
-                    statusList={constructionStatus}
-                    permission={permission}
+                    arrButton={[]}
+                    statusList={() => {
+                        console.log();
+                    }}
                 />
             </Grid>
 
