@@ -43,6 +43,13 @@ const UserDropdown = () => {
         setOpen((prevOpen) => !prevOpen);
     };
 
+    const handleDisplayProfile = (id: any) => {
+        setTimeout(() => {
+            navigate(`${UrlFeApp.USER.INFO}/${id}`);
+            setOpen(false);
+        }, 1000);
+    };
+
     const handleLogout = () => {
         logout().then(() => {
             localStorage.removeItem('access_token');
@@ -84,7 +91,7 @@ const UserDropdown = () => {
                         <Paper>
                             <ClickAwayListener onClickAway={handleClose}>
                                 <MenuList className="menu-list">
-                                    <MenuItem>
+                                    <MenuItem onClick={() => handleDisplayProfile(userInfo?.id)}>
                                         <PersonIcon />{' '}
                                         <span>
                                             {t('common.profile')} ({userInfo?.userName})

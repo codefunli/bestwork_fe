@@ -196,11 +196,6 @@ export default function ProjectSearch() {
             acFn: handleAddMaterialStatus,
             iconFn: 'AddMaterialStatus',
         },
-        {
-            nameFn: t('tooltip.projectDetail'),
-            acFn: handleAddProjectDetail,
-            iconFn: 'AddProjectDetail',
-        },
     ];
 
     return (

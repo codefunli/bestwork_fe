@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import {
     Avatar,
     Badge,
+    Button,
     ClickAwayListener,
     Grid,
     Grow,
@@ -37,6 +38,7 @@ const Notification = () => {
     const [formValues, setFormValues] = useState(initialValues);
     const { t } = useTranslation();
     const [notiList, setNotiList] = useState<NotificationsResDTO[]>([]);
+    const navigate = useNavigate();
 
     const handleClose = (event: any) => {
         if (anchorRef.current && anchorRef.current.contains(event.target)) return;
@@ -45,6 +47,13 @@ const Notification = () => {
 
     const handleToggle = () => {
         setOpen((prevOpen) => !prevOpen);
+    };
+
+    const handleToNotification = () => {
+        setTimeout(() => {
+            navigate(UrlFeApp.NOTIFICATIONS.SEARCH);
+            setOpen(false);
+        }, 1000);
     };
 
     useEffect(() => {
@@ -135,7 +144,7 @@ const Notification = () => {
                                 </List>
                             </ClickAwayListener>
                             <div className="view-all">
-                                <Link to={UrlFeApp.NOTIFICATIONS.SEARCH}>{t('common.viewAll')}</Link>
+                                <Button onClick={handleToNotification}>{t('common.viewAll')}</Button>
                             </div>
                         </Paper>
                     </Grow>
