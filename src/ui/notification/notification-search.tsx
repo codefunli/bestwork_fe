@@ -230,7 +230,6 @@ export default function NotificationsSearch() {
                                                         <MenuItem value={0}>
                                                             <Chip
                                                                 sx={{
-                                                                    backgroundColor: green[400],
                                                                     width: '100%',
                                                                 }}
                                                                 className="btn btn-outline-success"
@@ -240,7 +239,7 @@ export default function NotificationsSearch() {
                                                         </MenuItem>
                                                         <MenuItem value={1}>
                                                             <Chip
-                                                                sx={{ width: '100%' }}
+                                                                sx={{ backgroundColor: green[400], width: '100%' }}
                                                                 label={t(Item.LABEL_BTN.READ)}
                                                                 size="small"
                                                                 className="btn btn-outline-secondary"

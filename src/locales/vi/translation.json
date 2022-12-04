@@ -432,5 +432,13 @@
         "edit": {
             "title": "Chỉnh sửa công trình"
         }
+    },
+    "notification": {
+        "table": {
+            "colTitle": "Title",
+            "colContent": "Content",
+            "colCreateDate": "Create Date",
+            "colRead": "Read"
+        }
     }
 }

@@ -433,5 +433,13 @@
         "edit": {
             "title": "Construction Edition"
         }
+    },
+    "notification": {
+        "table": {
+            "colTitle": "Title",
+            "colContent": "Content",
+            "colCreateDate": "Create Date",
+            "colRead": "Read"
+        }
     }
 }

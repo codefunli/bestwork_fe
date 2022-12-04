@@ -249,12 +249,12 @@ export default function EnhancedTable(props: EnhancedTable) {
                                                             )
                                                         ) : colValue.id === 'projectType' ? (
                                                             row[colValue.id as string].name
-                                                        ) : colValue.id === 'enabled' &&
-                                                          colValue.label.includes('user') ? (
+                                                        ) : colValue.id === 'isRead' &&
+                                                          colValue.label.includes('notification') ? (
                                                             row[colValue.id as string] === 1 ? (
-                                                                t('user.search.enabled')
+                                                                t(Item.LABEL_BTN.READ)
                                                             ) : (
-                                                                t('user.search.notEnabled')
+                                                                t(Item.LABEL_BTN.UNREAD)
                                                             )
                                                         ) : colValue.id === 'awbCodes' ? (
                                                             handleArrayValue(row[colValue.id as string])
