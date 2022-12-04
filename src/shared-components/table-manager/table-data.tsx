@@ -222,7 +222,7 @@ export default function EnhancedTable(props: EnhancedTable) {
                                                           colValue.id === 'status' ? (
                                                             colValue.label.includes('company') ? (
                                                                 <HandleCompanyStatus
-                                                                    statusId={row[colValue.id] as string}
+                                                                    statusId={String(row[colValue.id])}
                                                                 />
                                                             ) : colValue.label.includes('project') ? (
                                                                 <HandleProjectStatus
@@ -234,9 +234,7 @@ export default function EnhancedTable(props: EnhancedTable) {
                                                                     statusId={row[colValue.id]}
                                                                 />
                                                             ) : colValue.label.includes('user') ? (
-                                                                <HandleUserStatus
-                                                                    statusId={row[colValue.id] as string}
-                                                                />
+                                                                <HandleUserStatus statusId={String(row[colValue.id])} />
                                                             ) : colValue.label.includes('construction') ? (
                                                                 <HandleConstructionStatus
                                                                     statusList={
@@ -244,7 +242,7 @@ export default function EnhancedTable(props: EnhancedTable) {
                                                                             ? statusList
                                                                             : []
                                                                     }
-                                                                    statusId={row[colValue.id] as string}
+                                                                    statusId={String(row[colValue.id])}
                                                                 />
                                                             ) : (
                                                                 ''
