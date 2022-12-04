@@ -130,7 +130,52 @@ const Notification = () => {
                                                                 </Typography>
                                                             </React.Fragment>{' '}
                                                             <br />
-                                                            {/* {notification.time} */}
+                                                            <small className="fw-normal">
+                                                                {Number(
+                                                                    (
+                                                                        (new Date().getTime() -
+                                                                            new Date(
+                                                                                notification.createDate,
+                                                                            ).getTime()) /
+                                                                        (1000 * 3600 * 24)
+                                                                    ).toFixed(0),
+                                                                ) <= 0
+                                                                    ? new Date().getHours() -
+                                                                          new Date(
+                                                                              notification.createDate,
+                                                                          ).getHours() <=
+                                                                      0
+                                                                        ? new Date().getMinutes() -
+                                                                              new Date(
+                                                                                  notification.createDate,
+                                                                              ).getMinutes() <=
+                                                                          0
+                                                                            ? new Date().getSeconds() -
+                                                                              new Date(
+                                                                                  notification.createDate,
+                                                                              ).getSeconds() +
+                                                                              ' ' +
+                                                                              t('material.secondAgo')
+                                                                            : new Date().getMinutes() -
+                                                                              new Date(
+                                                                                  notification.createDate,
+                                                                              ).getMinutes() +
+                                                                              ' ' +
+                                                                              t('material.minuteAgo')
+                                                                        : new Date().getHours() -
+                                                                          new Date(notification.createDate).getHours() +
+                                                                          ' ' +
+                                                                          t('material.hourAgo')
+                                                                    : (
+                                                                          (new Date().getTime() -
+                                                                              new Date(
+                                                                                  notification.createDate,
+                                                                              ).getTime()) /
+                                                                          (1000 * 3600 * 24)
+                                                                      ).toFixed(0) +
+                                                                      ' ' +
+                                                                      t('material.dayAgo')}
+                                                            </small>
                                                         </div>
                                                     }
                                                 />

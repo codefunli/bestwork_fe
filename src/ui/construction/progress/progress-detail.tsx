@@ -32,7 +32,11 @@ import HandleProjectStatus from '../../../shared-components/status-handle/projec
 import ProgressCreate from './progress-create';
 import ProgressEdit from './progress-edit';
 import '../../project/project.scss';
-import { getConstruction, getConstructionStatus, getProgressByConstruction } from '../../../services/construction-service';
+import {
+    getConstruction,
+    getConstructionStatus,
+    getProgressByConstruction,
+} from '../../../services/construction-service';
 import HandleConstructionStatus from '../../../shared-components/status-handle/construction-status-handle';
 
 export default function ProgressDetail() {
@@ -65,8 +69,8 @@ export default function ProgressDetail() {
         }
 
         const result: any = await getConstruction(params.id);
-        if(result && result.data){
-            setConstructionData(result.data)
+        if (result && result.data) {
+            setConstructionData(result.data);
         }
     };
 
@@ -116,7 +120,6 @@ export default function ProgressDetail() {
         );
     };
 
-
     return (
         <div className="project-detail">
             <form>
@@ -130,52 +133,54 @@ export default function ProgressDetail() {
                                     image={require('../../../assets/construction_img.jpg')}
                                     alt="green iguana"
                                 />
-                                {constructionData && (
-                                    <div className="project-info">
-                                        <CardHeader
-                                            action={
-                                                <Button
-                                                    variant="contained"
-                                                    onClick={() => handleCloseProject(constructionData)}
-                                                >
-                                                    Close
-                                                </Button>
-                                            }
-                                            className="pb-0"
-                                        ></CardHeader>
-                                        <CardContent>
-                                            <Typography gutterBottom variant="h3" component="div">
-                                                {constructionData.constructionName}
-                                            </Typography>
-                                            <div className="d-flex justify-content-start flex-column p-3 info-item">
-                                                <div className="title">{t('construction.register.cttStatus')}:</div>
-                                                <HandleConstructionStatus
-                                                    statusList={
-                                                        constructionStatus && constructionStatus.length > 0 ? constructionStatus : []
-                                                    }
-                                                    statusId={constructionData?.status}
-                                                />
-                                            </div>
-                                            <div className="d-flex justify-content-start flex-column p-3 info-item">
-                                                <div className="title">{t('construction.register.cttLocation')}:</div>
-                                                <div>{constructionData?.location}</div>
-                                            </div>
-                                            <div className="d-flex justify-content-start flex-column p-3 info-item">
-                                                <div className="title">{t('construction.register.cttStartDate')}:</div>
-                                                <div>{formatDateTimeResList(constructionData?.startDate)}</div>
-                                            </div>
-                                            <div className="d-flex justify-content-start flex-column p-3 info-item">
-                                                <div className="title">{t('construction.register.cttEndDate')}:</div>
-                                                <div>{formatDateTimeResList(constructionData?.endDate)}</div>
-                                            </div>
-                                            <div className="d-flex justify-content-start flex-column p-3 info-item">
-                                                <div className="title">{t('construction.register.cttAwb')}:</div>
-                                                <div> {handleArrayValue(constructionData?.awbCodes)}</div>
-                                            </div>
-                                        </CardContent>
-                                    </div>
-                                )}
                             </CardActionArea>
+                            {constructionData && (
+                                <div className="project-info">
+                                    <CardHeader
+                                        action={
+                                            <Button
+                                                variant="contained"
+                                                onClick={() => handleCloseProject(constructionData)}
+                                            >
+                                                Close
+                                            </Button>
+                                        }
+                                        className="pb-0"
+                                    ></CardHeader>
+                                    <CardContent>
+                                        <Typography gutterBottom variant="h3" component="div">
+                                            {constructionData.constructionName}
+                                        </Typography>
+                                        <div className="d-flex justify-content-start flex-column p-3 info-item">
+                                            <div className="title">{t('construction.register.cttStatus')}:</div>
+                                            <HandleConstructionStatus
+                                                statusList={
+                                                    constructionStatus && constructionStatus.length > 0
+                                                        ? constructionStatus
+                                                        : []
+                                                }
+                                                statusId={constructionData?.status}
+                                            />
+                                        </div>
+                                        <div className="d-flex justify-content-start flex-column p-3 info-item">
+                                            <div className="title">{t('construction.register.cttLocation')}:</div>
+                                            <div>{constructionData?.location}</div>
+                                        </div>
+                                        <div className="d-flex justify-content-start flex-column p-3 info-item">
+                                            <div className="title">{t('construction.register.cttStartDate')}:</div>
+                                            <div>{formatDateTimeResList(constructionData?.startDate)}</div>
+                                        </div>
+                                        <div className="d-flex justify-content-start flex-column p-3 info-item">
+                                            <div className="title">{t('construction.register.cttEndDate')}:</div>
+                                            <div>{formatDateTimeResList(constructionData?.endDate)}</div>
+                                        </div>
+                                        <div className="d-flex justify-content-start flex-column p-3 info-item">
+                                            <div className="title">{t('construction.register.cttAwb')}:</div>
+                                            <div> {handleArrayValue(constructionData?.awbCodes)}</div>
+                                        </div>
+                                    </CardContent>
+                                </div>
+                            )}
                         </Card>
                     </Grid>
                     <Grid item md={12} lg={8}>
@@ -198,40 +203,42 @@ export default function ProgressDetail() {
                                     },
                                 }}
                             >
-                                {progressList && progressList.length > 0 && progressList.map((progress: ProjectProgressDTO | any, index: number) => (
-                                    <div key={index}>
-                                        <TimelineItem>
-                                            <TimelineOppositeContent color="textSecondary">
-                                                <div style={{ minWidth: '200px' }}>
-                                                    {formatDateTimeResList(progress.startDate)}
-                                                </div>
-                                            </TimelineOppositeContent>
-                                            <TimelineSeparator className="h-40">
-                                                <TimelineDot />
-                                                <TimelineConnector />
-                                            </TimelineSeparator>
-                                            <TimelineContent>
-                                                <div
-                                                    className="mb-4 progress-item pb-2"
-                                                    onClick={() => handleEditProgress(progress)}
-                                                >
-                                                    <div className="pb-2 h4 fw-bold">{progress.title}</div>
-                                                    <div className="pb-2">{progress.report}</div>
-                                                    <div className="pb-2">
-                                                        <HandleProgressStatus
-                                                            statusList={
-                                                                progressStatus && progressStatus.length > 0
-                                                                    ? progressStatus
-                                                                    : []
-                                                            }
-                                                            statusId={progress.status}
-                                                        />
+                                {progressList &&
+                                    progressList.length > 0 &&
+                                    progressList.map((progress: ProjectProgressDTO | any, index: number) => (
+                                        <div key={index}>
+                                            <TimelineItem>
+                                                <TimelineOppositeContent color="textSecondary">
+                                                    <div style={{ minWidth: '200px' }}>
+                                                        {formatDateTimeResList(progress.startDate)}
                                                     </div>
-                                                </div>
-                                            </TimelineContent>
-                                        </TimelineItem>
-                                    </div>
-                                ))}
+                                                </TimelineOppositeContent>
+                                                <TimelineSeparator className="h-40">
+                                                    <TimelineDot />
+                                                    <TimelineConnector />
+                                                </TimelineSeparator>
+                                                <TimelineContent>
+                                                    <div
+                                                        className="mb-4 progress-item pb-2"
+                                                        onClick={() => handleEditProgress(progress)}
+                                                    >
+                                                        <div className="pb-2 h4 fw-bold">{progress.title}</div>
+                                                        <div className="pb-2">{progress.report}</div>
+                                                        <div className="pb-2">
+                                                            <HandleProgressStatus
+                                                                statusList={
+                                                                    progressStatus && progressStatus.length > 0
+                                                                        ? progressStatus
+                                                                        : []
+                                                                }
+                                                                statusId={progress.status}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                </TimelineContent>
+                                            </TimelineItem>
+                                        </div>
+                                    ))}
                             </Timeline>
                         </Card>
                     </Grid>
