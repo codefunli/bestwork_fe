@@ -8,7 +8,7 @@ export const headConstructionCol: HeadColumn[] = [
         label: 'Id',
     },
     {
-        id: 'name',
+        id: 'constructionName',
         numeric: false,
         disablePadding: false,
         label: 'construction.table.colCttName',

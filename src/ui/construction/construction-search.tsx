@@ -209,18 +209,6 @@ export default function ConstructionSearch() {
                             <div className="particletext">{t('construction.search.title')}</div>
                         </Typography>
                     </div>
-                    <div className="col-sm-12 text-start d-block d-lg-none">
-                        <Button
-                            className="btn-create"
-                            variant="contained"
-                            color="primary"
-                            component={Link}
-                            to={UrlFeApp.CONSTRUCTION.CREATE}
-                            sx={{ textTransform: 'uppercase' }}
-                        >
-                            {t(Item.LABEL_BTN.CREATE)}
-                        </Button>
-                    </div>
                 </div>
             </Grid>
             <Grid item lg={3} xs={12}>
