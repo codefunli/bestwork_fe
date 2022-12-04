@@ -607,99 +607,99 @@ export default function Role() {
                                                     <TableBody>
                                                         {currentRole &&
                                                             currentRole.permissions.map((row, index) => {
-                                                                return row.monitorId !== -1 ? (
-                                                                    <TableRow
-                                                                        key={row.monitorId}
-                                                                        sx={{
-                                                                            '&:last-child td, &:last-child th': {
-                                                                                border: 0,
-                                                                            },
-                                                                        }}
-                                                                    >
-                                                                        <TableCell component="th" scope="row">
-                                                                            {row.monitorName}
-                                                                        </TableCell>
-                                                                        <TableCell align="center">
-                                                                            <Checkbox
-                                                                                checked={
-                                                                                    row.canAccess &&
-                                                                                    row.canAdd &&
-                                                                                    row.canEdit &&
-                                                                                    row.canDelete
-                                                                                }
-                                                                                onChange={(e) =>
-                                                                                    handleChangeCheckbox(
-                                                                                        e,
-                                                                                        row.monitorId,
-                                                                                        index,
-                                                                                        true,
+                                                                return (
+                                                                    row.monitorId !== -1 && (
+                                                                        <TableRow
+                                                                            key={row.monitorId}
+                                                                            sx={{
+                                                                                '&:last-child td, &:last-child th': {
+                                                                                    border: 0,
+                                                                                },
+                                                                            }}
+                                                                        >
+                                                                            <TableCell component="th" scope="row">
+                                                                                {row.monitorName}
+                                                                            </TableCell>
+                                                                            <TableCell align="center">
+                                                                                <Checkbox
+                                                                                    checked={
                                                                                         row.canAccess &&
-                                                                                            row.canAdd &&
-                                                                                            row.canEdit &&
-                                                                                            row.canDelete,
-                                                                                    )
-                                                                                }
-                                                                                name="all"
-                                                                            />
-                                                                        </TableCell>
-                                                                        <TableCell align="center">
-                                                                            <Checkbox
-                                                                                checked={row.canAccess}
-                                                                                onChange={(e) =>
-                                                                                    handleChangeCheckbox(
-                                                                                        e,
-                                                                                        row.monitorId,
-                                                                                        index,
-                                                                                    )
-                                                                                }
-                                                                                name="canAccess"
-                                                                            />
-                                                                        </TableCell>
-                                                                        <TableCell align="center">
-                                                                            <Checkbox
-                                                                                checked={row.canAdd}
-                                                                                onChange={(e) =>
-                                                                                    handleChangeCheckbox(
-                                                                                        e,
-                                                                                        row.monitorId,
-                                                                                        index,
-                                                                                    )
-                                                                                }
-                                                                                name="canAdd"
-                                                                                disabled={!row.canAccess}
-                                                                            />
-                                                                        </TableCell>
-                                                                        <TableCell align="center">
-                                                                            <Checkbox
-                                                                                checked={row.canEdit}
-                                                                                onChange={(e) =>
-                                                                                    handleChangeCheckbox(
-                                                                                        e,
-                                                                                        row.monitorId,
-                                                                                        index,
-                                                                                    )
-                                                                                }
-                                                                                name="canEdit"
-                                                                                disabled={!row.canAccess}
-                                                                            />
-                                                                        </TableCell>
-                                                                        <TableCell align="center">
-                                                                            <Checkbox
-                                                                                checked={row.canDelete}
-                                                                                onChange={(e) =>
-                                                                                    handleChangeCheckbox(
-                                                                                        e,
-                                                                                        row.monitorId,
-                                                                                        index,
-                                                                                    )
-                                                                                }
-                                                                                name="canDelete"
-                                                                                disabled={!row.canAccess}
-                                                                            />
-                                                                        </TableCell>
-                                                                    </TableRow>
-                                                                ) : (
-                                                                    <tr></tr>
+                                                                                        row.canAdd &&
+                                                                                        row.canEdit &&
+                                                                                        row.canDelete
+                                                                                    }
+                                                                                    onChange={(e) =>
+                                                                                        handleChangeCheckbox(
+                                                                                            e,
+                                                                                            row.monitorId,
+                                                                                            index,
+                                                                                            true,
+                                                                                            row.canAccess &&
+                                                                                                row.canAdd &&
+                                                                                                row.canEdit &&
+                                                                                                row.canDelete,
+                                                                                        )
+                                                                                    }
+                                                                                    name="all"
+                                                                                />
+                                                                            </TableCell>
+                                                                            <TableCell align="center">
+                                                                                <Checkbox
+                                                                                    checked={row.canAccess}
+                                                                                    onChange={(e) =>
+                                                                                        handleChangeCheckbox(
+                                                                                            e,
+                                                                                            row.monitorId,
+                                                                                            index,
+                                                                                        )
+                                                                                    }
+                                                                                    name="canAccess"
+                                                                                />
+                                                                            </TableCell>
+                                                                            <TableCell align="center">
+                                                                                <Checkbox
+                                                                                    checked={row.canAdd}
+                                                                                    onChange={(e) =>
+                                                                                        handleChangeCheckbox(
+                                                                                            e,
+                                                                                            row.monitorId,
+                                                                                            index,
+                                                                                        )
+                                                                                    }
+                                                                                    name="canAdd"
+                                                                                    disabled={!row.canAccess}
+                                                                                />
+                                                                            </TableCell>
+                                                                            <TableCell align="center">
+                                                                                <Checkbox
+                                                                                    checked={row.canEdit}
+                                                                                    onChange={(e) =>
+                                                                                        handleChangeCheckbox(
+                                                                                            e,
+                                                                                            row.monitorId,
+                                                                                            index,
+                                                                                        )
+                                                                                    }
+                                                                                    name="canEdit"
+                                                                                    disabled={!row.canAccess}
+                                                                                />
+                                                                            </TableCell>
+                                                                            <TableCell align="center">
+                                                                                <Checkbox
+                                                                                    checked={row.canDelete}
+                                                                                    onChange={(e) =>
+                                                                                        handleChangeCheckbox(
+                                                                                            e,
+                                                                                            row.monitorId,
+                                                                                            index,
+                                                                                        )
+                                                                                    }
+                                                                                    name="canDelete"
+                                                                                    disabled={!row.canAccess}
+                                                                                />
+                                                                            </TableCell>
+                                                                        </TableRow>
+                                                                    )
                                                                 );
                                                             })}
                                                     </TableBody>
