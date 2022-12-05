@@ -28,7 +28,7 @@ interface CreateAwbProps {
 
 const initialValues: any = {
     projectId: '',
-    airWayBillCode: '',
+    code: '',
     note: '',
     status: '',
 };
@@ -48,10 +48,10 @@ export default function CreateAwb(props: CreateAwbProps) {
 
     useEffect(() => {
         setFormValues({
-            ...formValues,
-            projectId: props.projectId,
+            ...initialValues,
+            projectId: projectId,
         });
-    }, [props.projectId]);
+    }, [isOpen]);
 
     const {
         register,
