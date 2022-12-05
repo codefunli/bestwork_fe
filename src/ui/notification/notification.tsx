@@ -57,12 +57,9 @@ const Notification = () => {
     const navigate = useNavigate();
 
     const { data, isLoading } = useQuery(['getNotifications'], () => getNotifications(formValues), {
-        staleTime: 5000,
+        refetchInterval: 5000,
         onSuccess: (res: any) => {
             setNotiList(res.data.content);
-            res.data?.content?.forEach((notificationEl: { id: any }) => {
-                queryClient.setQueryData(['notificationEl', notificationEl.id], notificationEl);
-            });
         },
     });
 

@@ -161,285 +161,281 @@ export default function UserInfo() {
 
     return (
         <div className="user-info">
-            <form>
-                <div className="p-label-header-1">
-                    <Typography
-                        variant="h5"
-                        className="btn disabled text-white bg-light opacity-100 border-customTheme"
-                        color="textSecondary"
-                        gutterBottom
-                        sx={{ textTransform: 'uppercase' }}
-                    >
-                        <div className="particletext">{t('user.title')}</div>
-                        <Divider />
-                    </Typography>
-                </div>
-                <Grid container direction="row" spacing={3}>
-                    <Grid item xs={12} md={5} lg={3} sx={{ mt: 1, mb: 1 }}>
-                        <Card className="general-info">
-                            <FileUpload
-                                defaultImage={formValues.avatar}
-                                callbackFunc={onChangeAvatar}
-                                isDisabled={isLogedInUser}
-                            />
-                            <CardContent className="info">
-                                <Typography gutterBottom variant="h5" component="div">
-                                    {formValues.firstName} {formValues.lastName}
-                                </Typography>
-                                <Typography variant="body1" color="text.secondary">
-                                    {formValues.userName}
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                    <Grid item xs={12} md={7} lg={9} sx={{ mt: 1, mb: 1 }}>
-                        <Card>
-                            <CardContent>
-                                <Box
-                                    component="form"
-                                    sx={{
-                                        '& > :not(style)': { m: 1 },
-                                    }}
-                                    noValidate
-                                    autoComplete="off"
-                                >
-                                    <div className="row justify-center m-1">
-                                        <div className="col-12 col-sm-6 d-block p-1">
-                                            <InputLabel htmlFor="userName" error={Boolean(errors.userName)}>
-                                                {t('user.info.userName')} <span className="input-required">*</span>
-                                            </InputLabel>
-                                            <TextField
-                                                size="small"
-                                                fullWidth
-                                                sx={{
-                                                    mt: 1,
-                                                    mb: 1,
-                                                    '& legend': { display: 'none' },
-                                                    '& fieldset': { top: 0 },
-                                                }}
-                                                required
-                                                id="userName"
-                                                label=""
-                                                placeholder={t('common.placeholder')}
-                                                value={formValues.userName}
-                                                error={Boolean(errors.userName)}
-                                                helperText={t(errors.userName?.message?.toString() as string)}
-                                                {...register('userName', {
-                                                    onChange: (e) => handleInputChange(e),
-                                                })}
-                                                disabled={isLogedInUser}
-                                            />
-                                        </div>
-                                        <div className="col-12 col-sm-6 d-block p-1">
-                                            <InputLabel htmlFor="uEmail" error={Boolean(errors.uEmail)}>
-                                                {t('user.info.email')} <span className="input-required">*</span>
-                                            </InputLabel>
-                                            <TextField
-                                                size="small"
-                                                fullWidth
-                                                sx={{
-                                                    mt: 1,
-                                                    mb: 1,
-                                                    '& legend': { display: 'none' },
-                                                    '& fieldset': { top: 0 },
-                                                }}
-                                                required
-                                                id="uEmail"
-                                                label=""
-                                                placeholder={t('common.placeholder')}
-                                                value={formValues.uEmail}
-                                                error={Boolean(errors.uEmail)}
-                                                helperText={t(errors.uEmail?.message?.toString() as string)}
-                                                {...register('uEmail', {
-                                                    onChange: (e) => handleInputChange(e),
-                                                })}
-                                                disabled={isLogedInUser}
-                                            />
-                                        </div>
-                                        <div className="col-12 col-sm-6 d-block p-1">
-                                            <InputLabel htmlFor="uTelNo" error={Boolean(errors.uTelNo)}>
-                                                {t('company.search.telNo')} <span className="input-required">*</span>
-                                            </InputLabel>
-                                            <TextField
-                                                size="small"
-                                                fullWidth
-                                                sx={{
-                                                    mt: 1,
-                                                    mb: 1,
-                                                    '& legend': { display: 'none' },
-                                                    '& fieldset': { top: 0 },
-                                                }}
-                                                required
-                                                id="uTelNo"
-                                                label=""
-                                                placeholder={t('common.placeholder')}
-                                                value={formValues.uTelNo}
-                                                error={Boolean(errors.uTelNo)}
-                                                helperText={t(errors.uTelNo?.message?.toString() as string)}
-                                                {...register('uTelNo', {
-                                                    onChange: (e) => handleInputChange(e),
-                                                })}
-                                                disabled={isLogedInUser}
-                                            />
-                                        </div>
-                                        <div className="col-12 col-sm-6 d-block p-1">
-                                            <InputLabel htmlFor="company" error={Boolean(errors.company)}>
-                                                {t('user.info.company')} <span className="input-required">*</span>
-                                            </InputLabel>
-                                            <TextField
-                                                size="small"
-                                                fullWidth
-                                                sx={{
-                                                    mt: 1,
-                                                    mb: 1,
-                                                    '& legend': { display: 'none' },
-                                                    '& fieldset': { top: 0 },
-                                                }}
-                                                required
-                                                id="company"
-                                                label=""
-                                                placeholder=""
-                                                name="company"
-                                                value={getCompanyName(formValues.company)}
-                                                disabled
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="row justify-center m-1">
-                                        <div className="col-12 col-sm-6 d-block p-1">
-                                            <InputLabel htmlFor="firstName" error={Boolean(errors.firstName)}>
-                                                {t('user.info.firstName')} <span className="input-required">*</span>
-                                            </InputLabel>
-                                            <TextField
-                                                size="small"
-                                                fullWidth
-                                                sx={{
-                                                    mt: 1,
-                                                    mb: 1,
-                                                    '& legend': { display: 'none' },
-                                                    '& fieldset': { top: 0 },
-                                                }}
-                                                required
-                                                id="firstName"
-                                                label=""
-                                                placeholder={t('common.placeholder')}
-                                                value={formValues.firstName}
-                                                error={Boolean(errors.firstName)}
-                                                helperText={t(errors.firstName?.message?.toString() as string)}
-                                                {...register('firstName', {
-                                                    onChange: (e) => handleInputChange(e),
-                                                })}
-                                                disabled={isLogedInUser}
-                                            />
-                                        </div>
-                                        <div className="col-12 col-sm-6 d-block p-1">
-                                            <InputLabel htmlFor="lastName" error={Boolean(errors.lastName)}>
-                                                {t('user.info.lastName')} <span className="input-required">*</span>
-                                            </InputLabel>
-                                            <TextField
-                                                size="small"
-                                                fullWidth
-                                                sx={{
-                                                    mt: 1,
-                                                    mb: 1,
-                                                    '& legend': { display: 'none' },
-                                                    '& fieldset': { top: 0 },
-                                                }}
-                                                required
-                                                id="lastName"
-                                                label=""
-                                                placeholder={t('common.placeholder')}
-                                                value={formValues.lastName}
-                                                error={Boolean(errors.lastName)}
-                                                helperText={t(errors.lastName?.message?.toString() as string)}
-                                                {...register('lastName', {
-                                                    onChange: (e) => handleInputChange(e),
-                                                })}
-                                                disabled={isLogedInUser}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="row justify-center m-1">
-                                        <div className="col-12 col-sm-6 d-block p-1">
-                                            <InputLabel htmlFor="role" error={Boolean(errors.role)}>
-                                                {t('user.info.role')} <span className="input-required">*</span>
-                                            </InputLabel>
-                                            <FormControl
-                                                size="small"
-                                                fullWidth
-                                                sx={{ mt: 1, mb: 1 }}
-                                                variant="outlined"
-                                                error
-                                            >
-                                                <Select
-                                                    value={formValues.role}
-                                                    displayEmpty
-                                                    sx={{
-                                                        '& legend': { display: 'none' },
-                                                        '& fieldset': { top: 0 },
-                                                    }}
-                                                    error={Boolean(errors.role)}
-                                                    {...register('role', {
-                                                        onChange: (e) => handleInputChange(e),
-                                                    })}
-                                                    disabled={isLogedInUser}
-                                                >
-                                                    <MenuItem value="" disabled>
-                                                        <em className="placeholder-color">
-                                                            {t('user.search.selectRole')}
-                                                        </em>
-                                                    </MenuItem>
-                                                    {roles &&
-                                                        roles.length > 0 &&
-                                                        roles.map((role: any) => (
-                                                            <MenuItem value={role.id} selected={true}>
-                                                                <em>{role.roleName}</em>
-                                                            </MenuItem>
-                                                        ))}
-                                                </Select>
-                                                {Boolean(errors.role) && (
-                                                    <FormHelperText id="component-error-text">
-                                                        {errors?.role?.message as string}
-                                                    </FormHelperText>
-                                                )}
-                                            </FormControl>
-                                        </div>
-                                        <div className="col-12 col-sm-6 d-block p-1">
-                                            <InputLabel htmlFor="enable">{t('user.info.enabled')}</InputLabel>
-                                            <Switch
-                                                checked={formValues.enabled === 1 ? true : false}
-                                                name="enabled"
-                                                onChange={handleSwitchChange}
-                                                disabled={isLogedInUser}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="text-center justify-center mt-4">
-                                        <ButtonGroup
-                                            disableElevation
-                                            variant="contained"
-                                            aria-label="Disabled elevation buttons"
-                                        >
-                                            <Button
-                                                sx={{ mr: 1 }}
-                                                variant="contained"
-                                                disabled={isSubmitting}
-                                                hidden={isLogedInUser}
-                                                onClick={handleSubmit(handleSubmitForm)}
-                                            >
-                                                {t('button.btnSave')}
-                                            </Button>
-                                            <Button onClick={handleCancelChange} variant="outlined">
-                                                {t('button.btnBack')}
-                                            </Button>
-                                        </ButtonGroup>
-                                    </div>
-                                </Box>
-                            </CardContent>
-                        </Card>
-                    </Grid>
+            <div className="p-label-header-1">
+                <Typography
+                    variant="h5"
+                    className="btn disabled text-white bg-light opacity-100 border-customTheme"
+                    color="textSecondary"
+                    gutterBottom
+                    sx={{ textTransform: 'uppercase' }}
+                >
+                    <div className="particletext">{t('user.title')}</div>
+                    <Divider />
+                </Typography>
+            </div>
+            <Grid container direction="row" spacing={3}>
+                <Grid item xs={12} md={5} lg={3} sx={{ mt: 1, mb: 1 }}>
+                    <Card className="general-info">
+                        <FileUpload
+                            defaultImage={formValues.avatar}
+                            callbackFunc={onChangeAvatar}
+                            isDisabled={isLogedInUser}
+                        />
+                        <CardContent className="info">
+                            <Typography gutterBottom variant="h5" component="div">
+                                {formValues.firstName} {formValues.lastName}
+                            </Typography>
+                            <Typography variant="body1" color="text.secondary">
+                                {formValues.userName}
+                            </Typography>
+                        </CardContent>
+                    </Card>
                 </Grid>
-            </form>
+                <Grid item xs={12} md={7} lg={9} sx={{ mt: 1, mb: 1 }}>
+                    <Card>
+                        <CardContent>
+                            <Box
+                                component="form"
+                                sx={{
+                                    '& > :not(style)': { m: 1 },
+                                }}
+                                noValidate
+                                autoComplete="off"
+                            >
+                                <div className="row justify-center m-1">
+                                    <div className="col-12 col-sm-6 d-block p-1">
+                                        <InputLabel htmlFor="userName" error={Boolean(errors.userName)}>
+                                            {t('user.info.userName')} <span className="input-required">*</span>
+                                        </InputLabel>
+                                        <TextField
+                                            size="small"
+                                            fullWidth
+                                            sx={{
+                                                mt: 1,
+                                                mb: 1,
+                                                '& legend': { display: 'none' },
+                                                '& fieldset': { top: 0 },
+                                            }}
+                                            required
+                                            id="userName"
+                                            label=""
+                                            placeholder={t('common.placeholder')}
+                                            value={formValues.userName}
+                                            error={Boolean(errors.userName)}
+                                            helperText={t(errors.userName?.message?.toString() as string)}
+                                            {...register('userName', {
+                                                onChange: (e) => handleInputChange(e),
+                                            })}
+                                            disabled={isLogedInUser}
+                                        />
+                                    </div>
+                                    <div className="col-12 col-sm-6 d-block p-1">
+                                        <InputLabel htmlFor="uEmail" error={Boolean(errors.uEmail)}>
+                                            {t('user.info.email')} <span className="input-required">*</span>
+                                        </InputLabel>
+                                        <TextField
+                                            size="small"
+                                            fullWidth
+                                            sx={{
+                                                mt: 1,
+                                                mb: 1,
+                                                '& legend': { display: 'none' },
+                                                '& fieldset': { top: 0 },
+                                            }}
+                                            required
+                                            id="uEmail"
+                                            label=""
+                                            placeholder={t('common.placeholder')}
+                                            value={formValues.uEmail}
+                                            error={Boolean(errors.uEmail)}
+                                            helperText={t(errors.uEmail?.message?.toString() as string)}
+                                            {...register('uEmail', {
+                                                onChange: (e) => handleInputChange(e),
+                                            })}
+                                            disabled={isLogedInUser}
+                                        />
+                                    </div>
+                                    <div className="col-12 col-sm-6 d-block p-1">
+                                        <InputLabel htmlFor="uTelNo" error={Boolean(errors.uTelNo)}>
+                                            {t('company.search.telNo')} <span className="input-required">*</span>
+                                        </InputLabel>
+                                        <TextField
+                                            size="small"
+                                            fullWidth
+                                            sx={{
+                                                mt: 1,
+                                                mb: 1,
+                                                '& legend': { display: 'none' },
+                                                '& fieldset': { top: 0 },
+                                            }}
+                                            required
+                                            id="uTelNo"
+                                            label=""
+                                            placeholder={t('common.placeholder')}
+                                            value={formValues.uTelNo}
+                                            error={Boolean(errors.uTelNo)}
+                                            helperText={t(errors.uTelNo?.message?.toString() as string)}
+                                            {...register('uTelNo', {
+                                                onChange: (e) => handleInputChange(e),
+                                            })}
+                                            disabled={isLogedInUser}
+                                        />
+                                    </div>
+                                    <div className="col-12 col-sm-6 d-block p-1">
+                                        <InputLabel htmlFor="company" error={Boolean(errors.company)}>
+                                            {t('user.info.company')} <span className="input-required">*</span>
+                                        </InputLabel>
+                                        <TextField
+                                            size="small"
+                                            fullWidth
+                                            sx={{
+                                                mt: 1,
+                                                mb: 1,
+                                                '& legend': { display: 'none' },
+                                                '& fieldset': { top: 0 },
+                                            }}
+                                            required
+                                            id="company"
+                                            label=""
+                                            placeholder=""
+                                            name="company"
+                                            value={getCompanyName(formValues.company)}
+                                            disabled
+                                        />
+                                    </div>
+                                </div>
+                                <div className="row justify-center m-1">
+                                    <div className="col-12 col-sm-6 d-block p-1">
+                                        <InputLabel htmlFor="firstName" error={Boolean(errors.firstName)}>
+                                            {t('user.info.firstName')} <span className="input-required">*</span>
+                                        </InputLabel>
+                                        <TextField
+                                            size="small"
+                                            fullWidth
+                                            sx={{
+                                                mt: 1,
+                                                mb: 1,
+                                                '& legend': { display: 'none' },
+                                                '& fieldset': { top: 0 },
+                                            }}
+                                            required
+                                            id="firstName"
+                                            label=""
+                                            placeholder={t('common.placeholder')}
+                                            value={formValues.firstName}
+                                            error={Boolean(errors.firstName)}
+                                            helperText={t(errors.firstName?.message?.toString() as string)}
+                                            {...register('firstName', {
+                                                onChange: (e) => handleInputChange(e),
+                                            })}
+                                            disabled={isLogedInUser}
+                                        />
+                                    </div>
+                                    <div className="col-12 col-sm-6 d-block p-1">
+                                        <InputLabel htmlFor="lastName" error={Boolean(errors.lastName)}>
+                                            {t('user.info.lastName')} <span className="input-required">*</span>
+                                        </InputLabel>
+                                        <TextField
+                                            size="small"
+                                            fullWidth
+                                            sx={{
+                                                mt: 1,
+                                                mb: 1,
+                                                '& legend': { display: 'none' },
+                                                '& fieldset': { top: 0 },
+                                            }}
+                                            required
+                                            id="lastName"
+                                            label=""
+                                            placeholder={t('common.placeholder')}
+                                            value={formValues.lastName}
+                                            error={Boolean(errors.lastName)}
+                                            helperText={t(errors.lastName?.message?.toString() as string)}
+                                            {...register('lastName', {
+                                                onChange: (e) => handleInputChange(e),
+                                            })}
+                                            disabled={isLogedInUser}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="row justify-center m-1">
+                                    <div className="col-12 col-sm-6 d-block p-1">
+                                        <InputLabel htmlFor="role" error={Boolean(errors.role)}>
+                                            {t('user.info.role')} <span className="input-required">*</span>
+                                        </InputLabel>
+                                        <FormControl
+                                            size="small"
+                                            fullWidth
+                                            sx={{ mt: 1, mb: 1 }}
+                                            variant="outlined"
+                                            error
+                                        >
+                                            <Select
+                                                value={formValues.role}
+                                                displayEmpty
+                                                sx={{
+                                                    '& legend': { display: 'none' },
+                                                    '& fieldset': { top: 0 },
+                                                }}
+                                                error={Boolean(errors.role)}
+                                                {...register('role', {
+                                                    onChange: (e) => handleInputChange(e),
+                                                })}
+                                                disabled={isLogedInUser}
+                                            >
+                                                <MenuItem value="" disabled>
+                                                    <em className="placeholder-color">{t('user.search.selectRole')}</em>
+                                                </MenuItem>
+                                                {roles &&
+                                                    roles.length > 0 &&
+                                                    roles.map((role: any) => (
+                                                        <MenuItem key={role.id} value={role.id} selected={true}>
+                                                            <em>{role.roleName}</em>
+                                                        </MenuItem>
+                                                    ))}
+                                            </Select>
+                                            {Boolean(errors.role) && (
+                                                <FormHelperText id="component-error-text">
+                                                    {errors?.role?.message as string}
+                                                </FormHelperText>
+                                            )}
+                                        </FormControl>
+                                    </div>
+                                    <div className="col-12 col-sm-6 d-block p-1">
+                                        <InputLabel htmlFor="enable">{t('user.info.enabled')}</InputLabel>
+                                        <Switch
+                                            checked={formValues.enabled === 1 ? true : false}
+                                            name="enabled"
+                                            onChange={handleSwitchChange}
+                                            disabled={isLogedInUser}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="text-center justify-center mt-4">
+                                    <ButtonGroup
+                                        disableElevation
+                                        variant="contained"
+                                        aria-label="Disabled elevation buttons"
+                                    >
+                                        <Button
+                                            sx={{ mr: 1 }}
+                                            variant="contained"
+                                            disabled={isSubmitting}
+                                            hidden={isLogedInUser}
+                                            onClick={handleSubmit(handleSubmitForm)}
+                                        >
+                                            {t('button.btnSave')}
+                                        </Button>
+                                        <Button onClick={handleCancelChange} variant="outlined">
+                                            {t('button.btnBack')}
+                                        </Button>
+                                    </ButtonGroup>
+                                </div>
+                            </Box>
+                        </CardContent>
+                    </Card>
+                </Grid>
+            </Grid>
 
             <ApiAlert response={resForHandleMsg} />
         </div>

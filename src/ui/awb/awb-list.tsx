@@ -768,7 +768,10 @@ export default function AirWayBillList() {
                                                                             {statusListState &&
                                                                                 statusListState.map((s: any) => {
                                                                                     return (
-                                                                                        <MenuItem value={s.status}>
+                                                                                        <MenuItem
+                                                                                            key={s.id}
+                                                                                            value={s.id}
+                                                                                        >
                                                                                             {renderChipAwbStatus(
                                                                                                 s.status,
                                                                                             )}
