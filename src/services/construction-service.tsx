@@ -2,7 +2,11 @@ import { UrlServer } from '../core/constants/common';
 import apiClient from '../core/services/api-service';
 import { DataResSuccess, PageableDataResSuccess } from '../core/types/base';
 import { StatusResDTO } from '../models/common-res-dto';
-import { ConstructionResDTO, ContructionProgressResDTO, ProgressByConstrucionDTO } from '../models/construction-res-dto';
+import {
+    ConstructionResDTO,
+    ContructionProgressResDTO,
+    ProgressByConstrucionDTO,
+} from '../models/construction-res-dto';
 
 export const getConstructions = async (object: any) => {
     const res = await apiClient.post<PageableDataResSuccess<ConstructionResDTO[]>>(
@@ -17,8 +21,8 @@ export const getConstructionStatus = async () => {
     return res.data;
 };
 
-export const deleteConstructions = async (listId: any) => {
-    const res = await apiClient.post<DataResSuccess<ConstructionResDTO[]>>(UrlServer.CONSTRUCTION.DELETE, listId);
+export const deleteConstructions = async (ids: any) => {
+    const res = await apiClient.post<DataResSuccess<ConstructionResDTO[]>>(UrlServer.CONSTRUCTION.DELETE, ids);
     return res.data;
 };
 
@@ -55,9 +59,6 @@ export const getProgressStatus = async () => {
 };
 
 export const updateProgress = async (object: any, progressId: any) => {
-    const res = await apiClient.post<any>(
-        `${UrlServer.CONSTRUCTION.UPDATE_PROGRESS}/${progressId}`,
-        object,
-    );
+    const res = await apiClient.post<any>(`${UrlServer.CONSTRUCTION.UPDATE_PROGRESS}/${progressId}`, object);
     return res.data;
 };

@@ -107,21 +107,28 @@ export default function AirWayBillList() {
 
     const callInitAPI = async (projectId: string) => {
         const awbList = await fetchAirWayBillAPI(projectId);
-        dispatch(customsClearanceActions.setAirWayBillList(awbList.data));
-        setCurrentAwbCode(awbList.data[0].code);
-        const res = await Promise.all([
-            fetchCommercialInvoiceAPI(awbList.data[0].code),
-            fetchPackingListApi(awbList.data[0].code),
-            fetchCustomsClearanceDocument(awbList.data[0].code),
-            fetchImageBefore(awbList.data[0].code),
-            fetchImageAfter(awbList.data[0].code),
-        ]);
-        checkIsLoading(res);
-        dispatch(customsClearanceActions.setCommercialInvoice(res[0].data));
-        dispatch(customsClearanceActions.setPackingList(res[1].data));
-        dispatch(customsClearanceActions.setCustomsClearanceDocument(res[2].data));
-        dispatch(customsClearanceActions.setImageBefore(res[3].data));
-        dispatch(customsClearanceActions.setImageAfter(res[4].data));
+        if (awbList.data == undefined || awbList.data == null) {
+            setTimeout(() => {
+                setIsLoadingCCD(AWB_LOADING.NO_DATA);
+                setIsLoading(AWB_LOADING.NO_DATA);
+            }, 1000);
+        } else {
+            dispatch(customsClearanceActions.setAirWayBillList(awbList.data));
+            setCurrentAwbCode(awbList.data[0].code);
+            const res = await Promise.all([
+                fetchCommercialInvoiceAPI(awbList.data[0].code),
+                fetchPackingListApi(awbList.data[0].code),
+                fetchCustomsClearanceDocument(awbList.data[0].code),
+                fetchImageBefore(awbList.data[0].code),
+                fetchImageAfter(awbList.data[0].code),
+            ]);
+            checkIsLoading(res);
+            dispatch(customsClearanceActions.setCommercialInvoice(res[0].data));
+            dispatch(customsClearanceActions.setPackingList(res[1].data));
+            dispatch(customsClearanceActions.setCustomsClearanceDocument(res[2].data));
+            dispatch(customsClearanceActions.setImageBefore(res[3].data));
+            dispatch(customsClearanceActions.setImageAfter(res[4].data));
+        }
     };
 
     useEffect(() => {

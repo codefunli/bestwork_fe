@@ -51,7 +51,7 @@ export default function ConstructionSearch() {
     const [state, setState] = useState<any>();
     const { t } = useTranslation();
     const [listId, setListId] = useState<any>({
-        listId: [],
+        ids: [],
     });
     const [constructionStatus, setConstructionStatus] = useState([]);
     const location = useLocation();
@@ -134,7 +134,7 @@ export default function ConstructionSearch() {
         setCompanyMsg(t(SUCCESS_MSG.S01_004));
         setIsOpenModal(true);
         setListId({
-            listId: [...childData.ids],
+            ids: [...childData.ids],
         });
     };
 
