@@ -23,10 +23,14 @@ export default function FileUpload(props: any) {
         }
     };
 
+    const handleErrorImage = (error: any) => {
+        error.target.src = require('../../assets/default-avatar.png');
+    }
+
     return (
         <div>
             <label htmlFor="chosen-image" className="file-upload">
-                <img alt={imagePreview} src={imagePreview} />
+                <img alt={imagePreview} src={imagePreview} onError={handleErrorImage}/>
                 <span>
                     <LocalSeeIcon />
                 </span>
