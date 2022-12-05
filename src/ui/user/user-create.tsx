@@ -15,6 +15,9 @@ import {
     Switch,
     TextField,
     Typography,
+    InputAdornment,
+    IconButton,
+    OutlinedInput,
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { useEffect, useState } from 'react';
@@ -28,6 +31,7 @@ import { createUsers, getRoles } from '../../services/user-service';
 import ApiAlert from '../../shared-components/alert/api-alert';
 import FileUpload from '../../shared-components/file-upload/file-upload';
 import './user.scss';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const initialValues: any = {
     userName: '',
@@ -51,6 +55,7 @@ export default function UserAdd() {
     const params = useParams();
     const [resForHandleMsg, setResForHandleMsg] = useState<any>();
     const [isCreateWithCompany, setIsCreateWithCompany] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const {
         register,
@@ -144,6 +149,10 @@ export default function UserAdd() {
         navigate(`${UrlFeApp.USER.SEARCH}`);
     };
 
+    const handleClickShowPassword = () => {
+        setShowPassword(!showPassword);
+    };
+
     return (
         <div className="user-info">
             <form>
@@ -227,7 +236,7 @@ export default function UserAdd() {
                                             <InputLabel htmlFor="userName" error={Boolean(errors.password)}>
                                                 {t('login.password')} <span className="input-required">*</span>
                                             </InputLabel>
-                                            <TextField
+                                            <OutlinedInput
                                                 size="small"
                                                 fullWidth
                                                 sx={{
@@ -238,16 +247,28 @@ export default function UserAdd() {
                                                 }}
                                                 required
                                                 id="password"
-                                                type="password"
+                                                type={showPassword ? 'text' : 'password'}
+                                                autoComplete="false"
                                                 label=""
                                                 placeholder={t('common.placeholder')}
                                                 value={formValues.password}
                                                 error={Boolean(errors.password)}
-                                                helperText={t(errors.password?.message?.toString() as string)}
+                                                endAdornment={
+                                                    <InputAdornment position="end">
+                                                        <IconButton
+                                                            aria-label="toggle password visibility"
+                                                            onClick={handleClickShowPassword}
+                                                            edge="end"
+                                                        >
+                                                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                                                        </IconButton>
+                                                    </InputAdornment>
+                                                }
                                                 {...register('password', {
                                                     onChange: (e) => handleInputChange(e),
                                                 })}
                                             />
+                                            {errors.password?.message && <FormHelperText error>{t(errors.password?.message?.toString() as string)}</FormHelperText>}
                                         </div>
                                         <div className="col-12 col-sm-6 d-block p-1">
                                             <InputLabel htmlFor="uEmail" error={Boolean(errors.uEmail)}>
