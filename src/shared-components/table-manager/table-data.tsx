@@ -25,7 +25,8 @@ import HandleCompanyStatus from '../status-handle/company-status-handle';
 import HandleUserStatus from '../status-handle/user-status-handle';
 import HandleConstructionStatus from '../status-handle/construction-status-handle';
 import { Permission } from '../../core/types/permission';
-
+import HandleNotificationRead from '../status-handle/notification-read-handle';
+import ReadMoreIcon from '@mui/icons-material/ReadMore';
 export interface ArrayAction {
     nameFn: string;
     acFn: (object1: any, object2: any) => void;
@@ -141,6 +142,8 @@ export default function EnhancedTable(props: EnhancedTable) {
                 return <ModeEditIcon />;
             case Item.ICON_BTN.MODE_ADD_USER_ICON:
                 return <PersonAddAlt1Icon />;
+            case Item.ICON_BTN.MODE_READ_MORE_ICON:
+                return <ReadMoreIcon />;
             case 'AddMaterialStatus':
                 return <PostAddSharpIcon />;
             case 'AddProjectDetail':
@@ -249,13 +252,11 @@ export default function EnhancedTable(props: EnhancedTable) {
                                                             )
                                                         ) : colValue.id === 'projectType' ? (
                                                             row[colValue.id as string].name
-                                                        ) : colValue.id === 'isRead' &&
+                                                        ) : colValue.id === 'read' &&
                                                           colValue.label.includes('notification') ? (
-                                                            row[colValue.id as string] === 1 ? (
-                                                                t(Item.LABEL_BTN.READ)
-                                                            ) : (
-                                                                t(Item.LABEL_BTN.UNREAD)
-                                                            )
+                                                            <HandleNotificationRead
+                                                                statusId={String(row[colValue.id])}
+                                                            />
                                                         ) : colValue.id === 'awbCodes' ? (
                                                             handleArrayValue(row[colValue.id as string])
                                                         ) : (

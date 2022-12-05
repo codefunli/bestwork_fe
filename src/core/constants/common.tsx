@@ -157,6 +157,7 @@ export const UrlServer = {
     NOTIFICATIONS: {
         GET_LIST: `${PREFIX_SERVER_URL}/notifications/list`,
         CHANGE_STATUS: `${PREFIX_SERVER_URL}/notifications/read`,
+        COUNT_UNREAD: `${PREFIX_SERVER_URL}/notifications/count-unread`,
     },
 };
 
@@ -243,6 +244,7 @@ export const Item = {
     ICON_BTN: {
         MODE_EDIT_ICON: 'ModeEditIcon',
         MODE_ADD_USER_ICON: 'AddUser',
+        MODE_READ_MORE_ICON: 'ReadMoreIcon',
     },
     ICON_NM: {
         ICON_DASHBOARD_NM_BAR: 'DashBoardIcon',

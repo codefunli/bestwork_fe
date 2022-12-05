@@ -122,7 +122,9 @@
         "logout": "Logout",
         "status": "Status",
         "enable": "Enable",
-        "disable": "Disable"
+        "disable": "Disable",
+        "read": "Read",
+        "unRead": "Unread"
     },
     "message": {
         "required": "is required.",
@@ -225,7 +227,8 @@
         "projectDetail": "Add construction progress",
         "addAll": "Add all",
         "add": "Add",
-        "remove": "Remove"
+        "remove": "Remove",
+        "readMore": "Read More"
     },
     "edit": {
         "title": "Brand Edition",

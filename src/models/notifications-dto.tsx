@@ -3,6 +3,6 @@ export interface NotificationsResDTO {
     title: string;
     content: string;
     createDate: string;
-    isRead: number;
+    read: number;
     userId: number;
 }

@@ -21,3 +21,8 @@ export const deleteNotifications = async (listId: any) => {
     const res = await apiClient.post<DataResSuccess<NotificationsResDTO[]>>(UrlServer.NOTIFICATIONS.GET_LIST, listId);
     return res.data;
 };
+
+export const countUnRead = async () => {
+    const res = await apiClient.get<DataResSuccess<any>>(UrlServer.NOTIFICATIONS.COUNT_UNREAD);
+    return res.data;
+};

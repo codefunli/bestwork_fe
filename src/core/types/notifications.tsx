@@ -26,7 +26,7 @@ export const headNotiCol: HeadColumn[] = [
         label: 'notification.table.colCreateDate',
     },
     {
-        id: 'isRead',
+        id: 'read',
         numeric: false,
         disablePadding: false,
         label: 'notification.table.colRead',

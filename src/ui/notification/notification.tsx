@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
+    AlertColor,
     Avatar,
     Badge,
     Button,
@@ -17,11 +18,16 @@ import {
 } from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './notification.scss';
-import { UrlFeApp } from '../../core/constants/common';
+import { ConfirmConstants, UrlFeApp } from '../../core/constants/common';
 import { NotificationsResDTO } from '../../models/notifications-dto';
-import { getNotifications } from '../../services/notifications-service';
+import { changeStatus, countUnRead, getNotifications } from '../../services/notifications-service';
+import { useQuery, useQueryClient } from 'react-query';
+import { blueGrey, purple } from '@mui/material/colors';
+import AlertDialogSlide from '../../shared-components/modal/alert-dialog-slide';
+import AlertDiaLogInform from '../../shared-components/modal/alert-dialog-inform';
+import MessageShow from '../../shared-components/message/message';
 
 const initialValues = {
     page: '0',
@@ -38,7 +44,33 @@ const Notification = () => {
     const [formValues, setFormValues] = useState(initialValues);
     const { t } = useTranslation();
     const [notiList, setNotiList] = useState<NotificationsResDTO[]>([]);
+    const [badgeCount, setBadgeCount] = useState(0);
+    const [isOpenModal, setIsOpenModal] = useState(false);
+    const [title, setTitle] = useState<string>('');
+    const [content, setContent] = useState<string>('');
+    const [id, setId] = useState<number>(0);
+    const [isShowMessage, setIsShowMessage] = useState(false);
+    const [companyMsg, setCompanyMsg] = useState('');
+    const [typeCompanyMsg, setTypeCompanyMsg] = useState<AlertColor>('success');
+    const queryClient = useQueryClient();
+
     const navigate = useNavigate();
+
+    const { data, isLoading } = useQuery(['getNotifications'], () => getNotifications(formValues), {
+        staleTime: 5000,
+        onSuccess: (res: any) => {
+            setNotiList(res.data.content);
+            res.data?.content?.forEach((notificationEl: { id: any }) => {
+                queryClient.setQueryData(['notificationEl', notificationEl.id], notificationEl);
+            });
+        },
+    });
+
+    useEffect(() => {
+        countUnRead().then((res: any) => {
+            setBadgeCount(res.data);
+        });
+    }, [data]);
 
     const handleClose = (event: any) => {
         if (anchorRef.current && anchorRef.current.contains(event.target)) return;
@@ -56,19 +88,40 @@ const Notification = () => {
         }, 1000);
     };
 
-    useEffect(() => {
-        getNotifications(formValues).then((value: any) => {
-            if (value && value.data) {
-                setNotiList(value.data.content);
-            }
-        });
-    }, []);
+    const handleMessage = (showMsg: boolean, msg: string, type: AlertColor) => {
+        setIsShowMessage(showMsg);
+        setCompanyMsg(msg);
+        setTypeCompanyMsg(type);
+    };
+
+    const handleCloseMsg = () => {
+        setIsShowMessage(false);
+    };
+
+    const handleClickNotification = (id: number, title: string, content: string) => {
+        setId(id);
+        setTitle(title);
+        setContent(content);
+        setIsOpenModal(true);
+        setOpen(false);
+    };
+
+    const alertOkFunc = () => {
+        changeStatus(id)
+            .then((res) => {
+                setIsOpenModal(false);
+            })
+            .catch((err) => {
+                handleMessage(true, t('message.error'), 'error');
+            });
+    };
+
     return (
         <div className="notification">
             <Grid container direction="column" alignItems="end">
                 <Grid item xs={12}>
                     <Tooltip title={t('common.notification')} placement="bottom-start" ref={anchorRef}>
-                        <Badge sx={{ mr: 2 }} color="secondary" badgeContent={notiList.length} onClick={handleToggle}>
+                        <Badge sx={{ mr: 2 }} color="secondary" badgeContent={badgeCount} onClick={handleToggle}>
                             <NotificationsIcon />
                         </Badge>
                     </Tooltip>
@@ -108,9 +161,18 @@ const Notification = () => {
                                             <ListItem
                                                 alignItems="flex-start"
                                                 key={notification.id}
-                                                sx={{ width: '100%' }}
+                                                sx={{
+                                                    width: '100%',
+                                                    backgroundColor: notification.read ? 'white' : blueGrey.A200,
+                                                }}
                                                 className="notification-item"
-                                                onClick={() => console.log(notification.title)}
+                                                onClick={() =>
+                                                    handleClickNotification(
+                                                        notification.id,
+                                                        notification.title,
+                                                        notification.content,
+                                                    )
+                                                }
                                             >
                                                 <ListItemAvatar>
                                                     <Avatar alt="" src="" />
@@ -188,6 +250,7 @@ const Notification = () => {
                                     )}
                                 </List>
                             </ClickAwayListener>
+
                             <div className="view-all">
                                 <Button onClick={handleToNotification}>{t('common.viewAll')}</Button>
                             </div>
@@ -195,6 +258,21 @@ const Notification = () => {
                     </Grow>
                 )}
             </Popper>
+
+            <AlertDiaLogInform
+                isOpen={isOpenModal}
+                title={title}
+                content={content}
+                okFunc={alertOkFunc}
+                okBtn={t(ConfirmConstants.OK_BTN)}
+            />
+
+            <MessageShow
+                message={companyMsg}
+                showMessage={isShowMessage}
+                type={typeCompanyMsg}
+                handleCloseMsg={handleCloseMsg}
+            />
         </div>
     );
 };

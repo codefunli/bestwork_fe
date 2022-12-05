@@ -122,7 +122,9 @@
         "logout": "Đăng xuất",
         "status": "Trạng thái",
         "enable": "Đã kích hoạt",
-        "disable": "Chưa kích hoạt"
+        "disable": "Chưa kích hoạt",
+        "read": "Đã đọc",
+        "unRead": "Chưa đọc"
     },
     "message": {
         "required": "là bắt buộc.",

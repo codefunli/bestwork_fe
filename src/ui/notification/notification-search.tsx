@@ -23,15 +23,16 @@ import { useQuery, useQueryClient } from 'react-query';
 import { ConfirmConstants, Item } from '../../core/constants/common';
 import { SUCCESS_MSG } from '../../core/constants/message';
 import { headNotiCol } from '../../core/types/notifications';
-import { deleteNotifications, getNotifications } from '../../services/notifications-service';
+import { changeStatus, deleteNotifications, getNotifications } from '../../services/notifications-service';
 import MessageShow from '../../shared-components/message/message';
+import AlertDiaLogInform from '../../shared-components/modal/alert-dialog-inform';
 import AlertDialogSlide from '../../shared-components/modal/alert-dialog-slide';
-import EnhancedTable from '../../shared-components/table-manager/table-data';
+import EnhancedTable, { ArrayAction } from '../../shared-components/table-manager/table-data';
 
 const initialValues = {
     page: '0',
     size: '5',
-    sortDirection: 'DESC',
+    sortDirection: 'desc',
     sortBy: 'id',
     keyword: '',
     status: '-1',
@@ -49,6 +50,10 @@ export default function NotificationsSearch() {
     const [listId, setListId] = useState<any>({
         listId: [],
     });
+    const [isOpenModalNotification, setIsOpenModalNotification] = useState(false);
+    const [id, setId] = useState(0);
+    const [title, setTitle] = useState<string>('');
+    const [content, setContent] = useState<string>('');
 
     const { data, isLoading } = useQuery(['getConstruction'], () => getNotifications(formValues), {
         staleTime: 10000,
@@ -138,6 +143,38 @@ export default function NotificationsSearch() {
     const handleCloseMsg = () => {
         setIsShowMessage(false);
     };
+
+    const alertOkFuncNotification = () => {
+        changeStatus(id)
+            .then((res) => {
+                setIsOpenModalNotification(false);
+                fetchData({
+                    ...formValues,
+                });
+            })
+            .catch((err) => {
+                handleMessage(true, t('message.error'), 'error');
+            });
+    };
+
+    const handleReadNotification = (e: any, id: string) => {
+        state.content.map((target: any) => {
+            if (target.id === id) {
+                setId(Number(id));
+                setTitle(target.title);
+                setContent(target.content);
+            }
+        });
+        setIsOpenModalNotification(true);
+    };
+
+    const arrButton: ArrayAction[] = [
+        {
+            nameFn: t('tooltip.readMore'),
+            acFn: handleReadNotification,
+            iconFn: 'ReadMoreIcon',
+        },
+    ];
 
     return (
         <Grid container direction="row" spacing={3} className="project-search">
@@ -294,7 +331,7 @@ export default function NotificationsSearch() {
                         }
                     }
                     isLoading={false}
-                    arrButton={[]}
+                    arrButton={arrButton}
                     statusList={() => {
                         console.log();
                     }}
@@ -308,6 +345,14 @@ export default function NotificationsSearch() {
                 title={t(ConfirmConstants.DELETE.title)}
                 content={t(ConfirmConstants.DELETE.content)}
                 noBtn={t(ConfirmConstants.NO_BTN)}
+                okBtn={t(ConfirmConstants.OK_BTN)}
+            />
+
+            <AlertDiaLogInform
+                isOpen={isOpenModalNotification}
+                title={title}
+                content={content}
+                okFunc={alertOkFuncNotification}
                 okBtn={t(ConfirmConstants.OK_BTN)}
             />
 
