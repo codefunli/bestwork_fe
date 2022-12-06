@@ -933,7 +933,7 @@ export default function AirWayBillList() {
                                     </div>
                                 </Grid>
                                 <Grid item xs={12} sm={12} className="text-center item">
-                                    <div className="item-header">Action</div>
+                                    <div className="item-header">{t('awb.action')}</div>
                                     <div
                                         className="content pt-3"
                                         style={{
