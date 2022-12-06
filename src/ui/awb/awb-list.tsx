@@ -218,39 +218,39 @@ export default function AirWayBillList() {
     };
 
     const checkIsLoading = (res: any) => {
-        if (res[2].message === AWB_LOADING.SUCCESS_CCD) {
-            setIsLoadingCCD(AWB_LOADING.HAS_DATA);
-        } else if (res[2].message === AWB_LOADING.DATA_NOT_FOUND) {
+        if (res[2].data === undefined || res[2].data === null) {
             setIsLoadingCCD(AWB_LOADING.NO_DATA);
+        } else {
+            setIsLoadingCCD(AWB_LOADING.HAS_DATA);
         }
 
         switch (customsClearanceTab) {
             case 0:
-                if (res[0].message === AWB_LOADING.SUCCESS_INVOICE) {
-                    setIsLoading(AWB_LOADING.HAS_DATA);
-                } else if (res[0].message === AWB_LOADING.DATA_NOT_FOUND) {
+                if (res[0].data === undefined || res[0].data === null) {
                     setIsLoading(AWB_LOADING.NO_DATA);
+                } else {
+                    setIsLoading(AWB_LOADING.HAS_DATA);
                 }
                 break;
             case 1:
-                if (res[1].message === AWB_LOADING.SUCCESS_PACKAGE) {
-                    setIsLoading(AWB_LOADING.HAS_DATA);
-                } else if (res[1].message === AWB_LOADING.DATA_NOT_FOUND) {
+                if (res[1].data === undefined || res[1].data === null) {
                     setIsLoading(AWB_LOADING.NO_DATA);
+                } else {
+                    setIsLoading(AWB_LOADING.HAS_DATA);
                 }
                 break;
             case 2:
-                if (res[3].message === AWB_LOADING.SUCCESS_EVIDENCE_BEFORE) {
-                    setIsLoading(AWB_LOADING.HAS_DATA);
-                } else if (res[4].message === AWB_LOADING.DATA_NOT_FOUND) {
+                if (res[3].data === undefined || res[3].data === null) {
                     setIsLoading(AWB_LOADING.NO_DATA);
+                } else {
+                    setIsLoading(AWB_LOADING.HAS_DATA);
                 }
                 break;
             case 3:
-                if (res[3].message === AWB_LOADING.SUCCESS_EVIDENCE_AFTER) {
-                    setIsLoading(AWB_LOADING.HAS_DATA);
-                } else if (res[4].message === AWB_LOADING.DATA_NOT_FOUND) {
+                if (res[4].data === undefined || res[4].data === null) {
                     setIsLoading(AWB_LOADING.NO_DATA);
+                } else {
+                    setIsLoading(AWB_LOADING.HAS_DATA);
                 }
                 break;
             default:
@@ -313,6 +313,7 @@ export default function AirWayBillList() {
                 formData.append('file', data);
             });
 
+        setIsLoading(AWB_LOADING.LOADING);
         uploadCommercialInvoice(formData, fileData.description, currentAwbCode)
             .then((res) => {
                 setResForHandleMsg({
@@ -323,6 +324,11 @@ export default function AirWayBillList() {
                 if (res.status === StatusCode.OK) {
                     fetchCommercialInvoiceAPI(currentAwbCode).then((res: any) => {
                         dispatch(customsClearanceActions.setCommercialInvoice(res.data));
+                        if (res.data === undefined || res.data === null) {
+                            setIsLoading(AWB_LOADING.NO_DATA);
+                        } else {
+                            setIsLoading(AWB_LOADING.HAS_DATA);
+                        }
                     });
                 }
             })
@@ -336,11 +342,11 @@ export default function AirWayBillList() {
 
     const handleUploadPackingList = (fileData: any) => {
         let formData = new FormData();
-
         if (fileData && fileData.file && fileData.file.length > 0)
             fileData.file.forEach((data: any) => {
                 formData.append('file', data);
             });
+        setIsLoading(AWB_LOADING.LOADING);
         uploadPackingList(formData, fileData.description, currentAwbCode)
             .then((res) => {
                 setResForHandleMsg({
@@ -351,6 +357,11 @@ export default function AirWayBillList() {
                 if (res.status === StatusCode.OK) {
                     fetchPackingListApi(currentAwbCode).then((res: any) => {
                         dispatch(customsClearanceActions.setPackingList(res.data));
+                        if (res.data === undefined || res.data === null) {
+                            setIsLoading(AWB_LOADING.NO_DATA);
+                        } else {
+                            setIsLoading(AWB_LOADING.HAS_DATA);
+                        }
                     });
                 }
             })
@@ -364,7 +375,7 @@ export default function AirWayBillList() {
 
     const handleUploadImageBefore = (imageData: any) => {
         let formData = new FormData();
-
+        setIsLoading(AWB_LOADING.LOADING);
         if (imageData && imageData.file && imageData.file.length > 0)
             imageData.file.forEach((data: any) => {
                 formData.append('mFiles', data);
@@ -386,6 +397,11 @@ export default function AirWayBillList() {
                 if (res.status === StatusCode.OK) {
                     fetchImageBefore(currentAwbCode).then((res: any) => {
                         dispatch(customsClearanceActions.setImageBefore(res.data));
+                        if (res.data === undefined || res.data === null) {
+                            setIsLoading(AWB_LOADING.NO_DATA);
+                        } else {
+                            setIsLoading(AWB_LOADING.HAS_DATA);
+                        }
                     });
                 }
             })
@@ -399,7 +415,7 @@ export default function AirWayBillList() {
 
     const handleUploadImageAfter = (imageData: any) => {
         let formData = new FormData();
-
+        setIsLoading(AWB_LOADING.LOADING);
         if (imageData && imageData.file && imageData.file.length > 0)
             imageData.file.forEach((data: any) => {
                 formData.append('mFiles', data);
@@ -421,6 +437,11 @@ export default function AirWayBillList() {
                 if (res.status === StatusCode.OK) {
                     fetchImageAfter(currentAwbCode).then((res: any) => {
                         dispatch(customsClearanceActions.setImageAfter(res.data));
+                        if (res.data === undefined || res.data === null) {
+                            setIsLoading(AWB_LOADING.NO_DATA);
+                        } else {
+                            setIsLoading(AWB_LOADING.HAS_DATA);
+                        }
                     });
                 }
             })
@@ -433,6 +454,7 @@ export default function AirWayBillList() {
     };
 
     const handleAddFile = (data: any) => {
+        setIsLoadingCCD(AWB_LOADING.NO_DATA);
         addFileToCustomsClearance({ ...data })
             .then((res) => {
                 setResForHandleMsg({
@@ -443,6 +465,11 @@ export default function AirWayBillList() {
                 if (res.status === StatusCode.OK) {
                     fetchCustomsClearanceDocument(currentAwbCode).then((res: any) => {
                         dispatch(customsClearanceActions.setCustomsClearanceDocument(res.data));
+                        if (res.data === undefined || res.data === null) {
+                            setIsLoadingCCD(AWB_LOADING.NO_DATA);
+                        } else {
+                            setIsLoadingCCD(AWB_LOADING.HAS_DATA);
+                        }
                     });
 
                     if (data.postType === CUSTOMS_CLEARANCE.INVOICE) {
