@@ -402,7 +402,8 @@
         "create": {
             "title": "Create air waybill",
             "note": "Note"
-        }
+        },
+        "action": "Action"
     },
     "construction": {
         "table": {

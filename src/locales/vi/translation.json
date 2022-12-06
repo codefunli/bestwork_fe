@@ -401,7 +401,8 @@
         "create": {
             "title": "Thêm air waybill",
             "note": "Ghi chú"
-        }
+        },
+        "action": "Hành động"
     },
     "construction": {
         "table": {

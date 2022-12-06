@@ -78,7 +78,7 @@ export const ImageAfterContext = createContext([]);
 
 export default function AirWayBillList() {
     const { t } = useTranslation();
-    const [awbListData, setAwbListState] = useState<any>([]);
+    const [awbListData, setAwbListData] = useState<any>([]);
     const [commercialInvoiceState, setCommercialInvoiceState] = useState<any>([]);
     const [packingListState, setPackingListState] = useState<any>([]);
     const [imageBeforeState, setImageBeforeState] = useState<any>([]);
@@ -105,36 +105,37 @@ export default function AirWayBillList() {
     const [isLoading, setIsLoading] = useState(AWB_LOADING.LOADING);
     const [isLoadingCCD, setIsLoadingCCD] = useState(AWB_LOADING.LOADING);
 
+    // Reset data in redux of customs clearance
+    useEffect(() => {
+        dispatch(customsClearanceActions.setAirWayBillList([]));
+        clearData();
+    }, []);
+
+    // Init data
+    useEffect(() => {
+        if (params.id) {
+            setProjectId(params.id);
+            callInitAPI(params.id);
+        }
+    }, [params.id]);
+
     const callInitAPI = async (projectId: string) => {
         const awbList = await fetchAirWayBillAPI(projectId);
+        // Case of the project hasn't not any awb
         if (awbList.data == undefined || awbList.data == null) {
             setTimeout(() => {
                 setIsLoadingCCD(AWB_LOADING.NO_DATA);
                 setIsLoading(AWB_LOADING.NO_DATA);
             }, 1000);
         } else {
+            // save AWB data into the redux
             dispatch(customsClearanceActions.setAirWayBillList(awbList.data));
             setCurrentAwbCode(awbList.data[0].code);
-            const res = await Promise.all([
-                fetchCommercialInvoiceAPI(awbList.data[0].code),
-                fetchPackingListApi(awbList.data[0].code),
-                fetchCustomsClearanceDocument(awbList.data[0].code),
-                fetchImageBefore(awbList.data[0].code),
-                fetchImageAfter(awbList.data[0].code),
-            ]);
-            checkIsLoading(res);
-            dispatch(customsClearanceActions.setCommercialInvoice(res[0].data));
-            dispatch(customsClearanceActions.setPackingList(res[1].data));
-            dispatch(customsClearanceActions.setCustomsClearanceDocument(res[2].data));
-            dispatch(customsClearanceActions.setImageBefore(res[3].data));
-            dispatch(customsClearanceActions.setImageAfter(res[4].data));
+            // Get invoice, packing list, image after, and image before by AWB code
+            // save invoice, packing list, image after and image before into the redux
+            filterByAirWayBillCode(awbList.data[0].code);
         }
     };
-
-    useEffect(() => {
-        dispatch(customsClearanceActions.setAirWayBillList([]));
-        clearData();
-    }, []);
 
     const clearData = () => {
         dispatch(customsClearanceActions.setCommercialInvoice([]));
@@ -149,58 +150,68 @@ export default function AirWayBillList() {
         );
     };
 
+    // save awb data into the redux
     useEffect(() => {
-        if (params.id) callInitAPI(params.id);
-    }, [params.id]);
-
-    useEffect(() => {
-        setAwbListState(airWayBillListRedux ? airWayBillListRedux : []);
+        setAwbListData(airWayBillListRedux ? airWayBillListRedux : []);
     }, [airWayBillListRedux]);
 
+    // save invoice data into the redux
     useEffect(() => {
         setCommercialInvoiceState(invoiceRedux ? invoiceRedux : []);
     }, [invoiceRedux]);
 
+    // save packing list data into the redux
     useEffect(() => {
         setPackingListState(packingListRedux ? packingListRedux : []);
     }, [packingListRedux]);
 
+    // save image before data into the redux
     useEffect(() => {
         setImageBeforeState(imageBeforeRedux ? imageBeforeRedux : []);
     }, [imageBeforeRedux]);
 
+    // save image after data into the redux
     useEffect(() => {
         setImageAfterState(imageAfterRedux ? imageAfterRedux : []);
     }, [imageAfterRedux]);
 
+    // save customs clearance data into the redux
     useEffect(() => {
         setCustomsDeclarationDocumentState(customsClearanceDocumentRedux ? customsClearanceDocumentRedux : []);
     }, [customsClearanceDocumentRedux]);
 
+    // fetch air way bill data from the server
     const fetchAirWayBillAPI = async (projectId: string) => {
         return await getAirWayBillByProjectId(projectId);
     };
 
+    // fetch commercial invoice data from the server
     const fetchCommercialInvoiceAPI = async (awbCode: string) => {
         return await getAllCommercialInvoice(awbCode);
     };
 
+    // fetch packing list data from the server
     const fetchPackingListApi = async (awbCode: string) => {
         return await getAllPackingList(awbCode);
     };
 
+    // fetch image before data from the server
     const fetchImageBefore = async (awbCode: string) => {
         return await getAllImageBefore(awbCode);
     };
 
+    // fetch image after data from the server
     const fetchImageAfter = async (awbCode: string) => {
         return await getAllImageAfter(awbCode);
     };
 
+    // fetch customs clearance data from the server
     const fetchCustomsClearanceDocument = async (awbCode: string) => {
         return await getAllCustomsClearanceDocument(awbCode);
     };
 
+    // Get invoice, packing list, image after, and image before by AWB code
+    // save invoice, packing list, image after and image before into the redux
     const filterByAirWayBillCode = async (awbCode: string) => {
         const res = await Promise.all([
             fetchCommercialInvoiceAPI(awbCode),
@@ -217,6 +228,8 @@ export default function AirWayBillList() {
         dispatch(customsClearanceActions.setImageAfter(res[4].data));
     };
 
+    // check loading in customs clearance document area
+    // check loading in invoice, packing list, image before, image after area
     const checkIsLoading = (res: any) => {
         if (res[2].data === undefined || res[2].data === null) {
             setIsLoadingCCD(AWB_LOADING.NO_DATA);
@@ -226,48 +239,38 @@ export default function AirWayBillList() {
 
         switch (customsClearanceTab) {
             case 0:
-                if (res[0].data === undefined || res[0].data === null) {
-                    setIsLoading(AWB_LOADING.NO_DATA);
-                } else {
-                    setIsLoading(AWB_LOADING.HAS_DATA);
-                }
+                handleSetIsLoading(res[0].data);
                 break;
             case 1:
-                if (res[1].data === undefined || res[1].data === null) {
-                    setIsLoading(AWB_LOADING.NO_DATA);
-                } else {
-                    setIsLoading(AWB_LOADING.HAS_DATA);
-                }
+                handleSetIsLoading(res[1].data);
                 break;
             case 2:
-                if (res[3].data === undefined || res[3].data === null) {
-                    setIsLoading(AWB_LOADING.NO_DATA);
-                } else {
-                    setIsLoading(AWB_LOADING.HAS_DATA);
-                }
+                handleSetIsLoading(res[3].data);
                 break;
             case 3:
-                if (res[4].data === undefined || res[4].data === null) {
-                    setIsLoading(AWB_LOADING.NO_DATA);
-                } else {
-                    setIsLoading(AWB_LOADING.HAS_DATA);
-                }
+                handleSetIsLoading(res[4].data);
                 break;
             default:
                 break;
         }
     };
 
-    useEffect(() => {
-        if (params.id) setProjectId(params.id);
-    }, [params.id]);
+    const handleSetIsLoading = (object: any) => {
+        if (object === undefined || object === null) {
+            setIsLoading(AWB_LOADING.NO_DATA);
+        } else {
+            setIsLoading(AWB_LOADING.HAS_DATA);
+        }
+    };
 
+    // dowload file
     const fetchDownloadFile = (awbCode: string) => {
         downloadCCD(awbCode).then((response: any) => {
             downloadZIP(arrayBufferToBase64(response), awbCode, prefixZip);
         });
     };
 
+    // fetch data when change AWB code
     const handleChangeAwbTab = (newValue: number, awbCode: string) => {
         setIsLoading(AWB_LOADING.LOADING);
         setIsLoadingCCD(AWB_LOADING.LOADING);
@@ -277,20 +280,39 @@ export default function AirWayBillList() {
         filterByAirWayBillCode(awbCode);
     };
 
-    const handleSearch = () => {
-        let filterItems = awbListData;
+    // search awb code
+    const handleSearch = async () => {
+        let awbListSearch = airWayBillListRedux;
         if (searchKeyword) {
-            filterItems = awbListData.filter((data: any) => {
+            let filterItems = awbListSearch.filter((data: any) => {
                 if (data.code.toLowerCase().indexOf(searchKeyword.toLowerCase()) !== -1) {
                     return data;
                 }
             });
+            setAwbListData(filterItems);
+        } else {
+            setAwbListData(airWayBillListRedux);
         }
-        setAwbListState(filterItems);
     };
 
     const handleChangeCustomsClearanceTab = (newValue: number) => {
         setCustomsClearanceTab(newValue);
+        switch (newValue) {
+            case 0:
+                handleSetIsLoading(invoiceRedux);
+                break;
+            case 1:
+                handleSetIsLoading(packingListRedux);
+                break;
+            case 2:
+                handleSetIsLoading(imageBeforeRedux);
+                break;
+            case 3:
+                handleSetIsLoading(imageAfterRedux);
+                break;
+            default:
+                break;
+        }
     };
 
     const handleDownload = () => {
@@ -502,12 +524,8 @@ export default function AirWayBillList() {
     }, []);
 
     const handleStatusChange = (statusChange: string, awbCode: string) => {
-        const status = statusListState.filter((s: any) => {
-            return s.status === statusChange;
-        });
-
         const convertData = {
-            destinationStatus: status[0].id,
+            destinationStatus: statusChange,
         };
 
         let handleAirWayBillListRedux = airWayBillListRedux.map((currentAwb: any) => {
