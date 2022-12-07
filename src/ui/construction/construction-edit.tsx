@@ -168,7 +168,6 @@ export default function ConstructionEdit() {
     };
 
     const handleSubmitForm = async (event: any) => {
-        alert('B');
         let formData = new FormData();
 
         if (fileData && fileData.file && fileData.file.length > 0) {
