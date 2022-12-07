@@ -35,7 +35,11 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Item, StatusCode, UrlFeApp } from '../../core/constants/common';
 import { validateConstruction } from '../../core/constants/validate';
-import { formatDateTimeRes, formatDateTimeResList, formatDateTimeResNoneSuffixes } from '../../core/utils/get-current-datetime';
+import {
+    formatDateTimeRes,
+    formatDateTimeResList,
+    formatDateTimeResNoneSuffixes,
+} from '../../core/utils/get-current-datetime';
 import { ProjectProgressDTO } from '../../models/project-res-dto';
 import { getAirWayBillByProjectId } from '../../services/awb-service';
 import {
@@ -100,11 +104,12 @@ export default function ConstructionEdit() {
         const {
             target: { value },
         } = event;
+
         let selectValueTmp = typeof value === 'string' ? value.split(',') : value;
         setSelectValue(selectValueTmp);
         setFormValues({
             ...formValues,
-            awbCodes: awbCodesList.filter(id => selectValueTmp.includes(id)),
+            awbCodes: awbCodesList.filter((awbCodes) => selectValueTmp.includes(awbCodes['id'] as string)),
         });
     };
 
@@ -113,12 +118,13 @@ export default function ConstructionEdit() {
             if (result && result.data) {
                 setFormValues({
                     ...result.data,
-                    startDate:  formatDateTimeResNoneSuffixes(result.data.startDate),
+                    startDate: formatDateTimeResNoneSuffixes(result.data.startDate),
                     endDate: formatDateTimeResNoneSuffixes(result.data.endDate),
+                    awbCodes: result.data.awbCodes,
                 });
-                let awbCodeArr: string[] = [];
+                let awbCodeArr: any = [];
                 result.data.awbCodes.map((target: AWBCode) => {
-                    awbCodeArr.push(target.code);
+                    awbCodeArr.push(target.id);
                 });
                 setSelectValue(awbCodeArr);
                 getAirWayBillByProjectId(result.data.projectCode).then((result: any) => {
@@ -129,10 +135,10 @@ export default function ConstructionEdit() {
                         setProgressList(value.data);
                     }
                 });
-                reset()
+                reset();
             }
         });
-        
+
         getConstructionStatus().then((result: any) => {
             if (result && result.data) setConstructionStatus(result.data);
         });
@@ -162,6 +168,7 @@ export default function ConstructionEdit() {
     };
 
     const handleSubmitForm = async (event: any) => {
+        alert('B');
         let formData = new FormData();
 
         if (fileData && fileData.file && fileData.file.length > 0) {
@@ -207,6 +214,16 @@ export default function ConstructionEdit() {
             ...fileData,
             file: data,
         });
+    };
+
+    const getValueFromAwbCode = (id: any) => {
+        let result = awbCodesList.map((awbCode: any) => {
+            if (awbCode.id === id) {
+                return awbCode.code;
+            }
+        });
+
+        return result;
     };
 
     const handleClearEvent = (event: any) => {
@@ -433,7 +450,7 @@ export default function ConstructionEdit() {
                                         </InputLabel>
                                         <Select
                                             labelId="demo-simple-select-outlined-label"
-                                            id="awb"
+                                            id="awbCodes"
                                             multiple
                                             value={selectValue}
                                             sx={{
@@ -443,21 +460,23 @@ export default function ConstructionEdit() {
                                             renderValue={(selected) => (
                                                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                                                     {selected.map((value) => (
-                                                        <Chip key={value} label={value} />
+                                                        <Chip key={value} label={getValueFromAwbCode(Number(value))} />
                                                     ))}
                                                 </Box>
                                             )}
-                                            onChange={(e) => handleChange(e)}
+                                            {...register('awbCodes', {
+                                                onChange: (e) => handleChange(e),
+                                            })}
                                         >
                                             {awbCodesList.map((awbCode: any) => (
-                                                <MenuItem key={awbCode.id} value={awbCode.code}>
+                                                <MenuItem key={awbCode.id} value={awbCode.id}>
                                                     {awbCode.code}
                                                 </MenuItem>
                                             ))}
                                         </Select>
-                                        {Boolean(errors.status) && (
+                                        {Boolean(errors.awbCodes) && (
                                             <FormHelperText id="component-error-text">
-                                                {errors?.awb?.message as string}
+                                                {errors?.awbCodes?.message as string}
                                             </FormHelperText>
                                         )}
                                     </div>
@@ -505,37 +524,39 @@ export default function ConstructionEdit() {
                                     },
                                 }}
                             >
-                                {progressList && progressList.length > 0 && progressList.map((progress: ProgressByConstrucionDTO | any, index: number) => (
-                                    <div key={index}>
-                                        <TimelineItem>
-                                            <TimelineOppositeContent color="textSecondary">
-                                                <div style={{ minWidth: '200px' }}>
-                                                    {formatDateTimeResList(progress.startDate)}
-                                                </div>
-                                            </TimelineOppositeContent>
-                                            <TimelineSeparator className="h-40">
-                                                <TimelineDot />
-                                                <TimelineConnector />
-                                            </TimelineSeparator>
-                                            <TimelineContent>
-                                                <div className="mb-4 pb-2">
-                                                    <div className="pb-2 h4 fw-bold">{progress.title}</div>
-                                                    <div className="pb-2">{progress.report}</div>
-                                                    <div className="pb-2">
-                                                        <HandleProgressStatus
-                                                            statusList={
-                                                                progressStatus && progressStatus.length > 0
-                                                                    ? progressStatus
-                                                                    : []
-                                                            }
-                                                            statusId={progress.status}
-                                                        />
+                                {progressList &&
+                                    progressList.length > 0 &&
+                                    progressList.map((progress: ProgressByConstrucionDTO | any, index: number) => (
+                                        <div key={index}>
+                                            <TimelineItem>
+                                                <TimelineOppositeContent color="textSecondary">
+                                                    <div style={{ minWidth: '200px' }}>
+                                                        {formatDateTimeResList(progress.startDate)}
                                                     </div>
-                                                </div>
-                                            </TimelineContent>
-                                        </TimelineItem>
-                                    </div>
-                                ))}
+                                                </TimelineOppositeContent>
+                                                <TimelineSeparator className="h-40">
+                                                    <TimelineDot />
+                                                    <TimelineConnector />
+                                                </TimelineSeparator>
+                                                <TimelineContent>
+                                                    <div className="mb-4 pb-2">
+                                                        <div className="pb-2 h4 fw-bold">{progress.title}</div>
+                                                        <div className="pb-2">{progress.report}</div>
+                                                        <div className="pb-2">
+                                                            <HandleProgressStatus
+                                                                statusList={
+                                                                    progressStatus && progressStatus.length > 0
+                                                                        ? progressStatus
+                                                                        : []
+                                                                }
+                                                                statusId={progress.status}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                </TimelineContent>
+                                            </TimelineItem>
+                                        </div>
+                                    ))}
                             </Timeline>
                         </Card>
                     </Grid>
