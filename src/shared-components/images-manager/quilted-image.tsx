@@ -1,13 +1,19 @@
-import { Button, Card, CardContent, CardHeader, IconButton, ImageList, ImageListItem, Tooltip } from '@mui/material';
-import { useContext, useEffect, useState } from 'react';
-import { arrayBufferToBase64, prefixPdf, renderFile, renderImage } from '../../core/constants/common';
-import './image-manager.scss';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import { Card, CardHeader, IconButton, ImageList, ImageListItem, Tooltip } from '@mui/material';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import PreviewPDF from '../modal/view-pdf-modal';
+import { arrayBufferToBase64, prefixPdf, renderFile } from '../../core/constants/common';
 import { getPdfFile } from '../../services/awb-service';
+import PreviewPDF from '../modal/view-pdf-modal';
+import './image-manager.scss';
 
 export default function QuiltedImage(props: {
     images: any[];
@@ -16,12 +22,22 @@ export default function QuiltedImage(props: {
     isFile: boolean;
     isFilePreview: boolean;
     invoicePostId: number;
+    isImageBefore: boolean;
 }) {
     const [addNumberLabel, setAddNumberLabel] = useState(0);
     const { t } = useTranslation();
 
     const [isOpen, setIsOpen] = useState(false);
     const [base64Url, setBase64Url] = useState('');
+
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     const handleCloseModal = () => {
         setIsOpen(false);
@@ -58,9 +74,9 @@ export default function QuiltedImage(props: {
             invoicePostId: props.invoicePostId,
             fileId: item.fileId,
         };
+        setIsOpen(true);
         getPdfFile(convertData).then((res: any) => {
             setBase64Url(`${prefixPdf},${arrayBufferToBase64(res)}`);
-            setIsOpen(true);
         });
     };
 
@@ -97,39 +113,85 @@ export default function QuiltedImage(props: {
                                     </ImageListItem>
                                 ) : item.type === 'pdf' ? (
                                     <ImageListItem>
-                                        <button
-                                            className="border-0 bg-white d-flex align-items-center justify-content-center w-100"
-                                            onClick={() => handlePreviewPDF(item)}
-                                        >
-                                            <Card>
-                                                <CardHeader
-                                                    sx={{ padding: 0.5 }}
-                                                    className={`card-img-overlay img-item ${
-                                                        item.isChoosen ? 'border border-2 border-danger rounded-3' : ''
-                                                    }`}
-                                                    action={
-                                                        <IconButton
-                                                            aria-label="settings"
-                                                            color="primary"
-                                                            onClick={() => handleAddFile(item)}
-                                                            disabled={item.isChoosen}
+                                        <Card>
+                                            <CardHeader
+                                                sx={{ padding: 0.5 }}
+                                                className={`card-img-overlay img-item ${
+                                                    item.isChoosen ? 'border border-2 border-danger rounded-3' : ''
+                                                }`}
+                                                action={
+                                                    <React.Fragment>
+                                                        <Tooltip title="Account settings">
+                                                            <IconButton
+                                                                onClick={handleClick}
+                                                                aria-label="settings"
+                                                                color="primary"
+                                                                size="large"
+                                                            >
+                                                                <MoreVertIcon color="primary" fontSize="inherit" />
+                                                            </IconButton>
+                                                        </Tooltip>
+                                                        <Menu
+                                                            anchorEl={anchorEl}
+                                                            id="account-menu"
+                                                            open={open}
+                                                            onClose={handleClose}
+                                                            onClick={handleClose}
+                                                            PaperProps={{
+                                                                elevation: 0,
+                                                                sx: {
+                                                                    overflow: 'visible',
+                                                                    filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                                                                    mt: 1.5,
+                                                                    '& .MuiAvatar-root': {
+                                                                        width: 32,
+                                                                        height: 32,
+                                                                        ml: -0.5,
+                                                                        mr: 1,
+                                                                    },
+                                                                    '&:before': {
+                                                                        content: '""',
+                                                                        display: 'block',
+                                                                        position: 'absolute',
+                                                                        top: 0,
+                                                                        right: 14,
+                                                                        width: 10,
+                                                                        height: 10,
+                                                                        bgcolor: 'background.paper',
+                                                                        transform: 'translateY(-50%) rotate(45deg)',
+                                                                        zIndex: 0,
+                                                                    },
+                                                                },
+                                                            }}
+                                                            transformOrigin={{
+                                                                horizontal: 'right',
+                                                                vertical: 'top',
+                                                            }}
+                                                            anchorOrigin={{
+                                                                horizontal: 'right',
+                                                                vertical: 'bottom',
+                                                            }}
                                                         >
-                                                            {item.isChoosen ? (
-                                                                <CheckCircleIcon
-                                                                    color="primary"
-                                                                    className="opacity-100"
-                                                                />
-                                                            ) : (
-                                                                <Tooltip title={t('tooltip.add')} placement="top">
-                                                                    <AddCircleIcon color="primary" />
-                                                                </Tooltip>
+                                                            {!item.isChoosen && (
+                                                                <MenuItem onClick={() => handleAddFile(item)}>
+                                                                    <ListItemIcon>
+                                                                        <AddCircleIcon fontSize="small" />
+                                                                    </ListItemIcon>
+                                                                    Add
+                                                                </MenuItem>
                                                             )}
-                                                        </IconButton>
-                                                    }
-                                                />
-                                                {renderFile(item, index)}
-                                            </Card>
-                                        </button>
+                                                            <MenuItem onClick={() => handlePreviewPDF(item)}>
+                                                                <ListItemIcon>
+                                                                    <VisibilityIcon fontSize="small" />
+                                                                </ListItemIcon>
+                                                                Preview
+                                                            </MenuItem>
+                                                        </Menu>
+                                                    </React.Fragment>
+                                                }
+                                            />
+                                            {renderFile(item, index)}
+                                        </Card>
                                         <span className="text-center">{item.name}</span>
                                     </ImageListItem>
                                 ) : (

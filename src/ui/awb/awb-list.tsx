@@ -15,7 +15,6 @@ import {
     Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import { is } from 'immer/dist/internal';
 import { createContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -41,6 +40,8 @@ import {
     getImageBefore,
     getPackingList,
 } from '../../core/redux/customs-clearance-slice';
+import { getUserInfo } from '../../core/redux/user-slice';
+import { Permission } from '../../core/types/permission';
 import { formatDateTimeResList } from '../../core/utils/get-current-datetime';
 import {
     addFileToCustomsClearance,
@@ -65,6 +66,7 @@ import {
 import ApiAlert from '../../shared-components/alert/api-alert';
 import FileManagement from '../../shared-components/awb-management/file-management';
 import ImageManagement from '../../shared-components/awb-management/image-management';
+import ShowCustomsClearanceImageBefore from '../../shared-components/file-management/show-cc-image-before';
 import ShowCustomsClearanceInvoice from '../../shared-components/file-management/show-cc-invoice';
 import ShowCustomsClearancePackingList from '../../shared-components/file-management/show-cc-packing-list';
 import TabPanel from '../../shared-components/tab-manager/tab-panel';
@@ -100,10 +102,19 @@ export default function AirWayBillList() {
     const dispatch = useAppDispatch();
     const [customsClearanceTab, setCustomsClearanceTab] = useState(0);
     const [awbTab, setAwbTab] = useState(0);
+    const [currentAwbId, setCurrentAwbId] = useState('');
     const [currentAwbCode, setCurrentAwbCode] = useState('');
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(AWB_LOADING.LOADING);
     const [isLoadingCCD, setIsLoadingCCD] = useState(AWB_LOADING.LOADING);
+    const userInfo = useSelector(getUserInfo);
+    const [permission, setPermission] = useState<Permission>();
+
+    useEffect(() => {
+        if (userInfo && userInfo.permissions && userInfo.permissions[4] && userInfo.permissions[4][0]) {
+            setPermission(userInfo.permissions[4][0]);
+        }
+    }, [userInfo]);
 
     // Reset data in redux of customs clearance
     useEffect(() => {
@@ -130,10 +141,11 @@ export default function AirWayBillList() {
         } else {
             // save AWB data into the redux
             dispatch(customsClearanceActions.setAirWayBillList(awbList.data));
+            setCurrentAwbId(awbList.data[0].id);
             setCurrentAwbCode(awbList.data[0].code);
             // Get invoice, packing list, image after, and image before by AWB code
             // save invoice, packing list, image after and image before into the redux
-            filterByAirWayBillCode(awbList.data[0].code);
+            filterByAirWayBillId(awbList.data[0].id);
         }
     };
 
@@ -212,13 +224,13 @@ export default function AirWayBillList() {
 
     // Get invoice, packing list, image after, and image before by AWB code
     // save invoice, packing list, image after and image before into the redux
-    const filterByAirWayBillCode = async (awbCode: string) => {
+    const filterByAirWayBillId = async (awbId: string) => {
         const res = await Promise.all([
-            fetchCommercialInvoiceAPI(awbCode),
-            fetchPackingListApi(awbCode),
-            fetchCustomsClearanceDocument(awbCode),
-            fetchImageBefore(awbCode),
-            fetchImageAfter(awbCode),
+            fetchCommercialInvoiceAPI(awbId),
+            fetchPackingListApi(awbId),
+            fetchCustomsClearanceDocument(awbId),
+            fetchImageBefore(awbId),
+            fetchImageAfter(awbId),
         ]);
         checkIsLoading(res);
         dispatch(customsClearanceActions.setCommercialInvoice(res[0].data));
@@ -271,13 +283,14 @@ export default function AirWayBillList() {
     };
 
     // fetch data when change AWB code
-    const handleChangeAwbTab = (newValue: number, awbCode: string) => {
+    const handleChangeAwbTab = (newValue: number, awbId: string, awbCode: string) => {
+        setCurrentAwbCode(awbCode);
         setIsLoading(AWB_LOADING.LOADING);
         setIsLoadingCCD(AWB_LOADING.LOADING);
         clearData();
         setAwbTab(newValue);
-        setCurrentAwbCode(awbCode);
-        filterByAirWayBillCode(awbCode);
+        setCurrentAwbId(awbId);
+        filterByAirWayBillId(awbId);
     };
 
     // search awb code
@@ -316,7 +329,7 @@ export default function AirWayBillList() {
     };
 
     const handleDownload = () => {
-        fetchDownloadFile(currentAwbCode);
+        fetchDownloadFile(currentAwbId);
     };
 
     const handleDeleteAwb = () => {};
@@ -324,6 +337,7 @@ export default function AirWayBillList() {
     const handleCreateAwb = () => {
         fetchAirWayBillAPI(projectId).then((res: any) => {
             dispatch(customsClearanceActions.setAirWayBillList(res.data));
+            handleChangeAwbTab(airWayBillListRedux.length, res.data[res.data.length - 1].id, currentAwbCode);
         });
     };
 
@@ -336,7 +350,7 @@ export default function AirWayBillList() {
             });
 
         setIsLoading(AWB_LOADING.LOADING);
-        uploadCommercialInvoice(formData, fileData.description, currentAwbCode)
+        uploadCommercialInvoice(formData, fileData.description, currentAwbId)
             .then((res) => {
                 setResForHandleMsg({
                     status: res.status,
@@ -344,7 +358,7 @@ export default function AirWayBillList() {
                 });
 
                 if (res.status === StatusCode.OK) {
-                    fetchCommercialInvoiceAPI(currentAwbCode).then((res: any) => {
+                    fetchCommercialInvoiceAPI(currentAwbId).then((res: any) => {
                         dispatch(customsClearanceActions.setCommercialInvoice(res.data));
                         if (res.data === undefined || res.data === null) {
                             setIsLoading(AWB_LOADING.NO_DATA);
@@ -369,7 +383,7 @@ export default function AirWayBillList() {
                 formData.append('file', data);
             });
         setIsLoading(AWB_LOADING.LOADING);
-        uploadPackingList(formData, fileData.description, currentAwbCode)
+        uploadPackingList(formData, fileData.description, currentAwbId)
             .then((res) => {
                 setResForHandleMsg({
                     status: res.status,
@@ -377,7 +391,7 @@ export default function AirWayBillList() {
                 });
 
                 if (res.status === StatusCode.OK) {
-                    fetchPackingListApi(currentAwbCode).then((res: any) => {
+                    fetchPackingListApi(currentAwbId).then((res: any) => {
                         dispatch(customsClearanceActions.setPackingList(res.data));
                         if (res.data === undefined || res.data === null) {
                             setIsLoading(AWB_LOADING.NO_DATA);
@@ -404,7 +418,7 @@ export default function AirWayBillList() {
             });
         formData.append(
             'evidenceBefore',
-            new Blob([JSON.stringify({ airWayBillCode: currentAwbCode, description: imageData.description })], {
+            new Blob([JSON.stringify({ awbId: currentAwbId, description: imageData.description })], {
                 type: 'application/json',
             }),
         );
@@ -417,7 +431,7 @@ export default function AirWayBillList() {
                 });
 
                 if (res.status === StatusCode.OK) {
-                    fetchImageBefore(currentAwbCode).then((res: any) => {
+                    fetchImageBefore(currentAwbId).then((res: any) => {
                         dispatch(customsClearanceActions.setImageBefore(res.data));
                         if (res.data === undefined || res.data === null) {
                             setIsLoading(AWB_LOADING.NO_DATA);
@@ -444,7 +458,7 @@ export default function AirWayBillList() {
             });
         formData.append(
             'evidenceAfter',
-            new Blob([JSON.stringify({ airWayBillCode: currentAwbCode, description: imageData.description })], {
+            new Blob([JSON.stringify({ awbId: currentAwbId, description: imageData.description })], {
                 type: 'application/json',
             }),
         );
@@ -457,7 +471,7 @@ export default function AirWayBillList() {
                 });
 
                 if (res.status === StatusCode.OK) {
-                    fetchImageAfter(currentAwbCode).then((res: any) => {
+                    fetchImageAfter(currentAwbId).then((res: any) => {
                         dispatch(customsClearanceActions.setImageAfter(res.data));
                         if (res.data === undefined || res.data === null) {
                             setIsLoading(AWB_LOADING.NO_DATA);
@@ -476,7 +490,6 @@ export default function AirWayBillList() {
     };
 
     const handleAddFile = (data: any) => {
-        setIsLoadingCCD(AWB_LOADING.NO_DATA);
         addFileToCustomsClearance({ ...data })
             .then((res) => {
                 setResForHandleMsg({
@@ -485,7 +498,7 @@ export default function AirWayBillList() {
                 });
 
                 if (res.status === StatusCode.OK) {
-                    fetchCustomsClearanceDocument(currentAwbCode).then((res: any) => {
+                    fetchCustomsClearanceDocument(currentAwbId).then((res: any) => {
                         dispatch(customsClearanceActions.setCustomsClearanceDocument(res.data));
                         if (res.data === undefined || res.data === null) {
                             setIsLoadingCCD(AWB_LOADING.NO_DATA);
@@ -495,12 +508,16 @@ export default function AirWayBillList() {
                     });
 
                     if (data.postType === CUSTOMS_CLEARANCE.INVOICE) {
-                        fetchCommercialInvoiceAPI(currentAwbCode).then((res: any) => {
+                        fetchCommercialInvoiceAPI(currentAwbId).then((res: any) => {
                             dispatch(customsClearanceActions.setCommercialInvoice(res.data));
                         });
                     } else if (data.postType === CUSTOMS_CLEARANCE.PACKAGE) {
-                        fetchPackingListApi(currentAwbCode).then((res: any) => {
+                        fetchPackingListApi(currentAwbId).then((res: any) => {
                             dispatch(customsClearanceActions.setPackingList(res.data));
+                        });
+                    } else if (data.postType === 'imageBefore') {
+                        fetchImageBefore(currentAwbId).then((res: any) => {
+                            dispatch(customsClearanceActions.setImageBefore(res.data));
                         });
                     }
                 }
@@ -529,7 +546,7 @@ export default function AirWayBillList() {
         };
 
         let handleAirWayBillListRedux = airWayBillListRedux.map((currentAwb: any) => {
-            if (currentAwb.code === awbCode) {
+            if (currentAwb.id === awbCode) {
                 return {
                     ...currentAwb,
                     status: statusChange,
@@ -565,7 +582,7 @@ export default function AirWayBillList() {
 
     const handleAddFileComment = (data: any) => {
         const convertData = {
-            airWayBillCode: currentAwbCode,
+            airWayBillCode: currentAwbId,
             comment: data.comment,
         };
         switch (data.postType) {
@@ -578,13 +595,13 @@ export default function AirWayBillList() {
                         });
 
                         if (res.status !== StatusCode.OK) {
-                            fetchCommercialInvoiceAPI(currentAwbCode).then((res: any) => {
+                            fetchCommercialInvoiceAPI(currentAwbId).then((res: any) => {
                                 dispatch(customsClearanceActions.setCommercialInvoice(res.data));
                             });
                         }
                     })
                     .catch(() => {
-                        fetchCommercialInvoiceAPI(currentAwbCode).then((res: any) => {
+                        fetchCommercialInvoiceAPI(currentAwbId).then((res: any) => {
                             dispatch(customsClearanceActions.setCommercialInvoice(res.data));
                         });
                         setResForHandleMsg({
@@ -602,13 +619,13 @@ export default function AirWayBillList() {
                         });
 
                         if (res.status !== StatusCode.OK) {
-                            fetchPackingListApi(currentAwbCode).then((res: any) => {
+                            fetchPackingListApi(currentAwbId).then((res: any) => {
                                 dispatch(customsClearanceActions.setPackingList(res.data));
                             });
                         }
                     })
                     .catch(() => {
-                        fetchPackingListApi(currentAwbCode).then((res: any) => {
+                        fetchPackingListApi(currentAwbId).then((res: any) => {
                             dispatch(customsClearanceActions.setPackingList(res.data));
                         });
                         setResForHandleMsg({
@@ -624,7 +641,7 @@ export default function AirWayBillList() {
 
     const handleAddImageComment = (data: any) => {
         const convertData = {
-            airWayBillCode: currentAwbCode,
+            airWayBillCode: currentAwbId,
             comment: data.comment,
         };
 
@@ -638,13 +655,13 @@ export default function AirWayBillList() {
                         });
 
                         if (res.status !== StatusCode.OK) {
-                            fetchImageBefore(currentAwbCode).then((res: any) => {
+                            fetchImageBefore(currentAwbId).then((res: any) => {
                                 dispatch(customsClearanceActions.setImageBefore(res.data));
                             });
                         }
                     })
                     .catch(() => {
-                        fetchImageBefore(currentAwbCode).then((res: any) => {
+                        fetchImageBefore(currentAwbId).then((res: any) => {
                             dispatch(customsClearanceActions.setImageBefore(res.data));
                         });
                         setResForHandleMsg({
@@ -662,13 +679,13 @@ export default function AirWayBillList() {
                         });
 
                         if (res.status !== StatusCode.OK) {
-                            fetchImageAfter(currentAwbCode).then((res: any) => {
+                            fetchImageAfter(currentAwbId).then((res: any) => {
                                 dispatch(customsClearanceActions.setImageAfter(res.data));
                             });
                         }
                     })
                     .catch(() => {
-                        fetchImageAfter(currentAwbCode).then((res: any) => {
+                        fetchImageAfter(currentAwbId).then((res: any) => {
                             dispatch(customsClearanceActions.setImageBefore(res.data));
                         });
                         setResForHandleMsg({
@@ -704,9 +721,16 @@ export default function AirWayBillList() {
                                 variant="contained"
                                 color="primary"
                                 sx={{ textTransform: 'uppercase' }}
-                                onClick={() => {
-                                    navigate(`${UrlFeApp.CONSTRUCTION.CREATE}/${params.id}`);
-                                }}
+                                disabled={
+                                    !awbListData.some((awb: any) => awb.status === 2) && userInfo.uRole !== 'contractor'
+                                }
+                                onClick={
+                                    !awbListData.some((awb: any) => awb.status === 2) && userInfo.uRole !== 'contractor'
+                                        ? () => {
+                                              navigate(`${UrlFeApp.CONSTRUCTION.CREATE}/${params.id}`);
+                                          }
+                                        : () => {}
+                                }
                             >
                                 {t('awb.createConstruction')}
                             </Button>
@@ -717,9 +741,16 @@ export default function AirWayBillList() {
                                 variant="contained"
                                 color="primary"
                                 sx={{ textTransform: 'uppercase' }}
-                                onClick={() => {
-                                    navigate(`${UrlFeApp.CONSTRUCTION.CREATE}/${params.id}`);
-                                }}
+                                disabled={
+                                    !awbListData.some((awb: any) => awb.status === 2) && userInfo.uRole !== 'contractor'
+                                }
+                                onClick={
+                                    !awbListData.some((awb: any) => awb.status === 2) && userInfo.uRole !== 'contractor'
+                                        ? () => {
+                                              navigate(`${UrlFeApp.CONSTRUCTION.CREATE}/${params.id}`);
+                                          }
+                                        : () => {}
+                                }
                             >
                                 {t('awb.createConstruction')}
                             </Button>
@@ -791,7 +822,9 @@ export default function AirWayBillList() {
                                                                     minWidth: '450px',
                                                                 }}
                                                                 className="btn"
-                                                                onClick={() => handleChangeAwbTab(index, awb.code)}
+                                                                onClick={() =>
+                                                                    handleChangeAwbTab(index, awb.id, awb.code)
+                                                                }
                                                             >
                                                                 <div
                                                                     className="float-end"
@@ -805,7 +838,7 @@ export default function AirWayBillList() {
                                                                             onChange={(e) =>
                                                                                 handleStatusChange(
                                                                                     e.target.value,
-                                                                                    awb.code,
+                                                                                    awb.id,
                                                                                 )
                                                                             }
                                                                             label="status"
@@ -880,7 +913,7 @@ export default function AirWayBillList() {
                         </Card>
                     </Grid>
                     <Grid item xs={12} md={12} lg={12} sx={{ mt: 1, mb: 1 }} className="content-awb">
-                        <Card sx={{ width: '100%' }} className="progress-drawer" style={{ maxHeight: 900 }}>
+                        <Card sx={{ width: '100%' }} className="progress-drawer" style={{ maxHeight: 1300 }}>
                             <Grid container direction="row" spacing={0}>
                                 <Grid item xs={12} className="bg-customTheme">
                                     <Typography
@@ -926,6 +959,24 @@ export default function AirWayBillList() {
                                         }}
                                     >
                                         <ShowCustomsClearancePackingList
+                                            isLoading={isLoadingCCD}
+                                            customsDeclaration={customsDeclarationDocumentState}
+                                            callBackFn={handleRemoveFile}
+                                        />
+                                    </div>
+                                </Grid>
+                                <Grid item xs={12} className="text-center item">
+                                    <div className="item-header">{t('awb.imageBefore')}</div>
+                                    <div
+                                        className="content pt-3"
+                                        style={{
+                                            height: 230,
+                                            overflowX: 'auto',
+                                            display: 'inline-block',
+                                            width: '100%',
+                                        }}
+                                    >
+                                        <ShowCustomsClearanceImageBefore
                                             isLoading={isLoadingCCD}
                                             customsDeclaration={customsDeclarationDocumentState}
                                             callBackFn={handleRemoveFile}
@@ -1005,7 +1056,7 @@ export default function AirWayBillList() {
                                                         >
                                                             <FileManagement
                                                                 isLoading={isLoading}
-                                                                awbCode={currentAwbCode}
+                                                                awbCode={currentAwbId}
                                                                 callBackFn={handleUploadInvoice}
                                                                 callBackAddFile={handleAddFile}
                                                                 callBackAddComment={handleAddFileComment}
@@ -1048,6 +1099,8 @@ export default function AirWayBillList() {
                                                                 isLoading={isLoading}
                                                                 callBackFn={handleUploadImageBefore}
                                                                 callBackAddComment={handleAddImageComment}
+                                                                isImageBefore={true}
+                                                                callBackAddFile={handleAddFile}
                                                             />
                                                         </ImageBeforeContext.Provider>
                                                     }
@@ -1067,6 +1120,7 @@ export default function AirWayBillList() {
                                                                 isLoading={isLoading}
                                                                 callBackFn={handleUploadImageAfter}
                                                                 callBackAddComment={handleAddImageComment}
+                                                                isImageBefore={false}
                                                             />
                                                         </ImageAfterContext.Provider>
                                                     }

@@ -208,10 +208,10 @@ export default function MiniDrawer() {
                         dispatch(userActions.setIsLogined(true));
                         dispatch(appAction.setIsShowMsgErrLogin(false));
                         clearInterval(timer);
-                        navigate(UrlFeApp.DASH_BOARD);
                         apiClient.get(`${UrlServer.USER.INFO}`).then((res: any) => {
                             dispatch(userActions.setUserInfo(res.data.data));
                         });
+                        navigate(UrlFeApp.DASH_BOARD);
                     } else {
                         dispatch(appAction.setIsPageLoading(true));
                         dispatch(userActions.setIsLogined(false));
@@ -258,7 +258,11 @@ export default function MiniDrawer() {
     }));
 
     const filterRoleByMonitorId = (id: number) => {
-        if (userInfo && userInfo.permissions) return userInfo.permissions[id][0];
+        if (userInfo && userInfo.permissions && userInfo.permissions[id] && userInfo.permissions[id][0]) {
+            return userInfo.permissions[id][0];
+        } else {
+            return false;
+        }
     };
 
     return (

@@ -18,17 +18,18 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { getPdfFile } from '../../services/awb-service';
 import React from 'react';
 import PreviewPDF from '../modal/view-pdf-modal';
-export default function ShowCustomsClearancePackingList(props: {
+export default function ShowCustomsClearanceImageBefore(props: {
     callBackFn: Function;
     customsDeclaration: any;
     isLoading: string;
 }) {
     const { customsDeclaration, callBackFn, isLoading } = props;
+
     const handleRemoveCDFile = (item: any) => {
         const convertData = {
-            postType: 'package',
+            postType: 'imageBefore',
             toStatus: false,
-            postId: item.postPackageId,
+            postId: item.postImageBeforeId,
             fileId: [item.fileId],
         };
 
@@ -72,9 +73,9 @@ export default function ShowCustomsClearancePackingList(props: {
             {isLoading === AWB_LOADING.HAS_DATA ? (
                 <ImageList className="image-list-scroll" cols={5} rowHeight={164}>
                     {customsDeclaration &&
-                        customsDeclaration.packagesDoc &&
-                        customsDeclaration.packagesDoc.length > 0 &&
-                        customsDeclaration.packagesDoc.map((item: any, index: number) => {
+                        customsDeclaration.imageBeforeDoc &&
+                        customsDeclaration.imageBeforeDoc.length > 0 &&
+                        customsDeclaration.imageBeforeDoc.map((item: any, index: number) => {
                             return item.type === 'pdf' ? (
                                 <ImageListItem className="m-1">
                                     <Card>
