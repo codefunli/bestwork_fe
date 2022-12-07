@@ -584,3 +584,16 @@ export const AWB_LOADING = {
     NO_DATA: 'NoData',
     LOADING: 'Loading',
 };
+
+export const renderBase64File = (data: any) => {
+    switch (data.type.toLowerCase()) {
+        case 'pdf':
+            return dataURLtoFile(`${prefixPdf}/${data.type};base64,${data.content}`, data.name);
+        case 'xls':
+            return dataURLtoFile(`${prefixPdf}/${data.type};base64,${data.content}`, data.name);
+        case 'xlsx':
+            return dataURLtoFile(`${prefixPdf}/${data.type};base64,${data.content}`, data.name);
+        default:
+            return dataURLtoFile(`data:image/${data.type};base64,${data.content}`, data.name);
+    }
+};
