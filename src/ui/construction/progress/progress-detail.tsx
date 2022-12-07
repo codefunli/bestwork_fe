@@ -24,28 +24,28 @@ import IconButton from '@mui/material/IconButton';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import { AWB_LOADING } from '../../../core/constants/common';
 import { formatDateTimeResList } from '../../../core/utils/get-current-datetime';
-import { ProjectProgressDTO } from '../../../models/project-res-dto';
-import { getProgressByProjectId, getProgressStatus, getProjectStatus } from '../../../services/project-service';
-import HandleProgressStatus from '../../../shared-components/status-handle/progress-status-handle';
-import HandleProjectStatus from '../../../shared-components/status-handle/project-status-handle';
-import ProgressCreate from './progress-create';
-import ProgressEdit from './progress-edit';
-import '../../project/project.scss';
+import { ContructionProgressResDTO } from '../../../models/construction-res-dto';
 import {
     getConstruction,
     getConstructionStatus,
     getProgressByConstruction,
 } from '../../../services/construction-service';
-import HandleConstructionStatus from '../../../shared-components/status-handle/construction-status-handle';
+import { getProgressStatus } from '../../../services/project-service';
 import Loading from '../../../shared-components/loading-page/Loading';
-import { AWB_LOADING } from '../../../core/constants/common';
+import HandleConstructionStatus from '../../../shared-components/status-handle/construction-status-handle';
+import HandleProgressStatus from '../../../shared-components/status-handle/progress-status-handle';
+import '../../project/project.scss';
+import ProgressCreate from './progress-create';
+import ProgressEdit from './progress-edit';
 
 export default function ProgressDetail() {
     const [constructionData, setConstructionData] = useState<any>({});
     const { t } = useTranslation();
     const params = useParams();
-    const [isLoading, setIsLoading] = useState<any>(false);
+    const [isLoadingConstruction, setIsLoadingConstruction] = useState<any>(false);
+    const [isLoadingProgress, setIsLoadingProgress] = useState<any>(false);
     const [isOpenCreateProgress, setOpenCreateProgress] = useState(false);
     const [isOpenEditProgress, setOpenEditProgress] = useState(false);
     const [selectedProgress, setSelectedProgress] = useState<any>();
@@ -54,7 +54,7 @@ export default function ProgressDetail() {
     const [constructionStatus, setConstructionStatus] = useState([]);
 
     useEffect(() => {
-        if (params.id) fetchData();
+        if (params.id) fetchData(true, true);
 
         getProgressStatus().then((value: any) => {
             if (value && value.data) setProgressStatus(value.data);
@@ -65,19 +65,44 @@ export default function ProgressDetail() {
         });
     }, [params.id]);
 
-    const fetchData = async () => {
-        setIsLoading(AWB_LOADING.LOADING);
+    const fetchData = async (isLoadingConstruction: any, isLoadingProgress: any) => {
+        if (isLoadingConstruction) {
+            setIsLoadingConstruction(AWB_LOADING.LOADING);
+        }
+
+        if (isLoadingProgress) {
+            setIsLoadingProgress(AWB_LOADING.LOADING);
+        }
+
         const res = await Promise.all([getProgressByConstruction(params.id), getConstruction(params.id)]);
 
         if (res[0] && res[0].data) {
             setProgressList(res[0].data);
-            setIsLoading(AWB_LOADING.HAS_DATA);
+            if (isLoadingProgress) {
+                setIsLoadingProgress(AWB_LOADING.HAS_DATA);
+            }
         }
 
         if (res[1] && res[1].data) {
             setConstructionData(res[1].data);
-            setIsLoading(AWB_LOADING.HAS_DATA);
+            if (isLoadingConstruction) {
+                setIsLoadingConstruction(AWB_LOADING.HAS_DATA);
+            }
         }
+    };
+
+    const fetchProgressData = () => {
+        setIsLoadingProgress(AWB_LOADING.LOADING);
+        getProgressByConstruction(params.id)
+            .then((res) => {
+                if (res && res.data) {
+                    setProgressList(res.data);
+                    setIsLoadingProgress(AWB_LOADING.HAS_DATA);
+                }
+            })
+            .catch((err) => {
+                setProgressList([]);
+            });
     };
 
     const toggleDrawerCreateProgress = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -136,7 +161,7 @@ export default function ProgressDetail() {
                                     alt="green iguana"
                                 />
                             </CardActionArea>
-                            {isLoading === AWB_LOADING.HAS_DATA ? (
+                            {isLoadingConstruction === AWB_LOADING.HAS_DATA ? (
                                 <div className="project-info">
                                     <CardHeader
                                         action={
@@ -209,10 +234,10 @@ export default function ProgressDetail() {
                                     },
                                 }}
                             >
-                                {isLoading === AWB_LOADING.HAS_DATA ? (
+                                {isLoadingProgress === AWB_LOADING.HAS_DATA ? (
                                     progressList &&
                                     progressList.length > 0 &&
-                                    progressList.map((progress: ProjectProgressDTO | any, index: number) => (
+                                    progressList.map((progress: ContructionProgressResDTO | any, index: number) => (
                                         <div key={index}>
                                             <TimelineItem>
                                                 <TimelineOppositeContent color="textSecondary">
@@ -261,13 +286,14 @@ export default function ProgressDetail() {
                 isOpen={isOpenCreateProgress}
                 setIsOpen={setOpenCreateProgress}
                 toggleDrawer={toggleDrawerCreateProgress}
-                callBackFn={fetchData}
+                callBackFn={fetchProgressData}
             />
             <ProgressEdit
                 isOpen={isOpenEditProgress}
                 setIsOpen={setOpenEditProgress}
                 toggleDrawer={toggleDrawerEditProgress}
                 progress={selectedProgress}
+                callBackFn={fetchProgressData}
             />
         </div>
     );

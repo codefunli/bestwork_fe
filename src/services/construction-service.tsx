@@ -42,7 +42,7 @@ export const updateConstruction = async (id: any, obj: any) => {
 };
 
 export const getProgressByConstruction = async (constructionId: any) => {
-    const res = await apiClient.get<DataResSuccess<ProgressByConstrucionDTO>>(
+    const res = await apiClient.get<DataResSuccess<ContructionProgressResDTO[]>>(
         `${UrlServer.CONSTRUCTION.PROGRESS_BY_CONSTRUCTION}/${constructionId}`,
     );
     return res.data;

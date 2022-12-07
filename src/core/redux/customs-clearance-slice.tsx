@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface FileStorages {
+export interface FileStorages {
     fileId: number;
     content: string;
     createDate: string;

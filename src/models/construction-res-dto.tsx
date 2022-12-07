@@ -1,4 +1,4 @@
-import { ImageToUpload } from './project-res-dto';
+import { FileStorages } from '../core/redux/customs-clearance-slice';
 
 export interface AWBCode {
     id: number;
@@ -18,25 +18,14 @@ export interface ConstructionResDTO {
 }
 
 export interface ProgressByConstrucionDTO {
-    construction: ConstructionResDTO;
-    progress: {
-        id?: string;
-        projectId: string;
-        title: string;
-        fileStorages: ImageToUpload[];
-        startDate: string;
-        endDate: string;
-        status: string;
-        report: string;
-        note: string;
-    };
+    progress: Array<ContructionProgressResDTO>;
 }
 
 export interface ContructionProgressDTO {
-    id?: string;
+    id?: number;
     constructionId: string;
     title: string;
-    fileStorages: ImageToUpload[];
+    fileStorages: FileStorages[];
     startDate: string;
     endDate: string;
     status: string;
@@ -45,9 +34,9 @@ export interface ContructionProgressDTO {
 }
 
 export interface ContructionProgressResDTO {
-    id?: string;
+    id?: number;
     title: string;
-    fileStorages: ImageToUpload[];
+    fileStorages: FileStorages[];
     startDate: string;
     endDate: string;
     status: string;

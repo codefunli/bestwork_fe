@@ -19,7 +19,11 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { StatusCode } from '../../../core/constants/common';
 import { validateProjectProgress } from '../../../core/constants/validate';
-import { formatDateTimeReq, formatDateTimeRes, formatDateTimeResNoneSuffixes } from '../../../core/utils/get-current-datetime';
+import {
+    formatDateTimeReq,
+    formatDateTimeRes,
+    formatDateTimeResNoneSuffixes,
+} from '../../../core/utils/get-current-datetime';
 import { updateProgress, getProgressStatus } from '../../../services/construction-service';
 import ApiAlert from '../../../shared-components/alert/api-alert';
 import UploadMultipartFile from '../../../shared-components/file-management/upload-multipartfile';
@@ -29,6 +33,7 @@ interface Props {
     setIsOpen: Function;
     toggleDrawer: Function;
     progress: any;
+    callBackFn: Function;
 }
 
 const initialDataImg = {
@@ -38,7 +43,7 @@ const initialDataImg = {
 };
 
 const ProgressEdit = (props: Props) => {
-    const { isOpen, setIsOpen, toggleDrawer, progress } = props;
+    const { isOpen, setIsOpen, toggleDrawer, progress, callBackFn } = props;
     const { t } = useTranslation();
     const params = useParams();
     const [progressData, setProgressData] = useState(progress);
@@ -47,6 +52,7 @@ const ProgressEdit = (props: Props) => {
     const [progressStatus, setProgressStatus] = useState([]);
     const [fileData, setFileData] = useState(initialDataImg);
     const [eventImage, setEventImage] = useState<any>();
+    const [isClearPreview, setIsClearPreview] = useState(false);
 
     const {
         register,
@@ -69,15 +75,21 @@ const ProgressEdit = (props: Props) => {
     useEffect(() => {
         setProgressData({
             ...progress,
-            startDate: progress?.startDate ? formatDateTimeResNoneSuffixes(progress.startDate) : formatDateTimeRes(new Date()),
-            endDate: progress?.endDate ? formatDateTimeResNoneSuffixes(progress.endDate) : formatDateTimeRes(new Date()),
+            startDate: progress?.startDate
+                ? formatDateTimeResNoneSuffixes(progress.startDate)
+                : formatDateTimeRes(new Date()),
+            endDate: progress?.endDate
+                ? formatDateTimeResNoneSuffixes(progress.endDate)
+                : formatDateTimeRes(new Date()),
         });
         setImgData(progress?.fileStorages);
     }, [progress]);
 
     const handleCancel = () => {
+        reset();
         setIsOpen(false);
         toggleDrawer(false);
+        setIsClearPreview(true);
     };
 
     const handleInputChange = (e: any) => {
@@ -90,14 +102,14 @@ const ProgressEdit = (props: Props) => {
 
     const handleSubmitForm = async () => {
         let formData = new FormData();
-        
-        const progressValue: any ={
+
+        const progressValue: any = {
             ...progressData,
             constructionId: params.id,
             startDate: formatDateTimeReq(progressData.startDate),
-            endDate: formatDateTimeReq(progressData.endDate)
-        }
-        
+            endDate: formatDateTimeReq(progressData.endDate),
+        };
+
         if (fileData && fileData.file && fileData.file.length > 0) {
             fileData.file.forEach((data: any) => {
                 formData.append('files', data);
@@ -112,10 +124,8 @@ const ProgressEdit = (props: Props) => {
                 type: 'application/json',
             }),
         );
-        
-        updateProgress(
-            formData,
-            progressData.id)
+
+        updateProgress(formData, progressData.id)
             .then((res: any) => {
                 setResForHandleMsg({
                     status: res.status,
@@ -125,6 +135,7 @@ const ProgressEdit = (props: Props) => {
                 if (res.status === StatusCode.OK) {
                     setTimeout(() => {
                         setIsOpen(false);
+                        callBackFn();
                     }, 500);
                 }
             })
@@ -199,7 +210,7 @@ const ProgressEdit = (props: Props) => {
                                     <div className="content">
                                         <UploadMultipartFile
                                             imgData={progressData.fileStorages}
-                                            clearPreview={true}
+                                            clearPreview={isClearPreview}
                                             callbackFunc={onChangeImage}
                                             callBackClearEvent={handleClearEvent}
                                         />

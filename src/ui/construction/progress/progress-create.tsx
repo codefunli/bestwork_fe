@@ -122,13 +122,13 @@ const ProgressCreate = (props: Props) => {
 
     const handleSubmitForm = async (event: any) => {
         let formData = new FormData();
-        
-        const progressValue: any ={
+
+        const progressValue: any = {
             ...progressData,
             startDate: formatDateTimeReq(progressData.startDate),
-            endDate: formatDateTimeReq(progressData.endDate)
-        }
-        
+            endDate: formatDateTimeReq(progressData.endDate),
+        };
+
         if (fileData && fileData.file && fileData.file.length > 0) {
             fileData.file.forEach((data: any) => {
                 formData.append('files', data);
@@ -152,7 +152,7 @@ const ProgressCreate = (props: Props) => {
 
                 if (res.status === StatusCode.OK) {
                     setTimeout(() => {
-                        callBackFn();
+                        callBackFn(false, true);
                     }, 500);
                 }
             })
@@ -215,7 +215,7 @@ const ProgressCreate = (props: Props) => {
                             <div className="content">
                                 <UploadMultipartFile
                                     imgData={progressData.fileStorages}
-                                    clearPreview={true}
+                                    clearPreview={isClearPreview}
                                     callbackFunc={onChangeImage}
                                     callBackClearEvent={handleClearEvent}
                                 />
