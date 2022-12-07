@@ -18,7 +18,8 @@ export default function ShowCustomsClearanceInvoice(props: {
     const [isOpen, setIsOpen] = useState(false);
     const { t } = useTranslation();
 
-    const handleRemoveCDFile = (item: any) => {
+    const handleRemoveCDFile = (e: any, item: any) => {
+        e.preventDefault();
         const convertData = {
             postType: 'invoice',
             toStatus: false,
@@ -67,7 +68,7 @@ export default function ShowCustomsClearanceInvoice(props: {
                                                     <IconButton
                                                         aria-label="settings"
                                                         color="primary"
-                                                        onClick={() => handleRemoveCDFile(item)}
+                                                        onClick={(e) => handleRemoveCDFile(e, item)}
                                                     >
                                                         <RemoveCircleIcon color="primary" />
                                                     </IconButton>
@@ -98,7 +99,7 @@ export default function ShowCustomsClearanceInvoice(props: {
                                                 <IconButton
                                                     aria-label="settings"
                                                     color="primary"
-                                                    onClick={() => handleRemoveCDFile(item)}
+                                                    onClick={(e) => handleRemoveCDFile(e, item)}
                                                 >
                                                     <RemoveCircleIcon color="primary" />
                                                 </IconButton>

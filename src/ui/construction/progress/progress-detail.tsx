@@ -38,15 +38,18 @@ import {
     getProgressByConstruction,
 } from '../../../services/construction-service';
 import HandleConstructionStatus from '../../../shared-components/status-handle/construction-status-handle';
+import Loading from '../../../shared-components/loading-page/Loading';
+import { AWB_LOADING } from '../../../core/constants/common';
 
 export default function ProgressDetail() {
     const [constructionData, setConstructionData] = useState<any>({});
     const { t } = useTranslation();
     const params = useParams();
+    const [isLoading, setIsLoading] = useState<any>(false);
     const [isOpenCreateProgress, setOpenCreateProgress] = useState(false);
     const [isOpenEditProgress, setOpenEditProgress] = useState(false);
     const [selectedProgress, setSelectedProgress] = useState<any>();
-    const [progressList, setProgressList] = useState<ProjectProgressDTO[]>([]);
+    const [progressList, setProgressList] = useState<any>([]);
     const [progressStatus, setProgressStatus] = useState([]);
     const [constructionStatus, setConstructionStatus] = useState([]);
 
@@ -63,20 +66,19 @@ export default function ProgressDetail() {
     }, [params.id]);
 
     const fetchData = async () => {
-        const value: any = await getProgressByConstruction(params.id);
-        if (value && value.data) {
-            setProgressList(value.data);
+        setIsLoading(AWB_LOADING.LOADING);
+        const res = await Promise.all([getProgressByConstruction(params.id), getConstruction(params.id)]);
+
+        if (res[0] && res[0].data) {
+            setProgressList(res[0].data);
+            setIsLoading(AWB_LOADING.HAS_DATA);
         }
 
-        const result: any = await getConstruction(params.id);
-        if (result && result.data) {
-            setConstructionData(result.data);
+        if (res[1] && res[1].data) {
+            setConstructionData(res[1].data);
+            setIsLoading(AWB_LOADING.HAS_DATA);
         }
     };
-
-    useEffect(() => {
-        fetchData();
-    }, [isOpenEditProgress]);
 
     const toggleDrawerCreateProgress = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
         if (
@@ -134,7 +136,7 @@ export default function ProgressDetail() {
                                     alt="green iguana"
                                 />
                             </CardActionArea>
-                            {constructionData && (
+                            {isLoading === AWB_LOADING.HAS_DATA ? (
                                 <div className="project-info">
                                     <CardHeader
                                         action={
@@ -180,6 +182,10 @@ export default function ProgressDetail() {
                                         </div>
                                     </CardContent>
                                 </div>
+                            ) : (
+                                <div className="m-4">
+                                    <Loading />
+                                </div>
                             )}
                         </Card>
                     </Grid>
@@ -203,7 +209,8 @@ export default function ProgressDetail() {
                                     },
                                 }}
                             >
-                                {progressList &&
+                                {isLoading === AWB_LOADING.HAS_DATA ? (
+                                    progressList &&
                                     progressList.length > 0 &&
                                     progressList.map((progress: ProjectProgressDTO | any, index: number) => (
                                         <div key={index}>
@@ -238,7 +245,12 @@ export default function ProgressDetail() {
                                                 </TimelineContent>
                                             </TimelineItem>
                                         </div>
-                                    ))}
+                                    ))
+                                ) : (
+                                    <div className="m-4">
+                                        <Loading />
+                                    </div>
+                                )}
                             </Timeline>
                         </Card>
                     </Grid>
