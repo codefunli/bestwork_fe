@@ -137,7 +137,7 @@ export default function ProgressDetail() {
     const handleCloseProject = (project: any) => {};
     const handleArrayValue = (data: any) => {
         return (
-            <Stack direction="row" spacing={1}>
+            <Stack direction="column" spacing={1}>
                 {data &&
                     data.length > 0 &&
                     data.map((el: any) => {

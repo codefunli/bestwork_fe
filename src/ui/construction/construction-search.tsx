@@ -35,7 +35,7 @@ import './construction.scss';
 const initialValues = {
     page: '0',
     size: '5',
-    sortDirection: 'DESC',
+    sortDirection: 'ASC',
     sortBy: 'id',
     keyword: '',
     status: '-1',
