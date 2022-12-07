@@ -27,6 +27,8 @@ import HandleConstructionStatus from '../status-handle/construction-status-handl
 import { Permission } from '../../core/types/permission';
 import HandleNotificationRead from '../status-handle/notification-read-handle';
 import ReadMoreIcon from '@mui/icons-material/ReadMore';
+import { useSelector } from 'react-redux';
+import { getUserInfo } from '../../core/redux/user-slice';
 export interface ArrayAction {
     nameFn: string;
     acFn: (object1: any, object2: any) => void;
@@ -52,6 +54,7 @@ export default function EnhancedTable(props: EnhancedTable) {
     const [selected, setSelected] = React.useState<readonly string[]>([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const userInfo = useSelector(getUserInfo);
 
     React.useEffect(() => {
         setSelected([]);
@@ -268,9 +271,108 @@ export default function EnhancedTable(props: EnhancedTable) {
                                         {arrButton && arrButton.length > 0 && (
                                             <TableCell padding="normal">
                                                 {arrButton.map((arrBtn) => {
-                                                    return permission &&
-                                                        !permission.canEdit &&
-                                                        arrBtn.nameFn === 'Edit' ? (
+                                                    return rows.isProject ? (
+                                                        permission && !permission.canEdit ? (
+                                                            arrBtn.nameFn === 'Edit' ? (
+                                                                <Tooltip
+                                                                    key={arrBtn.nameFn}
+                                                                    title={arrBtn.nameFn}
+                                                                    placement="top-start"
+                                                                >
+                                                                    <IconButton
+                                                                        size="small"
+                                                                        color="primary"
+                                                                        aria-label="add to shopping cart"
+                                                                        disabled
+                                                                    >
+                                                                        {renderIcon(arrBtn.iconFn)}
+                                                                    </IconButton>
+                                                                </Tooltip>
+                                                            ) : (
+                                                                <Tooltip
+                                                                    key={arrBtn.nameFn}
+                                                                    title={arrBtn.nameFn}
+                                                                    placement="top-start"
+                                                                >
+                                                                    <IconButton
+                                                                        size="small"
+                                                                        color="primary"
+                                                                        aria-label="add to shopping cart"
+                                                                        onClick={(event) =>
+                                                                            handlePropsEdit(
+                                                                                event,
+                                                                                row.id as string,
+                                                                                arrBtn.acFn,
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        {renderIcon(arrBtn.iconFn)}
+                                                                    </IconButton>
+                                                                </Tooltip>
+                                                            )
+                                                        ) : arrBtn.nameFn === 'Edit' ? (
+                                                            row.createBy === userInfo.userName ? (
+                                                                <Tooltip
+                                                                    key={arrBtn.nameFn}
+                                                                    title={arrBtn.nameFn}
+                                                                    placement="top-start"
+                                                                >
+                                                                    <IconButton
+                                                                        size="small"
+                                                                        color="primary"
+                                                                        aria-label="add to shopping cart"
+                                                                        onClick={(event) =>
+                                                                            handlePropsEdit(
+                                                                                event,
+                                                                                row.id as string,
+                                                                                arrBtn.acFn,
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        {renderIcon(arrBtn.iconFn)}
+                                                                    </IconButton>
+                                                                </Tooltip>
+                                                            ) : (
+                                                                <Tooltip
+                                                                    key={arrBtn.nameFn}
+                                                                    title={arrBtn.nameFn}
+                                                                    placement="top-start"
+                                                                >
+                                                                    <IconButton
+                                                                        size="small"
+                                                                        color="primary"
+                                                                        aria-label="add to shopping cart"
+                                                                        disabled
+                                                                    >
+                                                                        {renderIcon(arrBtn.iconFn)}
+                                                                    </IconButton>
+                                                                </Tooltip>
+                                                            )
+                                                        ) : (
+                                                            <Tooltip
+                                                                key={arrBtn.nameFn}
+                                                                title={arrBtn.nameFn}
+                                                                placement="top-start"
+                                                            >
+                                                                <IconButton
+                                                                    size="small"
+                                                                    color="primary"
+                                                                    aria-label="add to shopping cart"
+                                                                    onClick={(event) =>
+                                                                        handlePropsEdit(
+                                                                            event,
+                                                                            row.id as string,
+                                                                            arrBtn.acFn,
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    {renderIcon(arrBtn.iconFn)}
+                                                                </IconButton>
+                                                            </Tooltip>
+                                                        )
+                                                    ) : permission &&
+                                                      !permission.canEdit &&
+                                                      arrBtn.nameFn === 'Edit' ? (
                                                         <Tooltip
                                                             key={arrBtn.nameFn}
                                                             title={arrBtn.nameFn}

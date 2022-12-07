@@ -6,9 +6,12 @@ interface ImageManager {
     data: any;
     isFile?: boolean;
     callBackFn: Function;
+    isImageBefore: boolean;
+    postType?: string;
+    postId?: number;
 }
 export default function ImageManager(props: ImageManager) {
-    const { data, isFile, callBackFn } = props;
+    const { data, isFile, callBackFn, isImageBefore, postType, postId } = props;
     const [isShowModal, setIsShowModal] = useState(false);
     const { t } = useTranslation();
 
@@ -24,25 +27,44 @@ export default function ImageManager(props: ImageManager) {
     };
 
     const handleAddFileCallBack = (value: any) => {
-        callBackFn({ ...value, postId: data.postId, postType: data.postType });
+        callBackFn({
+            ...value,
+            postId: data.postId ? data.postId : postId,
+            postType: data.postType ? data.postType : postType,
+        });
     };
 
     return (
         <>
             {!isFile ? (
-                <button
-                    onClick={showModal}
-                    className="border-0 bg-white d-flex align-items-center justify-content-center w-100"
-                >
-                    <QuiltedImage
-                        callBackFn={() => {}}
-                        images={data.files}
-                        isOpenModal={false}
-                        isFile={false}
-                        isFilePreview={false}
-                        invoicePostId={-1}
-                    />
-                </button>
+                isImageBefore ? (
+                    <div className="border-0 bg-white d-flex align-items-center justify-content-center w-100">
+                        <QuiltedImage
+                            callBackFn={handleAddFileCallBack}
+                            images={data.files}
+                            isOpenModal={false}
+                            isFile={true}
+                            isFilePreview={false}
+                            invoicePostId={data.invoicePostId}
+                            isImageBefore={isImageBefore}
+                        />
+                    </div>
+                ) : (
+                    <button
+                        onClick={showModal}
+                        className="border-0 bg-white d-flex align-items-center justify-content-center w-100"
+                    >
+                        <QuiltedImage
+                            callBackFn={() => {}}
+                            images={data.files}
+                            isOpenModal={false}
+                            isFile={false}
+                            isFilePreview={false}
+                            invoicePostId={-1}
+                            isImageBefore={isImageBefore}
+                        />
+                    </button>
+                )
             ) : (
                 <div className="border-0 bg-white d-flex align-items-center justify-content-center w-100">
                     <QuiltedImage
@@ -52,6 +74,7 @@ export default function ImageManager(props: ImageManager) {
                         isFile={true}
                         isFilePreview={false}
                         invoicePostId={data.invoicePostId}
+                        isImageBefore={isImageBefore}
                     />
                 </div>
             )}

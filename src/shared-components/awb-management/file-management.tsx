@@ -209,6 +209,7 @@ export default function FileManagement(props: any) {
                                             }}
                                             isFile={true}
                                             callBackFn={handleAddFile}
+                                            isImageBefore={false}
                                         />
                                     </CardContent>
                                     <CardActions>

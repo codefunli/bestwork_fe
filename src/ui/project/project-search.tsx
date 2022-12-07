@@ -255,14 +255,11 @@ export default function ProjectSearch() {
                                 />
                                 <CardContent>
                                     <Box
-                                        // component="form"
                                         sx={{
                                             '& > :not(style)': {
                                                 m: 1,
                                             },
                                         }}
-                                        // noValidate
-                                        // autoComplete="off"
                                     >
                                         <div className="row justify-center m-1">
                                             <div className="col-12 d-block p-1">
@@ -375,9 +372,11 @@ export default function ProjectSearch() {
                     searchCallBack={handleSearchCallBack}
                     headCells={headProjectCol}
                     rows={
-                        state || {
-                            content: [],
-                        }
+                        state
+                            ? { ...state, isProject: true }
+                            : {
+                                  content: [],
+                              }
                     }
                     isLoading={isLoading}
                     arrButton={arrButton}

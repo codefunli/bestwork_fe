@@ -33,7 +33,7 @@ const initialValue = {
 export const ImageContext = createContext<any>({});
 
 export default function ImageManagement(props: any) {
-    const { callBackFn, callBackAddComment, isLoading } = props;
+    const { callBackFn, callBackAddComment, isLoading, isImageBefore, callBackAddFile } = props;
     const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);
     const [imagesData, setImagesData] = useState<any>([]);
     const [arrMsg, setArrMsg] = useState<Comment[]>([]);
@@ -105,6 +105,10 @@ export default function ImageManagement(props: any) {
         callBackAddComment(data);
     };
 
+    const handleAddFileCallBack = (data: any) => {
+        callBackAddFile({ ...data, toStatus: true });
+    };
+
     return (
         <div>
             <Grid container spacing={3} direction="row" justifyContent="center" alignItems="center" sx={{ mb: 3 }}>
@@ -156,7 +160,10 @@ export default function ImageManagement(props: any) {
                                                 files: data.fileStorages,
                                             }}
                                             isFile={false}
-                                            callBackFn={() => {}}
+                                            callBackFn={handleAddFileCallBack}
+                                            isImageBefore={isImageBefore}
+                                            postType={data.postType}
+                                            postId={data.evidenceBeforeId}
                                         />
                                     </CardContent>
                                     <CardActions>
