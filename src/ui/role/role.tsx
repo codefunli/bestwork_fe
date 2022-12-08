@@ -284,8 +284,8 @@ export default function Role() {
             });
     };
 
-    const handleCreateNewScreen = (name: string, icon: string) => {
-        createScreen({ name, icon })
+    const handleCreateNewScreen = (name: string, icon: string, url: string) => {
+        createScreen({ name, icon, url })
             .then((res) => {
                 handleResponse(res);
                 fetchData();

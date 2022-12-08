@@ -127,7 +127,8 @@
         "enable": "Đã kích hoạt",
         "disable": "Chưa kích hoạt",
         "read": "Đã đọc",
-        "unRead": "Chưa đọc"
+        "unRead": "Chưa đọc",
+        "urlPlacholder": "VD: /app/role"
     },
     "message": {
         "required": "là bắt buộc.",
@@ -331,7 +332,12 @@
         "title": "Quản lý màn hình",
         "modal": {
             "name": "Tên màn hình",
-            "icon": "Icon"
+            "icon": "Biểu tượng",
+            "url": "Địa chỉ "
+        },
+        "guide": {
+            "title": "Hướng dẫn chọn biểu tượng: ",
+            "content": "Nhấn chuột trái vào vùng khoanh đỏ để sao chép tên của biểu tượng, sau đó dán nó vào ô nhập dữ liệu. "
         }
     },
     "error": {

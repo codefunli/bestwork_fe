@@ -9,7 +9,12 @@ import { store } from './core/redux/store';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { I18nextProvider } from 'react-i18next';
 import i18n from './transaction/i18n';
+import 'font-awesome/css/font-awesome.min.css';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+import { faTwitter, faFontAwesome } from '@fortawesome/free-brands-svg-icons';
 
+library.add(fas, faTwitter, faFontAwesome);
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
     <React.StrictMode>

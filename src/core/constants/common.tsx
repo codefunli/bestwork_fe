@@ -159,6 +159,9 @@ export const UrlServer = {
         CHANGE_STATUS: `${PREFIX_SERVER_URL}/notifications/read`,
         COUNT_UNREAD: `${PREFIX_SERVER_URL}/notifications/count-unread`,
     },
+    MONITOR: {
+        GET_LIST: `${PREFIX_SERVER_URL}/monitor`,
+    },
 };
 
 export const FieldConstants = {
@@ -187,6 +190,7 @@ export const FieldConstants = {
     END_DATE: 'End date',
     LOCATION: 'Location',
     AWB: 'AWB',
+    URL: 'Url',
 };
 
 export const ConfirmConstants = {
@@ -341,6 +345,14 @@ export const Item = {
         RU_DRAWING: 'construction.register.cttDraw',
         RU_AWB: 'construction.register.cttAwb',
         RU_DESCRIPTION: 'construction.register.cttDescription',
+    },
+    ICON_URL: {
+        ICON_DASHBOARD_NM_BAR: '/app/dashboard',
+        ICON_COM_NM_BAR: '/app/company',
+        ICON_USER_NM_BAR: '/app/user',
+        ICON_PRJ_NM_BAR: '/app/project',
+        ICON_ROLE_NM_BAR: '/app/role',
+        ICON_CONSTRUCTION_NM_BAR: '/app/construction',
     },
 };
 

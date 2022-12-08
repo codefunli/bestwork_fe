@@ -127,7 +127,8 @@
         "enable": "Enable",
         "disable": "Disable",
         "read": "Read",
-        "unRead": "Unread"
+        "unRead": "Unread",
+        "urlPlacholder": "Example: /app/role"
     },
     "message": {
         "required": "is required.",
@@ -332,7 +333,12 @@
         "title": "Screen Creation",
         "modal": {
             "name": "Screen Name",
-            "icon": "Icon"
+            "icon": "Icon",
+            "url": "Url"
+        },
+        "guide": {
+            "title": "How to choose icon?",
+            "content": "Click on the red area to copy Icon Name, then paste it in the icon input."
         }
     },
     "error": {

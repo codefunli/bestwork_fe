@@ -29,13 +29,13 @@ import { useSelector } from 'react-redux';
 import { Outlet, useNavigate } from 'react-router-dom';
 import '../App.scss';
 import { ErrorPagePath, StatusCode, UrlFeApp, UrlServer } from '../core/constants/common';
-import menuItemLinkData from '../core/constants/menu-item-link';
 import { BASE_API_PATH } from '../core/constants/urls';
 import { useAppDispatch, useAppSelector } from '../core/hook/redux';
 import { appAction } from '../core/redux/app-slice';
 import { getUserInfo, userActions } from '../core/redux/user-slice';
 import { isObjectEmpty } from '../core/utils/object-utils';
 import { renderIconLeftBar } from '../core/utils/render-utils';
+import { getMonitor } from '../services/monitor-service';
 import MLanguage from '../shared-components/language/m-language';
 import LinearProgressWithLabel from '../shared-components/progress/linear-progress-with-label';
 import Notification from '../ui/notification/notification';
@@ -120,6 +120,7 @@ export default function MiniDrawer() {
     const dispatch = useAppDispatch();
     const [progress, setProgress] = React.useState(10);
     const userInfo = useSelector(getUserInfo);
+    const [menuItems, setMenuItems] = React.useState([]);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -146,6 +147,9 @@ export default function MiniDrawer() {
             setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10));
         }, 1000);
 
+        getMonitor().then((result: any) => {
+            if (result && result.data) setMenuItems(result.data);
+        });
         const accessToken = localStorage.getItem('access_token');
         const refreshToken = localStorage.getItem('refresh_token');
 
@@ -332,7 +336,7 @@ export default function MiniDrawer() {
                             </DrawerHeader>
                             <Divider />
                             <List>
-                                {menuItemLinkData.map((menuItem, index) => (
+                                {menuItems.map((menuItem: any, index: number) => (
                                     <React.Fragment key={index}>
                                         {filterRoleByMonitorId(menuItem.id) &&
                                             filterRoleByMonitorId(menuItem.id).canAccess && (
@@ -345,7 +349,7 @@ export default function MiniDrawer() {
                                                         }}
                                                         onClick={(event) => {
                                                             navigateByLink(
-                                                                menuItem.link,
+                                                                menuItem.url,
                                                                 filterRoleByMonitorId(menuItem.id),
                                                             );
                                                         }}
@@ -357,7 +361,7 @@ export default function MiniDrawer() {
                                                                 justifyContent: 'center',
                                                             }}
                                                         >
-                                                            {renderIconLeftBar(menuItem.iconNm)}
+                                                            {renderIconLeftBar(menuItem.icon)}
                                                         </ListItemIcon>
                                                         <ListItemText
                                                             primary={t(menuItem.name)}
