@@ -11,18 +11,20 @@ import {
     IconButton,
     InputLabel,
     Paper,
+    Tooltip,
     Typography,
 } from '@mui/material';
-import { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { AWB_LOADING, CUSTOMS_CLEARANCE } from '../../core/constants/common';
 import { Comment } from '../../core/types/base';
 import CommentEl from '../../shared-components/comment/comment';
 import ImageManager from '../../shared-components/images-manager/image-manager';
-import { ImageAfterContext, ImageBeforeContext } from '../../ui/awb/awb-list';
+import { ImageAfterContext, ImageBeforeContext, PermissionContext } from '../../ui/awb/awb-list';
 import Loading from '../loading-page/Loading';
 import ImageUploadModal from '../modal/image-upload-modal';
+import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove';
 
 const initialValue = {
     description: '',
@@ -42,6 +44,7 @@ export default function ImageManagement(props: any) {
     const { t } = useTranslation();
     const imageBefore = useContext(ImageBeforeContext);
     const imageAfter = useContext(ImageAfterContext);
+    const permission = useContext<any>(PermissionContext);
 
     useEffect(() => {
         if (imageBefore && imageBefore.length > 0) {
@@ -109,6 +112,32 @@ export default function ImageManagement(props: any) {
         callBackAddFile({ ...data, toStatus: true });
     };
 
+    const handleAddAll = (value: any) => {
+        const fileId = value.fileStorages.map((file: any) => {
+            return file.fileId;
+        });
+
+        const convertData = {
+            postType: value.postType,
+            postId: value.evidenceBeforeId,
+            fileId: [...fileId],
+            toStatus: true,
+        };
+
+        callBackAddFile(convertData);
+    };
+
+    const checkAddAllButton = (value: any) => {
+        let check = [];
+        if (value && value.fileStorages) {
+            check = value.fileStorages.filter((file: any) => {
+                return file.isChoosen === false;
+            });
+        }
+
+        return check.length <= 0;
+    };
+
     return (
         <div>
             <Grid container spacing={3} direction="row" justifyContent="center" alignItems="center" sx={{ mb: 3 }}>
@@ -124,10 +153,15 @@ export default function ImageManagement(props: any) {
                             border: 2,
                             borderColor: 'primary.main',
                         }}
-                        onClick={openModal}
+                        onClick={permission?.canEdit ? openModal : () => {}}
                     >
                         <InputLabel htmlFor="outlined-adornment-amount">{t('awb.uploadImage')}</InputLabel>
-                        <IconButton color="primary" sx={{ p: '10px' }} aria-label="directions">
+                        <IconButton
+                            color="primary"
+                            sx={{ p: '10px' }}
+                            aria-label="directions"
+                            disabled={!permission?.canEdit}
+                        >
                             <AddPhotoAlternateIcon />
                         </IconButton>
                     </Paper>
@@ -152,6 +186,22 @@ export default function ImageManagement(props: any) {
                                         avatar={<Avatar aria-label="recipe">MS</Avatar>}
                                         title={data.createBy}
                                         subheader={data.createDate}
+                                        action={
+                                            isImageBefore ? (
+                                                <IconButton
+                                                    color="primary"
+                                                    size="large"
+                                                    onClick={() => handleAddAll(data)}
+                                                    disabled={checkAddAllButton(data)}
+                                                >
+                                                    <Tooltip title={t('tooltip.addAll')} placement="left">
+                                                        <DriveFileMoveIcon sx={{ fontSize: 50 }} />
+                                                    </Tooltip>
+                                                </IconButton>
+                                            ) : (
+                                                <React.Fragment></React.Fragment>
+                                            )
+                                        }
                                     />
                                     <CardContent>
                                         <p>{data.description}</p>

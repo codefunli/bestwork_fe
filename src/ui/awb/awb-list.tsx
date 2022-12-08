@@ -77,6 +77,7 @@ export const CommercialInvoiceContext = createContext([]);
 export const PackingListContext = createContext([]);
 export const ImageBeforeContext = createContext([]);
 export const ImageAfterContext = createContext([]);
+export const PermissionContext = createContext({});
 
 export default function AirWayBillList() {
     const { t } = useTranslation();
@@ -276,8 +277,8 @@ export default function AirWayBillList() {
     };
 
     // dowload file
-    const fetchDownloadFile = (awbCode: string) => {
-        downloadCCD(awbCode).then((response: any) => {
+    const fetchDownloadFile = (awbId: string, awbCode: string) => {
+        downloadCCD(awbId).then((response: any) => {
             downloadZIP(arrayBufferToBase64(response), awbCode, prefixZip);
         });
     };
@@ -329,7 +330,7 @@ export default function AirWayBillList() {
     };
 
     const handleDownload = () => {
-        fetchDownloadFile(currentAwbId);
+        fetchDownloadFile(currentAwbId, currentAwbCode);
     };
 
     const handleDeleteAwb = () => {};
@@ -337,7 +338,11 @@ export default function AirWayBillList() {
     const handleCreateAwb = () => {
         fetchAirWayBillAPI(projectId).then((res: any) => {
             dispatch(customsClearanceActions.setAirWayBillList(res.data));
-            handleChangeAwbTab(airWayBillListRedux.length, res.data[res.data.length - 1].id, currentAwbCode);
+            handleChangeAwbTab(
+                airWayBillListRedux.length,
+                res.data[res.data.length - 1].id,
+                res.data[res.data.length - 1].code,
+            );
         });
     };
 
@@ -458,7 +463,7 @@ export default function AirWayBillList() {
             });
         formData.append(
             'evidenceAfter',
-            new Blob([JSON.stringify({ awbId: currentAwbId, description: imageData.description })], {
+            new Blob([JSON.stringify({ airWayBillId: currentAwbId, description: imageData.description })], {
                 type: 'application/json',
             }),
         );
@@ -582,7 +587,7 @@ export default function AirWayBillList() {
 
     const handleAddFileComment = (data: any) => {
         const convertData = {
-            airWayBillCode: currentAwbId,
+            awbId: currentAwbId,
             comment: data.comment,
         };
         switch (data.postType) {
@@ -641,7 +646,7 @@ export default function AirWayBillList() {
 
     const handleAddImageComment = (data: any) => {
         const convertData = {
-            airWayBillCode: currentAwbId,
+            awbId: currentAwbId,
             comment: data.comment,
         };
 
@@ -722,10 +727,10 @@ export default function AirWayBillList() {
                                 color="primary"
                                 sx={{ textTransform: 'uppercase' }}
                                 disabled={
-                                    !awbListData.some((awb: any) => awb.status === 2) && userInfo.uRole !== 'contractor'
+                                    !awbListData.some((awb: any) => awb.status === 2) || userInfo.uRole !== 'contractor'
                                 }
                                 onClick={
-                                    !awbListData.some((awb: any) => awb.status === 2) && userInfo.uRole !== 'contractor'
+                                    !awbListData.some((awb: any) => awb.status === 2) || userInfo.uRole !== 'contractor'
                                         ? () => {
                                               navigate(`${UrlFeApp.CONSTRUCTION.CREATE}/${params.id}`);
                                           }
@@ -742,10 +747,10 @@ export default function AirWayBillList() {
                                 color="primary"
                                 sx={{ textTransform: 'uppercase' }}
                                 disabled={
-                                    !awbListData.some((awb: any) => awb.status === 2) && userInfo.uRole !== 'contractor'
+                                    !awbListData.some((awb: any) => awb.status === 2) || userInfo.uRole !== 'contractor'
                                 }
                                 onClick={
-                                    !awbListData.some((awb: any) => awb.status === 2) && userInfo.uRole !== 'contractor'
+                                    !awbListData.some((awb: any) => awb.status === 2) || userInfo.uRole !== 'contractor'
                                         ? () => {
                                               navigate(`${UrlFeApp.CONSTRUCTION.CREATE}/${params.id}`);
                                           }
@@ -822,8 +827,16 @@ export default function AirWayBillList() {
                                                                     minWidth: '450px',
                                                                 }}
                                                                 className="btn"
-                                                                onClick={() =>
-                                                                    handleChangeAwbTab(index, awb.id, awb.code)
+                                                                onClick={
+                                                                    isLoading === AWB_LOADING.LOADING ||
+                                                                    isLoadingCCD === AWB_LOADING.LOADING
+                                                                        ? () => {}
+                                                                        : () =>
+                                                                              handleChangeAwbTab(
+                                                                                  index,
+                                                                                  awb.id,
+                                                                                  awb.code,
+                                                                              )
                                                                 }
                                                             >
                                                                 <div
@@ -900,7 +913,12 @@ export default function AirWayBillList() {
                                                     <Button
                                                         sx={{ mr: 1 }}
                                                         variant="contained"
-                                                        onClick={() => toggleCreateModal(true)}
+                                                        disabled={!permission?.canEdit}
+                                                        onClick={
+                                                            permission?.canEdit
+                                                                ? () => toggleCreateModal(true)
+                                                                : () => {}
+                                                        }
                                                     >
                                                         {t('button.btnCreate')}
                                                     </Button>
@@ -926,11 +944,13 @@ export default function AirWayBillList() {
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={12} className="text-center item">
-                                    <div className="item-header">{t('awb.AWBNo')}</div>
-                                    <div className="content text-center">{currentAwbCode}</div>
+                                    <div className="item-header text-uppercase">{t('awb.AWBNo')}</div>
+                                    <div className="content text-center text-uppercase particletext">
+                                        {currentAwbCode}
+                                    </div>
                                 </Grid>
                                 <Grid item xs={12} className="text-center item">
-                                    <div className="item-header">{t('awb.commercialInvoice')}</div>
+                                    <div className="item-header text-uppercase">{t('awb.commercialInvoice')}</div>
                                     <div
                                         className="content pt-3"
                                         style={{
@@ -948,7 +968,7 @@ export default function AirWayBillList() {
                                     </div>
                                 </Grid>
                                 <Grid item xs={12} className="text-center item">
-                                    <div className="item-header">{t('awb.packingList')}</div>
+                                    <div className="item-header text-uppercase">{t('awb.packingList')}</div>
                                     <div
                                         className="content pt-3"
                                         style={{
@@ -966,7 +986,7 @@ export default function AirWayBillList() {
                                     </div>
                                 </Grid>
                                 <Grid item xs={12} className="text-center item">
-                                    <div className="item-header">{t('awb.imageBefore')}</div>
+                                    <div className="item-header text-uppercase">{t('awb.imageBefore')}</div>
                                     <div
                                         className="content pt-3"
                                         style={{
@@ -984,7 +1004,7 @@ export default function AirWayBillList() {
                                     </div>
                                 </Grid>
                                 <Grid item xs={12} sm={12} className="text-center item">
-                                    <div className="item-header">{t('awb.action')}</div>
+                                    <div className="item-header text-uppercase">{t('awb.action')}</div>
                                     <div
                                         className="content pt-3"
                                         style={{
@@ -1051,17 +1071,21 @@ export default function AirWayBillList() {
                                             <CardContent>
                                                 <Box>
                                                     {
-                                                        <CommercialInvoiceContext.Provider
-                                                            value={commercialInvoiceState}
+                                                        <PermissionContext.Provider
+                                                            value={permission ? permission : {}}
                                                         >
-                                                            <FileManagement
-                                                                isLoading={isLoading}
-                                                                awbCode={currentAwbId}
-                                                                callBackFn={handleUploadInvoice}
-                                                                callBackAddFile={handleAddFile}
-                                                                callBackAddComment={handleAddFileComment}
-                                                            />
-                                                        </CommercialInvoiceContext.Provider>
+                                                            <CommercialInvoiceContext.Provider
+                                                                value={commercialInvoiceState}
+                                                            >
+                                                                <FileManagement
+                                                                    isLoading={isLoading}
+                                                                    awbCode={currentAwbId}
+                                                                    callBackFn={handleUploadInvoice}
+                                                                    callBackAddFile={handleAddFile}
+                                                                    callBackAddComment={handleAddFileComment}
+                                                                />
+                                                            </CommercialInvoiceContext.Provider>
+                                                        </PermissionContext.Provider>
                                                     }
                                                 </Box>
                                             </CardContent>
@@ -1074,14 +1098,18 @@ export default function AirWayBillList() {
                                             <CardContent>
                                                 <Box>
                                                     {
-                                                        <PackingListContext.Provider value={packingListState}>
-                                                            <FileManagement
-                                                                isLoading={isLoading}
-                                                                callBackAddFile={handleAddFile}
-                                                                callBackFn={handleUploadPackingList}
-                                                                callBackAddComment={handleAddFileComment}
-                                                            />
-                                                        </PackingListContext.Provider>
+                                                        <PermissionContext.Provider
+                                                            value={permission ? permission : {}}
+                                                        >
+                                                            <PackingListContext.Provider value={packingListState}>
+                                                                <FileManagement
+                                                                    isLoading={isLoading}
+                                                                    callBackAddFile={handleAddFile}
+                                                                    callBackFn={handleUploadPackingList}
+                                                                    callBackAddComment={handleAddFileComment}
+                                                                />
+                                                            </PackingListContext.Provider>
+                                                        </PermissionContext.Provider>
                                                     }
                                                 </Box>
                                             </CardContent>
@@ -1094,15 +1122,19 @@ export default function AirWayBillList() {
                                             <CardContent>
                                                 <Box>
                                                     {
-                                                        <ImageBeforeContext.Provider value={imageBeforeState}>
-                                                            <ImageManagement
-                                                                isLoading={isLoading}
-                                                                callBackFn={handleUploadImageBefore}
-                                                                callBackAddComment={handleAddImageComment}
-                                                                isImageBefore={true}
-                                                                callBackAddFile={handleAddFile}
-                                                            />
-                                                        </ImageBeforeContext.Provider>
+                                                        <PermissionContext.Provider
+                                                            value={permission ? permission : {}}
+                                                        >
+                                                            <ImageBeforeContext.Provider value={imageBeforeState}>
+                                                                <ImageManagement
+                                                                    isLoading={isLoading}
+                                                                    callBackFn={handleUploadImageBefore}
+                                                                    callBackAddComment={handleAddImageComment}
+                                                                    isImageBefore={true}
+                                                                    callBackAddFile={handleAddFile}
+                                                                />
+                                                            </ImageBeforeContext.Provider>
+                                                        </PermissionContext.Provider>
                                                     }
                                                 </Box>
                                             </CardContent>
@@ -1115,14 +1147,18 @@ export default function AirWayBillList() {
                                             <CardContent>
                                                 <Box>
                                                     {
-                                                        <ImageAfterContext.Provider value={imageAfterState}>
-                                                            <ImageManagement
-                                                                isLoading={isLoading}
-                                                                callBackFn={handleUploadImageAfter}
-                                                                callBackAddComment={handleAddImageComment}
-                                                                isImageBefore={false}
-                                                            />
-                                                        </ImageAfterContext.Provider>
+                                                        <PermissionContext.Provider
+                                                            value={permission ? permission : {}}
+                                                        >
+                                                            <ImageAfterContext.Provider value={imageAfterState}>
+                                                                <ImageManagement
+                                                                    isLoading={isLoading}
+                                                                    callBackFn={handleUploadImageAfter}
+                                                                    callBackAddComment={handleAddImageComment}
+                                                                    isImageBefore={false}
+                                                                />
+                                                            </ImageAfterContext.Provider>
+                                                        </PermissionContext.Provider>
                                                     }
                                                 </Box>
                                             </CardContent>
@@ -1134,12 +1170,14 @@ export default function AirWayBillList() {
                     </Grid>
                 </Grid>
             </Grid>
-            <CreateAwb
-                isOpen={isOpenCreateModal}
-                toggleOpen={toggleCreateModal}
-                handleCreateNewAwb={handleCreateAwb}
-                projectId={projectId}
-            />
+            {permission?.canEdit && (
+                <CreateAwb
+                    isOpen={isOpenCreateModal}
+                    toggleOpen={toggleCreateModal}
+                    handleCreateNewAwb={handleCreateAwb}
+                    projectId={projectId}
+                />
+            )}
             <ApiAlert response={resForHandleMsg} />
         </div>
     );
