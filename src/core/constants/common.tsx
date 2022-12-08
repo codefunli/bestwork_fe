@@ -416,6 +416,10 @@ export const renderFile = (data: any, index: any) => {
             return <img loading="lazy" className="imgTag" src={excel} key={index} />;
         case 'xlsx':
             return <img loading="lazy" className="imgTag" src={excel} key={index} />;
+        case 'application/xls':
+            return <img loading="lazy" className="imgTag" src={excel} key={index} />;
+        case 'application/xlsx':
+            return <img loading="lazy" className="imgTag" src={excel} key={index} />;
         case 'application/vnd.ms-excel':
             return <img loading="lazy" className="imgTag" src={excel} key={index} />;
         case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
@@ -544,6 +548,8 @@ export const fileToBase64 = (file: any) => {
 
 export const prefixPdf = 'data:application/pdf;base64';
 
+export const prefixBase64 = 'data:application';
+
 export const prefixZip = 'data:application/zip;base64';
 
 export function downloadZIP(base64Data: any, name: string, prefix: string) {
@@ -619,11 +625,11 @@ export const AWB_LOADING = {
 export const renderBase64File = (data: any) => {
     switch (data.type.toLowerCase()) {
         case 'pdf':
-            return dataURLtoFile(`${prefixPdf}/${data.type};base64,${data.content}`, data.name);
+            return dataURLtoFile(`${prefixBase64}/${data.type};base64,${data.content}`, data.name);
         case 'xls':
-            return dataURLtoFile(`${prefixPdf}/${data.type};base64,${data.content}`, data.name);
+            return dataURLtoFile(`${prefixBase64}/${data.type};base64,${data.content}`, data.name);
         case 'xlsx':
-            return dataURLtoFile(`${prefixPdf}/${data.type};base64,${data.content}`, data.name);
+            return dataURLtoFile(`${prefixBase64}/${data.type};base64,${data.content}`, data.name);
         default:
             return dataURLtoFile(`data:image/${data.type};base64,${data.content}`, data.name);
     }

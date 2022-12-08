@@ -33,10 +33,11 @@ interface props {
     imgData?: any;
     isEditUpload?: boolean;
     callBackClearEvent: Function;
+    id?: string;
 }
 
 export default function UploadMultipartFile(props: props) {
-    const { clearPreview, callbackFunc, imgData, callBackClearEvent } = props;
+    const { clearPreview, callbackFunc, imgData, callBackClearEvent, id } = props;
     const [currentFiles, setCurrentFiles] = useState<any[]>([]);
     const [eventFile, setEventFile] = useState<any>();
     const [base64Url, setBase64Url] = useState('');
@@ -126,7 +127,7 @@ export default function UploadMultipartFile(props: props) {
         <div className="multiple-file-upload">
             <div className="image-area">
                 <label
-                    htmlFor="chosen-image"
+                    htmlFor={`chosen-image${id ? id : ''}`}
                     className={`${currentFiles.length > 0 ? 'label-selector-fixed' : 'label-selector'} `}
                 >
                     <UploadFileIcon />
@@ -218,7 +219,7 @@ export default function UploadMultipartFile(props: props) {
             </div>
             <input
                 accept=".xlsx,.xls,.pdf,image/*"
-                id="chosen-image"
+                id={`chosen-image${id ? id : ''}`}
                 type="file"
                 multiple
                 hidden
