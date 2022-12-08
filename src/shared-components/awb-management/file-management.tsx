@@ -17,7 +17,8 @@ import {
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Comment } from '../../core/types/base';
-import { CommercialInvoiceContext, PackingListContext } from '../../ui/awb/awb-list';
+import { Permission } from '../../core/types/permission';
+import { CommercialInvoiceContext, PackingListContext, PermissionContext } from '../../ui/awb/awb-list';
 import CommentEl from '../comment/comment';
 import ImageManager from '../images-manager/image-manager';
 import Loading from '../loading-page/Loading';
@@ -40,6 +41,7 @@ export default function FileManagement(props: any) {
     const { t } = useTranslation();
     const commercialInvoice = useContext<any>(CommercialInvoiceContext);
     const packingList = useContext<any>(PackingListContext);
+    const permission = useContext<any>(PermissionContext);
 
     useEffect(() => {
         if (commercialInvoice || packingList) {
@@ -151,10 +153,15 @@ export default function FileManagement(props: any) {
                             border: 2,
                             borderColor: 'primary.main',
                         }}
-                        onClick={openModal}
+                        onClick={permission?.canEdit ? openModal : () => {}}
                     >
                         <InputLabel htmlFor="outlined-adornment-amount">{t('awb.uploadFile')}</InputLabel>
-                        <IconButton color="primary" sx={{ p: '10px' }} aria-label="directions">
+                        <IconButton
+                            color="primary"
+                            sx={{ p: '10px' }}
+                            aria-label="directions"
+                            disabled={!permission?.canEdit}
+                        >
                             <UploadFileIcon />
                         </IconButton>
                     </Paper>
