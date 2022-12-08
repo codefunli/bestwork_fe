@@ -124,16 +124,14 @@ export default function QuiltedImage(props: {
                                                 }`}
                                                 action={
                                                     <React.Fragment>
-                                                        <Tooltip title="Account settings">
-                                                            <IconButton
-                                                                onClick={handleClick}
-                                                                aria-label="settings"
-                                                                color="primary"
-                                                                size="large"
-                                                            >
-                                                                <MoreVertIcon color="primary" fontSize="inherit" />
-                                                            </IconButton>
-                                                        </Tooltip>
+                                                        <IconButton
+                                                            onClick={handleClick}
+                                                            aria-label="settings"
+                                                            color="primary"
+                                                            size="large"
+                                                        >
+                                                            <MoreVertIcon color="primary" fontSize="inherit" />
+                                                        </IconButton>
                                                         <Menu
                                                             anchorEl={anchorEl}
                                                             id="account-menu"
@@ -187,14 +185,14 @@ export default function QuiltedImage(props: {
                                                                     <ListItemIcon>
                                                                         <AddCircleIcon fontSize="small" />
                                                                     </ListItemIcon>
-                                                                    Add
+                                                                    {t('button.btnAdd')}
                                                                 </MenuItem>
                                                             )}
                                                             <MenuItem onClick={() => handlePreviewPDF(item)}>
                                                                 <ListItemIcon>
                                                                     <VisibilityIcon fontSize="small" />
                                                                 </ListItemIcon>
-                                                                Preview
+                                                                {t('button.btnPreview')}
                                                             </MenuItem>
                                                         </Menu>
                                                     </React.Fragment>
@@ -259,7 +257,7 @@ export default function QuiltedImage(props: {
             )}
             <PreviewPDF
                 base64Url={base64Url}
-                title="Preview PDF"
+                title={t('title.previewPdf')}
                 isOpen={isOpen}
                 closeFunc={handleCloseModal}
                 okFunc={handleOkFunction}
