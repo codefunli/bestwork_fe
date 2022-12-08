@@ -15,6 +15,7 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { CommentConstant } from '../../core/constants/constant';
 import { validateCreateScreenForm } from '../../core/constants/validate';
+import IconGuide from './icon-guide';
 
 interface CreateRoleModalProps {
     isOpen: boolean;
@@ -25,6 +26,7 @@ interface CreateRoleModalProps {
 const initialValues: any = {
     name: '',
     icon: '',
+    url: '',
 };
 
 export default function CreateScreenModal(props: CreateRoleModalProps) {
@@ -42,7 +44,7 @@ export default function CreateScreenModal(props: CreateRoleModalProps) {
     });
 
     const handleSubmitForm = () => {
-        handleCreateNewScreen(formValues.name, formValues.icon);
+        handleCreateNewScreen(formValues.name, formValues.icon, formValues.url);
         toggleOpen(false);
         setFormValues(initialValues);
         reset();
@@ -63,7 +65,7 @@ export default function CreateScreenModal(props: CreateRoleModalProps) {
     };
 
     const goToFontAnwesomePage = (e: any) => {
-        window.open('https://fontawesome.com/icons', '_blank');
+        window.open('https://fontawesome.com/search?o=r&m=free&s=solid&f=classic', '_blank');
     };
 
     const handleKeyDown = (event: any) => {
@@ -98,6 +100,31 @@ export default function CreateScreenModal(props: CreateRoleModalProps) {
                             error={Boolean(errors.name)}
                             helperText={t(errors.name?.message?.toString() as string)}
                             {...register('name', {
+                                onChange: (e) => handleInputChange(e),
+                            })}
+                        />
+                    </div>
+                    <div>
+                        <InputLabel htmlFor="name" error={Boolean(errors.url)}>
+                            {t('create_screen.modal.url')} <span className="input-required">*</span>
+                        </InputLabel>
+                        <TextField
+                            size="small"
+                            fullWidth
+                            sx={{
+                                mt: 1,
+                                mb: 1,
+                                '& legend': { display: 'none' },
+                                '& fieldset': { top: 0 },
+                            }}
+                            required
+                            id="url"
+                            label=""
+                            placeholder={t('common.urlPlacholder')}
+                            value={formValues.url}
+                            error={Boolean(errors.url)}
+                            helperText={t(errors.url?.message?.toString() as string)}
+                            {...register('url', {
                                 onChange: (e) => handleInputChange(e),
                             })}
                         />
@@ -140,6 +167,9 @@ export default function CreateScreenModal(props: CreateRoleModalProps) {
                             <Button variant="outlined" onClick={goToFontAnwesomePage}>
                                 FontAwesome
                             </Button>
+                        </Box>
+                        <Box>
+                            <IconGuide />
                         </Box>
                     </div>
                 </DialogContent>
