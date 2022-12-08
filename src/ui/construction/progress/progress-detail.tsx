@@ -23,8 +23,11 @@ import {
 import IconButton from '@mui/material/IconButton';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { AWB_LOADING } from '../../../core/constants/common';
+import { getUserInfo } from '../../../core/redux/user-slice';
+import { Permission } from '../../../core/types/permission';
 import { formatDateTimeResList } from '../../../core/utils/get-current-datetime';
 import { ContructionProgressResDTO } from '../../../models/construction-res-dto';
 import {
@@ -52,6 +55,14 @@ export default function ProgressDetail() {
     const [progressList, setProgressList] = useState<any>([]);
     const [progressStatus, setProgressStatus] = useState([]);
     const [constructionStatus, setConstructionStatus] = useState([]);
+    const userInfo = useSelector(getUserInfo);
+    const [permission, setPermission] = useState<Permission>();
+
+    useEffect(() => {
+        if (userInfo && userInfo.permissions && userInfo.permissions[5] && userInfo.permissions[5][0]) {
+            setPermission(userInfo.permissions[5][0]);
+        }
+    }, [userInfo]);
 
     useEffect(() => {
         if (params.id) fetchData(true, true);
@@ -166,10 +177,11 @@ export default function ProgressDetail() {
                                     <CardHeader
                                         action={
                                             <Button
+                                                disabled={permission && !permission.canEdit}
                                                 variant="contained"
                                                 onClick={() => handleCloseProject(constructionData)}
                                             >
-                                                Close
+                                                {t('button.btnClose')}
                                             </Button>
                                         }
                                         className="pb-0"
@@ -221,7 +233,12 @@ export default function ProgressDetail() {
                                 title="Progress daily"
                                 subheader={new Date().toLocaleDateString()}
                                 action={
-                                    <IconButton color="primary" size="large" onClick={toggleDrawerCreateProgress(true)}>
+                                    <IconButton
+                                        disabled={permission && !permission.canAdd}
+                                        color="primary"
+                                        size="large"
+                                        onClick={toggleDrawerCreateProgress(true)}
+                                    >
                                         <AddCircleIcon fontSize="inherit" />
                                     </IconButton>
                                 }

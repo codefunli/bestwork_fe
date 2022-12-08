@@ -16,9 +16,12 @@ import {
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { StatusCode } from '../../../core/constants/common';
 import { validateProjectProgress } from '../../../core/constants/validate';
+import { getUserInfo } from '../../../core/redux/user-slice';
+import { Permission } from '../../../core/types/permission';
 import {
     formatDateTimeReq,
     formatDateTimeRes,
@@ -53,6 +56,8 @@ const ProgressEdit = (props: Props) => {
     const [fileData, setFileData] = useState(initialDataImg);
     const [eventImage, setEventImage] = useState<any>();
     const [isClearPreview, setIsClearPreview] = useState(false);
+    const userInfo = useSelector(getUserInfo);
+    const [permission, setPermission] = useState<Permission>();
 
     const {
         register,
@@ -62,6 +67,12 @@ const ProgressEdit = (props: Props) => {
     } = useForm({
         resolver: yupResolver(validateProjectProgress),
     });
+
+    useEffect(() => {
+        if (userInfo && userInfo.permissions && userInfo.permissions[5] && userInfo.permissions[5][0]) {
+            setPermission(userInfo.permissions[5][0]);
+        }
+    }, [userInfo]);
 
     useEffect(() => {
         getProgressStatus().then((value: any) => {
@@ -188,6 +199,7 @@ const ProgressEdit = (props: Props) => {
                                             value={progressData.title}
                                             fullWidth
                                             required
+                                            disabled={permission && !permission.canEdit}
                                             sx={{
                                                 mt: 1,
                                                 mb: 1,
@@ -228,6 +240,7 @@ const ProgressEdit = (props: Props) => {
                                         <TextField
                                             size="small"
                                             fullWidth
+                                            disabled={permission && !permission.canEdit}
                                             sx={{
                                                 mt: 1,
                                                 mb: 1,
@@ -258,6 +271,7 @@ const ProgressEdit = (props: Props) => {
                                                 '& legend': { display: 'none' },
                                                 '& fieldset': { top: 0 },
                                             }}
+                                            disabled={permission && !permission.canEdit}
                                             value={progressData.endDate}
                                             id="dateEnd"
                                             type="datetime-local"
@@ -290,6 +304,7 @@ const ProgressEdit = (props: Props) => {
                                                 labelId="demo-simple-select-outlined-label"
                                                 id="demo-simple-select-outlined"
                                                 displayEmpty
+                                                disabled={permission && !permission.canEdit}
                                                 value={progressData.status}
                                                 error={Boolean(errors.status)}
                                                 {...register('status', {
@@ -324,6 +339,7 @@ const ProgressEdit = (props: Props) => {
                                             size="small"
                                             fullWidth
                                             multiline
+                                            disabled={permission && !permission.canEdit}
                                             rows={3}
                                             name="report"
                                             sx={{
@@ -348,6 +364,7 @@ const ProgressEdit = (props: Props) => {
                                             size="small"
                                             fullWidth
                                             multiline
+                                            disabled={permission && !permission.canEdit}
                                             rows={3}
                                             name="note"
                                             sx={{
@@ -378,7 +395,7 @@ const ProgressEdit = (props: Props) => {
                                             variant="contained"
                                             color="primary"
                                             sx={{ ml: 1 }}
-                                            disabled={isSubmitting}
+                                            disabled={isSubmitting || (permission && !permission.canEdit)}
                                             onClick={handleSubmit(handleSubmitForm)}
                                         >
                                             {t('button.btnUpdate')}
