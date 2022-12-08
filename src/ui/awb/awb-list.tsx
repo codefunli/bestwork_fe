@@ -731,10 +731,10 @@ export default function AirWayBillList() {
                                 }
                                 onClick={
                                     !awbListData.some((awb: any) => awb.status === 2) || userInfo.uRole !== 'contractor'
-                                        ? () => {
+                                        ? () => {}
+                                        : () => {
                                               navigate(`${UrlFeApp.CONSTRUCTION.CREATE}/${params.id}`);
                                           }
-                                        : () => {}
                                 }
                             >
                                 {t('awb.createConstruction')}
@@ -960,11 +960,13 @@ export default function AirWayBillList() {
                                             width: '100%',
                                         }}
                                     >
-                                        <ShowCustomsClearanceInvoice
-                                            isLoading={isLoadingCCD}
-                                            customsDeclaration={customsDeclarationDocumentState}
-                                            callBackFn={handleRemoveFile}
-                                        />
+                                        <PermissionContext.Provider value={permission ? permission : {}}>
+                                            <ShowCustomsClearanceInvoice
+                                                isLoading={isLoadingCCD}
+                                                customsDeclaration={customsDeclarationDocumentState}
+                                                callBackFn={handleRemoveFile}
+                                            />
+                                        </PermissionContext.Provider>
                                     </div>
                                 </Grid>
                                 <Grid item xs={12} className="text-center item">
@@ -978,11 +980,13 @@ export default function AirWayBillList() {
                                             width: '100%',
                                         }}
                                     >
-                                        <ShowCustomsClearancePackingList
-                                            isLoading={isLoadingCCD}
-                                            customsDeclaration={customsDeclarationDocumentState}
-                                            callBackFn={handleRemoveFile}
-                                        />
+                                        <PermissionContext.Provider value={permission ? permission : {}}>
+                                            <ShowCustomsClearancePackingList
+                                                isLoading={isLoadingCCD}
+                                                customsDeclaration={customsDeclarationDocumentState}
+                                                callBackFn={handleRemoveFile}
+                                            />
+                                        </PermissionContext.Provider>
                                     </div>
                                 </Grid>
                                 <Grid item xs={12} className="text-center item">
@@ -996,11 +1000,13 @@ export default function AirWayBillList() {
                                             width: '100%',
                                         }}
                                     >
-                                        <ShowCustomsClearanceImageBefore
-                                            isLoading={isLoadingCCD}
-                                            customsDeclaration={customsDeclarationDocumentState}
-                                            callBackFn={handleRemoveFile}
-                                        />
+                                        <PermissionContext.Provider value={permission ? permission : {}}>
+                                            <ShowCustomsClearanceImageBefore
+                                                isLoading={isLoadingCCD}
+                                                customsDeclaration={customsDeclarationDocumentState}
+                                                callBackFn={handleRemoveFile}
+                                            />
+                                        </PermissionContext.Provider>
                                     </div>
                                 </Grid>
                                 <Grid item xs={12} sm={12} className="text-center item">

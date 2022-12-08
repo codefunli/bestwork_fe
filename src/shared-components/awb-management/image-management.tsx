@@ -192,7 +192,7 @@ export default function ImageManagement(props: any) {
                                                     color="primary"
                                                     size="large"
                                                     onClick={() => handleAddAll(data)}
-                                                    disabled={checkAddAllButton(data)}
+                                                    disabled={checkAddAllButton(data) || !permission?.canEdit}
                                                 >
                                                     <Tooltip title={t('tooltip.addAll')} placement="left">
                                                         <DriveFileMoveIcon sx={{ fontSize: 50 }} />
