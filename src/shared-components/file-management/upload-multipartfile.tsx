@@ -25,6 +25,7 @@ import { Card, CardHeader, IconButton, ImageList, ImageListItem, Tooltip } from 
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DownloadIcon from '@mui/icons-material/Download';
+import { t } from 'i18next';
 
 interface props {
     clearPreview?: any;
@@ -40,6 +41,7 @@ export default function UploadMultipartFile(props: props) {
     const [eventFile, setEventFile] = useState<any>();
     const [base64Url, setBase64Url] = useState('');
     const [isOpen, setIsOpen] = useState(false);
+    const { t } = useTranslation();
 
     const [anchorEl, setAnchorEl] = React.useState<any>(null);
     const open = Boolean(anchorEl);
@@ -186,22 +188,23 @@ export default function UploadMultipartFile(props: props) {
                                             <ListItemIcon>
                                                 <DownloadIcon fontSize="small" />
                                             </ListItemIcon>
-                                            Download
+                                            {t('button.btnDownload')}
                                         </MenuItem>
                                         <MenuItem onClick={() => removeImageItem(index)}>
                                             <ListItemIcon>
                                                 <HighlightOffIcon fontSize="small" />
                                             </ListItemIcon>
-                                            Remove
+                                            {t('button.btnRemove')}
                                         </MenuItem>
-                                        {data.type === 'application/pdf' && (
-                                            <MenuItem onClick={() => handlePreviewFilePDF(data)}>
-                                                <ListItemIcon>
-                                                    <VisibilityIcon fontSize="small" />
-                                                </ListItemIcon>
-                                                Preview
-                                            </MenuItem>
-                                        )}
+                                        {data.type === 'application/pdf' ||
+                                            (data.type === 'pdf' && (
+                                                <MenuItem onClick={() => handlePreviewFilePDF(data)}>
+                                                    <ListItemIcon>
+                                                        <VisibilityIcon fontSize="small" />
+                                                    </ListItemIcon>
+                                                    {t('button.btnPreview')}
+                                                </MenuItem>
+                                            ))}
                                     </Menu>
                                     <div>
                                         {renderFile(data, index)}

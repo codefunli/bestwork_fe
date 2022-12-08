@@ -101,7 +101,10 @@
         "btnConstruction": "Bản vẽ",
         "btnCreateRole": "Tạo quyền mới",
         "btnRead": "Đã đọc",
-        "btnUnread": "Chưa đọc"
+        "btnUnread": "Chưa đọc",
+        "btnRemove": "Xóa",
+        "btnPreview": "Xem trước",
+        "btnAdd": "Thêm"
     },
     "common": {
         "placeholder": "Nhập một giá trị mới",
@@ -218,7 +221,8 @@
         }
     },
     "title": {
-        "delete": "XÓA"
+        "delete": "XÓA",
+        "previewPdf": "Xem trước file PDF"
     },
     "tooltip": {
         "edit": "Chỉnh sửa",

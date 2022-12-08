@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { AWB_LOADING } from '../../core/constants/common';
 import { Comment } from '../../core/types/base';
 import { Permission } from '../../core/types/permission';
 import { CommercialInvoiceContext, PackingListContext, PermissionContext } from '../../ui/awb/awb-list';
@@ -167,7 +168,7 @@ export default function FileManagement(props: any) {
                     </Paper>
                 </Grid>
             </Grid>
-            {isLoading === 'HasData' ? (
+            {isLoading === AWB_LOADING.HAS_DATA ? (
                 filesData &&
                 filesData.length > 0 &&
                 filesData.map((data: any) => (
@@ -241,10 +242,10 @@ export default function FileManagement(props: any) {
                         </Grid>
                     </Grid>
                 ))
-            ) : isLoading === 'Loading' ? (
+            ) : isLoading === AWB_LOADING.LOADING ? (
                 <Loading />
             ) : (
-                isLoading === 'NoData' && <Typography>{t('message.noData')}</Typography>
+                isLoading === AWB_LOADING.NO_DATA && <Typography>{t('message.noData')}</Typography>
             )}
             <FileUploadModal
                 isOpen={isOpenModal}

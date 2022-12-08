@@ -81,16 +81,14 @@ export default function ShowCustomsClearanceInvoice(props: {
                                             className={`card-img-overlay img-item`}
                                             action={
                                                 <React.Fragment>
-                                                    <Tooltip title="Account settings">
-                                                        <IconButton
-                                                            onClick={handleClick}
-                                                            aria-label="settings"
-                                                            color="primary"
-                                                            size="large"
-                                                        >
-                                                            <MoreVertIcon color="primary" fontSize="inherit" />
-                                                        </IconButton>
-                                                    </Tooltip>
+                                                    <IconButton
+                                                        onClick={handleClick}
+                                                        aria-label="settings"
+                                                        color="primary"
+                                                        size="large"
+                                                    >
+                                                        <MoreVertIcon color="primary" fontSize="inherit" />
+                                                    </IconButton>
                                                     <Menu
                                                         anchorEl={anchorEl}
                                                         id="account-menu"
@@ -143,14 +141,14 @@ export default function ShowCustomsClearanceInvoice(props: {
                                                                 <ListItemIcon>
                                                                     <RemoveCircleIcon fontSize="small" />
                                                                 </ListItemIcon>
-                                                                Remove
+                                                                {t('button.btnRemove')}
                                                             </MenuItem>
                                                         )}
                                                         <MenuItem onClick={() => handlePreviewPDF(item)}>
                                                             <ListItemIcon>
                                                                 <VisibilityIcon fontSize="small" />
                                                             </ListItemIcon>
-                                                            Preview
+                                                            {t('button.btnPreview')}
                                                         </MenuItem>
                                                     </Menu>
                                                 </React.Fragment>
@@ -212,7 +210,7 @@ export default function ShowCustomsClearanceInvoice(props: {
             )}
             <PreviewPDF
                 base64Url={base64Url}
-                title="Preview PDF"
+                title={t('title.previewPdf')}
                 isOpen={isOpen}
                 closeFunc={handleCloseModal}
                 okFunc={handleOkFunction}

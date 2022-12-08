@@ -101,7 +101,10 @@
         "btnConstruction": "Construction drawing",
         "btnCreateRole": "Create Role",
         "btnRead": "Read",
-        "btnUnread": "Unread"
+        "btnUnread": "Unread",
+        "btnRemove": "Remove",
+        "btnPreview": "Preview",
+        "btnAdd": "Add"
     },
     "common": {
         "placeholder": "Please input a new value",
@@ -218,7 +221,8 @@
         }
     },
     "title": {
-        "delete": "DELETE"
+        "delete": "DELETE",
+        "previewPdf": "PDF Preview"
     },
     "tooltip": {
         "edit": "Edit",
