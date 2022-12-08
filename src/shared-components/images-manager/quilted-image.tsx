@@ -8,10 +8,12 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import * as React from 'react';
+import { useContext } from 'react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { arrayBufferToBase64, prefixPdf, renderFile } from '../../core/constants/common';
 import { getPdfFile } from '../../services/awb-service';
+import { PermissionContext } from '../../ui/awb/awb-list';
 import PreviewPDF from '../modal/view-pdf-modal';
 import './image-manager.scss';
 
@@ -29,7 +31,7 @@ export default function QuiltedImage(props: {
 
     const [isOpen, setIsOpen] = useState(false);
     const [base64Url, setBase64Url] = useState('');
-
+    const permission = useContext<any>(PermissionContext);
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -99,6 +101,7 @@ export default function QuiltedImage(props: {
                                                             aria-label="settings"
                                                             color="primary"
                                                             onClick={() => handleAddFile(item)}
+                                                            disabled={!permission?.canEdit}
                                                         >
                                                             <RemoveCircleIcon color="error" />
                                                         </IconButton>
@@ -172,8 +175,15 @@ export default function QuiltedImage(props: {
                                                                 vertical: 'bottom',
                                                             }}
                                                         >
-                                                            {!item.isChoosen && (
-                                                                <MenuItem onClick={() => handleAddFile(item)}>
+                                                            {!item.isChoosen && permission?.canEdit && (
+                                                                <MenuItem
+                                                                    onClick={
+                                                                        permission?.canEdit
+                                                                            ? () => handleAddFile(item)
+                                                                            : () => {}
+                                                                    }
+                                                                    disabled={!permission?.canEdit}
+                                                                >
                                                                     <ListItemIcon>
                                                                         <AddCircleIcon fontSize="small" />
                                                                     </ListItemIcon>
@@ -203,20 +213,27 @@ export default function QuiltedImage(props: {
                                                     item.isChoosen ? 'border border-2 border-danger rounded-3' : ''
                                                 }`}
                                                 action={
-                                                    <IconButton
-                                                        aria-label="settings"
-                                                        color="primary"
-                                                        onClick={() => handleAddFile(item)}
-                                                        disabled={item.isChoosen}
-                                                    >
-                                                        {item.isChoosen ? (
-                                                            <CheckCircleIcon color="primary" className="opacity-100" />
-                                                        ) : (
-                                                            <Tooltip title={t('tooltip.add')} placement="top">
-                                                                <AddCircleIcon color="primary" />
-                                                            </Tooltip>
-                                                        )}
-                                                    </IconButton>
+                                                    permission?.canEdit ? (
+                                                        <IconButton
+                                                            aria-label="settings"
+                                                            color="primary"
+                                                            onClick={() => handleAddFile(item)}
+                                                            disabled={item.isChoosen || !permission?.canEdit}
+                                                        >
+                                                            {item.isChoosen ? (
+                                                                <CheckCircleIcon
+                                                                    color="primary"
+                                                                    className="opacity-100"
+                                                                />
+                                                            ) : (
+                                                                <Tooltip title={t('tooltip.add')} placement="top">
+                                                                    <AddCircleIcon color="primary" />
+                                                                </Tooltip>
+                                                            )}
+                                                        </IconButton>
+                                                    ) : (
+                                                        <React.Fragment></React.Fragment>
+                                                    )
                                                 }
                                             />
                                             {renderFile(item, index)}
@@ -227,21 +244,7 @@ export default function QuiltedImage(props: {
                             ) : (
                                 <ImageListItem>
                                     <Card>
-                                        <CardHeader
-                                            sx={{ padding: 0.5 }}
-                                            className="card-img-overlay img-item"
-                                            // action={
-                                            //     <IconButton
-                                            //         aria-label="settings"
-                                            //         color="primary"
-                                            //         onClick={() => handleDeleteImage(index)}
-                                            //     >
-                                            //         <Tooltip title={t('tooltip.remove')} placement="top">
-                                            //             <RemoveCircleIcon />
-                                            //         </Tooltip>
-                                            //     </IconButton>
-                                            // }
-                                        />
+                                        <CardHeader sx={{ padding: 0.5 }} className="card-img-overlay img-item" />
                                         {renderFile(item, index)}
                                     </Card>
                                 </ImageListItem>

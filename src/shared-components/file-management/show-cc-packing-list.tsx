@@ -1,22 +1,17 @@
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
-import { Card, CardHeader, IconButton, ImageList, ImageListItem, Typography, Tooltip } from '@mui/material';
-import { useTranslation } from 'react-i18next';
-import { arrayBufferToBase64, AWB_LOADING, prefixPdf, renderFile } from '../../core/constants/common';
-import '../images-manager/image-manager.scss';
-import Loading from '../loading-page/Loading';
-import Box from '@mui/material/Box';
-import Avatar from '@mui/material/Avatar';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import { Card, CardHeader, IconButton, ImageList, ImageListItem, Tooltip } from '@mui/material';
+import ListItemIcon from '@mui/material/ListItemIcon';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import Divider from '@mui/material/Divider';
-import PersonAdd from '@mui/icons-material/PersonAdd';
-import Settings from '@mui/icons-material/Settings';
-import Logout from '@mui/icons-material/Logout';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import { getPdfFile } from '../../services/awb-service';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { arrayBufferToBase64, AWB_LOADING, prefixPdf, renderFile } from '../../core/constants/common';
+import { getPdfFile } from '../../services/awb-service';
+import { PermissionContext } from '../../ui/awb/awb-list';
+import '../images-manager/image-manager.scss';
+import Loading from '../loading-page/Loading';
 import PreviewPDF from '../modal/view-pdf-modal';
 export default function ShowCustomsClearancePackingList(props: {
     callBackFn: Function;
@@ -37,6 +32,7 @@ export default function ShowCustomsClearancePackingList(props: {
     const { t } = useTranslation();
     const [base64Url, setBase64Url] = React.useState('');
     const [isOpen, setIsOpen] = React.useState(false);
+    const permission = React.useContext<any>(PermissionContext);
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
@@ -134,8 +130,14 @@ export default function ShowCustomsClearancePackingList(props: {
                                                             vertical: 'bottom',
                                                         }}
                                                     >
-                                                        {!item.isChoosen && (
-                                                            <MenuItem onClick={() => handleRemoveCDFile(item)}>
+                                                        {!item.isChoosen && permission?.canEdit && (
+                                                            <MenuItem
+                                                                onClick={
+                                                                    permission?.canEdit
+                                                                        ? () => handleRemoveCDFile(item)
+                                                                        : () => {}
+                                                                }
+                                                            >
                                                                 <ListItemIcon>
                                                                     <RemoveCircleIcon fontSize="small" />
                                                                 </ListItemIcon>
@@ -173,13 +175,17 @@ export default function ShowCustomsClearancePackingList(props: {
                                             sx={{ padding: 0.5 }}
                                             className={`card-img-overlay img-item`}
                                             action={
-                                                <IconButton
-                                                    aria-label="settings"
-                                                    color="primary"
-                                                    onClick={(e) => handleRemoveCDFile(item)}
-                                                >
-                                                    <RemoveCircleIcon color="primary" />
-                                                </IconButton>
+                                                permission?.canEdit ? (
+                                                    <IconButton
+                                                        aria-label="settings"
+                                                        color="primary"
+                                                        onClick={(e) => handleRemoveCDFile(item)}
+                                                    >
+                                                        <RemoveCircleIcon color="primary" />
+                                                    </IconButton>
+                                                ) : (
+                                                    <React.Fragment></React.Fragment>
+                                                )
                                             }
                                         />
                                         {renderFile(item, index)}
