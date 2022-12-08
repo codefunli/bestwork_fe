@@ -196,15 +196,14 @@ export default function UploadMultipartFile(props: props) {
                                             </ListItemIcon>
                                             {t('button.btnRemove')}
                                         </MenuItem>
-                                        {data.type === 'application/pdf' ||
-                                            (data.type === 'pdf' && (
-                                                <MenuItem onClick={() => handlePreviewFilePDF(data)}>
-                                                    <ListItemIcon>
-                                                        <VisibilityIcon fontSize="small" />
-                                                    </ListItemIcon>
-                                                    {t('button.btnPreview')}
-                                                </MenuItem>
-                                            ))}
+                                        {(data.type === 'application/pdf' || data.type === 'pdf') && (
+                                            <MenuItem onClick={() => handlePreviewFilePDF(data)}>
+                                                <ListItemIcon>
+                                                    <VisibilityIcon fontSize="small" />
+                                                </ListItemIcon>
+                                                {t('button.btnPreview')}
+                                            </MenuItem>
+                                        )}
                                     </Menu>
                                     <div>
                                         {renderFile(data, index)}
