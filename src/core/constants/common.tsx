@@ -521,6 +521,15 @@ export const dataURLtoFile = (dataurl: any, filename: any) => {
     return new File([u8arr], filename, { type: mime });
 };
 
+export const fileToBase64 = (file: any) => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+    });
+};
+
 export const prefixPdf = 'data:application/pdf;base64';
 
 export const prefixZip = 'data:application/zip;base64';
@@ -529,6 +538,16 @@ export function downloadZIP(base64Data: any, name: string, prefix: string) {
     const linkSource = `${prefix},${base64Data}`;
     const downloadLink = document.createElement('a');
     const fileName = `${name}.zip`;
+
+    downloadLink.href = linkSource;
+    downloadLink.download = fileName;
+    downloadLink.click();
+}
+
+export function downloadFile(base64Data: any, name: string) {
+    const linkSource = `${base64Data}`;
+    const downloadLink = document.createElement('a');
+    const fileName = `${name}`;
 
     downloadLink.href = linkSource;
     downloadLink.download = fileName;
