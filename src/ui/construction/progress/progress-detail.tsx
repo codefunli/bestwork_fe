@@ -102,8 +102,15 @@ export default function ProgressDetail() {
         }
     };
 
-    const fetchProgressData = () => {
+    const handleLoading = () => {
         setIsLoadingProgress(AWB_LOADING.LOADING);
+    };
+
+    const handleLoadingCreate = () => {
+        setIsLoadingProgress(AWB_LOADING.LOADING);
+    };
+
+    const fetchProgressData = () => {
         getProgressByConstruction(params.id)
             .then((res) => {
                 if (res && res.data) {
@@ -304,12 +311,14 @@ export default function ProgressDetail() {
                 setIsOpen={setOpenCreateProgress}
                 toggleDrawer={toggleDrawerCreateProgress}
                 callBackFn={fetchProgressData}
+                callBackLoading={handleLoadingCreate}
             />
             <ProgressEdit
                 isOpen={isOpenEditProgress}
                 setIsOpen={setOpenEditProgress}
                 toggleDrawer={toggleDrawerEditProgress}
                 progress={selectedProgress}
+                callBackLoading={handleLoading}
                 callBackFn={fetchProgressData}
             />
         </div>
