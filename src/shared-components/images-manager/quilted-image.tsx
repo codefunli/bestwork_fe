@@ -175,22 +175,21 @@ export default function QuiltedImage(props: {
                                                                 vertical: 'bottom',
                                                             }}
                                                         >
-                                                            {!item.isChoosen ||
-                                                                (permission?.canEdit && (
-                                                                    <MenuItem
-                                                                        onClick={
-                                                                            permission?.canEdit
-                                                                                ? () => handleAddFile(item)
-                                                                                : () => {}
-                                                                        }
-                                                                        disabled={!permission?.canEdit}
-                                                                    >
-                                                                        <ListItemIcon>
-                                                                            <AddCircleIcon fontSize="small" />
-                                                                        </ListItemIcon>
-                                                                        Add
-                                                                    </MenuItem>
-                                                                ))}
+                                                            {!item.isChoosen && permission?.canEdit && (
+                                                                <MenuItem
+                                                                    onClick={
+                                                                        permission?.canEdit
+                                                                            ? () => handleAddFile(item)
+                                                                            : () => {}
+                                                                    }
+                                                                    disabled={!permission?.canEdit}
+                                                                >
+                                                                    <ListItemIcon>
+                                                                        <AddCircleIcon fontSize="small" />
+                                                                    </ListItemIcon>
+                                                                    Add
+                                                                </MenuItem>
+                                                            )}
                                                             <MenuItem onClick={() => handlePreviewPDF(item)}>
                                                                 <ListItemIcon>
                                                                     <VisibilityIcon fontSize="small" />
@@ -245,21 +244,7 @@ export default function QuiltedImage(props: {
                             ) : (
                                 <ImageListItem>
                                     <Card>
-                                        <CardHeader
-                                            sx={{ padding: 0.5 }}
-                                            className="card-img-overlay img-item"
-                                            // action={
-                                            //     <IconButton
-                                            //         aria-label="settings"
-                                            //         color="primary"
-                                            //         onClick={() => handleDeleteImage(index)}
-                                            //     >
-                                            //         <Tooltip title={t('tooltip.remove')} placement="top">
-                                            //             <RemoveCircleIcon />
-                                            //         </Tooltip>
-                                            //     </IconButton>
-                                            // }
-                                        />
+                                        <CardHeader sx={{ padding: 0.5 }} className="card-img-overlay img-item" />
                                         {renderFile(item, index)}
                                     </Card>
                                 </ImageListItem>
