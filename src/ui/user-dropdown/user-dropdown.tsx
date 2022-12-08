@@ -44,9 +44,9 @@ const UserDropdown = () => {
     };
 
     const handleDisplayProfile = (id: any) => {
+        setOpen(false);
         setTimeout(() => {
             navigate(`${UrlFeApp.USER.INFO}/${id}`);
-            setOpen(false);
         }, 1000);
     };
 
