@@ -35,7 +35,7 @@ const initialValues = {
     firstName: '',
     lastName: '',
     uEmail: '',
-    enabled: 0,
+    enabled: false,
     uTelNo: '',
     role: '',
     avatar: DefaultImage.USER_AVATAR,
@@ -403,7 +403,7 @@ export default function UserInfo() {
                                     <div className="col-12 col-sm-6 d-block p-1">
                                         <InputLabel htmlFor="enable">{t('user.info.enabled')}</InputLabel>
                                         <Switch
-                                            checked={formValues.enabled === 1 ? true : false}
+                                            checked={formValues.enabled}
                                             name="enabled"
                                             onChange={handleSwitchChange}
                                             disabled={isLogedInUser}

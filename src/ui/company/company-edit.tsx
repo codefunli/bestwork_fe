@@ -83,7 +83,7 @@ export default function CompanyEdit() {
                         },
                         user: {
                             ...value.data.user,
-                            enabled: value.data.user.enabled === 1 ? true : false,
+                            enabled: value.data.user.enabled,
                         },
                     });
                 }

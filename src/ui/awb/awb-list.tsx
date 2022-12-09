@@ -111,6 +111,8 @@ export default function AirWayBillList() {
     const userInfo = useSelector(getUserInfo);
     const [permission, setPermission] = useState<Permission>();
 
+    console.log(userInfo.project);
+
     useEffect(() => {
         if (userInfo && userInfo.permissions && userInfo.permissions[4] && userInfo.permissions[4][0]) {
             setPermission(userInfo.permissions[4][0]);
