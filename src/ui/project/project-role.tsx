@@ -199,7 +199,7 @@ export default function Role(props: Role) {
                         <div className="search-area mb-3">
                             <TextField
                                 size="small"
-                                fullWidth
+                                fullWidth={true}
                                 sx={{
                                     mt: 1,
                                     mb: 1,

@@ -198,7 +198,7 @@ export default function CompanyEdit() {
                                             <TextField
                                                 size="small"
                                                 value={formValues.company.companyName}
-                                                fullWidth
+                                                fullWidth={true}
                                                 sx={{
                                                     mt: 1,
                                                     mb: 1,
@@ -225,7 +225,7 @@ export default function CompanyEdit() {
                                             <TextField
                                                 size="small"
                                                 value={formValues.company.cpEmail}
-                                                fullWidth
+                                                fullWidth={true}
                                                 sx={{
                                                     mt: 1,
                                                     mb: 1,
@@ -254,7 +254,7 @@ export default function CompanyEdit() {
                                             <TextField
                                                 size="small"
                                                 value={formValues.company.cpTelNo}
-                                                fullWidth
+                                                fullWidth={true}
                                                 sx={{
                                                     mt: 1,
                                                     mb: 1,
@@ -280,7 +280,7 @@ export default function CompanyEdit() {
                                             <TextField
                                                 size="small"
                                                 value={formValues.company.taxNo}
-                                                fullWidth
+                                                fullWidth={true}
                                                 sx={{
                                                     mt: 1,
                                                     mb: 1,
@@ -307,7 +307,7 @@ export default function CompanyEdit() {
                                                 name="national"
                                                 size="small"
                                                 value={formValues.company.national}
-                                                fullWidth
+                                                fullWidth={true}
                                                 required
                                                 id="outlined-required"
                                                 sx={{
@@ -333,7 +333,7 @@ export default function CompanyEdit() {
                                                 name="city"
                                                 size="small"
                                                 value={formValues.company.city}
-                                                fullWidth
+                                                fullWidth={true}
                                                 required
                                                 id="outlined-required"
                                                 sx={{
@@ -355,7 +355,7 @@ export default function CompanyEdit() {
                                                 name="district"
                                                 size="small"
                                                 value={formValues.company.district}
-                                                fullWidth
+                                                fullWidth={true}
                                                 required
                                                 id="outlined-required"
                                                 sx={{
@@ -379,7 +379,7 @@ export default function CompanyEdit() {
                                                 name="ward"
                                                 size="small"
                                                 value={formValues.company.ward}
-                                                fullWidth
+                                                fullWidth={true}
                                                 required
                                                 id="outlined-required"
                                                 sx={{
@@ -400,7 +400,7 @@ export default function CompanyEdit() {
                                             <TextField
                                                 name="street"
                                                 size="small"
-                                                fullWidth
+                                                fullWidth={true}
                                                 sx={{
                                                     mt: 1,
                                                     mb: 1,
@@ -422,7 +422,7 @@ export default function CompanyEdit() {
                                                 {t('edit.company.startDate')}
                                             </InputLabel>
                                             <TextField
-                                                fullWidth
+                                                fullWidth={true}
                                                 size="small"
                                                 sx={{
                                                     mt: 1,
@@ -451,7 +451,7 @@ export default function CompanyEdit() {
                                                 {t('edit.company.endDate')}
                                             </InputLabel>
                                             <TextField
-                                                fullWidth
+                                                fullWidth={true}
                                                 size="small"
                                                 sx={{
                                                     mt: 1,
@@ -503,7 +503,7 @@ export default function CompanyEdit() {
                                                 value={formValues.user.userName}
                                                 disabled
                                                 size="small"
-                                                fullWidth
+                                                fullWidth={true}
                                                 sx={{
                                                     mt: 1,
                                                     mb: 1,
@@ -532,7 +532,7 @@ export default function CompanyEdit() {
                                                 disabled
                                                 value="hidden"
                                                 size="small"
-                                                fullWidth
+                                                fullWidth={true}
                                                 sx={{
                                                     mt: 1,
                                                     mb: 1,
@@ -560,7 +560,7 @@ export default function CompanyEdit() {
                                                 value={formValues.user.firstName}
                                                 disabled
                                                 size="small"
-                                                fullWidth
+                                                fullWidth={true}
                                                 sx={{
                                                     mt: 1,
                                                     mb: 1,
@@ -581,7 +581,7 @@ export default function CompanyEdit() {
                                                 value={formValues.user.lastName}
                                                 disabled
                                                 size="small"
-                                                fullWidth
+                                                fullWidth={true}
                                                 sx={{
                                                     mt: 1,
                                                     mb: 1,
@@ -606,7 +606,7 @@ export default function CompanyEdit() {
                                                 value={formValues.user.uTelNo}
                                                 disabled
                                                 size="small"
-                                                fullWidth
+                                                fullWidth={true}
                                                 sx={{
                                                     mt: 1,
                                                     mb: 1,
@@ -634,7 +634,7 @@ export default function CompanyEdit() {
                                             <TextField
                                                 value={formValues.user.uEmail}
                                                 size="small"
-                                                fullWidth
+                                                fullWidth={true}
                                                 disabled
                                                 sx={{
                                                     mt: 1,

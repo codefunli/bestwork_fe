@@ -168,6 +168,12 @@
     color: #df6c4f !important;
 }
 
+.text-ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 #component-error-text {
     color: #d32f2f !important;
 }

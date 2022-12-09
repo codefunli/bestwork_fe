@@ -9,6 +9,7 @@ import {
     Grid,
     Slide,
     TextField,
+    Typography,
 } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
 import { forwardRef, useEffect, useState } from 'react';
@@ -94,7 +95,7 @@ export default function FileUploadModal(props: AlertDialogSlideProps) {
     };
 
     return (
-        <div>
+        <>
             <Dialog
                 open={open}
                 TransitionComponent={Transition}
@@ -106,24 +107,38 @@ export default function FileUploadModal(props: AlertDialogSlideProps) {
                     sx={{
                         textTransform: 'uppercase',
                     }}
+                    className="pb-0"
                 >
-                    {title}
+                    <Typography
+                        variant="inherit"
+                        color="textSecondary"
+                        gutterBottom
+                        sx={{ textTransform: 'uppercase' }}
+                        className="btn disabled text-white bg-light opacity-100 border-customTheme"
+                    >
+                        <span className="particletext">{title}</span>
+                    </Typography>
                 </DialogTitle>
                 <Divider />
-                <DialogContent>
-                    <DialogContentText id="alert-dialog-slide-description" width={500} height={'auto'}>
-                        <Grid container spacing={3}>
-                            <Grid item xs={12} lg={12}>
+                <div>
+                    <div
+                        id="alert-dialog-slide-description"
+                        style={{
+                            width: '500px',
+                            height: 'auto',
+                        }}
+                    >
+                        <div className="ps-3 pe-3 pb-3">
+                            <div>
                                 <div
-                                    w-fullWidth
                                     style={{
                                         display: 'flex',
                                         alignItems: 'center',
                                     }}
+                                    className="pb-3"
                                 >
                                     <TextField
                                         size="small"
-                                        fullWidth
                                         multiline
                                         rows={3}
                                         value={fileData.description}
@@ -132,6 +147,7 @@ export default function FileUploadModal(props: AlertDialogSlideProps) {
                                             mb: 1,
                                             '& legend': { display: 'none' },
                                             '& fieldset': { top: 0 },
+                                            width: '100%',
                                         }}
                                         id="outlined-required"
                                         placeholder={t('material.descriptionPlaceHolder')}
@@ -139,27 +155,31 @@ export default function FileUploadModal(props: AlertDialogSlideProps) {
                                         onChange={handleInputChange}
                                     />
                                 </div>
-                            </Grid>
-                            <Grid item xs={12} lg={12}>
+                            </div>
+                            <div>
                                 <UploadMultipartFile
                                     clearPreview={open}
                                     callbackFunc={onChangeImage}
                                     callBackClearEvent={handleClearEvent}
                                 />
-                            </Grid>
-                        </Grid>
-                    </DialogContentText>
-                </DialogContent>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <Divider />
                 <DialogActions>
                     <Button variant="outlined" onClick={handleClose}>
                         {t('button.btnCancel')}
                     </Button>
-                    <Button variant="contained" onClick={handleOkFunc}>
+                    <Button
+                        variant="contained"
+                        onClick={fileData.description === '' && fileData.file.length <= 0 ? () => {} : handleOkFunc}
+                        disabled={fileData.description === '' && fileData.file.length <= 0}
+                    >
                         {t('button.btnUpload')}
                     </Button>
                 </DialogActions>
             </Dialog>
-        </div>
+        </>
     );
 }

@@ -139,11 +139,10 @@ export default function FileManagement(props: any) {
     };
 
     return (
-        <div>
+        <>
             <Grid container spacing={3} direction="row" justifyContent="center" alignItems="center" sx={{ mb: 3 }}>
                 <Grid item xs={12} lg={12} justifyContent="center">
                     <Paper
-                        w-fullWidth
                         component="form"
                         sx={{
                             p: '2px 4px',
@@ -206,7 +205,7 @@ export default function FileManagement(props: any) {
                                         }
                                     />
                                     <CardContent>
-                                        <p>{data.description}</p>
+                                        <div>{data.description}</div>
                                         <ImageManager
                                             data={{
                                                 files: data.fileStorages,
@@ -226,18 +225,16 @@ export default function FileManagement(props: any) {
                                     </CardActions>
                                 </Card>
                             </div>
-                            {
-                                <div>
-                                    <FileContext.Provider value={data}>
-                                        <CommentEl
-                                            isEnabled={data.isOpenComment ? data.isOpenComment : false}
-                                            callBackFn={handleAddComment}
-                                            postId={data.invoiceId ? data.invoiceId : data.packageId}
-                                            postType={data.postType}
-                                        />
-                                    </FileContext.Provider>
-                                </div>
-                            }
+                            <div>
+                                <FileContext.Provider value={data}>
+                                    <CommentEl
+                                        isEnabled={data.isOpenComment ? data.isOpenComment : false}
+                                        callBackFn={handleAddComment}
+                                        postId={data.invoiceId ? data.invoiceId : data.packageId}
+                                        postType={data.postType}
+                                    />
+                                </FileContext.Provider>
+                            </div>
                         </Grid>
                     </Grid>
                 ))
@@ -253,6 +250,6 @@ export default function FileManagement(props: any) {
                 title={t('awb.uploadFile')}
                 content={content}
             />
-        </div>
+        </>
     );
 }

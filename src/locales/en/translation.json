@@ -104,7 +104,8 @@
         "btnUnread": "Unread",
         "btnRemove": "Remove",
         "btnPreview": "Preview",
-        "btnAdd": "Add"
+        "btnAdd": "Add",
+        "btnEdit": "Edit"
     },
     "common": {
         "placeholder": "Please input a new value",
@@ -414,7 +415,11 @@
         "AWBNo": "Air way bill",
         "customsClearanceDocuments": "Customs Clearance Documents",
         "create": {
-            "title": "Create air waybill",
+            "title": "Create airwaybill",
+            "note": "Note"
+        },
+        "edit": {
+            "title": "Edit airwaybill",
             "note": "Note"
         },
         "action": "Action"

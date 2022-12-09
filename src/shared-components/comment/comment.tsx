@@ -209,7 +209,7 @@ export default function CommentEl(props: CommentProps) {
                 {isEnabled && (
                     <form>
                         <Paper
-                            w-fullWidth
+                            w-fullWidth={true}
                             component="form"
                             sx={{
                                 p: '2px 4px',
@@ -221,7 +221,7 @@ export default function CommentEl(props: CommentProps) {
                                 size="small"
                                 name="newMsg"
                                 value={newMsg}
-                                fullWidth
+                                fullWidth={true}
                                 sx={{ mt: 1, mb: 1 }}
                                 autoComplete="off"
                                 label={replyLabel}

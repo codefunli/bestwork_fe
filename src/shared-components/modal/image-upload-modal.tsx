@@ -116,15 +116,14 @@ export default function ImageUploadModal(props: AlertDialogSlideProps) {
                         <Grid container spacing={3}>
                             <Grid item xs={12} lg={12}>
                                 <div
-                                    w-fullWidth
                                     style={{
                                         display: 'flex',
                                         alignItems: 'center',
+                                        width: '100%',
                                     }}
                                 >
                                     <TextField
                                         size="small"
-                                        fullWidth
                                         multiline
                                         rows={3}
                                         value={fileData.description}
@@ -133,6 +132,7 @@ export default function ImageUploadModal(props: AlertDialogSlideProps) {
                                             mb: 1,
                                             '& legend': { display: 'none' },
                                             '& fieldset': { top: 0 },
+                                            width: '100%',
                                         }}
                                         id="outlined-required"
                                         placeholder={t('material.descriptionPlaceHolder')}

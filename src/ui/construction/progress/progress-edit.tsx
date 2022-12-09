@@ -210,7 +210,7 @@ const ProgressEdit = (props: Props) => {
                                         <TextField
                                             size="small"
                                             value={progressData.title}
-                                            fullWidth
+                                            fullWidth={true}
                                             required
                                             disabled={permission && !permission.canEdit}
                                             sx={{
@@ -265,7 +265,7 @@ const ProgressEdit = (props: Props) => {
                                         </InputLabel>
                                         <TextField
                                             size="small"
-                                            fullWidth
+                                            fullWidth={true}
                                             disabled={permission && !permission.canEdit}
                                             sx={{
                                                 mt: 1,
@@ -290,7 +290,7 @@ const ProgressEdit = (props: Props) => {
                                         </InputLabel>
                                         <TextField
                                             size="small"
-                                            fullWidth
+                                            fullWidth={true}
                                             sx={{
                                                 mt: 1,
                                                 mb: 1,
@@ -317,7 +317,7 @@ const ProgressEdit = (props: Props) => {
                                     <div className="content">
                                         <FormControl
                                             size="small"
-                                            fullWidth
+                                            fullWidth={true}
                                             sx={{
                                                 mt: 1,
                                                 mb: 1,
@@ -363,7 +363,7 @@ const ProgressEdit = (props: Props) => {
                                     <div className="content">
                                         <TextField
                                             size="small"
-                                            fullWidth
+                                            fullWidth={true}
                                             multiline
                                             disabled={permission && !permission.canEdit}
                                             rows={3}
@@ -388,7 +388,7 @@ const ProgressEdit = (props: Props) => {
                                     <div className="content">
                                         <TextField
                                             size="small"
-                                            fullWidth
+                                            fullWidth={true}
                                             multiline
                                             disabled={permission && !permission.canEdit}
                                             rows={3}

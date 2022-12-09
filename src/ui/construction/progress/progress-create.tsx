@@ -206,7 +206,7 @@ const ProgressCreate = (props: Props) => {
                                 <TextField
                                     size="small"
                                     value={progressData.title}
-                                    fullWidth
+                                    fullWidth={true}
                                     required
                                     sx={{
                                         mt: 1,
@@ -259,7 +259,7 @@ const ProgressCreate = (props: Props) => {
                                 </InputLabel>
                                 <TextField
                                     size="small"
-                                    fullWidth
+                                    fullWidth={true}
                                     sx={{
                                         mt: 1,
                                         mb: 1,
@@ -283,7 +283,7 @@ const ProgressCreate = (props: Props) => {
                                 </InputLabel>
                                 <TextField
                                     size="small"
-                                    fullWidth
+                                    fullWidth={true}
                                     sx={{
                                         mt: 1,
                                         mb: 1,
@@ -311,7 +311,7 @@ const ProgressCreate = (props: Props) => {
                             <div className="content">
                                 <FormControl
                                     size="small"
-                                    fullWidth
+                                    fullWidth={true}
                                     sx={{
                                         mt: 1,
                                         mb: 1,
@@ -362,7 +362,7 @@ const ProgressCreate = (props: Props) => {
                             <div className="content">
                                 <TextField
                                     size="small"
-                                    fullWidth
+                                    fullWidth={true}
                                     multiline
                                     rows={3}
                                     name="report"
@@ -388,7 +388,7 @@ const ProgressCreate = (props: Props) => {
                             <div className="content">
                                 <TextField
                                     size="small"
-                                    fullWidth
+                                    fullWidth={true}
                                     multiline
                                     rows={3}
                                     name="note"
