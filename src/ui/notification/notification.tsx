@@ -1,7 +1,6 @@
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import {
     AlertColor,
-    Avatar,
     Badge,
     Button,
     ClickAwayListener,
