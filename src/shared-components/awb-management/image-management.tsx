@@ -1,5 +1,5 @@
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
-import EditIcon from '@mui/icons-material/Edit';
+import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove';
 import {
     Avatar,
     Button,
@@ -24,7 +24,6 @@ import ImageManager from '../../shared-components/images-manager/image-manager';
 import { ImageAfterContext, ImageBeforeContext, PermissionContext } from '../../ui/awb/awb-list';
 import Loading from '../loading-page/Loading';
 import ImageUploadModal from '../modal/image-upload-modal';
-import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove';
 
 const initialValue = {
     description: '',

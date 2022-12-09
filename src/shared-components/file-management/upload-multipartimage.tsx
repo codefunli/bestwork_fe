@@ -1,7 +1,7 @@
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import { useEffect, useState } from 'react';
-import { renderFile, renderImage } from '../../core/constants/common';
+import { renderFile } from '../../core/constants/common';
 import './upload-file.scss';
 
 interface props {

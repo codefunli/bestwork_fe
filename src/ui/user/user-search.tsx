@@ -27,7 +27,6 @@ import { getUsers, deleteUsers, getRoles } from '../../services/user-service';
 import AlertDialogSlide from '../../shared-components/modal/alert-dialog-slide';
 import MessageShow from '../../shared-components/message/message';
 import { SUCCESS_MSG } from '../../core/constants/message';
-import './user.scss';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import { green } from '@mui/material/colors';

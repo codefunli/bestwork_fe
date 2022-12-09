@@ -88,7 +88,7 @@ export default function ConstructionRegister() {
         setSelectValue(selectValueTmp);
         setFormValues({
             ...formValues,
-            awbCodes: awbCodesList.filter(awbCodes => selectValueTmp.includes(awbCodes["id"] as string)),
+            awbCodes: awbCodesList.filter((awbCodes) => selectValueTmp.includes(awbCodes['id'] as string)),
         });
     };
 
@@ -230,7 +230,7 @@ export default function ConstructionRegister() {
                                         <div className="content">
                                             <UploadMultipartFile
                                                 imgData={formValues.fileStorages}
-                                                clearPreview={true}
+                                                clearPreview={isClearPreview}
                                                 callbackFunc={onChangeImage}
                                                 callBackClearEvent={handleClearEvent}
                                             />

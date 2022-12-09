@@ -30,7 +30,6 @@ import { getCompaniesByUser } from '../../services/company-service';
 import { createUsers, getRoles } from '../../services/user-service';
 import ApiAlert from '../../shared-components/alert/api-alert';
 import FileUpload from '../../shared-components/file-upload/file-upload';
-import './user.scss';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const initialValues: any = {
@@ -155,351 +154,353 @@ export default function UserAdd() {
 
     return (
         <div className="user-info">
-            <form>
-                <div className="p-label-header-1">
-                    <Typography
-                        variant="h5"
-                        className="btn disabled text-white bg-light opacity-100 border-customTheme"
-                        color="textSecondary"
-                        gutterBottom
-                        sx={{ textTransform: 'uppercase' }}
-                    >
-                        <div className="particletext">{t('user.create.title')}</div>
-                        <Divider />
-                    </Typography>
-                </div>
+            <div className="p-label-header-1">
+                <Typography
+                    variant="h5"
+                    className="btn disabled text-white bg-light opacity-100 border-customTheme"
+                    color="textSecondary"
+                    gutterBottom
+                    sx={{ textTransform: 'uppercase' }}
+                >
+                    <div className="particletext">{t('user.create.title')}</div>
+                    <Divider />
+                </Typography>
+            </div>
 
-                <Grid container direction="row" spacing={3}>
-                    <Grid item xs={12} md={5} lg={3} sx={{ mt: 1, mb: 1 }}>
-                        <Card className="general-info">
-                            <FileUpload
-                                defaultImage={DefaultImage.USER_AVATAR}
-                                callbackFunc={onChangeAvatar}
-                                isDisabled={false}
-                            />
-                            <CardContent className="info">
-                                <Typography gutterBottom variant="h5" component="div">
-                                    {formValues.firstName} {formValues.lastName}
-                                </Typography>
-                                <Typography variant="body1" color="text.secondary">
-                                    {formValues.userName}
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                    <Grid item xs={12} md={7} lg={9} sx={{ mt: 1, mb: 1 }}>
-                        <Card>
-                            <CardHeader
-                                action={
-                                    <Button onClick={handleClearForm} variant="outlined">
-                                        {t(Item.LABEL_BTN.CLEAR)}
-                                    </Button>
-                                }
-                            ></CardHeader>
-
-                            <CardContent>
-                                <Box
-                                    // component="form"
-                                    sx={{
-                                        '& > :not(style)': { m: 1 },
-                                    }}
-                                    // noValidate
-                                    // autoComplete="off"
-                                >
-                                    <div className="row justify-center m-1">
-                                        <div className="col-12 col-sm-6 d-block p-1">
-                                            <InputLabel htmlFor="userName" error={Boolean(errors.userName)}>
-                                                {t('user.info.userName')} <span className="input-required">*</span>
-                                            </InputLabel>
-                                            <TextField
-                                                size="small"
-                                                fullWidth
-                                                sx={{
-                                                    mt: 1,
-                                                    mb: 1,
-                                                    '& legend': { display: 'none' },
-                                                    '& fieldset': { top: 0 },
-                                                }}
-                                                required
-                                                id="userName"
-                                                label=""
-                                                placeholder={t('common.placeholder')}
-                                                value={formValues.userName}
-                                                error={Boolean(errors.userName)}
-                                                helperText={t(errors.userName?.message?.toString() as string)}
-                                                {...register('userName', {
-                                                    onChange: (e) => handleInputChange(e),
-                                                })}
-                                            />
-                                        </div>
-                                        <div className="col-12 col-sm-6 d-block p-1">
-                                            <InputLabel htmlFor="userName" error={Boolean(errors.password)}>
-                                                {t('login.password')} <span className="input-required">*</span>
-                                            </InputLabel>
-                                            <OutlinedInput
-                                                size="small"
-                                                fullWidth
-                                                sx={{
-                                                    mt: 1,
-                                                    mb: 1,
-                                                    '& legend': { display: 'none' },
-                                                    '& fieldset': { top: 0 },
-                                                }}
-                                                required
-                                                id="password"
-                                                type={showPassword ? 'text' : 'password'}
-                                                autoComplete="false"
-                                                label=""
-                                                placeholder={t('common.placeholder')}
-                                                value={formValues.password}
-                                                error={Boolean(errors.password)}
-                                                endAdornment={
-                                                    <InputAdornment position="end">
-                                                        <IconButton
-                                                            aria-label="toggle password visibility"
-                                                            onClick={handleClickShowPassword}
-                                                            edge="end"
-                                                        >
-                                                            {showPassword ? <VisibilityOff /> : <Visibility />}
-                                                        </IconButton>
-                                                    </InputAdornment>
-                                                }
-                                                {...register('password', {
-                                                    onChange: (e) => handleInputChange(e),
-                                                })}
-                                            />
-                                            {errors.password?.message && <FormHelperText error>{t(errors.password?.message?.toString() as string)}</FormHelperText>}
-                                        </div>
-                                        <div className="col-12 col-sm-6 d-block p-1">
-                                            <InputLabel htmlFor="uEmail" error={Boolean(errors.uEmail)}>
-                                                {t('user.info.email')} <span className="input-required">*</span>
-                                            </InputLabel>
-                                            <TextField
-                                                size="small"
-                                                fullWidth
-                                                sx={{
-                                                    mt: 1,
-                                                    mb: 1,
-                                                    '& legend': { display: 'none' },
-                                                    '& fieldset': { top: 0 },
-                                                }}
-                                                required
-                                                id="uEmail"
-                                                label=""
-                                                placeholder={t('common.placeholder')}
-                                                value={formValues.uEmail}
-                                                error={Boolean(errors.uEmail)}
-                                                helperText={t(errors.uEmail?.message?.toString() as string)}
-                                                {...register('uEmail', {
-                                                    onChange: (e) => handleInputChange(e),
-                                                })}
-                                            />
-                                        </div>
-                                        <div className="col-12 col-sm-6 d-block p-1">
-                                            <InputLabel htmlFor="uTelNo" error={Boolean(errors.uTelNo)}>
-                                                {t('company.search.telNo')} <span className="input-required">*</span>
-                                            </InputLabel>
-                                            <TextField
-                                                size="small"
-                                                fullWidth
-                                                sx={{
-                                                    mt: 1,
-                                                    mb: 1,
-                                                    '& legend': { display: 'none' },
-                                                    '& fieldset': { top: 0 },
-                                                }}
-                                                required
-                                                id="uTelNo"
-                                                label=""
-                                                placeholder={t('common.placeholder')}
-                                                value={formValues.uTelNo}
-                                                error={Boolean(errors.uTelNo)}
-                                                helperText={t(errors.uTelNo?.message?.toString() as string)}
-                                                {...register('uTelNo', {
-                                                    onChange: (e) => handleInputChange(e),
-                                                })}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="row justify-center m-1">
-                                        <div className="col-12 col-sm-6 d-block p-1">
-                                            <InputLabel htmlFor="firstName" error={Boolean(errors.firstName)}>
-                                                {t('user.info.firstName')} <span className="input-required">*</span>
-                                            </InputLabel>
-                                            <TextField
-                                                size="small"
-                                                fullWidth
-                                                sx={{
-                                                    mt: 1,
-                                                    mb: 1,
-                                                    '& legend': { display: 'none' },
-                                                    '& fieldset': { top: 0 },
-                                                }}
-                                                required
-                                                id="firstName"
-                                                label=""
-                                                placeholder={t('common.placeholder')}
-                                                value={formValues.firstName}
-                                                error={Boolean(errors.firstName)}
-                                                helperText={t(errors.firstName?.message?.toString() as string)}
-                                                {...register('firstName', {
-                                                    onChange: (e) => handleInputChange(e),
-                                                })}
-                                            />
-                                        </div>
-                                        <div className="col-12 col-sm-6 d-block p-1">
-                                            <InputLabel htmlFor="lastName" error={Boolean(errors.lastName)}>
-                                                {t('user.info.lastName')} <span className="input-required">*</span>
-                                            </InputLabel>
-                                            <TextField
-                                                size="small"
-                                                fullWidth
-                                                sx={{
-                                                    mt: 1,
-                                                    mb: 1,
-                                                    '& legend': { display: 'none' },
-                                                    '& fieldset': { top: 0 },
-                                                }}
-                                                required
-                                                id="lastName"
-                                                label=""
-                                                placeholder={t('common.placeholder')}
-                                                value={formValues.lastName}
-                                                error={Boolean(errors.lastName)}
-                                                helperText={t(errors.lastName?.message?.toString() as string)}
-                                                {...register('lastName', {
-                                                    onChange: (e) => handleInputChange(e),
-                                                })}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="row justify-center m-1">
-                                        <div className="col-12 col-sm-6 d-block p-1">
-                                            <InputLabel htmlFor="company" error={Boolean(errors.company)}>
-                                                {t('user.info.company')} <span className="input-required">*</span>
-                                            </InputLabel>
-                                            <FormControl
-                                                size="small"
-                                                fullWidth
-                                                sx={{ mt: 1, mb: 1 }}
-                                                variant="outlined"
-                                                error
-                                            >
-                                                <Select
-                                                    displayEmpty
-                                                    value={formValues.company}
-                                                    disabled={formValues.company ? true : false}
-                                                    sx={{
-                                                        '& legend': { display: 'none' },
-                                                        '& fieldset': { top: 0 },
-                                                    }}
-                                                    defaultValue=""
-                                                    error={Boolean(errors.company)}
-                                                    {...register('company', {
-                                                        onChange: (e) => handleInputChange(e),
-                                                    })}
-                                                >
-                                                    <MenuItem value="" disabled>
-                                                        <em style={{ margin: '0 auto' }} className="placeholder-color">
-                                                            {t('user.search.selectCompanyName')}
-                                                        </em>
-                                                    </MenuItem>
-                                                    {companies &&
-                                                        companies.length > 0 &&
-                                                        companies.map((company: any) => (
-                                                            <MenuItem key={company.id} value={company.id}>
-                                                                {company.companyName}
-                                                            </MenuItem>
-                                                        ))}
-                                                </Select>
-                                                {Boolean(errors.company) && (
-                                                    <FormHelperText id="component-error-text">
-                                                        {errors?.company?.message as string}
-                                                    </FormHelperText>
-                                                )}
-                                            </FormControl>
-                                        </div>
-                                        <div className="col-12 col-sm-6 d-block p-1">
-                                            <InputLabel htmlFor="role" error={Boolean(errors.role)}>
-                                                {t('user.info.role')} <span className="input-required">*</span>
-                                            </InputLabel>
-                                            <FormControl
-                                                size="small"
-                                                fullWidth
-                                                sx={{ mt: 1, mb: 1 }}
-                                                variant="outlined"
-                                                error
-                                            >
-                                                <Select
-                                                    displayEmpty
-                                                    value={formValues.role.id}
-                                                    sx={{
-                                                        '& legend': { display: 'none' },
-                                                        '& fieldset': { top: 0 },
-                                                    }}
-                                                    defaultValue=""
-                                                    error={Boolean(errors.role)}
-                                                    {...register('role', {
-                                                        onChange: (e) => handleInputChange(e),
-                                                    })}
-                                                >
-                                                    <MenuItem value="" disabled>
-                                                        <em style={{ color: '#bdbdbd', margin: '0 auto' }}>
-                                                            {t('user.search.selectRole')}
-                                                        </em>
-                                                    </MenuItem>
-                                                    {roles &&
-                                                        roles.length > 0 &&
-                                                        roles.map((role: any) => (
-                                                            <MenuItem key={role.id} value={role.id}>
-                                                                <em>{role.roleName}</em>
-                                                            </MenuItem>
-                                                        ))}
-                                                </Select>
-                                                {Boolean(errors.role) && (
-                                                    <FormHelperText id="component-error-text">
-                                                        {errors?.role?.message as string}
-                                                    </FormHelperText>
-                                                )}
-                                            </FormControl>
-                                        </div>
-                                    </div>
-                                    <div className="row justify-center m-1">
-                                        <div className="col-12 col-sm-6 d-block p-1">
-                                            <InputLabel htmlFor="formEnabled">{t('user.info.enabled')}</InputLabel>
-                                            <Switch
-                                                id="formEnabled"
-                                                checked={formValues.enabled}
-                                                name="enabled"
-                                                onChange={handleSwitchChange}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="text-center justify-center mt-4">
-                                        <ButtonGroup
-                                            disableElevation
-                                            variant="contained"
-                                            aria-label="Disabled elevation buttons"
-                                        >
-                                            <Button
-                                                sx={{ mr: 1 }}
-                                                variant="contained"
-                                                disabled={isSubmitting}
-                                                onClick={handleSubmit(handleSubmitForm)}
-                                            >
-                                                {t(Item.LABEL_BTN.CREATE)}
-                                            </Button>
-                                            <Button onClick={handleBack} variant="outlined">
-                                                {t(Item.LABEL_BTN.BACK)}
-                                            </Button>
-                                        </ButtonGroup>
-                                    </div>
-                                </Box>
-                            </CardContent>
-                        </Card>
-                    </Grid>
+            <Grid container direction="row" spacing={3}>
+                <Grid item xs={12} md={5} lg={3} sx={{ mt: 1, mb: 1 }}>
+                    <Card className="general-info">
+                        <FileUpload
+                            defaultImage={DefaultImage.USER_AVATAR}
+                            callbackFunc={onChangeAvatar}
+                            isDisabled={false}
+                        />
+                        <CardContent className="info">
+                            <Typography gutterBottom variant="h5" component="div">
+                                {formValues.firstName} {formValues.lastName}
+                            </Typography>
+                            <Typography variant="body1" color="text.secondary">
+                                {formValues.userName}
+                            </Typography>
+                        </CardContent>
+                    </Card>
                 </Grid>
-            </form>
+                <Grid item xs={12} md={7} lg={9} sx={{ mt: 1, mb: 1 }}>
+                    <Card>
+                        <CardHeader
+                            action={
+                                <Button onClick={handleClearForm} variant="outlined">
+                                    {t(Item.LABEL_BTN.CLEAR)}
+                                </Button>
+                            }
+                        ></CardHeader>
+
+                        <CardContent>
+                            <Box
+                                // component="form"
+                                sx={{
+                                    '& > :not(style)': { m: 1 },
+                                }}
+                                // noValidate
+                                // autoComplete="off"
+                            >
+                                <div className="row justify-center m-1">
+                                    <div className="col-12 col-sm-6 d-block p-1">
+                                        <InputLabel htmlFor="userName" error={Boolean(errors.userName)}>
+                                            {t('user.info.userName')} <span className="input-required">*</span>
+                                        </InputLabel>
+                                        <TextField
+                                            size="small"
+                                            fullWidth
+                                            sx={{
+                                                mt: 1,
+                                                mb: 1,
+                                                '& legend': { display: 'none' },
+                                                '& fieldset': { top: 0 },
+                                            }}
+                                            required
+                                            id="userName"
+                                            label=""
+                                            placeholder={t('common.placeholder')}
+                                            value={formValues.userName}
+                                            error={Boolean(errors.userName)}
+                                            helperText={t(errors.userName?.message?.toString() as string)}
+                                            {...register('userName', {
+                                                onChange: (e) => handleInputChange(e),
+                                            })}
+                                        />
+                                    </div>
+                                    <div className="col-12 col-sm-6 d-block p-1">
+                                        <InputLabel htmlFor="userName" error={Boolean(errors.password)}>
+                                            {t('login.password')} <span className="input-required">*</span>
+                                        </InputLabel>
+                                        <OutlinedInput
+                                            size="small"
+                                            fullWidth
+                                            sx={{
+                                                mt: 1,
+                                                mb: 1,
+                                                '& legend': { display: 'none' },
+                                                '& fieldset': { top: 0 },
+                                            }}
+                                            required
+                                            id="password"
+                                            type={showPassword ? 'text' : 'password'}
+                                            autoComplete="false"
+                                            label=""
+                                            placeholder={t('common.placeholder')}
+                                            value={formValues.password}
+                                            error={Boolean(errors.password)}
+                                            endAdornment={
+                                                <InputAdornment position="end">
+                                                    <IconButton
+                                                        aria-label="toggle password visibility"
+                                                        onClick={handleClickShowPassword}
+                                                        edge="end"
+                                                    >
+                                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                                    </IconButton>
+                                                </InputAdornment>
+                                            }
+                                            {...register('password', {
+                                                onChange: (e) => handleInputChange(e),
+                                            })}
+                                        />
+                                        {errors.password?.message && (
+                                            <FormHelperText error>
+                                                {t(errors.password?.message?.toString() as string)}
+                                            </FormHelperText>
+                                        )}
+                                    </div>
+                                    <div className="col-12 col-sm-6 d-block p-1">
+                                        <InputLabel htmlFor="uEmail" error={Boolean(errors.uEmail)}>
+                                            {t('user.info.email')} <span className="input-required">*</span>
+                                        </InputLabel>
+                                        <TextField
+                                            size="small"
+                                            fullWidth
+                                            sx={{
+                                                mt: 1,
+                                                mb: 1,
+                                                '& legend': { display: 'none' },
+                                                '& fieldset': { top: 0 },
+                                            }}
+                                            required
+                                            id="uEmail"
+                                            label=""
+                                            placeholder={t('common.placeholder')}
+                                            value={formValues.uEmail}
+                                            error={Boolean(errors.uEmail)}
+                                            helperText={t(errors.uEmail?.message?.toString() as string)}
+                                            {...register('uEmail', {
+                                                onChange: (e) => handleInputChange(e),
+                                            })}
+                                        />
+                                    </div>
+                                    <div className="col-12 col-sm-6 d-block p-1">
+                                        <InputLabel htmlFor="uTelNo" error={Boolean(errors.uTelNo)}>
+                                            {t('company.search.telNo')} <span className="input-required">*</span>
+                                        </InputLabel>
+                                        <TextField
+                                            size="small"
+                                            fullWidth
+                                            sx={{
+                                                mt: 1,
+                                                mb: 1,
+                                                '& legend': { display: 'none' },
+                                                '& fieldset': { top: 0 },
+                                            }}
+                                            required
+                                            id="uTelNo"
+                                            label=""
+                                            placeholder={t('common.placeholder')}
+                                            value={formValues.uTelNo}
+                                            error={Boolean(errors.uTelNo)}
+                                            helperText={t(errors.uTelNo?.message?.toString() as string)}
+                                            {...register('uTelNo', {
+                                                onChange: (e) => handleInputChange(e),
+                                            })}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="row justify-center m-1">
+                                    <div className="col-12 col-sm-6 d-block p-1">
+                                        <InputLabel htmlFor="firstName" error={Boolean(errors.firstName)}>
+                                            {t('user.info.firstName')} <span className="input-required">*</span>
+                                        </InputLabel>
+                                        <TextField
+                                            size="small"
+                                            fullWidth
+                                            sx={{
+                                                mt: 1,
+                                                mb: 1,
+                                                '& legend': { display: 'none' },
+                                                '& fieldset': { top: 0 },
+                                            }}
+                                            required
+                                            id="firstName"
+                                            label=""
+                                            placeholder={t('common.placeholder')}
+                                            value={formValues.firstName}
+                                            error={Boolean(errors.firstName)}
+                                            helperText={t(errors.firstName?.message?.toString() as string)}
+                                            {...register('firstName', {
+                                                onChange: (e) => handleInputChange(e),
+                                            })}
+                                        />
+                                    </div>
+                                    <div className="col-12 col-sm-6 d-block p-1">
+                                        <InputLabel htmlFor="lastName" error={Boolean(errors.lastName)}>
+                                            {t('user.info.lastName')} <span className="input-required">*</span>
+                                        </InputLabel>
+                                        <TextField
+                                            size="small"
+                                            fullWidth
+                                            sx={{
+                                                mt: 1,
+                                                mb: 1,
+                                                '& legend': { display: 'none' },
+                                                '& fieldset': { top: 0 },
+                                            }}
+                                            required
+                                            id="lastName"
+                                            label=""
+                                            placeholder={t('common.placeholder')}
+                                            value={formValues.lastName}
+                                            error={Boolean(errors.lastName)}
+                                            helperText={t(errors.lastName?.message?.toString() as string)}
+                                            {...register('lastName', {
+                                                onChange: (e) => handleInputChange(e),
+                                            })}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="row justify-center m-1">
+                                    <div className="col-12 col-sm-6 d-block p-1">
+                                        <InputLabel htmlFor="company" error={Boolean(errors.company)}>
+                                            {t('user.info.company')} <span className="input-required">*</span>
+                                        </InputLabel>
+                                        <FormControl
+                                            size="small"
+                                            fullWidth
+                                            sx={{ mt: 1, mb: 1 }}
+                                            variant="outlined"
+                                            error
+                                        >
+                                            <Select
+                                                displayEmpty
+                                                value={formValues.company}
+                                                disabled={formValues.company ? true : false}
+                                                sx={{
+                                                    '& legend': { display: 'none' },
+                                                    '& fieldset': { top: 0 },
+                                                }}
+                                                defaultValue=""
+                                                error={Boolean(errors.company)}
+                                                {...register('company', {
+                                                    onChange: (e) => handleInputChange(e),
+                                                })}
+                                            >
+                                                <MenuItem value="" disabled>
+                                                    <em style={{ margin: '0 auto' }} className="placeholder-color">
+                                                        {t('user.search.selectCompanyName')}
+                                                    </em>
+                                                </MenuItem>
+                                                {companies &&
+                                                    companies.length > 0 &&
+                                                    companies.map((company: any) => (
+                                                        <MenuItem key={company.id} value={company.id}>
+                                                            {company.companyName}
+                                                        </MenuItem>
+                                                    ))}
+                                            </Select>
+                                            {Boolean(errors.company) && (
+                                                <FormHelperText id="component-error-text">
+                                                    {errors?.company?.message as string}
+                                                </FormHelperText>
+                                            )}
+                                        </FormControl>
+                                    </div>
+                                    <div className="col-12 col-sm-6 d-block p-1">
+                                        <InputLabel htmlFor="role" error={Boolean(errors.role)}>
+                                            {t('user.info.role')} <span className="input-required">*</span>
+                                        </InputLabel>
+                                        <FormControl
+                                            size="small"
+                                            fullWidth
+                                            sx={{ mt: 1, mb: 1 }}
+                                            variant="outlined"
+                                            error
+                                        >
+                                            <Select
+                                                displayEmpty
+                                                value={formValues.role.id}
+                                                sx={{
+                                                    '& legend': { display: 'none' },
+                                                    '& fieldset': { top: 0 },
+                                                }}
+                                                defaultValue=""
+                                                error={Boolean(errors.role)}
+                                                {...register('role', {
+                                                    onChange: (e) => handleInputChange(e),
+                                                })}
+                                            >
+                                                <MenuItem value="" disabled>
+                                                    <em style={{ color: '#bdbdbd', margin: '0 auto' }}>
+                                                        {t('user.search.selectRole')}
+                                                    </em>
+                                                </MenuItem>
+                                                {roles &&
+                                                    roles.length > 0 &&
+                                                    roles.map((role: any) => (
+                                                        <MenuItem key={role.id} value={role.id}>
+                                                            <em>{role.roleName}</em>
+                                                        </MenuItem>
+                                                    ))}
+                                            </Select>
+                                            {Boolean(errors.role) && (
+                                                <FormHelperText id="component-error-text">
+                                                    {errors?.role?.message as string}
+                                                </FormHelperText>
+                                            )}
+                                        </FormControl>
+                                    </div>
+                                </div>
+                                <div className="row justify-center m-1">
+                                    <div className="col-12 col-sm-6 d-block p-1">
+                                        <InputLabel htmlFor="formEnabled">{t('user.info.enabled')}</InputLabel>
+                                        <Switch
+                                            id="formEnabled"
+                                            checked={formValues.enabled}
+                                            name="enabled"
+                                            onChange={handleSwitchChange}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="text-center justify-center mt-4">
+                                    <ButtonGroup
+                                        disableElevation
+                                        variant="contained"
+                                        aria-label="Disabled elevation buttons"
+                                    >
+                                        <Button
+                                            sx={{ mr: 1 }}
+                                            variant="contained"
+                                            disabled={isSubmitting}
+                                            onClick={handleSubmit(handleSubmitForm)}
+                                        >
+                                            {t(Item.LABEL_BTN.CREATE)}
+                                        </Button>
+                                        <Button onClick={handleBack} variant="outlined">
+                                            {t(Item.LABEL_BTN.BACK)}
+                                        </Button>
+                                    </ButtonGroup>
+                                </div>
+                            </Box>
+                        </CardContent>
+                    </Card>
+                </Grid>
+            </Grid>
 
             <ApiAlert response={resForHandleMsg} />
         </div>

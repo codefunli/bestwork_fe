@@ -1,9 +1,6 @@
-import LocalSeeIcon from '@mui/icons-material/LocalSee';
-import { IconButton } from '@mui/material';
-import { useEffect, useState } from 'react';
-import QuiltedImage from '../images-manager/quilted-image';
-import './file-upload.scss';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
+import { useEffect, useState } from 'react';
+import './file-upload.scss';
 
 interface FilesUpLoad {
     defaultImages: string[];
@@ -25,12 +22,6 @@ export default function FilesUpload(props: FilesUpLoad) {
 
         for (let index = 0; index < event.target.files.length; index++) {
             if (event.target.files[index]) {
-                // const file = event.target.files[index];
-                // file.preview = URL.createObjectURL(file);
-                // arr.push(file.preview);
-
-                // setImagesPreview([...imagesPreview, ...arr]);
-
                 const reader: any = new FileReader();
                 reader.addEventListener('load', () => {
                     arr.push(reader.result);

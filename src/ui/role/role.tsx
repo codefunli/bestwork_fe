@@ -90,49 +90,50 @@ export default function Role() {
     const toggleCreateModal = (value: boolean) => setIsOpenCreateModal(value);
     const toggleUpdateModal = (value: boolean) => setIsOpenUpdateModal(value);
 
-    const fetchData = async () => {
-        const roles: any = await getRoles();
-        if (roles) {
-            let tmpRoleList: RoleResDto[] = [];
-            let tmpRoleRegisterList: RoleHasPermissionResDto[] = [];
-            roles.data.map((target: RoleResDto) => {
-                tmpRoleList.push({
-                    id: target.id,
-                    roleName: target.roleName,
-                    description: target.description,
-                });
-
-                tmpRoleRegisterList.push({
-                    id: target.id,
-                    roleName: target.roleName,
-                    description: target.description,
-                    permissions: [],
-                });
-            });
-
-            setRoleList(tmpRoleList);
-            setRolePrimitiveList(tmpRoleList);
-
-            setRoleRegisterList(tmpRoleRegisterList);
-
-            if (tmpRoleList && tmpRoleList.length > 0) {
-                getPermissionsList(tmpRoleList[0].id)
-                    .then((res) => {
-                        if (res.status === StatusCode.OK && res.data) {
-                            setCurrentRole({
-                                ...currentRole,
-                                id: tmpRoleList[0].id,
-                                roleName: tmpRoleList[0].roleName,
-                                description: tmpRoleList[0].description,
-                                permissions: res.data,
-                            });
-                        }
-                    })
-                    .catch((err) => {
-                        handleMessage(true, err.message, AlertColorConstants.ERROR);
+    const fetchData = () => {
+        getRoles().then((res: any) => {
+            if (res) {
+                let tmpRoleList: RoleResDto[] = [];
+                let tmpRoleRegisterList: RoleHasPermissionResDto[] = [];
+                res.data.map((target: RoleResDto) => {
+                    tmpRoleList.push({
+                        id: target.id,
+                        roleName: target.roleName,
+                        description: target.description,
                     });
+
+                    tmpRoleRegisterList.push({
+                        id: target.id,
+                        roleName: target.roleName,
+                        description: target.description,
+                        permissions: [],
+                    });
+                });
+
+                setRoleList(tmpRoleList);
+                setRolePrimitiveList(tmpRoleList);
+
+                setRoleRegisterList(tmpRoleRegisterList);
+
+                if (tmpRoleList && tmpRoleList.length > 0) {
+                    getPermissionsList(tmpRoleList[0].id)
+                        .then((res) => {
+                            if (res.status === StatusCode.OK && res.data) {
+                                setCurrentRole({
+                                    ...currentRole,
+                                    id: tmpRoleList[0].id,
+                                    roleName: tmpRoleList[0].roleName,
+                                    description: tmpRoleList[0].description,
+                                    permissions: res.data,
+                                });
+                            }
+                        })
+                        .catch((err) => {
+                            handleMessage(true, err.message, AlertColorConstants.ERROR);
+                        });
+                }
             }
-        }
+        });
     };
 
     useEffect(() => {

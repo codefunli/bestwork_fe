@@ -28,7 +28,6 @@ import { getCompaniesByUser } from '../../services/company-service';
 import { getRoles, getUser, putUser } from '../../services/user-service';
 import ApiAlert from '../../shared-components/alert/api-alert';
 import FileUpload from '../../shared-components/file-upload/file-upload';
-import './user.scss';
 
 const initialValues = {
     id: '',

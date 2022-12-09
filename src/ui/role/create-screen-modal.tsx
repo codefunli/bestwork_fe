@@ -75,16 +75,80 @@ export default function CreateScreenModal(props: CreateRoleModalProps) {
     };
 
     return (
-        <form>
-            <Dialog open={isOpen} onClose={handleCancel} keepMounted fullWidth maxWidth="sm">
-                <DialogTitle>{t('create_screen.title')}</DialogTitle>
-                <DialogContent>
-                    <div>
-                        <InputLabel htmlFor="name" error={Boolean(errors.name)}>
-                            {t('create_screen.modal.name')} <span className="input-required">*</span>
-                        </InputLabel>
+        <Dialog open={isOpen} onClose={handleCancel} keepMounted fullWidth maxWidth="sm">
+            <DialogTitle>{t('create_screen.title')}</DialogTitle>
+            <DialogContent>
+                <div>
+                    <InputLabel htmlFor="name" error={Boolean(errors.name)}>
+                        {t('create_screen.modal.name')} <span className="input-required">*</span>
+                    </InputLabel>
+                    <TextField
+                        size="small"
+                        fullWidth
+                        sx={{
+                            mt: 1,
+                            mb: 1,
+                            '& legend': { display: 'none' },
+                            '& fieldset': { top: 0 },
+                        }}
+                        required
+                        id="name"
+                        label=""
+                        placeholder={t('common.placeholder')}
+                        value={formValues.name}
+                        error={Boolean(errors.name)}
+                        helperText={t(errors.name?.message?.toString() as string)}
+                        {...register('name', {
+                            onChange: (e) => handleInputChange(e),
+                        })}
+                    />
+                </div>
+                <div>
+                    <InputLabel htmlFor="name" error={Boolean(errors.url)}>
+                        {t('create_screen.modal.url')} <span className="input-required">*</span>
+                    </InputLabel>
+                    <TextField
+                        size="small"
+                        fullWidth
+                        sx={{
+                            mt: 1,
+                            mb: 1,
+                            '& legend': { display: 'none' },
+                            '& fieldset': { top: 0 },
+                        }}
+                        required
+                        id="url"
+                        label=""
+                        placeholder={t('common.urlPlacholder')}
+                        value={formValues.url}
+                        error={Boolean(errors.url)}
+                        helperText={t(errors.url?.message?.toString() as string)}
+                        {...register('url', {
+                            onChange: (e) => handleInputChange(e),
+                        })}
+                    />
+                </div>
+                <div>
+                    <InputLabel htmlFor="icon" error={Boolean(errors.description)}>
+                        {t('create_screen.modal.icon')}
+                    </InputLabel>
+                    <Box
+                        w-fullWidth
+                        component="form"
+                        sx={{
+                            p: '2px 4px',
+                            display: 'flex',
+                            alignItems: 'center',
+                        }}
+                    >
                         <TextField
                             size="small"
+                            value={formValues.icon}
+                            error={Boolean(errors.icon)}
+                            helperText={t(errors.icon?.message?.toString() as string)}
+                            {...register('icon', {
+                                onChange: (e) => handleInputChange(e),
+                            })}
                             fullWidth
                             sx={{
                                 mt: 1,
@@ -92,96 +156,30 @@ export default function CreateScreenModal(props: CreateRoleModalProps) {
                                 '& legend': { display: 'none' },
                                 '& fieldset': { top: 0 },
                             }}
-                            required
-                            id="name"
+                            autoComplete="off"
                             label=""
                             placeholder={t('common.placeholder')}
-                            value={formValues.name}
-                            error={Boolean(errors.name)}
-                            helperText={t(errors.name?.message?.toString() as string)}
-                            {...register('name', {
-                                onChange: (e) => handleInputChange(e),
-                            })}
+                            onChange={handleInputChange}
+                            onKeyDown={handleKeyDown}
                         />
-                    </div>
-                    <div>
-                        <InputLabel htmlFor="name" error={Boolean(errors.url)}>
-                            {t('create_screen.modal.url')} <span className="input-required">*</span>
-                        </InputLabel>
-                        <TextField
-                            size="small"
-                            fullWidth
-                            sx={{
-                                mt: 1,
-                                mb: 1,
-                                '& legend': { display: 'none' },
-                                '& fieldset': { top: 0 },
-                            }}
-                            required
-                            id="url"
-                            label=""
-                            placeholder={t('common.urlPlacholder')}
-                            value={formValues.url}
-                            error={Boolean(errors.url)}
-                            helperText={t(errors.url?.message?.toString() as string)}
-                            {...register('url', {
-                                onChange: (e) => handleInputChange(e),
-                            })}
-                        />
-                    </div>
-                    <div>
-                        <InputLabel htmlFor="icon" error={Boolean(errors.description)}>
-                            {t('create_screen.modal.icon')}
-                        </InputLabel>
-                        <Box
-                            w-fullWidth
-                            component="form"
-                            sx={{
-                                p: '2px 4px',
-                                display: 'flex',
-                                alignItems: 'center',
-                            }}
-                        >
-                            <TextField
-                                size="small"
-                                value={formValues.icon}
-                                error={Boolean(errors.icon)}
-                                helperText={t(errors.icon?.message?.toString() as string)}
-                                {...register('icon', {
-                                    onChange: (e) => handleInputChange(e),
-                                })}
-                                fullWidth
-                                sx={{
-                                    mt: 1,
-                                    mb: 1,
-                                    '& legend': { display: 'none' },
-                                    '& fieldset': { top: 0 },
-                                }}
-                                autoComplete="off"
-                                label=""
-                                placeholder={t('common.placeholder')}
-                                onChange={handleInputChange}
-                                onKeyDown={handleKeyDown}
-                            />
-                            <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-                            <Button variant="outlined" onClick={goToFontAnwesomePage}>
-                                FontAwesome
-                            </Button>
-                        </Box>
-                        <Box>
-                            <IconGuide />
-                        </Box>
-                    </div>
-                </DialogContent>
-                <DialogActions>
-                    <Button variant="outlined" onClick={handleCancel}>
-                        {t('button.btnCancel')}
-                    </Button>
-                    <Button variant="contained" disabled={isSubmitting} onClick={handleSubmit(handleSubmitForm)}>
-                        {t('button.btnCreate')}
-                    </Button>
-                </DialogActions>
-            </Dialog>
-        </form>
+                        <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+                        <Button variant="outlined" onClick={goToFontAnwesomePage}>
+                            FontAwesome
+                        </Button>
+                    </Box>
+                    <Box>
+                        <IconGuide />
+                    </Box>
+                </div>
+            </DialogContent>
+            <DialogActions>
+                <Button variant="outlined" onClick={handleCancel}>
+                    {t('button.btnCancel')}
+                </Button>
+                <Button variant="contained" disabled={isSubmitting} onClick={handleSubmit(handleSubmitForm)}>
+                    {t('button.btnCreate')}
+                </Button>
+            </DialogActions>
+        </Dialog>
     );
 }

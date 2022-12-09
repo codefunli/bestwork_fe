@@ -1,12 +1,24 @@
-import { useState } from 'react';
-import { Button, ButtonGroup, Dialog, DialogActions, DialogContent, DialogTitle, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from '@mui/material';
-import { useTranslation } from 'react-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
-import { validateChangePassword } from '../../core/constants/validate';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { changePassword } from '../../services/auth-service';
+import {
+    Button,
+    ButtonGroup,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    FormHelperText,
+    IconButton,
+    InputAdornment,
+    InputLabel,
+    OutlinedInput,
+} from '@mui/material';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { StatusCode } from '../../core/constants/common';
+import { validateChangePassword } from '../../core/constants/validate';
+import { changePassword } from '../../services/auth-service';
 import ApiAlert from '../../shared-components/alert/api-alert';
 import './change-password.scss';
 
@@ -18,7 +30,7 @@ interface ChangePasswordModalProps {
 const initialValues: any = {
     currentPassword: '',
     newPassword: '',
-    confirmPassword: ''
+    confirmPassword: '',
 };
 
 export default function ChangePassword(props: ChangePasswordModalProps) {
@@ -56,28 +68,37 @@ export default function ChangePassword(props: ChangePasswordModalProps) {
     };
 
     const handleSubmitForm = () => {
-        changePassword(formValues).then((res: any) => {
-            setResForHandleMsg({
-                status: res.status,
-                message: res.message,
-            });
+        changePassword(formValues)
+            .then((res: any) => {
+                setResForHandleMsg({
+                    status: res.status,
+                    message: res.message,
+                });
 
-            if (res.status === StatusCode.OK) {
-                toggleOpen(false);
-                setFormValues(initialValues);
-                reset();
-            };
-        }).catch(() => {
-            setResForHandleMsg({
-                status: StatusCode.ERROR,
-                message: t('message.error'),
+                if (res.status === StatusCode.OK) {
+                    toggleOpen(false);
+                    setFormValues(initialValues);
+                    reset();
+                }
+            })
+            .catch(() => {
+                setResForHandleMsg({
+                    status: StatusCode.ERROR,
+                    message: t('message.error'),
+                });
             });
-        });
     };
 
     return (
         <form>
-            <Dialog open={isOpen} onClose={handleCancel} keepMounted fullWidth maxWidth="xs" className="change-password">
+            <Dialog
+                open={isOpen}
+                onClose={handleCancel}
+                keepMounted
+                fullWidth
+                maxWidth="xs"
+                className="change-password"
+            >
                 <DialogTitle>{t('changePassword.title')}</DialogTitle>
                 <DialogContent>
                     <div className="text-field-item">
@@ -114,7 +135,11 @@ export default function ChangePassword(props: ChangePasswordModalProps) {
                                 </InputAdornment>
                             }
                         />
-                        {errors?.currentPassword && <FormHelperText error>{t(errors.currentPassword?.message?.toString() as string)}</FormHelperText>}
+                        {errors?.currentPassword && (
+                            <FormHelperText error>
+                                {t(errors.currentPassword?.message?.toString() as string)}
+                            </FormHelperText>
+                        )}
                     </div>
                     <div className="text-field-item">
                         <InputLabel htmlFor="newPassword" error={Boolean(errors.newPassword)}>
@@ -150,7 +175,11 @@ export default function ChangePassword(props: ChangePasswordModalProps) {
                                 </InputAdornment>
                             }
                         />
-                        {errors?.newPassword && <FormHelperText error>{t(errors.newPassword?.message?.toString() as string)}</FormHelperText>}
+                        {errors?.newPassword && (
+                            <FormHelperText error>
+                                {t(errors.newPassword?.message?.toString() as string)}
+                            </FormHelperText>
+                        )}
                     </div>
                     <div className="text-field-item">
                         <InputLabel htmlFor="newPassword" error={Boolean(errors.newPassword)}>
@@ -186,7 +215,11 @@ export default function ChangePassword(props: ChangePasswordModalProps) {
                                 </InputAdornment>
                             }
                         />
-                        {errors?.confirmPassword && <FormHelperText error>{t(errors.confirmPassword?.message?.toString() as string)}</FormHelperText>}
+                        {errors?.confirmPassword && (
+                            <FormHelperText error>
+                                {t(errors.confirmPassword?.message?.toString() as string)}
+                            </FormHelperText>
+                        )}
                     </div>
                 </DialogContent>
                 <DialogActions sx={{ p: 3, pt: 0 }}>

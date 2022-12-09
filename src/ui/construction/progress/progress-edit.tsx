@@ -27,7 +27,7 @@ import {
     formatDateTimeRes,
     formatDateTimeResNoneSuffixes,
 } from '../../../core/utils/get-current-datetime';
-import { updateProgress, getProgressStatus } from '../../../services/construction-service';
+import { getProgressStatus, updateProgress } from '../../../services/construction-service';
 import ApiAlert from '../../../shared-components/alert/api-alert';
 import UploadMultipartFile from '../../../shared-components/file-management/upload-multipartfile';
 
@@ -51,7 +51,6 @@ const ProgressEdit = (props: Props) => {
     const { t } = useTranslation();
     const params = useParams();
     const [progressData, setProgressData] = useState(progress);
-    const [imgData, setImgData] = useState([]);
     const [resForHandleMsg, setResForHandleMsg] = useState<any>();
     const [progressStatus, setProgressStatus] = useState([]);
     const [fileDataBefore, setFileDataBefore] = useState(initialDataImg);
@@ -95,7 +94,6 @@ const ProgressEdit = (props: Props) => {
                 ? formatDateTimeResNoneSuffixes(progress.endDate)
                 : formatDateTimeRes(new Date()),
         });
-        setImgData(progress?.fileStorages);
     }, [progress]);
 
     const handleCancel = () => {

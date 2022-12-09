@@ -1,31 +1,17 @@
+import DownloadIcon from '@mui/icons-material/Download';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
-import { useEffect, useState } from 'react';
-import {
-    dataURLtoFile,
-    downloadFile,
-    fileToBase64,
-    prefixPdf,
-    renderBase64File,
-    renderFile,
-    renderImage,
-} from '../../core/constants/common';
-import './upload-file.scss';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import * as React from 'react';
-import { useContext } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getPdfFile } from '../../services/awb-service';
-import { PermissionContext } from '../../ui/awb/awb-list';
+import { downloadFile, fileToBase64, renderBase64File, renderFile } from '../../core/constants/common';
 import PreviewPDF from '../modal/view-pdf-modal';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import { Card, CardHeader, IconButton, ImageList, ImageListItem, Tooltip } from '@mui/material';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import DownloadIcon from '@mui/icons-material/Download';
-import { t } from 'i18next';
+import './upload-file.scss';
 
 interface props {
     clearPreview?: any;

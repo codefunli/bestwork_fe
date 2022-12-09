@@ -1,9 +1,9 @@
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { Breadcrumbs, Typography } from '@mui/material';
 import Stack from '@mui/material/Stack';
-import { useLocation, Link } from 'react-router-dom';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import { UrlFeApp, BreadcrumbReplaceList } from '../core/constants/common';
 import { useTranslation } from 'react-i18next';
+import { Link, useLocation } from 'react-router-dom';
+import { BreadcrumbReplaceList, UrlFeApp } from '../core/constants/common';
 
 const CollapsedBreadcrumbs = () => {
     const { t } = useTranslation();
@@ -38,11 +38,11 @@ const CollapsedBreadcrumbs = () => {
                         const isLast = index === pathNameArr.length - 1;
                         return isLast ? (
                             <Typography color="white" key={name}>
-                                {t('bread_crumbs.' + `${name}` + '')}
+                                {t(`bread_crumbs.${name}`)}
                             </Typography>
                         ) : (
                             <Link key={name} to={routeTo}>
-                                {t('bread_crumbs.' + `${name}` + '')}
+                                {t(`bread_crumbs.${name}`)}
                             </Link>
                         );
                     })}

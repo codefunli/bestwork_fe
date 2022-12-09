@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import {
     AlertColor,
     Avatar,
@@ -16,18 +16,18 @@ import {
     Tooltip,
     Typography,
 } from '@mui/material';
-import NotificationsIcon from '@mui/icons-material/Notifications';
+import { blueGrey } from '@mui/material/colors';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
-import './notification.scss';
 import { ConfirmConstants, UrlFeApp } from '../../core/constants/common';
 import { NotificationsResDTO } from '../../models/notifications-dto';
 import { changeStatus, countUnRead, getNotifications } from '../../services/notifications-service';
-import { useQuery, useQueryClient } from 'react-query';
-import { blueGrey, purple } from '@mui/material/colors';
-import AlertDialogSlide from '../../shared-components/modal/alert-dialog-slide';
-import AlertDiaLogInform from '../../shared-components/modal/alert-dialog-inform';
 import MessageShow from '../../shared-components/message/message';
+import AlertDiaLogInform from '../../shared-components/modal/alert-dialog-inform';
+import CampaignIcon from '@mui/icons-material/Campaign';
+import './notification.scss';
 
 const initialValues = {
     page: '0',
@@ -41,7 +41,6 @@ const initialValues = {
 const Notification = () => {
     const anchorRef = useRef<HTMLDivElement>(null);
     const [open, setOpen] = useState(false);
-    const [formValues, setFormValues] = useState(initialValues);
     const { t } = useTranslation();
     const [notiList, setNotiList] = useState<NotificationsResDTO[]>([]);
     const [badgeCount, setBadgeCount] = useState(0);
@@ -52,11 +51,10 @@ const Notification = () => {
     const [isShowMessage, setIsShowMessage] = useState(false);
     const [companyMsg, setCompanyMsg] = useState('');
     const [typeCompanyMsg, setTypeCompanyMsg] = useState<AlertColor>('success');
-    const queryClient = useQueryClient();
 
     const navigate = useNavigate();
 
-    const { data, isLoading } = useQuery(['getNotifications'], () => getNotifications(formValues), {
+    const { data } = useQuery(['getNotifications'], () => getNotifications(initialValues), {
         refetchInterval: 5000,
         onSuccess: (res: any) => {
             setNotiList(res.data.content);
@@ -154,7 +152,7 @@ const Notification = () => {
                             <ClickAwayListener onClickAway={handleClose}>
                                 <List className="notification-list">
                                     {notiList && notiList.length > 0 ? (
-                                        notiList.map((notification, index) => (
+                                        notiList.map((notification) => (
                                             <ListItem
                                                 alignItems="flex-start"
                                                 key={notification.id}
@@ -172,7 +170,7 @@ const Notification = () => {
                                                 }
                                             >
                                                 <ListItemAvatar>
-                                                    <Avatar alt="" src="" />
+                                                    <CampaignIcon sx={{ fontSize: 50 }} color="warning" />
                                                 </ListItemAvatar>
                                                 <ListItemText
                                                     primary={<span className="title">{notification.title}</span>}

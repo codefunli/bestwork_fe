@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
 import LocalSeeIcon from '@mui/icons-material/LocalSee';
+import { useEffect, useState } from 'react';
 import './file-upload.scss';
 
 export default function FileUpload(props: any) {
@@ -25,12 +25,12 @@ export default function FileUpload(props: any) {
 
     const handleErrorImage = (error: any) => {
         error.target.src = require('../../assets/default-avatar.png');
-    }
+    };
 
     return (
         <div>
             <label htmlFor="chosen-image" className="file-upload">
-                <img alt={imagePreview} src={imagePreview} onError={handleErrorImage}/>
+                <img alt={imagePreview} src={imagePreview} onError={handleErrorImage} />
                 <span>
                     <LocalSeeIcon />
                 </span>

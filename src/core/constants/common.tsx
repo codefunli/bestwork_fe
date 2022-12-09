@@ -1,8 +1,8 @@
 import Chip from '@mui/material/Chip';
-import { PREFIX_SERVER_URL } from './urls';
-import pdf from '../../../src/assets/pdf.png';
 import excel from '../../../src/assets/excel.png';
+import pdf from '../../../src/assets/pdf.png';
 import unknown from '../../../src/assets/unknown.jpg';
+import { PREFIX_SERVER_URL } from './urls';
 
 export const CharacterConstants = {
     SLASH: '/',
@@ -376,40 +376,6 @@ export const BreadcrumbReplaceList = ['with'];
 export const NameElConstants = {
     USER_NAME: 'userName',
     PASSWORD: 'password',
-};
-
-export const renderImage = (data: any, index: any) => {
-    if (data.file.includes('pdf;'))
-        return (
-            <img
-                loading="lazy"
-                className="imgTag"
-                src={
-                    'https://play-lh.googleusercontent.com/9XKD5S7rwQ6FiPXSyp9SzLXfIue88ntf9sJ9K250IuHTL7pmn2-ZB0sngAX4A2Bw4w'
-                }
-                key={index}
-            />
-        );
-    if (data.file.includes('image/')) return <img loading="lazy" className="imgTag" src={data.file} key={index} />;
-    if (data.file.includes('excel;'))
-        return (
-            <img
-                loading="lazy"
-                className="imgTag"
-                src={'https://cdn1.iconfinder.com/data/icons/famous-brand-apps/100/_-04-512.png'}
-                key={index}
-            />
-        );
-    return (
-        <img
-            loading="lazy"
-            className="imgTag"
-            src={
-                'https://static.vecteezy.com/system/resources/previews/002/303/215/original/modern-flat-design-of-unknown-format-file-icon-for-web-free-vector.jpg'
-            }
-            key={index}
-        />
-    );
 };
 
 export const renderFile = (data: any, index: any) => {

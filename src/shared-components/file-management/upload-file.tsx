@@ -1,7 +1,7 @@
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import { useEffect, useState } from 'react';
-import { renderImage } from '../../core/constants/common';
+import { renderFile } from '../../core/constants/common';
 import './upload-file.scss';
 
 interface props {
@@ -82,7 +82,7 @@ export default function UploadFile(props: props) {
                             <div className="col-6 col-lg-4 img-item" key={index}>
                                 <HighlightOffIcon onClick={() => removeImageItem(index)} />
                                 <div>
-                                    {renderImage(data, index)}
+                                    {renderFile(data, index)}
                                     <div>
                                         <p className="text-center">{data.name}</p>
                                     </div>

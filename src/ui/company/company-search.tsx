@@ -1,3 +1,5 @@
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
 import {
     AlertColor,
     Avatar,
@@ -16,24 +18,22 @@ import {
     TextField,
     Typography,
 } from '@mui/material';
+import { green } from '@mui/material/colors';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from 'react-query';
+import { useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AlertColorConstants, ConfirmConstants, Item, UrlFeApp } from '../../core/constants/common';
 import { ERROR_MSG, SUCCESS_MSG } from '../../core/constants/message';
+import { getUserInfo } from '../../core/redux/user-slice';
 import { headCompanyCol } from '../../core/types/company';
+import { Permission } from '../../core/types/permission';
 import { deleteCompanies, getCompanies } from '../../services/company-service';
 import MessageShow from '../../shared-components/message/message';
 import AlertDialogSlide from '../../shared-components/modal/alert-dialog-slide';
 import EnhancedTable, { ArrayAction } from '../../shared-components/table-manager/table-data';
-import CheckIcon from '@mui/icons-material/Check';
-import CloseIcon from '@mui/icons-material/Close';
-import { green } from '@mui/material/colors';
 import './company.scss';
-import { Permission } from '../../core/types/permission';
-import { useSelector } from 'react-redux';
-import { getUserInfo } from '../../core/redux/user-slice';
 
 const initialValues = {
     keyword: '',

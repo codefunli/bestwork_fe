@@ -18,7 +18,6 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AWB_LOADING } from '../../core/constants/common';
 import { Comment } from '../../core/types/base';
-import { Permission } from '../../core/types/permission';
 import { CommercialInvoiceContext, PackingListContext, PermissionContext } from '../../ui/awb/awb-list';
 import CommentEl from '../comment/comment';
 import ImageManager from '../images-manager/image-manager';

@@ -5,8 +5,8 @@ import TimelineConnector from '@mui/lab/TimelineConnector';
 import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
 import TimelineItem from '@mui/lab/TimelineItem';
-import TimelineSeparator from '@mui/lab/TimelineSeparator';
 import TimelineOppositeContent, { timelineOppositeContentClasses } from '@mui/lab/TimelineOppositeContent';
+import TimelineSeparator from '@mui/lab/TimelineSeparator';
 import {
     Avatar,
     Box,
@@ -40,7 +40,7 @@ import {
     formatDateTimeResList,
     formatDateTimeResNoneSuffixes,
 } from '../../core/utils/get-current-datetime';
-import { ProjectProgressDTO } from '../../models/project-res-dto';
+import { AWBCode, ContructionProgressResDTO, ProgressByConstrucionDTO } from '../../models/construction-res-dto';
 import { getAirWayBillByProjectId } from '../../services/awb-service';
 import {
     getConstruction,
@@ -48,14 +48,12 @@ import {
     getProgressByConstruction,
     updateConstruction,
 } from '../../services/construction-service';
-import { getProgressByProjectId, getProgressStatus } from '../../services/project-service';
+import { getProgressStatus } from '../../services/project-service';
 import ApiAlert from '../../shared-components/alert/api-alert';
-import MultipleFileUpload from '../../shared-components/file-upload/multiple-file-upload';
-import HandleConstructionStatus from '../../shared-components/status-handle/construction-status-handle';
-import './construction.scss';
-import HandleProgressStatus from '../../shared-components/status-handle/progress-status-handle';
 import UploadMultipartFile from '../../shared-components/file-management/upload-multipartfile';
-import { AWBCode, ContructionProgressResDTO, ProgressByConstrucionDTO } from '../../models/construction-res-dto';
+import HandleConstructionStatus from '../../shared-components/status-handle/construction-status-handle';
+import HandleProgressStatus from '../../shared-components/status-handle/progress-status-handle';
+import './construction.scss';
 
 const initialValues = {
     fileStorages: [],
@@ -88,7 +86,6 @@ export default function ConstructionEdit() {
     const [progressStatus, setProgressStatus] = useState([]);
     const [fileData, setFileData] = useState(initialDataImg);
     const [eventImage, setEventImage] = useState<any>();
-    const [isOpenProgress, setIsOpenProgress] = useState(false);
     const {
         register,
         handleSubmit,
@@ -268,7 +265,7 @@ export default function ConstructionEdit() {
                                         <div className="content">
                                             <UploadMultipartFile
                                                 imgData={formValues.fileStorages}
-                                                clearPreview={true}
+                                                clearPreview={isClearPreview}
                                                 callbackFunc={onChangeImage}
                                                 callBackClearEvent={handleClearEvent}
                                             />

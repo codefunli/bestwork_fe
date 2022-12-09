@@ -17,7 +17,7 @@ import {
     Typography,
 } from '@mui/material';
 import { green } from '@mui/material/colors';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from 'react-query';
 import { ConfirmConstants, Item } from '../../core/constants/common';
@@ -64,6 +64,15 @@ export default function NotificationsSearch() {
             });
         },
     });
+
+    useEffect(() => {
+        // do some checking here to ensure data exist
+        if (data && data.data && data.data.content) {
+            // mutate data if you need to
+            setState(data.data);
+        }
+        setIsShowMessage(false);
+    }, [data]);
 
     const handleInputChange = (e: any) => {
         const { name, value } = e.target;
@@ -330,7 +339,7 @@ export default function NotificationsSearch() {
                             content: [],
                         }
                     }
-                    isLoading={false}
+                    isLoading={isLoading}
                     arrButton={arrButton}
                     statusList={() => {
                         console.log();

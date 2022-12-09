@@ -27,10 +27,9 @@ import {
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Form, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Item, StatusCode, UrlFeApp } from '../../core/constants/common';
 import { validateForm } from '../../core/constants/validate';
-import { District, Ward } from '../../core/types/administrative';
 import { formatDateTimeReq, formatDateTimeRes } from '../../core/utils/get-current-datetime';
 import { registerCompany } from '../../services/company-service';
 import ApiAlert from '../../shared-components/alert/api-alert';
@@ -67,8 +66,6 @@ export default function CompanyRegister() {
     const [formValues, setFormValues] = useState({
         ...initialValues,
     });
-    const [districts, setDistricts] = useState<District[]>([]);
-    const [wards, setWards] = useState<Ward[]>([]);
     const navigate = useNavigate();
     const { t } = useTranslation();
     const [showPassword, setShowPassword] = useState(false);
@@ -106,7 +103,7 @@ export default function CompanyRegister() {
     };
 
     const handleAllowLoginChange = (event: any) => {
-        const { name, value } = event.target;
+        const { name } = event.target;
 
         setFormValues({
             ...formValues,
