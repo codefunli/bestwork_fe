@@ -253,7 +253,7 @@ export default function ProjectRegister() {
                                                             <TextField
                                                                 size="small"
                                                                 value={formValues.project.projectName}
-                                                                fullWidth
+                                                                fullWidth={true}
                                                                 required
                                                                 sx={{
                                                                     mt: 1,
@@ -283,7 +283,7 @@ export default function ProjectRegister() {
                                                             <TextField
                                                                 size="small"
                                                                 value={formValues.project.description}
-                                                                fullWidth
+                                                                fullWidth={true}
                                                                 required
                                                                 sx={{
                                                                     mt: 1,
@@ -314,7 +314,7 @@ export default function ProjectRegister() {
                                                                 <span className="input-required">*</span>
                                                             </InputLabel>
                                                             <TextField
-                                                                fullWidth
+                                                                fullWidth={true}
                                                                 sx={{
                                                                     mt: 1,
                                                                     mb: 1,
@@ -344,7 +344,7 @@ export default function ProjectRegister() {
                                                             </InputLabel>
                                                             <FormControl
                                                                 size="small"
-                                                                fullWidth
+                                                                fullWidth={true}
                                                                 sx={{
                                                                     mt: 1,
                                                                     mb: 1,
@@ -399,7 +399,7 @@ export default function ProjectRegister() {
                                                             </InputLabel>
                                                             <FormControl
                                                                 size="small"
-                                                                fullWidth
+                                                                fullWidth={true}
                                                                 sx={{
                                                                     mt: 1,
                                                                     mb: 1,

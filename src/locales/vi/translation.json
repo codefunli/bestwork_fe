@@ -104,7 +104,8 @@
         "btnUnread": "Chưa đọc",
         "btnRemove": "Xóa",
         "btnPreview": "Xem trước",
-        "btnAdd": "Thêm"
+        "btnAdd": "Thêm",
+        "btnEdit": "Chỉnh sửa"
     },
     "common": {
         "placeholder": "Nhập một giá trị mới",
@@ -413,7 +414,11 @@
         "AWBNo": "Mã vận chuyển",
         "customsClearanceDocuments": "Hồ sơ thông quan",
         "create": {
-            "title": "Thêm air waybill",
+            "title": "Thêm airwaybill",
+            "note": "Ghi chú"
+        },
+        "edit": {
+            "title": "Chỉnh sửa airwaybill",
             "note": "Ghi chú"
         },
         "action": "Hành động"

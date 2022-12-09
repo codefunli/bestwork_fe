@@ -219,7 +219,7 @@ export default function CompanyRegister() {
                                                 <TextField
                                                     size="small"
                                                     value={formValues.company.companyName}
-                                                    fullWidth
+                                                    fullWidth={true}
                                                     required
                                                     sx={{
                                                         mt: 1,
@@ -245,7 +245,7 @@ export default function CompanyRegister() {
                                                 <TextField
                                                     size="small"
                                                     value={formValues.company.cpEmail}
-                                                    fullWidth
+                                                    fullWidth={true}
                                                     required
                                                     id="cpEmail"
                                                     sx={{
@@ -272,7 +272,7 @@ export default function CompanyRegister() {
                                                 <TextField
                                                     size="small"
                                                     value={formValues.company.cpTelNo}
-                                                    fullWidth
+                                                    fullWidth={true}
                                                     required
                                                     id="cpTelNo"
                                                     sx={{
@@ -298,7 +298,7 @@ export default function CompanyRegister() {
                                                 <TextField
                                                     size="small"
                                                     value={formValues.company.taxNo}
-                                                    fullWidth
+                                                    fullWidth={true}
                                                     required
                                                     id="taxNo"
                                                     sx={{
@@ -325,7 +325,7 @@ export default function CompanyRegister() {
                                                 <TextField
                                                     size="small"
                                                     value={formValues.company.national}
-                                                    fullWidth
+                                                    fullWidth={true}
                                                     required
                                                     id="national"
                                                     sx={{
@@ -351,7 +351,7 @@ export default function CompanyRegister() {
                                                     name="city"
                                                     size="small"
                                                     value={formValues.company.city}
-                                                    fullWidth
+                                                    fullWidth={true}
                                                     required
                                                     id="city"
                                                     sx={{
@@ -373,7 +373,7 @@ export default function CompanyRegister() {
                                                     name="district"
                                                     size="small"
                                                     value={formValues.company.district}
-                                                    fullWidth
+                                                    fullWidth={true}
                                                     required
                                                     id="district"
                                                     sx={{
@@ -395,7 +395,7 @@ export default function CompanyRegister() {
                                                     name="ward"
                                                     size="small"
                                                     value={formValues.company.ward}
-                                                    fullWidth
+                                                    fullWidth={true}
                                                     required
                                                     id="ward"
                                                     sx={{
@@ -416,7 +416,7 @@ export default function CompanyRegister() {
                                                 <TextField
                                                     name="street"
                                                     size="small"
-                                                    fullWidth
+                                                    fullWidth={true}
                                                     sx={{
                                                         mt: 1,
                                                         mb: 1,
@@ -435,7 +435,7 @@ export default function CompanyRegister() {
                                                     {t(Item.COMPANY.REGISTER_START_DATE)}
                                                 </InputLabel>
                                                 <TextField
-                                                    fullWidth
+                                                    fullWidth={true}
                                                     size="small"
                                                     sx={{
                                                         mt: 1,
@@ -461,7 +461,7 @@ export default function CompanyRegister() {
                                                     {t(Item.COMPANY.REGISTER_END_DATE)}
                                                 </InputLabel>
                                                 <TextField
-                                                    fullWidth
+                                                    fullWidth={true}
                                                     size="small"
                                                     sx={{
                                                         mt: 1,
@@ -515,7 +515,7 @@ export default function CompanyRegister() {
                                                 <TextField
                                                     value={formValues.user.userName}
                                                     size="small"
-                                                    fullWidth
+                                                    fullWidth={true}
                                                     sx={{
                                                         mt: 1,
                                                         mb: 1,
@@ -583,7 +583,7 @@ export default function CompanyRegister() {
                                                     name="firstName"
                                                     value={formValues.user.firstName}
                                                     size="small"
-                                                    fullWidth
+                                                    fullWidth={true}
                                                     sx={{
                                                         mt: 1,
                                                         mb: 1,
@@ -603,7 +603,7 @@ export default function CompanyRegister() {
                                                     name="lastName"
                                                     value={formValues.user.lastName}
                                                     size="small"
-                                                    fullWidth
+                                                    fullWidth={true}
                                                     sx={{
                                                         mt: 1,
                                                         mb: 1,
@@ -625,7 +625,7 @@ export default function CompanyRegister() {
                                                 <TextField
                                                     value={formValues.user.uTelNo}
                                                     size="small"
-                                                    fullWidth
+                                                    fullWidth={true}
                                                     sx={{
                                                         mt: 1,
                                                         mb: 1,
@@ -652,7 +652,7 @@ export default function CompanyRegister() {
                                                 <TextField
                                                     value={formValues.user.uEmail}
                                                     size="small"
-                                                    fullWidth
+                                                    fullWidth={true}
                                                     sx={{
                                                         mt: 1,
                                                         mb: 1,

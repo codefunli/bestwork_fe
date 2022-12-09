@@ -264,7 +264,7 @@ export default function CompanySearch(props: any) {
                                             </InputLabel>
                                             <TextField
                                                 size="small"
-                                                fullWidth
+                                                fullWidth={true}
                                                 sx={{
                                                     mt: 1,
                                                     mb: 1,
@@ -286,7 +286,7 @@ export default function CompanySearch(props: any) {
                                             </InputLabel>
                                             <FormControl
                                                 size="small"
-                                                fullWidth
+                                                fullWidth={true}
                                                 sx={{ mt: 1, mb: 1 }}
                                                 variant="outlined"
                                             >

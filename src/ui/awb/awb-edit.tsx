@@ -11,13 +11,14 @@ import {
     Select,
     TextField,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { renderChipAwbStatus, StatusCode } from '../../core/constants/common';
 import { validateCreateAwbForm } from '../../core/constants/validate';
-import { createAirWayBill, getAwbStatus } from '../../services/awb-service';
+import { createAirWayBill, editAirWayBill, getAwbStatus } from '../../services/awb-service';
 import ApiAlert from '../../shared-components/alert/api-alert';
+import { AwbDataContext } from './awb-list';
 
 interface CreateAwbProps {
     isOpen: boolean;
@@ -33,13 +34,26 @@ const initialValues: any = {
     status: '',
 };
 
-export default function CreateAwb(props: CreateAwbProps) {
+export default function EditAwb(props: CreateAwbProps) {
     const { t } = useTranslation();
     const { isOpen, toggleOpen, handleCreateNewAwb, projectId } = props;
     const [formValues, setFormValues] = useState(initialValues);
     const [status, setStatus] = useState<any>([]);
     const [resForHandleMsg, setResForHandleMsg] = useState<any>();
+    const currentAwbData = useContext<any>(AwbDataContext);
     const [isSubmit, setIsSubmit] = useState(false);
+
+    useEffect(() => {
+        if (currentAwbData)
+            setFormValues({
+                projectId: projectId,
+                id: currentAwbData.id,
+                code: currentAwbData.code,
+                note: currentAwbData.note,
+                status: currentAwbData.status,
+            });
+        reset();
+    }, [currentAwbData]);
 
     useEffect(() => {
         getAwbStatus().then((value: any) => {
@@ -48,10 +62,15 @@ export default function CreateAwb(props: CreateAwbProps) {
     }, []);
 
     useEffect(() => {
-        setFormValues({
-            ...initialValues,
-            projectId: projectId,
-        });
+        if (currentAwbData)
+            setFormValues({
+                projectId: projectId,
+                id: currentAwbData.id,
+                code: currentAwbData.code,
+                note: currentAwbData.note,
+                status: currentAwbData.status,
+            });
+        reset();
     }, [isOpen]);
 
     const {
@@ -65,7 +84,7 @@ export default function CreateAwb(props: CreateAwbProps) {
 
     const handleSubmitForm = () => {
         setIsSubmit(true);
-        createAirWayBill(formValues)
+        editAirWayBill(formValues)
             .then((res: any) => {
                 setResForHandleMsg({
                     status: res.status,
@@ -74,8 +93,8 @@ export default function CreateAwb(props: CreateAwbProps) {
 
                 if (res.status === StatusCode.OK) {
                     setTimeout(() => {
-                        toggleOpen(false);
                         setFormValues(initialValues);
+                        toggleOpen(false);
                         handleCreateNewAwb();
                         reset();
                         setIsSubmit(false);
@@ -107,7 +126,7 @@ export default function CreateAwb(props: CreateAwbProps) {
     return (
         <form>
             <Dialog open={isOpen} onClose={handleCancel} keepMounted fullWidth maxWidth="sm">
-                <DialogTitle className="text-uppercase">{t('awb.create.title')}</DialogTitle>
+                <DialogTitle className="text-uppercase">{t('awb.edit.title')}</DialogTitle>
                 <DialogContent>
                     <div>
                         <InputLabel htmlFor="code" error={Boolean(errors.code)}>
@@ -157,36 +176,38 @@ export default function CreateAwb(props: CreateAwbProps) {
                     <div className="row justify-center">
                         <div className="col-12 d-block">
                             <InputLabel id="demo-simple-select-outlined-label">{t('company.search.status')}</InputLabel>
-                            <FormControl size="small" fullWidth={true} sx={{ mt: 1, mb: 1 }} variant="outlined">
-                                <Select
-                                    labelId="demo-simple-select-outlined-label"
-                                    id="demo-simple-select-outlined"
-                                    name="status"
-                                    displayEmpty
-                                    sx={{
-                                        '& legend': { display: 'none' },
-                                        '& fieldset': { top: 0 },
-                                    }}
-                                    value={formValues.status}
-                                    onChange={handleInputChange}
-                                    className="text-center"
-                                >
-                                    {status &&
-                                        status.length > 0 &&
-                                        status.map((s: any) => (
-                                            <MenuItem value={s.id} key={s.id}>
-                                                <em className="m-auto w-100">{renderChipAwbStatus(s.status)}</em>
-                                            </MenuItem>
-                                        ))}
-                                </Select>
-                            </FormControl>
+                            {status && status.length > 0 && (
+                                <FormControl size="small" fullWidth={true} sx={{ mt: 1, mb: 1 }} variant="outlined">
+                                    <Select
+                                        labelId="demo-simple-select-outlined-label"
+                                        id="demo-simple-select-outlined"
+                                        name="status"
+                                        displayEmpty
+                                        sx={{
+                                            '& legend': { display: 'none' },
+                                            '& fieldset': { top: 0 },
+                                        }}
+                                        value={formValues.status}
+                                        onChange={handleInputChange}
+                                        className="text-center"
+                                    >
+                                        {status &&
+                                            status.length > 0 &&
+                                            status.map((s: any) => (
+                                                <MenuItem value={s.id} key={s.id}>
+                                                    <em className="m-auto w-100">{renderChipAwbStatus(s.status)}</em>
+                                                </MenuItem>
+                                            ))}
+                                    </Select>
+                                </FormControl>
+                            )}
                         </div>
                         <ApiAlert response={resForHandleMsg} />
                     </div>
                 </DialogContent>
                 <DialogActions>
                     <Button variant="contained" disabled={isSubmit} onClick={handleSubmit(handleSubmitForm)}>
-                        {t('button.btnCreate')}
+                        {t('button.btnEdit')}
                     </Button>
                     <Button variant="outlined" onClick={handleCancel}>
                         {t('button.btnCancel')}

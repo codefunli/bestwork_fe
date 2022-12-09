@@ -69,13 +69,13 @@ export default function PreviewPDF(props: AlertDialogSlideProps) {
                     }}
                 >
                     <Typography
-                        variant="h5"
+                        variant="inherit"
                         color="textSecondary"
                         gutterBottom
                         sx={{ textTransform: 'uppercase' }}
                         className="btn disabled text-white bg-light opacity-100 border-customTheme"
                     >
-                        <div className="particletext">{title}</div>
+                        <span className="particletext">{title}</span>
                     </Typography>
                 </DialogTitle>
                 <DialogContent>

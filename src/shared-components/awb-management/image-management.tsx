@@ -142,7 +142,6 @@ export default function ImageManagement(props: any) {
             <Grid container spacing={3} direction="row" justifyContent="center" alignItems="center" sx={{ mb: 3 }}>
                 <Grid item xs={12} lg={12} justifyContent="center">
                     <Paper
-                        w-fullWidth
                         component="form"
                         sx={{
                             p: '2px 4px',
@@ -151,6 +150,7 @@ export default function ImageManagement(props: any) {
                             justifyContent: 'center',
                             border: 2,
                             borderColor: 'primary.main',
+                            width: '100%',
                         }}
                         onClick={permission?.canEdit ? openModal : () => {}}
                     >
