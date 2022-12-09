@@ -138,7 +138,6 @@ export default function ConstructionEdit() {
                 getNationalList().then((nationList: any) => {
                     if (nationList && nationList.data) setNationList(nationList.data);
                 });
-                console.log(formValues);
                 reset();
             }
         });

@@ -65,7 +65,7 @@ export const UrlFeApp = {
         SEARCH: '/app/notifications',
     },
 };
-console.log(PREFIX_SERVER_URL);
+
 export const UrlServer = {
     API_LOGIN_URL: '/bestwork/login',
     API_LOGOUT_URL: '/bestwork/logout',
