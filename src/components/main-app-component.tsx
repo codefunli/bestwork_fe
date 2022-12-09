@@ -13,6 +13,7 @@ import {
     ListItemText,
     Toolbar,
     Typography,
+    Tooltip,
 } from '@mui/material';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Badge from '@mui/material/Badge';
@@ -326,8 +327,22 @@ export default function MiniDrawer() {
                                 </Stack>
                                 <Typography>
                                     <span className="p-2">
-                                        <span className="d-block fw-bold text-customTheme ">{`${userInfo.firstName} ${userInfo.lastName}`}</span>
-                                        <span className="fst-italic">{`${userInfo.uRole}`}</span>
+                                        <Tooltip title={`${userInfo.firstName} ${userInfo.lastName}`} placement="right">
+                                            <span
+                                                className="d-block fw-bold text-customTheme text-ellipsis"
+                                                style={{
+                                                    width: '120px',
+                                                }}
+                                            >{`${userInfo.firstName} ${userInfo.lastName}`}</span>
+                                        </Tooltip>
+                                        <Tooltip title={userInfo.uRole} placement="right">
+                                            <span
+                                                className="fst-italic text-ellipsis text-ellipsis"
+                                                style={{
+                                                    width: '120px',
+                                                }}
+                                            >{`${userInfo.uRole}`}</span>
+                                        </Tooltip>
                                     </span>
                                 </Typography>
                                 <IconButton onClick={handleDrawerClose}>
