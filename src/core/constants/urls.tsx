@@ -1,8 +1,2 @@
-export const LOGIN_URL = '/';
-export const FORGOT_PASSWORD_URL = '/forgot-password';
-export const RESET_PASSWORD_WITH_TOKEN = '/password-reset';
-export const changePasswordUrl = '/change-password';
-export const NOTIFICATIONS = '/notifications';
-export const BASE_API_PATH = 'http://localhost:8181';
-export const PREFIX_SERVER_URL = '/bestwork/api/v1';
-export const PUBLIC_URL = [LOGIN_URL, FORGOT_PASSWORD_URL, RESET_PASSWORD_WITH_TOKEN];
+export const BASE_API_PATH = process.env.REACT_APP_BASE_API_PATH;
+export const PREFIX_SERVER_URL = process.env.REACT_APP_PREFIX_SERVER_URL;

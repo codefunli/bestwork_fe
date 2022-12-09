@@ -135,7 +135,6 @@ export default function ConstructionSearch() {
     };
 
     const handleSubmit = (e: any) => {
-        console.log(formValues);
         fetchData(formValues);
     };
 
