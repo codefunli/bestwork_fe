@@ -437,10 +437,36 @@
     },
     "notification": {
         "table": {
-            "colTitle": "Title",
-            "colContent": "Content",
-            "colCreateDate": "Create Date",
-            "colRead": "Read"
+            "colTitle": "Tiêu đề",
+            "colContent": "Nội dung",
+            "colCreateDate": "Ngày tạo",
+            "colRead": "Trạng thái"
         }
+    },
+    "dashBoard": {
+        "company": "Công ty",
+        "construction": "Công trình",
+        "project": "Dự án",
+        "awb": "Mã vận chuyển"
+    },
+    "month": {
+        "jan": "Tháng Một",
+        "feb": "Tháng Hai",
+        "mar": "Tháng Ba",
+        "apr": "Tháng Tư",
+        "may": "Tháng Năm",
+        "jun": "Tháng Sáu",
+        "jul": "Tháng Bảy",
+        "aug": "Tháng Tám",
+        "sep": "Tháng Chín",
+        "oct": "Tháng Mười",
+        "nov": "Tháng Mười Một",
+        "dec": "Tháng Mười Hai"
+    },
+    "awbStatus": {
+        "Not yet customs clearance": "Chưa thông quan",
+        "Done": "Đã thông quan",
+        "Cancel": "Huỷ",
+        "In Customs Clearance Progress": "Đang thông quan"
     }
 }

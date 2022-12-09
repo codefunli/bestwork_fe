@@ -3,7 +3,7 @@ interface CardProps {
     Icon: any;
     title: string;
     color: string;
-    value: number;
+    value: 0;
 }
 export default function DashCard(card: CardProps) {
     const { Icon, title, color, value } = card;
@@ -42,7 +42,7 @@ export default function DashCard(card: CardProps) {
             </Box>
             <Box mt={{ xs: '1rem', sm: 0 }}>
                 <h5 color="text.disabled">{title}</h5>
-                <h3>{value}</h3>
+                <h3>{String(value)}</h3>
             </Box>
         </StyledCard>
     );

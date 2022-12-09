@@ -159,6 +159,16 @@ export const UrlServer = {
         CHANGE_STATUS: `${PREFIX_SERVER_URL}/notifications/read`,
         COUNT_UNREAD: `${PREFIX_SERVER_URL}/notifications/count-unread`,
     },
+    DASHBOARD: {
+        COUNT_AWB: `${PREFIX_SERVER_URL}/dashboard/awb`,
+        COUNT_COMPANY: `${PREFIX_SERVER_URL}/dashboard/company`,
+        COUNT_PROJECT: `${PREFIX_SERVER_URL}/dashboard/project`,
+        COUNT_CONSTRUCTION: `${PREFIX_SERVER_URL}/dashboard/construction`,
+        GET_PROJ_CONSTR: `${PREFIX_SERVER_URL}/dashboard/search`,
+        GET_AWB_STATUS: `${PREFIX_SERVER_URL}/dashboard/awb/status`,
+        GET_LATEST_PROGRESS: `${PREFIX_SERVER_URL}/dashboard/progress`,
+        GET_TOP_LOCATION: `${PREFIX_SERVER_URL}/dashboard/location`,
+    }
 };
 
 export const FieldConstants = {
