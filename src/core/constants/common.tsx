@@ -121,6 +121,7 @@ export const UrlServer = {
         GET_COMPANIES: `${PREFIX_SERVER_URL}/constructions/companies`,
         GET_PROJECTS: `${PREFIX_SERVER_URL}/constructions/projects`,
         GET_NATIONS: `${PREFIX_SERVER_URL}/constructions/nations`,
+        CLOSE_CONSTRUCTION: `${PREFIX_SERVER_URL}/constructions/close`,
     },
     ROLE: {
         GET: `${PREFIX_SERVER_URL}/users/roles`,

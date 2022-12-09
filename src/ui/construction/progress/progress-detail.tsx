@@ -25,17 +25,19 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { AWB_LOADING } from '../../../core/constants/common';
+import { AWB_LOADING, StatusCode } from '../../../core/constants/common';
 import { getUserInfo } from '../../../core/redux/user-slice';
 import { Permission } from '../../../core/types/permission';
 import { formatDateTimeResList } from '../../../core/utils/get-current-datetime';
 import { ContructionProgressResDTO } from '../../../models/construction-res-dto';
 import {
+    closeConstruction,
     getConstruction,
     getConstructionStatus,
     getProgressByConstruction,
 } from '../../../services/construction-service';
 import { getProgressStatus } from '../../../services/project-service';
+import ApiAlert from '../../../shared-components/alert/api-alert';
 import Loading from '../../../shared-components/loading-page/Loading';
 import HandleConstructionStatus from '../../../shared-components/status-handle/construction-status-handle';
 import HandleProgressStatus from '../../../shared-components/status-handle/progress-status-handle';
@@ -57,6 +59,8 @@ export default function ProgressDetail() {
     const [constructionStatus, setConstructionStatus] = useState([]);
     const userInfo = useSelector(getUserInfo);
     const [permission, setPermission] = useState<Permission>();
+    const [resForHandleMsg, setResForHandleMsg] = useState<any>();
+    const [isClose, setIsClose] = useState(false);
 
     useEffect(() => {
         if (userInfo && userInfo.permissions && userInfo.permissions[5] && userInfo.permissions[5][0]) {
@@ -115,6 +119,13 @@ export default function ProgressDetail() {
             .then((res) => {
                 if (res && res.data) {
                     setProgressList(res.data);
+                    setConstructionData({
+                        ...constructionData,
+                        status: res.data[0].status,
+                    });
+                    if (res.data[0].status === '4') {
+                        setIsClose(true);
+                    }
                     setIsLoadingProgress(AWB_LOADING.HAS_DATA);
                 }
             })
@@ -152,7 +163,28 @@ export default function ProgressDetail() {
         setSelectedProgress(tmpSelectedProgress);
     };
 
-    const handleCloseProject = (project: any) => {};
+    const handleCloseProject = (constructionId: any) => {
+        closeConstruction(constructionId)
+            .then((res) => {
+                setResForHandleMsg({
+                    status: res.status,
+                    message: res.message,
+                });
+                if (res.status === StatusCode.OK && res.data) {
+                    setConstructionData({
+                        ...constructionData,
+                        status: res.data,
+                    });
+                    setIsClose(true);
+                }
+            })
+            .catch((err) => {
+                setResForHandleMsg({
+                    status: StatusCode.ERROR,
+                    message: t('message.error'),
+                });
+            });
+    };
     const handleArrayValue = (data: any) => {
         return (
             <Stack direction="column" spacing={1}>
@@ -184,9 +216,9 @@ export default function ProgressDetail() {
                                     <CardHeader
                                         action={
                                             <Button
-                                                disabled={permission && !permission.canEdit}
+                                                disabled={(permission && !permission.canEdit) || isClose}
                                                 variant="contained"
-                                                onClick={() => handleCloseProject(constructionData)}
+                                                onClick={() => handleCloseProject(constructionData.id)}
                                             >
                                                 {t('button.btnClose')}
                                             </Button>
@@ -321,6 +353,10 @@ export default function ProgressDetail() {
                 callBackLoading={handleLoading}
                 callBackFn={fetchProgressData}
             />
+            <ApiAlert response={resForHandleMsg} />
         </div>
     );
+}
+function setResForHandleMsg(arg0: { status: any; message: string }) {
+    throw new Error('Function not implemented.');
 }

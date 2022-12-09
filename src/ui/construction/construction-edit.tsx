@@ -270,7 +270,7 @@ export default function ConstructionEdit() {
                                     <div className="content">
                                         <UploadMultipartFile
                                             imgData={formValues.fileStorages}
-                                            clearPreview={true}
+                                            clearPreview={isClearPreview}
                                             callbackFunc={onChangeImage}
                                             callBackClearEvent={handleClearEvent}
                                         />

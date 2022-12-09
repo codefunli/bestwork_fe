@@ -80,3 +80,8 @@ export const getNationalConstruction = async () => {
     const res = await apiClient.get<DataResSuccess<NationResDto[]>>(UrlServer.CONSTRUCTION.GET_NATIONS);
     return res.data;
 };
+
+export const closeConstruction = async (constructionId: number) => {
+    const res = await apiClient.patch<any>(`${UrlServer.CONSTRUCTION.CLOSE_CONSTRUCTION}/${constructionId}`);
+    return res.data;
+};

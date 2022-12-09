@@ -32,6 +32,12 @@ export const headConstructionCol: HeadColumn[] = [
         label: 'construction.table.colAWB',
     },
     {
+        id: 'nationName',
+        numeric: false,
+        disablePadding: false,
+        label: 'construction.table.colNation',
+    },
+    {
         id: 'location',
         numeric: false,
         disablePadding: false,
@@ -50,7 +56,7 @@ export const headConstructionCol: HeadColumn[] = [
         label: 'construction.table.colDescription',
     },
     {
-        id: 'brand',
+        id: 'companyName',
         numeric: false,
         disablePadding: false,
         label: 'construction.table.colBrand',
@@ -60,11 +66,5 @@ export const headConstructionCol: HeadColumn[] = [
         numeric: false,
         disablePadding: false,
         label: 'construction.table.colProjectName',
-    },
-    {
-        id: 'nation',
-        numeric: false,
-        disablePadding: false,
-        label: 'construction.table.colNation',
     },
 ];
