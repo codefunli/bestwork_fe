@@ -30,7 +30,7 @@ export const deleteConstructions = async (ids: any) => {
 };
 
 export const getConstruction = async (id: any) => {
-    const res = await apiClient.get<DataResSuccess<ConstructionResDTO[]>>(`${UrlServer.CONSTRUCTION.DETAIL}/${id}`);
+    const res = await apiClient.get<DataResSuccess<ConstructionResDTO>>(`${UrlServer.CONSTRUCTION.DETAIL}/${id}`);
     return res.data;
 };
 

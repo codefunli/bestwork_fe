@@ -100,6 +100,9 @@ export default function ProgressDetail() {
 
         if (res[1] && res[1].data) {
             setConstructionData(res[1].data);
+            if (res[1].data && res[1].data.status === '4') {
+                setIsClose(true);
+            }
             if (isLoadingConstruction) {
                 setIsLoadingConstruction(AWB_LOADING.HAS_DATA);
             }
