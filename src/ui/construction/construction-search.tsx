@@ -51,9 +51,9 @@ const initialValues = {
     sortBy: 'id',
     keyword: '',
     status: '-1',
-    projectId: '0',
-    nationId: '0',
-    companyId: '0',
+    projectId: '',
+    nationId: 0,
+    companyId: 0,
     location: '',
 };
 
@@ -116,6 +116,7 @@ export default function ConstructionSearch() {
             });
         },
     });
+    console.log(state);
 
     useEffect(() => {
         // do some checking here to ensure data exist
@@ -660,7 +661,7 @@ export default function ConstructionSearch() {
                             content: [],
                         }
                     }
-                    isLoading={false}
+                    isLoading={isLoading}
                     arrButton={arrButton}
                     statusList={constructionStatus}
                     permission={permission}

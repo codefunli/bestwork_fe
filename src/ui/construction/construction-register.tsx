@@ -34,6 +34,7 @@ import { formatDateTimeRes } from '../../core/utils/get-current-datetime';
 import { AWBCode } from '../../models/construction-res-dto';
 import { getAirWayBillByProjectId } from '../../services/awb-service';
 import { getConstructionStatus, registerConstruction } from '../../services/construction-service';
+import { getNationalList } from '../../services/national-service';
 import ApiAlert from '../../shared-components/alert/api-alert';
 import UploadMultipartFile from '../../shared-components/file-management/upload-multipartfile';
 import HandleConstructionStatus from '../../shared-components/status-handle/construction-status-handle';
@@ -49,6 +50,7 @@ const initialValues = {
     startDate: formatDateTimeRes(new Date()),
     endDate: formatDateTimeRes(new Date()),
     projectCode: '',
+    nationId: '',
 };
 
 const initialDataImg = {
@@ -69,6 +71,7 @@ export default function ConstructionRegister() {
     const [selectValue, setSelectValue] = useState<string[]>([]);
     const [fileData, setFileData] = useState(initialDataImg);
     const [eventImage, setEventImage] = useState<any>();
+    const [nationList, setNationList] = useState<any>();
 
     const {
         register,
@@ -95,6 +98,10 @@ export default function ConstructionRegister() {
     useEffect(() => {
         getConstructionStatus().then((result: any) => {
             if (result && result.data) setConstructionStatus(result.data);
+        });
+
+        getNationalList().then((nationList: any) => {
+            if (nationList && nationList.data) setNationList(nationList.data);
         });
 
         if (params.id) {
@@ -197,302 +204,335 @@ export default function ConstructionRegister() {
 
     return (
         <div className="construction-register">
-            <form onSubmit={handleSubmitForm}>
-                <div className="p-label-header">
-                    <Typography
-                        variant="h5"
-                        className="btn disabled text-white bg-light opacity-100 border-customTheme"
-                        color="textSecondary"
-                        gutterBottom
-                        sx={{ textTransform: 'uppercase' }}
-                    >
-                        <div className="particletext">{t('construction.register.title')}</div>
-                        <Divider />
-                    </Typography>
-                </div>
-                <Grid container spacing={3} justifyContent="center">
-                    <Grid item md={12} lg={4}>
-                        <Card>
-                            <CardActionArea>
-                                <CardMedia
-                                    component="img"
-                                    height="auto"
-                                    image={require('../../assets/construction_img.jpg')}
-                                    alt="green iguana"
-                                />
-                            </CardActionArea>
-                            <div className="construction-info">
-                                <CardContent>
-                                    <div className="d-flex justify-content-start flex-column p-2 info-item">
-                                        <InputLabel htmlFor="outlined-adornment-amount">
-                                            {t(Item.LABEL_BTN.UPLOAD_CONSTRUCTION)}
-                                        </InputLabel>
-                                        <div className="content">
-                                            <UploadMultipartFile
-                                                imgData={formValues.fileStorages}
-                                                clearPreview={isClearPreview}
-                                                callbackFunc={onChangeImage}
-                                                callBackClearEvent={handleClearEvent}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="d-flex justify-content-start flex-column p-2 info-item">
-                                        <InputLabel htmlFor="constructionName" error={Boolean(errors.constructionName)}>
-                                            {t(Item.CONSTRUCTION.RU_NAME)}
-                                            <span className="input-required p-1">*</span>
-                                        </InputLabel>
-                                        <TextField
-                                            autoComplete="off"
-                                            size="small"
-                                            value={formValues.constructionName}
-                                            fullWidth
-                                            required
-                                            id="constructionName"
-                                            sx={{
-                                                mt: 1,
-                                                mb: 1,
-                                                '& legend': { display: 'none' },
-                                                '& fieldset': { top: 0 },
-                                            }}
-                                            label=""
-                                            placeholder={t(Item.COMMON.PLACE_HOLDER)}
-                                            error={Boolean(errors.constructionName)}
-                                            helperText={errors.constructionName?.message?.toString()}
-                                            {...register('constructionName', {
-                                                onChange: (e) => handleInputChange(e),
-                                            })}
-                                        />
-                                    </div>
-                                    <div className="d-flex justify-content-start flex-column p-2 info-item">
-                                        <InputLabel htmlFor="description" error={Boolean(errors.description)}>
-                                            {t(Item.CONSTRUCTION.RU_DESCRIPTION)}
-                                        </InputLabel>
-                                        <TextField
-                                            autoComplete="off"
-                                            size="small"
-                                            value={formValues.description}
-                                            fullWidth
-                                            required
-                                            id="description"
-                                            sx={{
-                                                mt: 1,
-                                                mb: 1,
-                                                '& legend': { display: 'none' },
-                                                '& fieldset': { top: 0 },
-                                            }}
-                                            label=""
-                                            name="description"
-                                            placeholder={t(Item.COMMON.PLACE_HOLDER)}
-                                            onChange={(e) => handleInputChange(e)}
-                                        />
-                                    </div>
-                                    <div className="d-flex justify-content-start flex-column p-2 info-item">
-                                        <InputLabel htmlFor="startDate" error={Boolean(errors.startDate)}>
-                                            {t(Item.CONSTRUCTION.RU_START_DATE)}
-                                            <span className="input-required p-1">*</span>
-                                        </InputLabel>
-                                        <TextField
-                                            autoComplete="off"
-                                            fullWidth
-                                            size="small"
-                                            sx={{
-                                                mt: 1,
-                                                mb: 1,
-                                                '& legend': { display: 'none' },
-                                                '& fieldset': { top: 0 },
-                                            }}
-                                            value={formValues.startDate}
-                                            id="startDate"
-                                            type="datetime-local"
-                                            InputLabelProps={{
-                                                shrink: true,
-                                            }}
-                                            error={Boolean(errors.startDate)}
-                                            helperText={errors.startDate?.message?.toString()}
-                                            {...register('startDate', {
-                                                onChange: (e) => handleInputChange(e),
-                                            })}
-                                        />
-                                    </div>
-                                    <div className="d-flex justify-content-start flex-column p-2 info-item">
-                                        <InputLabel htmlFor="endDate" error={Boolean(errors.endDate)}>
-                                            {t(Item.CONSTRUCTION.RU_END_DATE)}
-                                            <span className="input-required p-1">*</span>
-                                        </InputLabel>
-                                        <TextField
-                                            autoComplete="off"
-                                            fullWidth
-                                            size="small"
-                                            sx={{
-                                                mt: 1,
-                                                mb: 1,
-                                                '& legend': { display: 'none' },
-                                                '& fieldset': { top: 0 },
-                                            }}
-                                            value={formValues.endDate}
-                                            id="endDate"
-                                            type="datetime-local"
-                                            InputLabelProps={{
-                                                shrink: true,
-                                            }}
-                                            error={Boolean(errors.endDate)}
-                                            helperText={errors.endDate?.message?.toString()}
-                                            {...register('endDate', {
-                                                onChange: (e) => handleInputChange(e),
-                                            })}
-                                        />
-                                    </div>
-                                    <div className="d-flex justify-content-start flex-column p-2 info-item">
-                                        <InputLabel htmlFor="location">{t(Item.CONSTRUCTION.RU_LOCATION)}</InputLabel>
-                                        <TextField
-                                            autoComplete="off"
-                                            size="small"
-                                            value={formValues.location}
-                                            fullWidth
-                                            required
-                                            id="location"
-                                            sx={{
-                                                mt: 1,
-                                                mb: 1,
-                                                '& legend': { display: 'none' },
-                                                '& fieldset': { top: 0 },
-                                            }}
-                                            label=""
-                                            placeholder={t(Item.COMMON.PLACE_HOLDER)}
-                                            error={Boolean(errors.location)}
-                                            helperText={errors.location?.message?.toString()}
-                                            name="location"
-                                            onChange={(e) => handleInputChange(e)}
-                                        />
-                                    </div>
-                                    <div className="d-flex justify-content-start flex-column p-2 info-item">
-                                        <InputLabel htmlFor="status" error={Boolean(errors.status)}>
-                                            {t(Item.CONSTRUCTION.RU_STATUS)}
-                                            <span className="input-required p-1">*</span>
-                                        </InputLabel>
-                                        <Select
-                                            labelId="demo-simple-select-outlined-label"
-                                            id="status"
-                                            displayEmpty
-                                            sx={{
-                                                '& legend': { display: 'none' },
-                                                '& fieldset': { top: 0 },
-                                            }}
-                                            value={formValues.status}
-                                            {...register('status', {
-                                                onChange: (e) => handleInputChange(e),
-                                            })}
-                                        >
-                                            <MenuItem value="" selected={true} disabled>
-                                                <em className="m-auto color-label-select-box">
-                                                    {t('message.statusLabel')}
-                                                </em>
-                                            </MenuItem>
-                                            {constructionStatus &&
-                                                constructionStatus.length > 0 &&
-                                                constructionStatus.map((data: any, index: any) => {
-                                                    return (
-                                                        <MenuItem key={data.id} value={index} className="text-center">
-                                                            <HandleConstructionStatus
-                                                                isSearch={true}
-                                                                statusList={constructionStatus}
-                                                                statusId={data.id.toString()}
-                                                            />
-                                                        </MenuItem>
-                                                    );
-                                                })}
-                                        </Select>
-                                        {Boolean(errors.status) && (
-                                            <FormHelperText id="component-error-text">
-                                                {errors?.status?.message as string}
-                                            </FormHelperText>
-                                        )}
-                                    </div>
-                                    <div className="d-flex justify-content-start flex-column p-2 info-item">
-                                        <InputLabel htmlFor="awb" error={Boolean(errors.awbCodes)}>
-                                            {t(Item.CONSTRUCTION.RU_AWB)}
-                                            <span className="input-required p-1">*</span>
-                                        </InputLabel>
-                                        <Select
-                                            labelId="demo-simple-select-outlined-label"
-                                            id="awbCodes"
-                                            multiple
-                                            value={selectValue}
-                                            sx={{
-                                                '& legend': { display: 'none' },
-                                                '& fieldset': { top: 0 },
-                                            }}
-                                            renderValue={(selected) => (
-                                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                                    {selected.map((value) => (
-                                                        <Chip key={value} label={getValueFromAwbCode(value)} />
-                                                    ))}
-                                                </Box>
-                                            )}
-                                            {...register('awbCodes', {
-                                                onChange: (e) => handleChange(e),
-                                            })}
-                                        >
-                                            {awbCodesList.map((awbCode: any) => (
-                                                <MenuItem key={awbCode.id} value={awbCode.id}>
-                                                    {awbCode.code}
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
-                                        {Boolean(errors.awbCodes) && (
-                                            <FormHelperText id="component-error-text">
-                                                {errors?.awbCodes?.message as string}
-                                            </FormHelperText>
-                                        )}
-                                    </div>
-                                </CardContent>
-                            </div>
-                            <Grid item xs={12} sm={12} className="text-center pb-4 pt-0">
-                                <ButtonGroup
-                                    disableElevation
-                                    variant="contained"
-                                    aria-label="Disabled elevation buttons"
-                                >
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        sx={{ mr: 1 }}
-                                        disabled={isSubmitting}
-                                        onClick={handleSubmit(handleSubmitForm)}
-                                    >
-                                        {t(Item.LABEL_BTN.CREATE)}
-                                    </Button>
-                                </ButtonGroup>
-                                <Button variant="outlined" type="button" onClick={handleClear}>
-                                    {t(Item.LABEL_BTN.CLEAR)}
-                                </Button>
-                            </Grid>
-                        </Card>
-                    </Grid>
-                    <Grid item md={12} lg={8}>
-                        <Card style={{ width: '100%' }}>
-                            <CardHeader
-                                avatar={<Avatar aria-label="recipe">PR</Avatar>}
-                                title="Progress daily"
-                                subheader={new Date().toLocaleDateString()}
-                                action={
-                                    <IconButton disabled color="primary" size="large">
-                                        <AddCircleIcon fontSize="inherit" />
-                                    </IconButton>
-                                }
+            <div className="p-label-header">
+                <Typography
+                    variant="h5"
+                    className="btn disabled text-white bg-light opacity-100 border-customTheme"
+                    color="textSecondary"
+                    gutterBottom
+                    sx={{ textTransform: 'uppercase' }}
+                >
+                    <div className="particletext">{t('construction.register.title')}</div>
+                    <Divider />
+                </Typography>
+            </div>
+            <Grid container spacing={3} justifyContent="center">
+                <Grid item md={12} lg={4}>
+                    <Card>
+                        <CardActionArea>
+                            <CardMedia
+                                component="img"
+                                height="auto"
+                                image={require('../../assets/construction_img.jpg')}
+                                alt="green iguana"
                             />
-                            <Divider />
-                            <Timeline
-                                sx={{
-                                    [`& .${timelineOppositeContentClasses.root}`]: {
-                                        flex: 0.2,
-                                    },
-                                }}
-                            ></Timeline>
-                        </Card>
-                    </Grid>
+                        </CardActionArea>
+                        <div className="construction-info">
+                            <CardContent>
+                                <div className="d-flex justify-content-start flex-column p-2 info-item">
+                                    <InputLabel htmlFor="outlined-adornment-amount">
+                                        {t(Item.LABEL_BTN.UPLOAD_CONSTRUCTION)}
+                                    </InputLabel>
+                                    <div className="content">
+                                        <UploadMultipartFile
+                                            imgData={formValues.fileStorages}
+                                            clearPreview={true}
+                                            callbackFunc={onChangeImage}
+                                            callBackClearEvent={handleClearEvent}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="d-flex justify-content-start flex-column p-2 info-item">
+                                    <InputLabel htmlFor="constructionName" error={Boolean(errors.constructionName)}>
+                                        {t(Item.CONSTRUCTION.RU_NAME)}
+                                        <span className="input-required p-1">*</span>
+                                    </InputLabel>
+                                    <TextField
+                                        autoComplete="off"
+                                        size="small"
+                                        value={formValues.constructionName}
+                                        fullWidth
+                                        required
+                                        id="constructionName"
+                                        sx={{
+                                            mt: 1,
+                                            mb: 1,
+                                            '& legend': { display: 'none' },
+                                            '& fieldset': { top: 0 },
+                                        }}
+                                        label=""
+                                        placeholder={t(Item.COMMON.PLACE_HOLDER)}
+                                        error={Boolean(errors.constructionName)}
+                                        helperText={errors.constructionName?.message?.toString()}
+                                        {...register('constructionName', {
+                                            onChange: (e) => handleInputChange(e),
+                                        })}
+                                    />
+                                </div>
+                                <div className="d-flex justify-content-start flex-column p-2 info-item">
+                                    <InputLabel htmlFor="description" error={Boolean(errors.description)}>
+                                        {t(Item.CONSTRUCTION.RU_DESCRIPTION)}
+                                    </InputLabel>
+                                    <TextField
+                                        autoComplete="off"
+                                        size="small"
+                                        value={formValues.description}
+                                        fullWidth
+                                        required
+                                        id="description"
+                                        sx={{
+                                            mt: 1,
+                                            mb: 1,
+                                            '& legend': { display: 'none' },
+                                            '& fieldset': { top: 0 },
+                                        }}
+                                        label=""
+                                        name="description"
+                                        placeholder={t(Item.COMMON.PLACE_HOLDER)}
+                                        onChange={(e) => handleInputChange(e)}
+                                    />
+                                </div>
+                                <div className="d-flex justify-content-start flex-column p-2 info-item">
+                                    <InputLabel htmlFor="startDate" error={Boolean(errors.startDate)}>
+                                        {t(Item.CONSTRUCTION.RU_START_DATE)}
+                                        <span className="input-required p-1">*</span>
+                                    </InputLabel>
+                                    <TextField
+                                        autoComplete="off"
+                                        fullWidth
+                                        size="small"
+                                        sx={{
+                                            mt: 1,
+                                            mb: 1,
+                                            '& legend': { display: 'none' },
+                                            '& fieldset': { top: 0 },
+                                        }}
+                                        value={formValues.startDate}
+                                        id="startDate"
+                                        type="datetime-local"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        error={Boolean(errors.startDate)}
+                                        helperText={errors.startDate?.message?.toString()}
+                                        {...register('startDate', {
+                                            onChange: (e) => handleInputChange(e),
+                                        })}
+                                    />
+                                </div>
+                                <div className="d-flex justify-content-start flex-column p-2 info-item">
+                                    <InputLabel htmlFor="endDate" error={Boolean(errors.endDate)}>
+                                        {t(Item.CONSTRUCTION.RU_END_DATE)}
+                                        <span className="input-required p-1">*</span>
+                                    </InputLabel>
+                                    <TextField
+                                        autoComplete="off"
+                                        fullWidth
+                                        size="small"
+                                        sx={{
+                                            mt: 1,
+                                            mb: 1,
+                                            '& legend': { display: 'none' },
+                                            '& fieldset': { top: 0 },
+                                        }}
+                                        value={formValues.endDate}
+                                        id="endDate"
+                                        type="datetime-local"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        error={Boolean(errors.endDate)}
+                                        helperText={errors.endDate?.message?.toString()}
+                                        {...register('endDate', {
+                                            onChange: (e) => handleInputChange(e),
+                                        })}
+                                    />
+                                </div>
+                                <div className="d-flex justify-content-start flex-column p-2 info-item">
+                                    <InputLabel htmlFor="status" error={Boolean(errors.nationId)}>
+                                        {t(Item.CONSTRUCTION.RU_NATION)}
+                                        <span className="input-required p-1">*</span>
+                                    </InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-outlined-label"
+                                        id="status"
+                                        displayEmpty
+                                        sx={{
+                                            '& legend': { display: 'none' },
+                                            '& fieldset': { top: 0 },
+                                        }}
+                                        value={formValues.nationId}
+                                        {...register('nationId', {
+                                            onChange: (e) => handleInputChange(e),
+                                        })}
+                                    >
+                                        <MenuItem value="" selected={true} disabled>
+                                            <em className="m-auto color-label-select-box">
+                                                {t('message.statusLabel')}
+                                            </em>
+                                        </MenuItem>
+                                        {nationList &&
+                                            nationList.length > 0 &&
+                                            nationList.map((data: any, index: any) => {
+                                                return (
+                                                    <MenuItem key={data.id} value={data.id} className="text-center">
+                                                        {data.name}
+                                                    </MenuItem>
+                                                );
+                                            })}
+                                    </Select>
+                                    {Boolean(errors.nationId) && (
+                                        <FormHelperText id="component-error-text">
+                                            {errors?.nationId?.message as string}
+                                        </FormHelperText>
+                                    )}
+                                </div>
+                                <div className="d-flex justify-content-start flex-column p-2 info-item">
+                                    <InputLabel htmlFor="location">{t(Item.CONSTRUCTION.RU_LOCATION)}</InputLabel>
+                                    <TextField
+                                        autoComplete="off"
+                                        size="small"
+                                        value={formValues.location}
+                                        fullWidth
+                                        required
+                                        id="location"
+                                        sx={{
+                                            mt: 1,
+                                            mb: 1,
+                                            '& legend': { display: 'none' },
+                                            '& fieldset': { top: 0 },
+                                        }}
+                                        label=""
+                                        placeholder={t(Item.COMMON.PLACE_HOLDER)}
+                                        error={Boolean(errors.location)}
+                                        helperText={errors.location?.message?.toString()}
+                                        name="location"
+                                        onChange={(e) => handleInputChange(e)}
+                                    />
+                                </div>
+                                <div className="d-flex justify-content-start flex-column p-2 info-item">
+                                    <InputLabel htmlFor="status" error={Boolean(errors.status)}>
+                                        {t(Item.CONSTRUCTION.RU_STATUS)}
+                                        <span className="input-required p-1">*</span>
+                                    </InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-outlined-label"
+                                        id="status"
+                                        displayEmpty
+                                        sx={{
+                                            '& legend': { display: 'none' },
+                                            '& fieldset': { top: 0 },
+                                        }}
+                                        value={formValues.status}
+                                        {...register('status', {
+                                            onChange: (e) => handleInputChange(e),
+                                        })}
+                                    >
+                                        <MenuItem value="" selected={true} disabled>
+                                            <em className="m-auto color-label-select-box">
+                                                {t('message.statusLabel')}
+                                            </em>
+                                        </MenuItem>
+                                        {constructionStatus &&
+                                            constructionStatus.length > 0 &&
+                                            constructionStatus.map((data: any, index: any) => {
+                                                return (
+                                                    <MenuItem key={data.id} value={index} className="text-center">
+                                                        <HandleConstructionStatus
+                                                            isSearch={true}
+                                                            statusList={constructionStatus}
+                                                            statusId={data.id.toString()}
+                                                        />
+                                                    </MenuItem>
+                                                );
+                                            })}
+                                    </Select>
+                                    {Boolean(errors.status) && (
+                                        <FormHelperText id="component-error-text">
+                                            {errors?.status?.message as string}
+                                        </FormHelperText>
+                                    )}
+                                </div>
+                                <div className="d-flex justify-content-start flex-column p-2 info-item">
+                                    <InputLabel htmlFor="awb" error={Boolean(errors.awbCodes)}>
+                                        {t(Item.CONSTRUCTION.RU_AWB)}
+                                        <span className="input-required p-1">*</span>
+                                    </InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-outlined-label"
+                                        id="awbCodes"
+                                        multiple
+                                        value={selectValue}
+                                        sx={{
+                                            '& legend': { display: 'none' },
+                                            '& fieldset': { top: 0 },
+                                        }}
+                                        renderValue={(selected) => (
+                                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                                {selected.map((value) => (
+                                                    <Chip key={value} label={getValueFromAwbCode(value)} />
+                                                ))}
+                                            </Box>
+                                        )}
+                                        {...register('awbCodes', {
+                                            onChange: (e) => handleChange(e),
+                                        })}
+                                    >
+                                        {awbCodesList.map((awbCode: any) => (
+                                            <MenuItem key={awbCode.id} value={awbCode.id}>
+                                                {awbCode.code}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                    {Boolean(errors.awbCodes) && (
+                                        <FormHelperText id="component-error-text">
+                                            {errors?.awbCodes?.message as string}
+                                        </FormHelperText>
+                                    )}
+                                </div>
+                            </CardContent>
+                        </div>
+                        <Grid item xs={12} sm={12} className="text-center pb-4 pt-0">
+                            <ButtonGroup disableElevation variant="contained" aria-label="Disabled elevation buttons">
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    sx={{ mr: 1 }}
+                                    disabled={isSubmitting}
+                                    onClick={handleSubmit(handleSubmitForm)}
+                                >
+                                    {t(Item.LABEL_BTN.CREATE)}
+                                </Button>
+                            </ButtonGroup>
+                            <Button variant="outlined" type="button" onClick={handleClear} disabled={isSubmitting}>
+                                {t(Item.LABEL_BTN.CLEAR)}
+                            </Button>
+                        </Grid>
+                    </Card>
                 </Grid>
-            </form>
+                <Grid item md={12} lg={8}>
+                    <Card style={{ width: '100%' }}>
+                        <CardHeader
+                            avatar={<Avatar aria-label="recipe">PR</Avatar>}
+                            title="Progress daily"
+                            subheader={new Date().toLocaleDateString()}
+                            action={
+                                <IconButton disabled color="primary" size="large">
+                                    <AddCircleIcon fontSize="inherit" />
+                                </IconButton>
+                            }
+                        />
+                        <Divider />
+                        <Timeline
+                            sx={{
+                                [`& .${timelineOppositeContentClasses.root}`]: {
+                                    flex: 0.2,
+                                },
+                            }}
+                        ></Timeline>
+                    </Card>
+                </Grid>
+            </Grid>
             <ApiAlert response={resForHandleMsg} />
         </div>
     );

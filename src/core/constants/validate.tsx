@@ -235,5 +235,10 @@ export const validateConstruction = yup.object({
         .typeError(getMessage(ERROR_MSG.E01_001, [FieldConstants.END_DATE]))
         .min(yup.ref('startDate'), getMessage(ERROR_MSG.E01_003, [FieldConstants.END_DATE, FieldConstants.START_DATE])),
     status: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.STATUS])),
-    awbCodes: yup.array().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.AIR_WAY_BILL])).min(1).nullable(),
+    awbCodes: yup
+        .array()
+        .required(getMessage(ERROR_MSG.E01_001, [FieldConstants.AIR_WAY_BILL]))
+        .min(1)
+        .nullable(),
+    nationId: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.NATION])),
 });

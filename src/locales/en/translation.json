@@ -428,7 +428,10 @@
             "colAWB": "Air way bill",
             "colStatus": "Status",
             "colLocation": "Location",
-            "colDescription": "Description"
+            "colDescription": "Description",
+            "colBrand": "Brand",
+            "colProjectName": "Project Name",
+            "colNation": "Nation"
         },
         "search": {
             "title": "Construction Search",
@@ -450,7 +453,8 @@
             "cttLocation": "Location",
             "cttDraw": "Construction drawing",
             "cttAwb": "Air way bill",
-            "cttDescription": "Description"
+            "cttDescription": "Description",
+            "cttNation": "Nation"
         },
         "edit": {
             "title": "Construction Edition"
