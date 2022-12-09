@@ -116,7 +116,6 @@ export default function ConstructionSearch() {
             });
         },
     });
-    console.log(state);
 
     useEffect(() => {
         // do some checking here to ensure data exist
@@ -135,17 +134,17 @@ export default function ConstructionSearch() {
         });
     };
 
-    const handleSubmit = async (e: any) => {
-        let data = await getConstructions(formValues);
-        if (data && data.data && data.data.content) {
-            setState(data.data);
-        }
+    const handleSubmit = (e: any) => {
+        console.log(formValues);
+        fetchData(formValues);
     };
 
     const fetchData = async (obj: any) => {
         const resp = await getConstructions(obj);
         if (resp && resp.data && resp.data.content) {
             setState(resp.data);
+        } else {
+            setState(null);
         }
     };
 
@@ -269,122 +268,193 @@ export default function ConstructionSearch() {
                 </div>
             </Grid>
             <Grid item lg={3} xs={12}>
-                <form>
-                    <Grid container direction="row" alignItems="center">
-                        <Grid item xs={12} sx={{ mt: 1, mb: 1 }}>
-                            <Card w-full="true">
-                                <CardHeader
-                                    avatar={<Avatar aria-label="recipe">SC</Avatar>}
-                                    title={t('construction.search.title_card')}
-                                    subheader={new Date().toLocaleDateString()}
-                                    action={
-                                        <React.Fragment>
-                                            <Tooltip title="Add more items search">
-                                                <IconButton
-                                                    onClick={handleClick}
-                                                    aria-label="settings"
-                                                    color="primary"
-                                                    size="large"
-                                                >
-                                                    <MoreVertIcon color="primary" fontSize="inherit" />
-                                                </IconButton>
-                                            </Tooltip>
-                                            <Menu
-                                                anchorEl={anchorEl}
-                                                id="account-menu"
-                                                open={open}
-                                                onClose={handleClose}
-                                                PaperProps={{
-                                                    elevation: 0,
-                                                    sx: {
-                                                        overflow: 'visible',
-                                                        filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                                                        mt: 1.5,
-                                                        '& .MuiAvatar-root': {
-                                                            width: 32,
-                                                            height: 32,
-                                                            ml: -0.5,
-                                                            mr: 1,
-                                                        },
-                                                        '&:before': {
-                                                            content: '""',
-                                                            display: 'block',
-                                                            position: 'absolute',
-                                                            top: 0,
-                                                            right: 14,
-                                                            width: 10,
-                                                            height: 10,
-                                                            bgcolor: 'background.paper',
-                                                            transform: 'translateY(-50%) rotate(45deg)',
-                                                            zIndex: 0,
-                                                        },
-                                                    },
-                                                }}
-                                                transformOrigin={{
-                                                    horizontal: 'right',
-                                                    vertical: 'top',
-                                                }}
-                                                anchorOrigin={{
-                                                    horizontal: 'right',
-                                                    vertical: 'bottom',
-                                                }}
+                <Grid container direction="row" alignItems="center">
+                    <Grid item xs={12} sx={{ mt: 1, mb: 1 }}>
+                        <Card w-full="true">
+                            <CardHeader
+                                avatar={<Avatar aria-label="recipe">SC</Avatar>}
+                                title={t('construction.search.title_card')}
+                                subheader={new Date().toLocaleDateString()}
+                                action={
+                                    <React.Fragment>
+                                        <Tooltip title="Add more items search">
+                                            <IconButton
+                                                onClick={handleClick}
+                                                aria-label="settings"
+                                                color="primary"
+                                                size="large"
                                             >
-                                                <MenuItem onClick={(e) => handleChangeMenuItem(e, 'isLocation')}>
-                                                    <Checkbox
-                                                        checked={controlSearchItem.isLocation}
-                                                        onChange={(e) => handleChangeCheckbox(e)}
-                                                        name="isLocation"
-                                                    />
-                                                    <Typography variant="h6">
-                                                        {t('construction.search.constructionLocation')}
-                                                    </Typography>
-                                                </MenuItem>
-                                                <MenuItem onClick={(e) => handleChangeMenuItem(e, 'isProject')}>
-                                                    <Checkbox
-                                                        checked={controlSearchItem.isProject}
-                                                        onChange={(e) => handleChangeCheckbox(e)}
-                                                        name="isProject"
-                                                    />
-                                                    <Typography variant="h6">
-                                                        {t('construction.search.constructionProject')}
-                                                    </Typography>
-                                                </MenuItem>
-                                                <MenuItem onClick={(e) => handleChangeMenuItem(e, 'isBrand')}>
-                                                    <Checkbox
-                                                        checked={controlSearchItem.isBrand}
-                                                        onChange={(e) => handleChangeCheckbox(e)}
-                                                        name="isBrand"
-                                                    />
-                                                    <Typography variant="h6">
-                                                        {t('construction.search.constructionBrand')}
-                                                    </Typography>
-                                                </MenuItem>
-                                                <MenuItem onClick={(e) => handleChangeMenuItem(e, 'isNation')}>
-                                                    <Checkbox
-                                                        checked={controlSearchItem.isNation}
-                                                        onChange={(e) => handleChangeCheckbox(e)}
-                                                        name="isNation"
-                                                    />
-                                                    <Typography variant="h6">
-                                                        {t('construction.search.constructionNation')}
-                                                    </Typography>
-                                                </MenuItem>
-                                            </Menu>
-                                        </React.Fragment>
-                                    }
-                                />
-                                <CardContent>
-                                    <Box
-                                        sx={{
-                                            '& > :not(style)': {
-                                                m: 1,
-                                            },
-                                        }}
-                                    >
+                                                <MoreVertIcon color="primary" fontSize="inherit" />
+                                            </IconButton>
+                                        </Tooltip>
+                                        <Menu
+                                            anchorEl={anchorEl}
+                                            id="account-menu"
+                                            open={open}
+                                            onClose={handleClose}
+                                            PaperProps={{
+                                                elevation: 0,
+                                                sx: {
+                                                    overflow: 'visible',
+                                                    filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                                                    mt: 1.5,
+                                                    '& .MuiAvatar-root': {
+                                                        width: 32,
+                                                        height: 32,
+                                                        ml: -0.5,
+                                                        mr: 1,
+                                                    },
+                                                    '&:before': {
+                                                        content: '""',
+                                                        display: 'block',
+                                                        position: 'absolute',
+                                                        top: 0,
+                                                        right: 14,
+                                                        width: 10,
+                                                        height: 10,
+                                                        bgcolor: 'background.paper',
+                                                        transform: 'translateY(-50%) rotate(45deg)',
+                                                        zIndex: 0,
+                                                    },
+                                                },
+                                            }}
+                                            transformOrigin={{
+                                                horizontal: 'right',
+                                                vertical: 'top',
+                                            }}
+                                            anchorOrigin={{
+                                                horizontal: 'right',
+                                                vertical: 'bottom',
+                                            }}
+                                        >
+                                            <MenuItem onClick={(e) => handleChangeMenuItem(e, 'isLocation')}>
+                                                <Checkbox
+                                                    checked={controlSearchItem.isLocation}
+                                                    onChange={(e) => handleChangeCheckbox(e)}
+                                                    name="isLocation"
+                                                />
+                                                <Typography variant="h6">
+                                                    {t('construction.search.constructionLocation')}
+                                                </Typography>
+                                            </MenuItem>
+                                            <MenuItem onClick={(e) => handleChangeMenuItem(e, 'isProject')}>
+                                                <Checkbox
+                                                    checked={controlSearchItem.isProject}
+                                                    onChange={(e) => handleChangeCheckbox(e)}
+                                                    name="isProject"
+                                                />
+                                                <Typography variant="h6">
+                                                    {t('construction.search.constructionProject')}
+                                                </Typography>
+                                            </MenuItem>
+                                            <MenuItem onClick={(e) => handleChangeMenuItem(e, 'isBrand')}>
+                                                <Checkbox
+                                                    checked={controlSearchItem.isBrand}
+                                                    onChange={(e) => handleChangeCheckbox(e)}
+                                                    name="isBrand"
+                                                />
+                                                <Typography variant="h6">
+                                                    {t('construction.search.constructionBrand')}
+                                                </Typography>
+                                            </MenuItem>
+                                            <MenuItem onClick={(e) => handleChangeMenuItem(e, 'isNation')}>
+                                                <Checkbox
+                                                    checked={controlSearchItem.isNation}
+                                                    onChange={(e) => handleChangeCheckbox(e)}
+                                                    name="isNation"
+                                                />
+                                                <Typography variant="h6">
+                                                    {t('construction.search.constructionNation')}
+                                                </Typography>
+                                            </MenuItem>
+                                        </Menu>
+                                    </React.Fragment>
+                                }
+                            />
+                            <CardContent>
+                                <Box
+                                    sx={{
+                                        '& > :not(style)': {
+                                            m: 1,
+                                        },
+                                    }}
+                                >
+                                    <div className="row justify-center m-1">
+                                        <div className="col-12 d-block p-1">
+                                            <InputLabel htmlFor="outlined-adornment-amount">
+                                                {t('company.search.keyword')}
+                                            </InputLabel>
+                                            <TextField
+                                                size="small"
+                                                sx={{
+                                                    mt: 1,
+                                                    mb: 1,
+                                                    '& legend': { display: 'none' },
+                                                    '& fieldset': { top: 0 },
+                                                    width: '100%',
+                                                }}
+                                                id="outlined-required"
+                                                placeholder={t('common.placeholder')}
+                                                name="keyword"
+                                                value={formValues.keyword}
+                                                onChange={handleInputChange}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="row justify-center m-1">
+                                        <div className="col-12 d-block p-1">
+                                            <InputLabel id="demo-simple-select-outlined-label">
+                                                {t('company.search.status')}
+                                            </InputLabel>
+                                            <FormControl
+                                                size="small"
+                                                fullWidth
+                                                sx={{ mt: 1, mb: 1 }}
+                                                variant="outlined"
+                                            >
+                                                <Select
+                                                    labelId="demo-simple-select-outlined-label"
+                                                    id="demo-simple-select-outlined"
+                                                    name="status"
+                                                    displayEmpty
+                                                    sx={{
+                                                        '& legend': { display: 'none' },
+                                                        '& fieldset': { top: 0 },
+                                                    }}
+                                                    value={formValues.status}
+                                                    onChange={handleInputChange}
+                                                >
+                                                    <MenuItem value="-1">
+                                                        <em className="m-auto color-label-select-box">
+                                                            {t('message.status')}
+                                                        </em>
+                                                    </MenuItem>
+                                                    {constructionStatus &&
+                                                        constructionStatus.length > 0 &&
+                                                        constructionStatus.map((data: any, index: any) => {
+                                                            return (
+                                                                <MenuItem
+                                                                    key={data.id}
+                                                                    value={index}
+                                                                    className="text-center"
+                                                                >
+                                                                    <HandleConstructionStatus
+                                                                        isSearch={true}
+                                                                        statusList={constructionStatus}
+                                                                        statusId={data.id.toString()}
+                                                                    />
+                                                                </MenuItem>
+                                                            );
+                                                        })}
+                                                </Select>
+                                            </FormControl>
+                                        </div>
+                                    </div>
+                                    {controlSearchItem.isLocation && (
                                         <div className="row justify-center m-1">
                                             <div className="col-12 d-block p-1">
                                                 <InputLabel htmlFor="outlined-adornment-amount">
-                                                    {t('company.search.keyword')}
+                                                    {t('construction.search.constructionLocation')}
                                                 </InputLabel>
                                                 <TextField
                                                     size="small"
@@ -397,16 +467,18 @@ export default function ConstructionSearch() {
                                                     }}
                                                     id="outlined-required"
                                                     placeholder={t('common.placeholder')}
-                                                    name="keyword"
-                                                    value={formValues.keyword}
+                                                    name="location"
+                                                    value={formValues.location}
                                                     onChange={handleInputChange}
                                                 />
                                             </div>
                                         </div>
+                                    )}
+                                    {controlSearchItem.isProject && (
                                         <div className="row justify-center m-1">
                                             <div className="col-12 d-block p-1">
                                                 <InputLabel id="demo-simple-select-outlined-label">
-                                                    {t('company.search.status')}
+                                                    {t('construction.search.constructionProject')}
                                                 </InputLabel>
                                                 <FormControl
                                                     size="small"
@@ -417,34 +489,30 @@ export default function ConstructionSearch() {
                                                     <Select
                                                         labelId="demo-simple-select-outlined-label"
                                                         id="demo-simple-select-outlined"
-                                                        name="status"
+                                                        name="projectId"
                                                         displayEmpty
                                                         sx={{
                                                             '& legend': { display: 'none' },
                                                             '& fieldset': { top: 0 },
                                                         }}
-                                                        value={formValues.status}
+                                                        value={formValues.projectId}
                                                         onChange={handleInputChange}
                                                     >
-                                                        <MenuItem value="-1">
+                                                        <MenuItem value="0">
                                                             <em className="m-auto color-label-select-box">
-                                                                {t('message.status')}
+                                                                {t('message.project')}
                                                             </em>
                                                         </MenuItem>
-                                                        {constructionStatus &&
-                                                            constructionStatus.length > 0 &&
-                                                            constructionStatus.map((data: any, index: any) => {
+                                                        {projects &&
+                                                            projects.length > 0 &&
+                                                            projects.map((data: any, index: any) => {
                                                                 return (
                                                                     <MenuItem
                                                                         key={data.id}
-                                                                        value={index}
+                                                                        value={data.id}
                                                                         className="text-center"
                                                                     >
-                                                                        <HandleConstructionStatus
-                                                                            isSearch={true}
-                                                                            statusList={constructionStatus}
-                                                                            statusId={data.id.toString()}
-                                                                        />
+                                                                        {data.projectName}
                                                                     </MenuItem>
                                                                 );
                                                             })}
@@ -452,204 +520,133 @@ export default function ConstructionSearch() {
                                                 </FormControl>
                                             </div>
                                         </div>
-                                        {controlSearchItem.isLocation && (
-                                            <div className="row justify-center m-1">
-                                                <div className="col-12 d-block p-1">
-                                                    <InputLabel htmlFor="outlined-adornment-amount">
-                                                        {t('construction.search.constructionLocation')}
-                                                    </InputLabel>
-                                                    <TextField
-                                                        size="small"
-                                                        fullWidth
+                                    )}
+                                    {controlSearchItem.isBrand && (
+                                        <div className="row justify-center m-1">
+                                            <div className="col-12 d-block p-1">
+                                                <InputLabel id="demo-simple-select-outlined-label">
+                                                    {t('construction.search.constructionBrand')}
+                                                </InputLabel>
+                                                <FormControl
+                                                    size="small"
+                                                    fullWidth
+                                                    sx={{ mt: 1, mb: 1 }}
+                                                    variant="outlined"
+                                                >
+                                                    <Select
+                                                        labelId="demo-simple-select-outlined-label"
+                                                        id="demo-simple-select-outlined"
+                                                        name="companyId"
+                                                        displayEmpty
                                                         sx={{
-                                                            mt: 1,
-                                                            mb: 1,
                                                             '& legend': { display: 'none' },
                                                             '& fieldset': { top: 0 },
                                                         }}
-                                                        id="outlined-required"
-                                                        placeholder={t('common.placeholder')}
-                                                        name="location"
-                                                        value={formValues.location}
+                                                        value={formValues.companyId}
                                                         onChange={handleInputChange}
-                                                    />
-                                                </div>
-                                            </div>
-                                        )}
-                                        {controlSearchItem.isProject && (
-                                            <div className="row justify-center m-1">
-                                                <div className="col-12 d-block p-1">
-                                                    <InputLabel id="demo-simple-select-outlined-label">
-                                                        {t('construction.search.constructionProject')}
-                                                    </InputLabel>
-                                                    <FormControl
-                                                        size="small"
-                                                        fullWidth
-                                                        sx={{ mt: 1, mb: 1 }}
-                                                        variant="outlined"
                                                     >
-                                                        <Select
-                                                            labelId="demo-simple-select-outlined-label"
-                                                            id="demo-simple-select-outlined"
-                                                            name="projectId"
-                                                            displayEmpty
-                                                            sx={{
-                                                                '& legend': { display: 'none' },
-                                                                '& fieldset': { top: 0 },
-                                                            }}
-                                                            value={formValues.projectId}
-                                                            onChange={handleInputChange}
-                                                        >
-                                                            <MenuItem value="0">
-                                                                <em className="m-auto color-label-select-box">
-                                                                    {t('message.project')}
-                                                                </em>
-                                                            </MenuItem>
-                                                            {projects &&
-                                                                projects.length > 0 &&
-                                                                projects.map((data: any, index: any) => {
-                                                                    return (
-                                                                        <MenuItem
-                                                                            key={data.id}
-                                                                            value={data.id}
-                                                                            className="text-center"
-                                                                        >
-                                                                            {data.projectName}
-                                                                        </MenuItem>
-                                                                    );
-                                                                })}
-                                                        </Select>
-                                                    </FormControl>
-                                                </div>
+                                                        <MenuItem value="0">
+                                                            <em className="m-auto color-label-select-box">
+                                                                {t('message.brand')}
+                                                            </em>
+                                                        </MenuItem>
+                                                        {companies &&
+                                                            companies.length > 0 &&
+                                                            companies.map((data: any, index: any) => {
+                                                                return (
+                                                                    <MenuItem
+                                                                        key={data.id}
+                                                                        value={data.id}
+                                                                        className="text-center"
+                                                                    >
+                                                                        {data.companyName}
+                                                                    </MenuItem>
+                                                                );
+                                                            })}
+                                                    </Select>
+                                                </FormControl>
                                             </div>
-                                        )}
-                                        {controlSearchItem.isBrand && (
-                                            <div className="row justify-center m-1">
-                                                <div className="col-12 d-block p-1">
-                                                    <InputLabel id="demo-simple-select-outlined-label">
-                                                        {t('construction.search.constructionBrand')}
-                                                    </InputLabel>
-                                                    <FormControl
-                                                        size="small"
-                                                        fullWidth
-                                                        sx={{ mt: 1, mb: 1 }}
-                                                        variant="outlined"
-                                                    >
-                                                        <Select
-                                                            labelId="demo-simple-select-outlined-label"
-                                                            id="demo-simple-select-outlined"
-                                                            name="companyId"
-                                                            displayEmpty
-                                                            sx={{
-                                                                '& legend': { display: 'none' },
-                                                                '& fieldset': { top: 0 },
-                                                            }}
-                                                            value={formValues.companyId}
-                                                            onChange={handleInputChange}
-                                                        >
-                                                            <MenuItem value="0">
-                                                                <em className="m-auto color-label-select-box">
-                                                                    {t('message.brand')}
-                                                                </em>
-                                                            </MenuItem>
-                                                            {companies &&
-                                                                companies.length > 0 &&
-                                                                companies.map((data: any, index: any) => {
-                                                                    return (
-                                                                        <MenuItem
-                                                                            key={data.id}
-                                                                            value={data.id}
-                                                                            className="text-center"
-                                                                        >
-                                                                            {data.companyName}
-                                                                        </MenuItem>
-                                                                    );
-                                                                })}
-                                                        </Select>
-                                                    </FormControl>
-                                                </div>
-                                            </div>
-                                        )}
-                                        {controlSearchItem.isNation && (
-                                            <div className="row justify-center m-1">
-                                                <div className="col-12 d-block p-1">
-                                                    <InputLabel id="demo-simple-select-outlined-label">
-                                                        {t('construction.search.constructionNation')}
-                                                    </InputLabel>
-                                                    <FormControl
-                                                        size="small"
-                                                        fullWidth
-                                                        sx={{ mt: 1, mb: 1 }}
-                                                        variant="outlined"
-                                                    >
-                                                        <Select
-                                                            labelId="demo-simple-select-outlined-label"
-                                                            id="demo-simple-select-outlined"
-                                                            name="nationId"
-                                                            displayEmpty
-                                                            sx={{
-                                                                '& legend': { display: 'none' },
-                                                                '& fieldset': { top: 0 },
-                                                            }}
-                                                            value={formValues.nationId}
-                                                            onChange={handleInputChange}
-                                                        >
-                                                            <MenuItem value="0">
-                                                                <em className="m-auto color-label-select-box">
-                                                                    {t('message.nation')}
-                                                                </em>
-                                                            </MenuItem>
-                                                            {nations &&
-                                                                nations.length > 0 &&
-                                                                nations.map((data: any, index: any) => {
-                                                                    return (
-                                                                        <MenuItem
-                                                                            key={data.id}
-                                                                            value={data.id}
-                                                                            className="text-center"
-                                                                        >
-                                                                            {data.name}
-                                                                        </MenuItem>
-                                                                    );
-                                                                })}
-                                                        </Select>
-                                                    </FormControl>
-                                                </div>
-                                            </div>
-                                        )}
-                                        <div className="text-center justify-center m-1">
-                                            <ButtonGroup
-                                                disableElevation
-                                                variant="contained"
-                                                aria-label="Disabled elevation buttons"
-                                            >
-                                                <Button
-                                                    sx={{
-                                                        mr: 1,
-                                                        textTransform: 'uppercase',
-                                                    }}
-                                                    variant="contained"
-                                                    onClick={handleSubmit}
-                                                >
-                                                    {t(Item.LABEL_BTN.SEARCH)}
-                                                </Button>
-                                                <Button
-                                                    sx={{
-                                                        textTransform: 'uppercase',
-                                                    }}
-                                                    onClick={handleClearData}
+                                        </div>
+                                    )}
+                                    {controlSearchItem.isNation && (
+                                        <div className="row justify-center m-1">
+                                            <div className="col-12 d-block p-1">
+                                                <InputLabel id="demo-simple-select-outlined-label">
+                                                    {t('construction.search.constructionNation')}
+                                                </InputLabel>
+                                                <FormControl
+                                                    size="small"
+                                                    fullWidth
+                                                    sx={{ mt: 1, mb: 1 }}
                                                     variant="outlined"
                                                 >
-                                                    {t(Item.LABEL_BTN.CLEAR)}
-                                                </Button>
-                                            </ButtonGroup>
+                                                    <Select
+                                                        labelId="demo-simple-select-outlined-label"
+                                                        id="demo-simple-select-outlined"
+                                                        name="nationId"
+                                                        displayEmpty
+                                                        sx={{
+                                                            '& legend': { display: 'none' },
+                                                            '& fieldset': { top: 0 },
+                                                        }}
+                                                        value={formValues.nationId}
+                                                        onChange={handleInputChange}
+                                                    >
+                                                        <MenuItem value="0">
+                                                            <em className="m-auto color-label-select-box">
+                                                                {t('message.nation')}
+                                                            </em>
+                                                        </MenuItem>
+                                                        {nations &&
+                                                            nations.length > 0 &&
+                                                            nations.map((data: any, index: any) => {
+                                                                return (
+                                                                    <MenuItem
+                                                                        key={data.id}
+                                                                        value={data.id}
+                                                                        className="text-center"
+                                                                    >
+                                                                        {data.name}
+                                                                    </MenuItem>
+                                                                );
+                                                            })}
+                                                    </Select>
+                                                </FormControl>
+                                            </div>
                                         </div>
-                                    </Box>
-                                </CardContent>
-                            </Card>
-                        </Grid>
+                                    )}
+                                    <div className="text-center justify-center m-1">
+                                        <ButtonGroup
+                                            disableElevation
+                                            variant="contained"
+                                            aria-label="Disabled elevation buttons"
+                                        >
+                                            <Button
+                                                sx={{
+                                                    mr: 1,
+                                                    textTransform: 'uppercase',
+                                                }}
+                                                variant="contained"
+                                                onClick={handleSubmit}
+                                            >
+                                                {t(Item.LABEL_BTN.SEARCH)}
+                                            </Button>
+                                            <Button
+                                                sx={{
+                                                    textTransform: 'uppercase',
+                                                }}
+                                                onClick={handleClearData}
+                                                variant="outlined"
+                                            >
+                                                {t(Item.LABEL_BTN.CLEAR)}
+                                            </Button>
+                                        </ButtonGroup>
+                                    </div>
+                                </Box>
+                            </CardContent>
+                        </Card>
                     </Grid>
-                </form>
+                </Grid>
             </Grid>
             <Grid item lg={9} xs={12} sx={{ mt: 1, mb: 1 }}>
                 <EnhancedTable

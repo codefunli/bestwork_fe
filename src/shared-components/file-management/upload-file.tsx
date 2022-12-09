@@ -30,7 +30,6 @@ export default function UploadFile(props: props) {
 
     useEffect(() => {
         if (currentFiles.length < 1) return;
-        console.log(currentFiles);
 
         const newImageUrls: any = [];
         for (let index = 0; index < currentFiles.length; index++) {

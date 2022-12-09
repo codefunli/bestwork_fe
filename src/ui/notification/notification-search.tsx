@@ -341,9 +341,7 @@ export default function NotificationsSearch() {
                     }
                     isLoading={isLoading}
                     arrButton={arrButton}
-                    statusList={() => {
-                        console.log();
-                    }}
+                    statusList={[]}
                 />
             </Grid>
 
