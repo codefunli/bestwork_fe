@@ -150,7 +150,11 @@
         "retriveSuccess": "Lấy dữ liệu thành công",
         "registrationSuccess": "Đăng kí dữ liệu thành công",
         "updateSuccess": "Cập nhật dữ liệu thành công",
-        "awbs": "Chọn mã hóa đơn"
+        "awbs": "Chọn mã hóa đơn",
+        "project": "Project",
+        "brand": "Brand",
+        "location": "Location",
+        "nation": "Nation"
     },
     "bread_crumbs": {
         "home": "Trang chủ",
@@ -428,7 +432,11 @@
             "title": "Tìm kiếm thông tin công trình",
             "title_card": "Tim kiếm thông tin công trình của bạn",
             "constructionName": "Tên công trình",
-            "constructionTitle": "Title"
+            "constructionTitle": "Title",
+            "constructionProject": "Project",
+            "constructionBrand": "Brand",
+            "constructionLocation": "Location",
+            "constructionNation": "Nation"
         },
         "register": {
             "title": "Đăng kí công trình",

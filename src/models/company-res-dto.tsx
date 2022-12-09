@@ -1,7 +1,7 @@
 export interface CompanyResDTO {
     id: number;
     version: number;
-    name: string;
+    companyName: string;
     address1: string | null;
     address2: string | null;
     city: string;

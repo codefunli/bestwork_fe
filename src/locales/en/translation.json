@@ -150,7 +150,11 @@
         "retriveSuccess": "Retrieve data is successfully",
         "registrationSuccess": "Registration data is successfully",
         "updateSuccess": "Update data is successfully",
-        "awbs": "Please choose awb"
+        "awbs": "Please choose awb",
+        "project": "Project",
+        "brand": "Brand",
+        "location": "Location",
+        "nation": "Nation"
     },
     "bread_crumbs": {
         "home": "Home",
@@ -430,7 +434,11 @@
             "title": "Construction Search",
             "title_card": "Search info of your construction",
             "constructionName": "Project Name",
-            "constructionTitle": "Title"
+            "constructionTitle": "Title",
+            "constructionProject": "Project",
+            "constructionBrand": "Brand",
+            "constructionLocation": "Location",
+            "constructionNation": "Nation"
         },
         "register": {
             "title": "Construction Creation",

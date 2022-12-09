@@ -2,11 +2,14 @@ import { UrlServer } from '../core/constants/common';
 import apiClient from '../core/services/api-service';
 import { DataResSuccess, PageableDataResSuccess } from '../core/types/base';
 import { StatusResDTO } from '../models/common-res-dto';
+import { CompanyResDTO } from '../models/company-res-dto';
 import {
     ConstructionResDTO,
     ContructionProgressResDTO,
     ProgressByConstrucionDTO,
 } from '../models/construction-res-dto';
+import { NationResDto } from '../models/nation-res-dto';
+import { ProjectResDTO } from '../models/project-res-dto';
 
 export const getConstructions = async (object: any) => {
     const res = await apiClient.post<PageableDataResSuccess<ConstructionResDTO[]>>(
@@ -17,7 +20,7 @@ export const getConstructions = async (object: any) => {
 };
 
 export const getConstructionStatus = async () => {
-    const res = await apiClient.get<PageableDataResSuccess<StatusResDTO[]>>(UrlServer.CONSTRUCTION.GET_STATUS);
+    const res = await apiClient.get<DataResSuccess<StatusResDTO[]>>(UrlServer.CONSTRUCTION.GET_STATUS);
     return res.data;
 };
 
@@ -60,5 +63,20 @@ export const getProgressStatus = async () => {
 
 export const updateProgress = async (object: any, progressId: any) => {
     const res = await apiClient.post<any>(`${UrlServer.CONSTRUCTION.UPDATE_PROGRESS}/${progressId}`, object);
+    return res.data;
+};
+
+export const getCompaniesConstruction = async () => {
+    const res = await apiClient.get<DataResSuccess<CompanyResDTO[]>>(UrlServer.CONSTRUCTION.GET_COMPANIES);
+    return res.data;
+};
+
+export const getProjectsConstruction = async () => {
+    const res = await apiClient.get<DataResSuccess<ProjectResDTO[]>>(UrlServer.CONSTRUCTION.GET_PROJECTS);
+    return res.data;
+};
+
+export const getNationalConstruction = async () => {
+    const res = await apiClient.get<DataResSuccess<NationResDto[]>>(UrlServer.CONSTRUCTION.GET_NATIONS);
     return res.data;
 };

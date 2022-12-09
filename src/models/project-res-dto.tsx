@@ -1,6 +1,6 @@
 export interface ProjectResDTO {
     id: number;
-    prjName: string;
+    projectName: string;
     title: string;
     description: string;
     prjType: string;

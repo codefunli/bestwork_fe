@@ -1,3 +1,4 @@
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {
     AlertColor,
     Avatar,
@@ -7,25 +8,36 @@ import {
     Card,
     CardContent,
     CardHeader,
+    Checkbox,
     FormControl,
     Grid,
+    IconButton,
     InputLabel,
-    MenuItem,
     Select,
     TextField,
+    Tooltip,
     Typography,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from 'react-query';
 import { useSelector } from 'react-redux';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ConfirmConstants, Item, UrlFeApp } from '../../core/constants/common';
 import { SUCCESS_MSG } from '../../core/constants/message';
 import { getUserInfo } from '../../core/redux/user-slice';
 import { headConstructionCol } from '../../core/types/construction';
 import { Permission } from '../../core/types/permission';
-import { deleteConstructions, getConstructions, getConstructionStatus } from '../../services/construction-service';
+import {
+    deleteConstructions,
+    getCompaniesConstruction,
+    getConstructions,
+    getConstructionStatus,
+    getNationalConstruction,
+    getProjectsConstruction,
+} from '../../services/construction-service';
 import MessageShow from '../../shared-components/message/message';
 import AlertDialogSlide from '../../shared-components/modal/alert-dialog-slide';
 import HandleConstructionStatus from '../../shared-components/status-handle/construction-status-handle';
@@ -39,6 +51,17 @@ const initialValues = {
     sortBy: 'id',
     keyword: '',
     status: '-1',
+    projectId: '0',
+    nationId: '0',
+    companyId: '0',
+    location: '',
+};
+
+const initSearchItem = {
+    isProject: false,
+    isBrand: false,
+    isNation: false,
+    isLocation: false,
 };
 
 export default function ConstructionSearch() {
@@ -57,6 +80,10 @@ export default function ConstructionSearch() {
     const location = useLocation();
     const [permission, setPermission] = useState<Permission>();
     const userInfo = useSelector(getUserInfo);
+    const [controlSearchItem, setContronlSearchItem] = useState<any>(initSearchItem);
+    const [projects, setProjects] = useState<any>([]);
+    const [companies, setCompanies] = useState<any>([]);
+    const [nations, setNations] = useState<any>([]);
 
     useEffect(() => {
         if (userInfo && userInfo.permissions && userInfo.permissions[5][0]) setPermission(userInfo.permissions[5][0]);
@@ -66,6 +93,15 @@ export default function ConstructionSearch() {
     useEffect(() => {
         getConstructionStatus().then((status: any) => {
             if (status && status.data) setConstructionStatus(status.data);
+        });
+        getCompaniesConstruction().then((res: any) => {
+            if (res && res.data) setCompanies(res.data);
+        });
+        getProjectsConstruction().then((res: any) => {
+            if (res && res.data) setProjects(res.data);
+        });
+        getNationalConstruction().then((res: any) => {
+            if (res && res.data) setNations(res.data);
         });
     }, []);
 
@@ -194,6 +230,26 @@ export default function ConstructionSearch() {
         },
     ];
 
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleChangeCheckbox = (event: any) => {
+        setContronlSearchItem({
+            ...controlSearchItem,
+            [event.target.name]: event.target.checked,
+        });
+    };
+    const handleChangeMenuItem = (event: any, name: string) => {
+        setContronlSearchItem({
+            ...controlSearchItem,
+            [name]: !controlSearchItem[name],
+        });
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
     return (
         <Grid container direction="row" spacing={3} className="project-search">
             <Grid item xs={12} sx={{ mt: 1 }}>
@@ -220,6 +276,101 @@ export default function ConstructionSearch() {
                                     avatar={<Avatar aria-label="recipe">SC</Avatar>}
                                     title={t('construction.search.title_card')}
                                     subheader={new Date().toLocaleDateString()}
+                                    action={
+                                        <React.Fragment>
+                                            <Tooltip title="Add more items search">
+                                                <IconButton
+                                                    onClick={handleClick}
+                                                    aria-label="settings"
+                                                    color="primary"
+                                                    size="large"
+                                                >
+                                                    <MoreVertIcon color="primary" fontSize="inherit" />
+                                                </IconButton>
+                                            </Tooltip>
+                                            <Menu
+                                                anchorEl={anchorEl}
+                                                id="account-menu"
+                                                open={open}
+                                                onClose={handleClose}
+                                                PaperProps={{
+                                                    elevation: 0,
+                                                    sx: {
+                                                        overflow: 'visible',
+                                                        filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                                                        mt: 1.5,
+                                                        '& .MuiAvatar-root': {
+                                                            width: 32,
+                                                            height: 32,
+                                                            ml: -0.5,
+                                                            mr: 1,
+                                                        },
+                                                        '&:before': {
+                                                            content: '""',
+                                                            display: 'block',
+                                                            position: 'absolute',
+                                                            top: 0,
+                                                            right: 14,
+                                                            width: 10,
+                                                            height: 10,
+                                                            bgcolor: 'background.paper',
+                                                            transform: 'translateY(-50%) rotate(45deg)',
+                                                            zIndex: 0,
+                                                        },
+                                                    },
+                                                }}
+                                                transformOrigin={{
+                                                    horizontal: 'right',
+                                                    vertical: 'top',
+                                                }}
+                                                anchorOrigin={{
+                                                    horizontal: 'right',
+                                                    vertical: 'bottom',
+                                                }}
+                                            >
+                                                <MenuItem onClick={(e) => handleChangeMenuItem(e, 'isLocation')}>
+                                                    <Checkbox
+                                                        checked={controlSearchItem.isLocation}
+                                                        onChange={(e) => handleChangeCheckbox(e)}
+                                                        name="isLocation"
+                                                    />
+                                                    <Typography variant="h6">
+                                                        {t('construction.search.constructionLocation')}
+                                                    </Typography>
+                                                </MenuItem>
+                                                <MenuItem onClick={(e) => handleChangeMenuItem(e, 'isProject')}>
+                                                    <Checkbox
+                                                        checked={controlSearchItem.isProject}
+                                                        onChange={(e) => handleChangeCheckbox(e)}
+                                                        name="isProject"
+                                                    />
+                                                    <Typography variant="h6">
+                                                        {t('construction.search.constructionProject')}
+                                                    </Typography>
+                                                </MenuItem>
+                                                <MenuItem onClick={(e) => handleChangeMenuItem(e, 'isBrand')}>
+                                                    <Checkbox
+                                                        checked={controlSearchItem.isBrand}
+                                                        onChange={(e) => handleChangeCheckbox(e)}
+                                                        name="isBrand"
+                                                    />
+                                                    <Typography variant="h6">
+                                                        {t('construction.search.constructionBrand')}
+                                                    </Typography>
+                                                </MenuItem>
+                                                <MenuItem onClick={(e) => handleChangeMenuItem(e, 'isNation')}>
+                                                    <Checkbox
+                                                        checked={controlSearchItem.isNation}
+                                                        onChange={(e) => handleChangeCheckbox(e)}
+                                                        name="isNation"
+                                                    />
+                                                    <Typography variant="h6">
+                                                        {t('construction.search.constructionNation')}
+                                                    </Typography>
+                                                </MenuItem>
+                                            </Menu>
+                                        </React.Fragment>
+                                    }
                                 />
                                 <CardContent>
                                     <Box
@@ -300,6 +451,171 @@ export default function ConstructionSearch() {
                                                 </FormControl>
                                             </div>
                                         </div>
+                                        {controlSearchItem.isLocation && (
+                                            <div className="row justify-center m-1">
+                                                <div className="col-12 d-block p-1">
+                                                    <InputLabel htmlFor="outlined-adornment-amount">
+                                                        {t('construction.search.constructionLocation')}
+                                                    </InputLabel>
+                                                    <TextField
+                                                        size="small"
+                                                        fullWidth
+                                                        sx={{
+                                                            mt: 1,
+                                                            mb: 1,
+                                                            '& legend': { display: 'none' },
+                                                            '& fieldset': { top: 0 },
+                                                        }}
+                                                        id="outlined-required"
+                                                        placeholder={t('common.placeholder')}
+                                                        name="location"
+                                                        value={formValues.location}
+                                                        onChange={handleInputChange}
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
+                                        {controlSearchItem.isProject && (
+                                            <div className="row justify-center m-1">
+                                                <div className="col-12 d-block p-1">
+                                                    <InputLabel id="demo-simple-select-outlined-label">
+                                                        {t('construction.search.constructionProject')}
+                                                    </InputLabel>
+                                                    <FormControl
+                                                        size="small"
+                                                        fullWidth
+                                                        sx={{ mt: 1, mb: 1 }}
+                                                        variant="outlined"
+                                                    >
+                                                        <Select
+                                                            labelId="demo-simple-select-outlined-label"
+                                                            id="demo-simple-select-outlined"
+                                                            name="projectId"
+                                                            displayEmpty
+                                                            sx={{
+                                                                '& legend': { display: 'none' },
+                                                                '& fieldset': { top: 0 },
+                                                            }}
+                                                            value={formValues.projectId}
+                                                            onChange={handleInputChange}
+                                                        >
+                                                            <MenuItem value="0">
+                                                                <em className="m-auto color-label-select-box">
+                                                                    {t('message.project')}
+                                                                </em>
+                                                            </MenuItem>
+                                                            {projects &&
+                                                                projects.length > 0 &&
+                                                                projects.map((data: any, index: any) => {
+                                                                    return (
+                                                                        <MenuItem
+                                                                            key={data.id}
+                                                                            value={data.id}
+                                                                            className="text-center"
+                                                                        >
+                                                                            {data.projectName}
+                                                                        </MenuItem>
+                                                                    );
+                                                                })}
+                                                        </Select>
+                                                    </FormControl>
+                                                </div>
+                                            </div>
+                                        )}
+                                        {controlSearchItem.isBrand && (
+                                            <div className="row justify-center m-1">
+                                                <div className="col-12 d-block p-1">
+                                                    <InputLabel id="demo-simple-select-outlined-label">
+                                                        {t('construction.search.constructionBrand')}
+                                                    </InputLabel>
+                                                    <FormControl
+                                                        size="small"
+                                                        fullWidth
+                                                        sx={{ mt: 1, mb: 1 }}
+                                                        variant="outlined"
+                                                    >
+                                                        <Select
+                                                            labelId="demo-simple-select-outlined-label"
+                                                            id="demo-simple-select-outlined"
+                                                            name="companyId"
+                                                            displayEmpty
+                                                            sx={{
+                                                                '& legend': { display: 'none' },
+                                                                '& fieldset': { top: 0 },
+                                                            }}
+                                                            value={formValues.companyId}
+                                                            onChange={handleInputChange}
+                                                        >
+                                                            <MenuItem value="0">
+                                                                <em className="m-auto color-label-select-box">
+                                                                    {t('message.brand')}
+                                                                </em>
+                                                            </MenuItem>
+                                                            {companies &&
+                                                                companies.length > 0 &&
+                                                                companies.map((data: any, index: any) => {
+                                                                    return (
+                                                                        <MenuItem
+                                                                            key={data.id}
+                                                                            value={data.id}
+                                                                            className="text-center"
+                                                                        >
+                                                                            {data.companyName}
+                                                                        </MenuItem>
+                                                                    );
+                                                                })}
+                                                        </Select>
+                                                    </FormControl>
+                                                </div>
+                                            </div>
+                                        )}
+                                        {controlSearchItem.isNation && (
+                                            <div className="row justify-center m-1">
+                                                <div className="col-12 d-block p-1">
+                                                    <InputLabel id="demo-simple-select-outlined-label">
+                                                        {t('construction.search.constructionNation')}
+                                                    </InputLabel>
+                                                    <FormControl
+                                                        size="small"
+                                                        fullWidth
+                                                        sx={{ mt: 1, mb: 1 }}
+                                                        variant="outlined"
+                                                    >
+                                                        <Select
+                                                            labelId="demo-simple-select-outlined-label"
+                                                            id="demo-simple-select-outlined"
+                                                            name="nationId"
+                                                            displayEmpty
+                                                            sx={{
+                                                                '& legend': { display: 'none' },
+                                                                '& fieldset': { top: 0 },
+                                                            }}
+                                                            value={formValues.nationId}
+                                                            onChange={handleInputChange}
+                                                        >
+                                                            <MenuItem value="0">
+                                                                <em className="m-auto color-label-select-box">
+                                                                    {t('message.nation')}
+                                                                </em>
+                                                            </MenuItem>
+                                                            {nations &&
+                                                                nations.length > 0 &&
+                                                                nations.map((data: any, index: any) => {
+                                                                    return (
+                                                                        <MenuItem
+                                                                            key={data.id}
+                                                                            value={data.id}
+                                                                            className="text-center"
+                                                                        >
+                                                                            {data.name}
+                                                                        </MenuItem>
+                                                                    );
+                                                                })}
+                                                        </Select>
+                                                    </FormControl>
+                                                </div>
+                                            </div>
+                                        )}
                                         <div className="text-center justify-center m-1">
                                             <ButtonGroup
                                                 disableElevation

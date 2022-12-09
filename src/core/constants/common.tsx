@@ -118,6 +118,9 @@ export const UrlServer = {
         CREATE_PROGRESS: `${PREFIX_SERVER_URL}/progress/create`,
         GET_PROGRESS_STATUS: `${PREFIX_SERVER_URL}/progress/status`,
         UPDATE_PROGRESS: `${PREFIX_SERVER_URL}/progress/update`,
+        GET_COMPANIES: `${PREFIX_SERVER_URL}/constructions/companies`,
+        GET_PROJECTS: `${PREFIX_SERVER_URL}/constructions/projects`,
+        GET_NATIONS: `${PREFIX_SERVER_URL}/constructions/nations`,
     },
     ROLE: {
         GET: `${PREFIX_SERVER_URL}/users/roles`,
@@ -161,6 +164,9 @@ export const UrlServer = {
     },
     MONITOR: {
         GET_LIST: `${PREFIX_SERVER_URL}/monitor`,
+    },
+    NATION: {
+        GET_LIST: `${PREFIX_SERVER_URL}/nations/list`,
     },
 };
 
