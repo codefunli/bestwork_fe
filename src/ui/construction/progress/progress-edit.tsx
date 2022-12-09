@@ -37,6 +37,7 @@ interface Props {
     toggleDrawer: Function;
     progress: any;
     callBackFn: Function;
+    callBackLoading: Function;
 }
 
 const initialDataImg = {
@@ -46,14 +47,15 @@ const initialDataImg = {
 };
 
 const ProgressEdit = (props: Props) => {
-    const { isOpen, setIsOpen, toggleDrawer, progress, callBackFn } = props;
+    const { isOpen, setIsOpen, toggleDrawer, progress, callBackFn, callBackLoading } = props;
     const { t } = useTranslation();
     const params = useParams();
     const [progressData, setProgressData] = useState(progress);
     const [imgData, setImgData] = useState([]);
     const [resForHandleMsg, setResForHandleMsg] = useState<any>();
     const [progressStatus, setProgressStatus] = useState([]);
-    const [fileData, setFileData] = useState(initialDataImg);
+    const [fileDataBefore, setFileDataBefore] = useState(initialDataImg);
+    const [fileDataAfter, setFileDataAfter] = useState(initialDataImg);
     const [eventImage, setEventImage] = useState<any>();
     const [isClearPreview, setIsClearPreview] = useState(false);
     const userInfo = useSelector(getUserInfo);
@@ -121,12 +123,20 @@ const ProgressEdit = (props: Props) => {
             endDate: formatDateTimeReq(progressData.endDate),
         };
 
-        if (fileData && fileData.file && fileData.file.length > 0) {
-            fileData.file.forEach((data: any) => {
-                formData.append('files', data);
+        if (fileDataBefore && fileDataBefore.file && fileDataBefore.file.length > 0) {
+            fileDataBefore.file.forEach((data: any) => {
+                formData.append('fileBefore', data);
             });
         } else {
-            formData.append('files', new Blob());
+            formData.append('fileBefore', new Blob());
+        }
+
+        if (fileDataAfter && fileDataAfter.file && fileDataAfter.file.length > 0) {
+            fileDataAfter.file.forEach((data: any) => {
+                formData.append('fileAfter', data);
+            });
+        } else {
+            formData.append('fileAfter', new Blob());
         }
 
         formData.append(
@@ -135,7 +145,8 @@ const ProgressEdit = (props: Props) => {
                 type: 'application/json',
             }),
         );
-
+        setIsOpen(false);
+        callBackLoading();
         updateProgress(formData, progressData.id)
             .then((res: any) => {
                 setResForHandleMsg({
@@ -144,10 +155,7 @@ const ProgressEdit = (props: Props) => {
                 });
 
                 if (res.status === StatusCode.OK) {
-                    setTimeout(() => {
-                        setIsOpen(false);
-                        callBackFn();
-                    }, 500);
+                    callBackFn();
                 }
             })
             .catch(() => {
@@ -159,9 +167,16 @@ const ProgressEdit = (props: Props) => {
         clearEventImage();
     };
 
-    const onChangeImage = (data: any) => {
-        setFileData({
-            ...fileData,
+    const onChangeImageBefore = (data: any) => {
+        setFileDataBefore({
+            ...fileDataBefore,
+            file: data,
+        });
+    };
+
+    const onChangeImageAfter = (data: any) => {
+        setFileDataAfter({
+            ...fileDataAfter,
             file: data,
         });
     };
@@ -221,9 +236,22 @@ const ProgressEdit = (props: Props) => {
                                     <div className="item-header">{t('project.progress.progressImg')}</div>
                                     <div className="content">
                                         <UploadMultipartFile
-                                            imgData={progressData.fileStorages}
+                                            id="before"
+                                            imgData={progressData.fileBefore}
                                             clearPreview={isClearPreview}
-                                            callbackFunc={onChangeImage}
+                                            callbackFunc={onChangeImageBefore}
+                                            callBackClearEvent={handleClearEvent}
+                                        />
+                                    </div>
+                                </Grid>
+                                <Grid item xs={12} className="item">
+                                    <div className="item-header">{t('project.progress.progressImg')}</div>
+                                    <div className="content">
+                                        <UploadMultipartFile
+                                            id="after"
+                                            imgData={progressData.fileAfter}
+                                            clearPreview={isClearPreview}
+                                            callbackFunc={onChangeImageAfter}
                                             callBackClearEvent={handleClearEvent}
                                         />
                                     </div>
@@ -388,7 +416,7 @@ const ProgressEdit = (props: Props) => {
                                         variant="contained"
                                         aria-label="Disabled elevation buttons"
                                     >
-                                        <Button onClick={handleCancel} variant="outlined">
+                                        <Button onClick={handleCancel} variant="outlined" disabled={isSubmitting}>
                                             {t('button.btnCancel')}
                                         </Button>
                                         <Button
