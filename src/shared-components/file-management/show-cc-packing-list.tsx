@@ -72,7 +72,7 @@ export default function ShowCustomsClearancePackingList(props: {
                         customsDeclaration.packagesDoc.length > 0 &&
                         customsDeclaration.packagesDoc.map((item: any, index: number) => {
                             return item.type === 'pdf' ? (
-                                <ImageListItem className="m-1">
+                                <ImageListItem className="m-1" key={index}>
                                     <Card>
                                         <CardHeader
                                             sx={{ padding: 0.5 }}
@@ -167,7 +167,7 @@ export default function ShowCustomsClearancePackingList(props: {
                                     </span>
                                 </ImageListItem>
                             ) : (
-                                <ImageListItem className="m-1">
+                                <ImageListItem className="m-1" key={index}>
                                     <Card>
                                         <CardHeader
                                             sx={{ padding: 0.5 }}

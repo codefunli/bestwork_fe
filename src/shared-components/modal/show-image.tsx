@@ -58,14 +58,14 @@ export default function ShowImage(props: AlertDialogSlideProps) {
                     <DialogContentText id="alert-dialog-slide-description" width={500} height={'auto'}>
                         {content &&
                             content.map((image: any, index: any) => (
-                                <div key={index}>
+                                <span key={index}>
                                     <img
                                         loading="lazy"
                                         className="imgTag w-100 border"
                                         src={`data:image/${image.type};base64,${image.content}`}
                                         key={index}
                                     />
-                                </div>
+                                </span>
                             ))}
                     </DialogContentText>
                 </DialogContent>

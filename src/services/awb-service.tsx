@@ -11,6 +11,11 @@ export const createAirWayBill = async (obj: any) => {
     return res.data;
 };
 
+export const editAirWayBill = async (obj: any) => {
+    const res = await apiClient.put<any>(`${UrlServer.AWB.EDIT_AWB}/${obj.id}/edit`, obj);
+    return res.data;
+};
+
 export const getAirWayBillByProjectId = async (projectId: string) => {
     const res = await apiClient.get<any>(`${UrlServer.AWB.GET_AWB_BY_PROJECT_ID}/${projectId}`);
     return res.data;

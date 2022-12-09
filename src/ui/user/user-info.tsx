@@ -194,12 +194,9 @@ export default function UserInfo() {
                     <Card>
                         <CardContent>
                             <Box
-                                component="form"
                                 sx={{
                                     '& > :not(style)': { m: 1 },
                                 }}
-                                noValidate
-                                autoComplete="off"
                             >
                                 <div className="row justify-center m-1">
                                     <div className="col-12 col-sm-6 d-block p-1">
@@ -208,7 +205,7 @@ export default function UserInfo() {
                                         </InputLabel>
                                         <TextField
                                             size="small"
-                                            fullWidth
+                                            fullWidth={true}
                                             sx={{
                                                 mt: 1,
                                                 mb: 1,
@@ -234,7 +231,7 @@ export default function UserInfo() {
                                         </InputLabel>
                                         <TextField
                                             size="small"
-                                            fullWidth
+                                            fullWidth={true}
                                             sx={{
                                                 mt: 1,
                                                 mb: 1,
@@ -260,7 +257,7 @@ export default function UserInfo() {
                                         </InputLabel>
                                         <TextField
                                             size="small"
-                                            fullWidth
+                                            fullWidth={true}
                                             sx={{
                                                 mt: 1,
                                                 mb: 1,
@@ -286,7 +283,7 @@ export default function UserInfo() {
                                         </InputLabel>
                                         <TextField
                                             size="small"
-                                            fullWidth
+                                            fullWidth={true}
                                             sx={{
                                                 mt: 1,
                                                 mb: 1,
@@ -310,7 +307,7 @@ export default function UserInfo() {
                                         </InputLabel>
                                         <TextField
                                             size="small"
-                                            fullWidth
+                                            fullWidth={true}
                                             sx={{
                                                 mt: 1,
                                                 mb: 1,
@@ -336,7 +333,7 @@ export default function UserInfo() {
                                         </InputLabel>
                                         <TextField
                                             size="small"
-                                            fullWidth
+                                            fullWidth={true}
                                             sx={{
                                                 mt: 1,
                                                 mb: 1,
@@ -364,7 +361,7 @@ export default function UserInfo() {
                                         </InputLabel>
                                         <FormControl
                                             size="small"
-                                            fullWidth
+                                            fullWidth={true}
                                             sx={{ mt: 1, mb: 1 }}
                                             variant="outlined"
                                             error

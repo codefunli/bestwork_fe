@@ -89,7 +89,7 @@ export default function QuiltedImage(props: {
                         if (index < 9) {
                             return props.isFile ? (
                                 props.isFilePreview ? (
-                                    <ImageListItem sx={{ height: '100% !important' }}>
+                                    <ImageListItem sx={{ height: '100% !important' }} key={index}>
                                         <Card>
                                             <CardHeader
                                                 sx={{ padding: 0.5 }}
@@ -114,7 +114,7 @@ export default function QuiltedImage(props: {
                                         </span>
                                     </ImageListItem>
                                 ) : item.type === 'pdf' ? (
-                                    <ImageListItem>
+                                    <ImageListItem key={index}>
                                         <Card>
                                             <CardHeader
                                                 sx={{ padding: 0.5 }}
@@ -202,7 +202,7 @@ export default function QuiltedImage(props: {
                                         <span className="text-center">{item.name}</span>
                                     </ImageListItem>
                                 ) : (
-                                    <ImageListItem>
+                                    <ImageListItem key={index}>
                                         <Card>
                                             <CardHeader
                                                 sx={{ padding: 0.5 }}
@@ -239,7 +239,7 @@ export default function QuiltedImage(props: {
                                     </ImageListItem>
                                 )
                             ) : (
-                                <ImageListItem>
+                                <ImageListItem key={index}>
                                     <Card>
                                         <CardHeader sx={{ padding: 0.5 }} className="card-img-overlay img-item" />
                                         {renderFile(item, index)}

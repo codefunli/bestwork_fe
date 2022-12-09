@@ -268,7 +268,7 @@ export default function ProjectSearch() {
                                                 </InputLabel>
                                                 <TextField
                                                     size="small"
-                                                    fullWidth
+                                                    fullWidth={true}
                                                     sx={{
                                                         mt: 1,
                                                         mb: 1,
@@ -290,7 +290,7 @@ export default function ProjectSearch() {
                                                 </InputLabel>
                                                 <FormControl
                                                     size="small"
-                                                    fullWidth
+                                                    fullWidth={true}
                                                     sx={{ mt: 1, mb: 1 }}
                                                     variant="outlined"
                                                 >

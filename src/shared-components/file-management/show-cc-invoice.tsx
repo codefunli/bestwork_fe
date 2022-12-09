@@ -17,7 +17,7 @@ import PreviewPDF from '../modal/view-pdf-modal';
 
 export default function ShowCustomsClearanceInvoice(props: {
     callBackFn: Function;
-    customsDeclaration: any;
+    customsDeclaration?: any;
     isLoading: string;
 }) {
     const { customsDeclaration, callBackFn, isLoading } = props;
@@ -67,147 +67,149 @@ export default function ShowCustomsClearanceInvoice(props: {
 
     return (
         <div className="image-manager-wrapper">
-            {isLoading === AWB_LOADING.HAS_DATA ? (
-                <ImageList className="image-list-scroll" cols={5} rowHeight={164}>
-                    {customsDeclaration &&
-                        customsDeclaration.invoicesDoc &&
-                        customsDeclaration.invoicesDoc.length > 0 &&
-                        customsDeclaration.invoicesDoc.map((item: any, index: number) => {
-                            return item.type === 'pdf' ? (
-                                <ImageListItem className="m-1">
-                                    <Card>
-                                        <CardHeader
-                                            sx={{ padding: 0.5 }}
-                                            className={`card-img-overlay img-item`}
-                                            action={
-                                                <React.Fragment>
-                                                    <IconButton
-                                                        onClick={handleClick}
-                                                        aria-label="settings"
-                                                        color="primary"
-                                                        size="large"
-                                                    >
-                                                        <MoreVertIcon color="primary" fontSize="inherit" />
-                                                    </IconButton>
-                                                    <Menu
-                                                        anchorEl={anchorEl}
-                                                        id="account-menu"
-                                                        open={open}
-                                                        onClose={handleClose}
-                                                        onClick={handleClose}
-                                                        PaperProps={{
-                                                            elevation: 0,
-                                                            sx: {
-                                                                overflow: 'visible',
-                                                                filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                                                                mt: 1.5,
-                                                                '& .MuiAvatar-root': {
-                                                                    width: 32,
-                                                                    height: 32,
-                                                                    ml: -0.5,
-                                                                    mr: 1,
-                                                                },
-                                                                '&:before': {
-                                                                    content: '""',
-                                                                    display: 'block',
-                                                                    position: 'absolute',
-                                                                    top: 0,
-                                                                    right: 14,
-                                                                    width: 10,
-                                                                    height: 10,
-                                                                    bgcolor: 'background.paper',
-                                                                    transform: 'translateY(-50%) rotate(45deg)',
-                                                                    zIndex: 0,
-                                                                },
-                                                            },
-                                                        }}
-                                                        transformOrigin={{
-                                                            horizontal: 'right',
-                                                            vertical: 'top',
-                                                        }}
-                                                        anchorOrigin={{
-                                                            horizontal: 'right',
-                                                            vertical: 'bottom',
-                                                        }}
-                                                    >
-                                                        {!item.isChoosen && permission?.canEdit && (
-                                                            <MenuItem
-                                                                onClick={
-                                                                    permission?.canEdit
-                                                                        ? () => handleRemoveCDFile(item)
-                                                                        : () => {}
-                                                                }
-                                                            >
-                                                                <ListItemIcon>
-                                                                    <RemoveCircleIcon fontSize="small" />
-                                                                </ListItemIcon>
-                                                                {t('button.btnRemove')}
-                                                            </MenuItem>
-                                                        )}
-                                                        <MenuItem onClick={() => handlePreviewPDF(item)}>
-                                                            <ListItemIcon>
-                                                                <VisibilityIcon fontSize="small" />
-                                                            </ListItemIcon>
-                                                            {t('button.btnPreview')}
-                                                        </MenuItem>
-                                                    </Menu>
-                                                </React.Fragment>
-                                            }
-                                        />
-                                        {renderFile(item, index)}
-                                    </Card>
-                                    <span
-                                        className="text-center card-img-overlay"
-                                        style={{
-                                            top: 140,
-                                            whiteSpace: 'nowrap',
-                                            overflow: 'hidden',
-                                            textOverflow: 'ellipsis',
-                                        }}
-                                    >
-                                        {item.name}
-                                    </span>
-                                </ImageListItem>
-                            ) : (
-                                <ImageListItem className="m-1">
-                                    <Card>
-                                        <CardHeader
-                                            sx={{ padding: 0.5 }}
-                                            className={`card-img-overlay img-item`}
-                                            action={
-                                                permission?.canEdit ? (
-                                                    <IconButton
-                                                        aria-label="settings"
-                                                        color="primary"
-                                                        onClick={(e) => handleRemoveCDFile(item)}
-                                                    >
-                                                        <RemoveCircleIcon color="primary" />
-                                                    </IconButton>
-                                                ) : (
-                                                    <React.Fragment></React.Fragment>
-                                                )
-                                            }
-                                        />
-                                        {renderFile(item, index)}
-                                    </Card>
-                                    <span
-                                        className="text-center card-img-overlay"
-                                        style={{
-                                            top: 140,
-                                            whiteSpace: 'nowrap',
-                                            overflow: 'hidden',
-                                            textOverflow: 'ellipsis',
-                                        }}
-                                    >
-                                        {item.name}
-                                    </span>
-                                </ImageListItem>
-                            );
-                        })}
-                </ImageList>
-            ) : (
-                isLoading === AWB_LOADING.LOADING && <Loading />
-            )}
+            {isLoading === AWB_LOADING.HAS_DATA
+                ? customsDeclaration &&
+                  customsDeclaration.invoicesDoc &&
+                  customsDeclaration.invoicesDoc.length > 0 && (
+                      <ImageList className="image-list-scroll" cols={5} rowHeight={164}>
+                          {customsDeclaration &&
+                              customsDeclaration.invoicesDoc &&
+                              customsDeclaration.invoicesDoc.length > 0 &&
+                              customsDeclaration.invoicesDoc.map((item: any, index: number) => {
+                                  return item.type === 'pdf' ? (
+                                      <ImageListItem className="m-1" key={index}>
+                                          <Card>
+                                              <CardHeader
+                                                  sx={{ padding: 0.5 }}
+                                                  className={`card-img-overlay img-item`}
+                                                  action={
+                                                      <React.Fragment>
+                                                          <IconButton
+                                                              onClick={handleClick}
+                                                              aria-label="settings"
+                                                              color="primary"
+                                                              size="large"
+                                                          >
+                                                              <MoreVertIcon color="primary" fontSize="inherit" />
+                                                          </IconButton>
+                                                          <Menu
+                                                              anchorEl={anchorEl}
+                                                              id="account-menu"
+                                                              open={open}
+                                                              onClose={handleClose}
+                                                              onClick={handleClose}
+                                                              PaperProps={{
+                                                                  elevation: 0,
+                                                                  sx: {
+                                                                      overflow: 'visible',
+                                                                      filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                                                                      mt: 1.5,
+                                                                      '& .MuiAvatar-root': {
+                                                                          width: 32,
+                                                                          height: 32,
+                                                                          ml: -0.5,
+                                                                          mr: 1,
+                                                                      },
+                                                                      '&:before': {
+                                                                          content: '""',
+                                                                          display: 'block',
+                                                                          position: 'absolute',
+                                                                          top: 0,
+                                                                          right: 14,
+                                                                          width: 10,
+                                                                          height: 10,
+                                                                          bgcolor: 'background.paper',
+                                                                          transform: 'translateY(-50%) rotate(45deg)',
+                                                                          zIndex: 0,
+                                                                      },
+                                                                  },
+                                                              }}
+                                                              transformOrigin={{
+                                                                  horizontal: 'right',
+                                                                  vertical: 'top',
+                                                              }}
+                                                              anchorOrigin={{
+                                                                  horizontal: 'right',
+                                                                  vertical: 'bottom',
+                                                              }}
+                                                          >
+                                                              {!item.isChoosen && permission?.canEdit && (
+                                                                  <MenuItem
+                                                                      onClick={
+                                                                          permission?.canEdit
+                                                                              ? () => handleRemoveCDFile(item)
+                                                                              : () => {}
+                                                                      }
+                                                                  >
+                                                                      <ListItemIcon>
+                                                                          <RemoveCircleIcon fontSize="small" />
+                                                                      </ListItemIcon>
+                                                                      {t('button.btnRemove')}
+                                                                  </MenuItem>
+                                                              )}
+                                                              <MenuItem onClick={() => handlePreviewPDF(item)}>
+                                                                  <ListItemIcon>
+                                                                      <VisibilityIcon fontSize="small" />
+                                                                  </ListItemIcon>
+                                                                  {t('button.btnPreview')}
+                                                              </MenuItem>
+                                                          </Menu>
+                                                      </React.Fragment>
+                                                  }
+                                              />
+                                              {renderFile(item, index)}
+                                          </Card>
+                                          <span
+                                              className="text-center card-img-overlay"
+                                              style={{
+                                                  top: 140,
+                                                  whiteSpace: 'nowrap',
+                                                  overflow: 'hidden',
+                                                  textOverflow: 'ellipsis',
+                                              }}
+                                          >
+                                              {item.name}
+                                          </span>
+                                      </ImageListItem>
+                                  ) : (
+                                      <ImageListItem className="m-1" key={index}>
+                                          <Card>
+                                              <CardHeader
+                                                  sx={{ padding: 0.5 }}
+                                                  className={`card-img-overlay img-item`}
+                                                  action={
+                                                      permission?.canEdit ? (
+                                                          <IconButton
+                                                              aria-label="settings"
+                                                              color="primary"
+                                                              onClick={(e) => handleRemoveCDFile(item)}
+                                                          >
+                                                              <RemoveCircleIcon color="primary" />
+                                                          </IconButton>
+                                                      ) : (
+                                                          <React.Fragment></React.Fragment>
+                                                      )
+                                                  }
+                                              />
+                                              {renderFile(item, index)}
+                                          </Card>
+                                          <span
+                                              className="text-center card-img-overlay"
+                                              style={{
+                                                  top: 140,
+                                                  whiteSpace: 'nowrap',
+                                                  overflow: 'hidden',
+                                                  textOverflow: 'ellipsis',
+                                              }}
+                                          >
+                                              {item.name}
+                                          </span>
+                                      </ImageListItem>
+                                  );
+                              })}
+                      </ImageList>
+                  )
+                : isLoading === AWB_LOADING.LOADING && <Loading />}
             <PreviewPDF
                 base64Url={base64Url}
                 title={t('title.previewPdf')}

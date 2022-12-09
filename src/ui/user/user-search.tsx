@@ -251,7 +251,7 @@ export default function UserSearch() {
                                         </InputLabel>
                                         <TextField
                                             size="small"
-                                            fullWidth
+                                            fullWidth={true}
                                             sx={{
                                                 mt: 1,
                                                 mb: 1,
@@ -267,7 +267,12 @@ export default function UserSearch() {
                                     </div>
                                     <div className="col-12 d-block p-1">
                                         <InputLabel htmlFor="role">{t('user.info.role')}</InputLabel>
-                                        <FormControl size="small" fullWidth sx={{ mt: 1, mb: 1 }} variant="outlined">
+                                        <FormControl
+                                            size="small"
+                                            fullWidth={true}
+                                            sx={{ mt: 1, mb: 1 }}
+                                            variant="outlined"
+                                        >
                                             <Select
                                                 name="role"
                                                 value={formValues.role}
@@ -293,7 +298,12 @@ export default function UserSearch() {
                                     </div>
                                     <div className="col-12 d-block p-1">
                                         <InputLabel htmlFor="isBlocked">{t('user.search.status')}</InputLabel>
-                                        <FormControl size="small" fullWidth sx={{ mt: 1, mb: 1 }} variant="outlined">
+                                        <FormControl
+                                            size="small"
+                                            fullWidth={true}
+                                            sx={{ mt: 1, mb: 1 }}
+                                            variant="outlined"
+                                        >
                                             <Select
                                                 name="status"
                                                 value={formValues.status}

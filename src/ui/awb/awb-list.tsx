@@ -12,6 +12,7 @@ import {
     Tab,
     Tabs,
     TextField,
+    Tooltip,
     Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
@@ -71,6 +72,7 @@ import ShowCustomsClearanceInvoice from '../../shared-components/file-management
 import ShowCustomsClearancePackingList from '../../shared-components/file-management/show-cc-packing-list';
 import TabPanel from '../../shared-components/tab-manager/tab-panel';
 import CreateAwb from './awb-create';
+import EditAwb from './awb-edit';
 import './awb.scss';
 
 export const CommercialInvoiceContext = createContext([]);
@@ -78,6 +80,7 @@ export const PackingListContext = createContext([]);
 export const ImageBeforeContext = createContext([]);
 export const ImageAfterContext = createContext([]);
 export const PermissionContext = createContext({});
+export const AwbDataContext = createContext({});
 
 export default function AirWayBillList() {
     const { t } = useTranslation();
@@ -89,7 +92,9 @@ export default function AirWayBillList() {
     const [searchKeyword, setSearchKeyword] = useState('');
     const [customsDeclarationDocumentState, setCustomsDeclarationDocumentState] = useState<any>({});
     const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);
+    const [isOpenEditModal, setIsOpenEditModal] = useState(false);
     const toggleCreateModal = (value: boolean) => setIsOpenCreateModal(value);
+    const toggleEditModal = (value: boolean) => setIsOpenEditModal(value);
     const [resForHandleMsg, setResForHandleMsg] = useState<any>();
     const [statusListState, setStatusListState] = useState<any>([]);
     const airWayBillListRedux = useSelector(getAirWayBillList);
@@ -109,11 +114,12 @@ export default function AirWayBillList() {
     const [isLoading, setIsLoading] = useState(AWB_LOADING.LOADING);
     const [isLoadingCCD, setIsLoadingCCD] = useState(AWB_LOADING.LOADING);
     const userInfo = useSelector(getUserInfo);
-    const [permission, setPermission] = useState<Permission>();
+    const [permission, setPermission] = useState<any>();
+    const [currentAwbData, setCurrentAwbData] = useState<any>();
 
     useEffect(() => {
-        if (userInfo && userInfo.permissions && userInfo.permissions[4] && userInfo.permissions[4][0]) {
-            setPermission(userInfo.permissions[4][0]);
+        if (userInfo && userInfo.project && userInfo.project[0]) {
+            setPermission(userInfo.project[0]);
         }
     }, [userInfo]);
 
@@ -140,6 +146,13 @@ export default function AirWayBillList() {
                 setIsLoading(AWB_LOADING.NO_DATA);
             }, 1000);
         } else {
+            setCurrentAwbData({
+                id: awbList.data[0].id,
+                code: awbList.data[0].code,
+                note: awbList.data[0].note,
+                status: awbList.data[0].status,
+            });
+
             // save AWB data into the redux
             dispatch(customsClearanceActions.setAirWayBillList(awbList.data));
             setCurrentAwbId(awbList.data[0].id);
@@ -284,14 +297,20 @@ export default function AirWayBillList() {
     };
 
     // fetch data when change AWB code
-    const handleChangeAwbTab = (newValue: number, awbId: string, awbCode: string) => {
-        setCurrentAwbCode(awbCode);
+    const handleChangeAwbTab = (newValue: number, awb: any) => {
+        setCurrentAwbCode(awb.code);
         setIsLoading(AWB_LOADING.LOADING);
         setIsLoadingCCD(AWB_LOADING.LOADING);
         clearData();
         setAwbTab(newValue);
-        setCurrentAwbId(awbId);
-        filterByAirWayBillId(awbId);
+        setCurrentAwbId(awb.id);
+        filterByAirWayBillId(awb.id);
+        setCurrentAwbData({
+            id: awb.id,
+            code: awb.code,
+            note: awb.note,
+            status: awb.status,
+        });
     };
 
     // search awb code
@@ -338,21 +357,29 @@ export default function AirWayBillList() {
     const handleCreateAwb = () => {
         fetchAirWayBillAPI(projectId).then((res: any) => {
             dispatch(customsClearanceActions.setAirWayBillList(res.data));
-            handleChangeAwbTab(
-                airWayBillListRedux.length,
-                res.data[res.data.length - 1].id,
-                res.data[res.data.length - 1].code,
-            );
+            handleChangeAwbTab(airWayBillListRedux.length, res.data[res.data.length - 1]);
+        });
+    };
+
+    const handleEditAwb = () => {
+        fetchAirWayBillAPI(projectId).then((res: any) => {
+            dispatch(customsClearanceActions.setAirWayBillList(res.data));
+            console.log(res.data[res.data.length - 1]);
+
+            handleChangeAwbTab(awbTab, res.data[res.data.length - 1]);
         });
     };
 
     const handleUploadInvoice = (fileData: any) => {
         let formData = new FormData();
 
-        if (fileData && fileData.file && fileData.file.length > 0)
+        if (fileData && fileData.file && fileData.file.length > 0) {
             fileData.file.forEach((data: any) => {
                 formData.append('file', data);
             });
+        } else {
+            formData.append('file', new Blob());
+        }
 
         setIsLoading(AWB_LOADING.LOADING);
         uploadCommercialInvoice(formData, fileData.description, currentAwbId)
@@ -383,10 +410,13 @@ export default function AirWayBillList() {
 
     const handleUploadPackingList = (fileData: any) => {
         let formData = new FormData();
-        if (fileData && fileData.file && fileData.file.length > 0)
+        if (fileData && fileData.file && fileData.file.length > 0) {
             fileData.file.forEach((data: any) => {
                 formData.append('file', data);
             });
+        } else {
+            formData.append('file', new Blob());
+        }
         setIsLoading(AWB_LOADING.LOADING);
         uploadPackingList(formData, fileData.description, currentAwbId)
             .then((res) => {
@@ -417,10 +447,13 @@ export default function AirWayBillList() {
     const handleUploadImageBefore = (imageData: any) => {
         let formData = new FormData();
         setIsLoading(AWB_LOADING.LOADING);
-        if (imageData && imageData.file && imageData.file.length > 0)
+        if (imageData && imageData.file && imageData.file.length > 0) {
             imageData.file.forEach((data: any) => {
                 formData.append('mFiles', data);
             });
+        } else {
+            formData.append('mFiles', new Blob());
+        }
         formData.append(
             'evidenceBefore',
             new Blob([JSON.stringify({ awbId: currentAwbId, description: imageData.description })], {
@@ -457,10 +490,13 @@ export default function AirWayBillList() {
     const handleUploadImageAfter = (imageData: any) => {
         let formData = new FormData();
         setIsLoading(AWB_LOADING.LOADING);
-        if (imageData && imageData.file && imageData.file.length > 0)
+        if (imageData && imageData.file && imageData.file.length > 0) {
             imageData.file.forEach((data: any) => {
                 formData.append('mFiles', data);
             });
+        } else {
+            formData.append('mFiles', new Blob());
+        }
         formData.append(
             'evidenceAfter',
             new Blob([JSON.stringify({ airWayBillId: currentAwbId, description: imageData.description })], {
@@ -520,7 +556,7 @@ export default function AirWayBillList() {
                         fetchPackingListApi(currentAwbId).then((res: any) => {
                             dispatch(customsClearanceActions.setPackingList(res.data));
                         });
-                    } else if (data.postType === 'imageBefore') {
+                    } else if (data.postType === CUSTOMS_CLEARANCE.IMAGE_BEFORE) {
                         fetchImageBefore(currentAwbId).then((res: any) => {
                             dispatch(customsClearanceActions.setImageBefore(res.data));
                         });
@@ -545,7 +581,7 @@ export default function AirWayBillList() {
         });
     }, []);
 
-    const handleStatusChange = (statusChange: string, awbCode: string) => {
+    const handleStatusChange = (statusChange: string, awbCode: string, event: any) => {
         const convertData = {
             destinationStatus: statusChange,
         };
@@ -559,6 +595,8 @@ export default function AirWayBillList() {
             }
             return currentAwb;
         });
+
+        setAwbListData(handleAirWayBillListRedux);
         dispatch(customsClearanceActions.setAirWayBillList(handleAirWayBillListRedux));
         changeAwbStatus(convertData, awbCode)
             .then((res) => {
@@ -789,12 +827,12 @@ export default function AirWayBillList() {
                                                 <div className="search-area mb-3">
                                                     <TextField
                                                         size="small"
-                                                        fullWidth
                                                         sx={{
                                                             mt: 1,
                                                             mb: 1,
                                                             '& legend': { display: 'none' },
                                                             '& fieldset': { top: 0 },
+                                                            width: '100%',
                                                         }}
                                                         name="keyword"
                                                         label=""
@@ -806,52 +844,41 @@ export default function AirWayBillList() {
                                                         <SearchIcon />
                                                     </Button>
                                                 </div>
-                                                <Tabs
-                                                    orientation="vertical"
-                                                    value={awbTab}
-                                                    aria-label=""
-                                                    sx={{
-                                                        borderRight: 1,
-                                                        borderColor: 'divider',
-                                                        maxHeight: 320,
-                                                        '& .MuiTabs-scroller': { overflow: 'auto !important' },
-                                                    }}
-                                                >
-                                                    {awbListData &&
-                                                        awbListData.map((awb: any, index: any) => (
-                                                            <span
-                                                                style={{
-                                                                    backgroundColor: `${
-                                                                        awbTab === index ? '#1976d22a' : ''
-                                                                    }`,
-                                                                    minWidth: '450px',
-                                                                }}
-                                                                className="btn"
-                                                                onClick={
-                                                                    isLoading === AWB_LOADING.LOADING ||
-                                                                    isLoadingCCD === AWB_LOADING.LOADING
-                                                                        ? () => {}
-                                                                        : () =>
-                                                                              handleChangeAwbTab(
-                                                                                  index,
-                                                                                  awb.id,
-                                                                                  awb.code,
-                                                                              )
-                                                                }
+                                                {awbListData &&
+                                                    awbListData.map((awb: any, index: any) => (
+                                                        <div
+                                                            key={awb.id}
+                                                            style={{
+                                                                backgroundColor: `${
+                                                                    awbTab === index ? '#1976d22a' : ''
+                                                                }`,
+                                                                minWidth: '450px',
+                                                                width: '100%',
+                                                            }}
+                                                            className="btn"
+                                                            onClick={
+                                                                isLoading === AWB_LOADING.LOADING ||
+                                                                isLoadingCCD === AWB_LOADING.LOADING
+                                                                    ? () => {}
+                                                                    : () => handleChangeAwbTab(index, awb)
+                                                            }
+                                                        >
+                                                            <div
+                                                                className="float-end"
+                                                                style={{ width: '25%', paddingTop: '0.3rem' }}
                                                             >
-                                                                <div
-                                                                    className="float-end"
-                                                                    style={{ width: '25%', paddingTop: '0.3rem' }}
-                                                                >
+                                                                {statusListState && statusListState.length > 0 && (
                                                                     <FormControl sx={{ width: '100%' }}>
                                                                         <Select
                                                                             labelId="demo-simple-select-autowidth-label"
                                                                             id="demo-simple-select-autowidth"
                                                                             value={awb.status}
+                                                                            defaultValue=""
                                                                             onChange={(e) =>
                                                                                 handleStatusChange(
                                                                                     e.target.value,
                                                                                     awb.id,
+                                                                                    e,
                                                                                 )
                                                                             }
                                                                             label="status"
@@ -878,31 +905,41 @@ export default function AirWayBillList() {
                                                                                 })}
                                                                         </Select>
                                                                     </FormControl>
-                                                                </div>
-                                                                <div className="float-end" style={{ width: '25%' }}>
-                                                                    <Tab
-                                                                        key={index}
-                                                                        label={formatDateTimeResList(awb.createDate)}
-                                                                        className="awb-tab"
-                                                                    />
-                                                                </div>
-                                                                <div className="float-end" style={{ width: '25%' }}>
-                                                                    <Tab
-                                                                        key={index}
-                                                                        label={awb.createBy}
-                                                                        className="awb-tab"
-                                                                    />
-                                                                </div>
-                                                                <div className="float-end" style={{ width: '25%' }}>
+                                                                )}
+                                                            </div>
+                                                            <div className="float-end" style={{ width: '25%' }}>
+                                                                <Tab
+                                                                    key={index}
+                                                                    label={formatDateTimeResList(awb.createDate)}
+                                                                    className="awb-tab"
+                                                                />
+                                                            </div>
+                                                            <div className="float-end" style={{ width: '25%' }}>
+                                                                <Tab
+                                                                    key={index}
+                                                                    label={awb.createBy}
+                                                                    className="awb-tab"
+                                                                />
+                                                            </div>
+                                                            <div
+                                                                className="float-end"
+                                                                style={{
+                                                                    width: '25%',
+                                                                    whiteSpace: 'nowrap',
+                                                                    overflow: 'hidden',
+                                                                    textOverflow: 'ellipsis',
+                                                                }}
+                                                            >
+                                                                <Tooltip title={awb.code} placement="top">
                                                                     <Tab
                                                                         key={index}
                                                                         label={awb.code}
                                                                         className="awb-tab"
                                                                     />
-                                                                </div>
-                                                            </span>
-                                                        ))}
-                                                </Tabs>
+                                                                </Tooltip>
+                                                            </div>
+                                                        </div>
+                                                    ))}
                                             </div>
                                             <div className="text-center justify-center mt-4">
                                                 <ButtonGroup
@@ -921,6 +958,16 @@ export default function AirWayBillList() {
                                                         }
                                                     >
                                                         {t('button.btnCreate')}
+                                                    </Button>
+                                                    <Button
+                                                        sx={{ mr: 1 }}
+                                                        variant="contained"
+                                                        disabled={!permission?.canEdit}
+                                                        onClick={
+                                                            permission?.canEdit ? () => toggleEditModal(true) : () => {}
+                                                        }
+                                                    >
+                                                        {t('button.btnEdit')}
                                                     </Button>
                                                 </ButtonGroup>
                                             </div>
@@ -1070,7 +1117,7 @@ export default function AirWayBillList() {
                                     onFocus={() => handleChangeCustomsClearanceTab(3)}
                                 />
                             </Tabs>
-                            <Grid xs={12} className="position-relative">
+                            <Grid item xs={12} className="position-relative">
                                 <div>
                                     <Card w-full="true" className="">
                                         <TabPanel value={customsClearanceTab} index={0}>
@@ -1176,14 +1223,25 @@ export default function AirWayBillList() {
                     </Grid>
                 </Grid>
             </Grid>
-            {permission?.canEdit && (
-                <CreateAwb
-                    isOpen={isOpenCreateModal}
-                    toggleOpen={toggleCreateModal}
-                    handleCreateNewAwb={handleCreateAwb}
-                    projectId={projectId}
-                />
-            )}
+            {permission?.canEdit &&
+                (isOpenCreateModal ? (
+                    <CreateAwb
+                        isOpen={isOpenCreateModal}
+                        toggleOpen={toggleCreateModal}
+                        handleCreateNewAwb={handleCreateAwb}
+                        projectId={projectId}
+                    />
+                ) : (
+                    <AwbDataContext.Provider value={currentAwbData}>
+                        <EditAwb
+                            isOpen={isOpenEditModal}
+                            toggleOpen={toggleEditModal}
+                            handleCreateNewAwb={handleEditAwb}
+                            projectId={projectId}
+                        />
+                    </AwbDataContext.Provider>
+                ))}
+
             <ApiAlert response={resForHandleMsg} />
         </div>
     );

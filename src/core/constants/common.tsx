@@ -138,6 +138,7 @@ export const UrlServer = {
     AWB: {
         GET_STATUS: `${PREFIX_SERVER_URL}/airway-bill/status`,
         CREATE_AWB: `${PREFIX_SERVER_URL}/airway-bill/create`,
+        EDIT_AWB: `${PREFIX_SERVER_URL}/airway-bill`,
         GET_AWB_BY_PROJECT_ID: `${PREFIX_SERVER_URL}/airway-bill/list/by`,
         UPDATE_INVOICE: `${PREFIX_SERVER_URL}/invoices/update-invoice`,
         GET_ALL_INVOICE: `${PREFIX_SERVER_URL}/invoices/list/by`,
