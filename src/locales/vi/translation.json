@@ -426,7 +426,10 @@
             "colAWB": "Hóa đơn vận chuyển",
             "colStatus": "Trạng thái",
             "colLocation": "Địa điểm",
-            "colDescription": "Mô tả"
+            "colDescription": "Mô tả",
+            "colBrand": "Công ty",
+            "colProjectName": "Tên dự án",
+            "colNation": "Quốc gia"
         },
         "search": {
             "title": "Tìm kiếm thông tin công trình",
@@ -448,7 +451,8 @@
             "cttLocation": "Địa điểm",
             "cttDraw": "Bản vẽ",
             "cttAwb": "Hóa đơn vận chuyển",
-            "cttDescription": "Mô tả"
+            "cttDescription": "Mô tả",
+            "cttNation": "Quốc gia"
         },
         "edit": {
             "title": "Chỉnh sửa công trình"

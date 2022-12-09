@@ -197,6 +197,7 @@ export const FieldConstants = {
     LOCATION: 'Location',
     AWB: 'AWB',
     URL: 'Url',
+    NATION: 'Nationality',
 };
 
 export const ConfirmConstants = {
@@ -351,6 +352,7 @@ export const Item = {
         RU_DRAWING: 'construction.register.cttDraw',
         RU_AWB: 'construction.register.cttAwb',
         RU_DESCRIPTION: 'construction.register.cttDescription',
+        RU_NATION: 'construction.register.cttNation',
     },
     ICON_URL: {
         ICON_DASHBOARD_NM_BAR: '/app/dashboard',

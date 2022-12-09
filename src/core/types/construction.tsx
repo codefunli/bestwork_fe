@@ -49,4 +49,22 @@ export const headConstructionCol: HeadColumn[] = [
         disablePadding: false,
         label: 'construction.table.colDescription',
     },
+    {
+        id: 'brand',
+        numeric: false,
+        disablePadding: false,
+        label: 'construction.table.colBrand',
+    },
+    {
+        id: 'projectName',
+        numeric: false,
+        disablePadding: false,
+        label: 'construction.table.colProjectName',
+    },
+    {
+        id: 'nation',
+        numeric: false,
+        disablePadding: false,
+        label: 'construction.table.colNation',
+    },
 ];
