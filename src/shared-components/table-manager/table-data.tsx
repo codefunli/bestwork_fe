@@ -279,14 +279,16 @@ export default function EnhancedTable(props: EnhancedTable) {
                                                                     title={arrBtn.nameFn}
                                                                     placement="top-start"
                                                                 >
-                                                                    <IconButton
-                                                                        size="small"
-                                                                        color="primary"
-                                                                        aria-label="add to shopping cart"
-                                                                        disabled
-                                                                    >
-                                                                        {renderIcon(arrBtn.iconFn)}
-                                                                    </IconButton>
+                                                                    <span>
+                                                                        <IconButton
+                                                                            size="small"
+                                                                            color="primary"
+                                                                            aria-label="add to shopping cart"
+                                                                            disabled
+                                                                        >
+                                                                            {renderIcon(arrBtn.iconFn)}
+                                                                        </IconButton>
+                                                                    </span>
                                                                 </Tooltip>
                                                             ) : (
                                                                 <Tooltip
@@ -338,14 +340,16 @@ export default function EnhancedTable(props: EnhancedTable) {
                                                                     title={arrBtn.nameFn}
                                                                     placement="top-start"
                                                                 >
-                                                                    <IconButton
-                                                                        size="small"
-                                                                        color="primary"
-                                                                        aria-label="add to shopping cart"
-                                                                        disabled
-                                                                    >
-                                                                        {renderIcon(arrBtn.iconFn)}
-                                                                    </IconButton>
+                                                                    <span>
+                                                                        <IconButton
+                                                                            size="small"
+                                                                            color="primary"
+                                                                            aria-label="add to shopping cart"
+                                                                            disabled
+                                                                        >
+                                                                            {renderIcon(arrBtn.iconFn)}
+                                                                        </IconButton>
+                                                                    </span>
                                                                 </Tooltip>
                                                             )
                                                         ) : (
@@ -378,14 +382,16 @@ export default function EnhancedTable(props: EnhancedTable) {
                                                             title={arrBtn.nameFn}
                                                             placement="top-start"
                                                         >
-                                                            <IconButton
-                                                                size="small"
-                                                                color="primary"
-                                                                aria-label="add to shopping cart"
-                                                                disabled
-                                                            >
-                                                                {renderIcon(arrBtn.iconFn)}
-                                                            </IconButton>
+                                                            <span>
+                                                                <IconButton
+                                                                    size="small"
+                                                                    color="primary"
+                                                                    aria-label="add to shopping cart"
+                                                                    disabled
+                                                                >
+                                                                    {renderIcon(arrBtn.iconFn)}
+                                                                </IconButton>
+                                                            </span>
                                                         </Tooltip>
                                                     ) : (
                                                         <Tooltip

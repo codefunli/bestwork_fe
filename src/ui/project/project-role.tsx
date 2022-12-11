@@ -186,12 +186,9 @@ export default function Role(props: Role) {
     return (
         <div className="role">
             <Box
-                // component="form"
                 sx={{
                     '& > :not(style)': { m: 1 },
                 }}
-                // noValidate
-                // autoComplete="off"
                 className="content-area"
             >
                 <div className="row">
@@ -253,11 +250,14 @@ export default function Role(props: Role) {
                                     <TableHead>
                                         <TableRow>
                                             <TableCell>
-                                                <b>User</b>
+                                                <b>{t('menu.user')}</b>
                                             </TableCell>
-                                            <TableCell align="center">All</TableCell>
-                                            <TableCell align="center">View</TableCell>
-                                            <TableCell align="center">Edit</TableCell>
+                                            <TableCell>
+                                                <b>{t('menu.role')}</b>
+                                            </TableCell>
+                                            <TableCell align="center">{t('role.tab.all')}</TableCell>
+                                            <TableCell align="center">{t('role.tab.view')}</TableCell>
+                                            <TableCell align="center">{t('role.tab.edit')}</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -273,6 +273,7 @@ export default function Role(props: Role) {
                                                     <TableCell component="th" scope="row">
                                                         {user.userName}
                                                     </TableCell>
+                                                    <TableCell>{user.roleName}</TableCell>
                                                     <TableCell align="center">
                                                         <Checkbox
                                                             checked={user.canView && user.canEdit}

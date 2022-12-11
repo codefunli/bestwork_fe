@@ -266,12 +266,9 @@ export default function ProjectRegister() {
                                         <TabPanel value={value} index={0}>
                                             <CardContent>
                                                 <Box
-                                                    // component="form"
                                                     sx={{
                                                         '& > :not(style)': { m: 1 },
                                                     }}
-                                                    // noValidate
-                                                    // autoComplete="off"
                                                 >
                                                     <div className="row justify-center m-1">
                                                         <div className="col-12 col-sm-6 d-block p-1">

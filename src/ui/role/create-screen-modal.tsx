@@ -77,7 +77,12 @@ export default function CreateScreenModal(props: CreateRoleModalProps) {
     return (
         <Dialog open={isOpen} onClose={handleCancel} keepMounted fullWidth maxWidth="sm">
             <DialogTitle>{t('create_screen.title')}</DialogTitle>
-            <DialogContent>
+            <Box
+                sx={{
+                    p: '0 24px 20px 24px',
+                    overflowY: 'auto',
+                }}
+            >
                 <div>
                     <InputLabel htmlFor="name" error={Boolean(errors.name)}>
                         {t('create_screen.modal.name')} <span className="input-required">*</span>
@@ -135,12 +140,12 @@ export default function CreateScreenModal(props: CreateRoleModalProps) {
                         {t('create_screen.modal.icon')}
                     </InputLabel>
                     <Box
-                        w-fullWidth
                         component="form"
                         sx={{
                             p: '2px 4px',
                             display: 'flex',
                             alignItems: 'center',
+                            width: '100%',
                         }}
                     >
                         <TextField
@@ -173,7 +178,7 @@ export default function CreateScreenModal(props: CreateRoleModalProps) {
                         <IconGuide />
                     </Box>
                 </div>
-            </DialogContent>
+            </Box>
             <DialogActions>
                 <Button variant="outlined" onClick={handleCancel}>
                     {t('button.btnCancel')}

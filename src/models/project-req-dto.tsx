@@ -1,30 +1,31 @@
 interface RoleData {
-    companyId: string,
+    companyId: string;
     userList: [
         {
-            userId: number,
-            canView: boolean,
-            canEdit: boolean
-        }
-    ]
+            userId: number;
+            canView: boolean;
+            canEdit: boolean;
+        },
+    ];
 }
 
 export interface CreateProjectDTO {
     project: {
-        projectName: string,
-        description: string,
-        notificationFlag: string,
-        isPaid: string,
-        status: string,
-        projectType: string,
-        createDate: string
-    },
-    roleData?: RoleData[]
+        projectName: string;
+        description: string;
+        notificationFlag: string;
+        isPaid: string;
+        status: string;
+        projectType: string;
+        createDate: string;
+    };
+    roleData?: RoleData[];
 }
 
 export interface User {
     userId: number;
     userName: string;
+    roleName: string;
     canView: boolean;
     canEdit: boolean;
 }
@@ -32,5 +33,5 @@ export interface User {
 export interface Company {
     id: number;
     companyName: string;
-    userList?: User[]
+    userList?: User[];
 }
