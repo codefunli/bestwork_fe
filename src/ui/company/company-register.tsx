@@ -235,6 +235,7 @@ export default function CompanyRegister() {
                                                     {...register('companyName', {
                                                         onChange: (e) => handleInputChangeCompany(e),
                                                     })}
+                                                    autoComplete="off"
                                                 />
                                             </div>
                                             <div className="col-12 col-sm-6 d-block p-1">
@@ -261,6 +262,7 @@ export default function CompanyRegister() {
                                                     {...register('cpEmail', {
                                                         onChange: (e) => handleInputChangeCompany(e),
                                                     })}
+                                                    autoComplete="off"
                                                 />
                                             </div>
                                         </div>
@@ -288,6 +290,7 @@ export default function CompanyRegister() {
                                                     {...register('cpTelNo', {
                                                         onChange: (e) => handleInputChangeCompany(e),
                                                     })}
+                                                    autoComplete="off"
                                                 />
                                             </div>
                                             <div className="col-12 col-sm-6 d-block p-1">
@@ -314,6 +317,7 @@ export default function CompanyRegister() {
                                                     {...register('taxNo', {
                                                         onChange: (e) => handleInputChangeCompany(e),
                                                     })}
+                                                    autoComplete="off"
                                                 />
                                             </div>
                                         </div>
@@ -341,6 +345,7 @@ export default function CompanyRegister() {
                                                     {...register('national', {
                                                         onChange: (e) => handleInputChangeCompany(e),
                                                     })}
+                                                    autoComplete="off"
                                                 />
                                             </div>
                                         </div>
@@ -363,6 +368,7 @@ export default function CompanyRegister() {
                                                     label=""
                                                     placeholder={t(Item.COMMON.PLACE_HOLDER)}
                                                     onChange={handleInputChangeCompany}
+                                                    autoComplete="off"
                                                 />
                                             </div>
                                             <div className="col-12 col-sm-6 p-1">
@@ -385,6 +391,7 @@ export default function CompanyRegister() {
                                                     label=""
                                                     placeholder={t(Item.COMMON.PLACE_HOLDER)}
                                                     onChange={handleInputChangeCompany}
+                                                    autoComplete="off"
                                                 />
                                             </div>
                                         </div>
@@ -407,6 +414,7 @@ export default function CompanyRegister() {
                                                     label=""
                                                     placeholder={t(Item.COMMON.PLACE_HOLDER)}
                                                     onChange={handleInputChangeCompany}
+                                                    autoComplete="off"
                                                 />
                                             </div>
                                             <div className="col-12 col-sm-6 d-block p-1">
@@ -426,6 +434,7 @@ export default function CompanyRegister() {
                                                     id="street"
                                                     placeholder={t(Item.COMMON.PLACE_HOLDER)}
                                                     onChange={handleInputChangeCompany}
+                                                    autoComplete="off"
                                                 />
                                             </div>
                                         </div>
@@ -454,6 +463,7 @@ export default function CompanyRegister() {
                                                     {...register('startDate', {
                                                         onChange: (e) => handleInputChangeCompany(e),
                                                     })}
+                                                    autoComplete="off"
                                                 />
                                             </div>
                                             <div className="col-12 col-sm-6 d-block p-1">
@@ -480,6 +490,7 @@ export default function CompanyRegister() {
                                                     {...register('expiredDate', {
                                                         onChange: (e) => handleInputChangeCompany(e),
                                                     })}
+                                                    autoComplete="off"
                                                 />
                                             </div>
                                         </div>
@@ -530,6 +541,7 @@ export default function CompanyRegister() {
                                                     {...register('userName', {
                                                         onChange: (e) => handleInputChangeUser(e),
                                                     })}
+                                                    autoComplete="off"
                                                 />
                                             </div>
                                             <div className="col-12 col-sm-6 d-block p-1">
@@ -593,6 +605,7 @@ export default function CompanyRegister() {
                                                     id="firstName"
                                                     placeholder={t(Item.COMMON.PLACE_HOLDER)}
                                                     onChange={handleInputChangeUser}
+                                                    autoComplete="off"
                                                 />
                                             </div>
                                             <div className="col-12 col-sm-6 d-block p-1">
@@ -613,6 +626,7 @@ export default function CompanyRegister() {
                                                     id="lastName"
                                                     placeholder={t(Item.COMMON.PLACE_HOLDER)}
                                                     onChange={handleInputChangeUser}
+                                                    autoComplete="off"
                                                 />
                                             </div>
                                         </div>
@@ -640,6 +654,7 @@ export default function CompanyRegister() {
                                                     {...register('uTelNo', {
                                                         onChange: (e) => handleInputChangeUser(e),
                                                     })}
+                                                    autoComplete="off"
                                                 />
                                             </div>
                                         </div>
@@ -666,6 +681,7 @@ export default function CompanyRegister() {
                                                     {...register('uEmail', {
                                                         onChange: (e) => handleInputChangeUser(e),
                                                     })}
+                                                    autoComplete="off"
                                                 />
                                             </div>
                                         </div>

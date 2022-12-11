@@ -271,6 +271,7 @@ export default function ProjectRegister() {
                                                                 {...register('projectName', {
                                                                     onChange: (e) => handleInputChange(e),
                                                                 })}
+                                                                autoComplete="off"
                                                             />
                                                         </div>
                                                         <div className="col-12 col-sm-6 d-block p-1">
@@ -301,6 +302,7 @@ export default function ProjectRegister() {
                                                                 {...register('description', {
                                                                     onChange: (e) => handleInputChange(e),
                                                                 })}
+                                                                autoComplete="off"
                                                             />
                                                         </div>
                                                     </div>
@@ -335,6 +337,7 @@ export default function ProjectRegister() {
                                                                 {...register('startDate', {
                                                                     onChange: (e) => handleInputChange(e),
                                                                 })}
+                                                                autoComplete="off"
                                                             />
                                                         </div>
                                                         <div className="col-12 col-sm-6 p-1">

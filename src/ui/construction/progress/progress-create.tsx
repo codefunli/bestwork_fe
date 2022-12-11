@@ -222,6 +222,7 @@ const ProgressCreate = (props: Props) => {
                                     {...register('title', {
                                         onChange: (e) => handleInputChange(e),
                                     })}
+                                    autoComplete="off"
                                 />
                             </div>
                         </Grid>
@@ -277,6 +278,7 @@ const ProgressCreate = (props: Props) => {
                                     {...register('startDate', {
                                         onChange: (e) => handleInputChange(e),
                                     })}
+                                    autoComplete="off"
                                 />
                                 <InputLabel htmlFor="outlined-adornment-amount" error={Boolean(errors.endDate)}>
                                     {t('project.progress.endDate')} <span className="input-required">*</span>
@@ -301,6 +303,7 @@ const ProgressCreate = (props: Props) => {
                                     {...register('endDate', {
                                         onChange: (e) => handleInputChange(e),
                                     })}
+                                    autoComplete="off"
                                 />
                             </div>
                         </Grid>
@@ -378,6 +381,7 @@ const ProgressCreate = (props: Props) => {
                                         shrink: true,
                                     }}
                                     onChange={handleInputChange}
+                                    autoComplete="off"
                                 />
                             </div>
                         </Grid>
@@ -404,6 +408,7 @@ const ProgressCreate = (props: Props) => {
                                         shrink: true,
                                     }}
                                     onChange={handleInputChange}
+                                    autoComplete="off"
                                 />
                             </div>
                         </Grid>

@@ -280,6 +280,7 @@ export default function ProjectSearch() {
                                                     name="keyword"
                                                     value={formValues.keyword}
                                                     onChange={handleInputChange}
+                                                    autoComplete="off"
                                                 />
                                             </div>
                                         </div>

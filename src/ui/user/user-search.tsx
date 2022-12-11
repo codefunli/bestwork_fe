@@ -263,6 +263,7 @@ export default function UserSearch() {
                                             placeholder={t('common.placeholder')}
                                             value={formValues.keyword}
                                             onChange={handleInputChange}
+                                            autoComplete="off"
                                         />
                                     </div>
                                     <div className="col-12 d-block p-1">

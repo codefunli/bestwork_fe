@@ -839,6 +839,7 @@ export default function AirWayBillList() {
                                                         placeholder={t('common.placeholder')}
                                                         value={searchKeyword}
                                                         onChange={(e) => setSearchKeyword(e.target.value)}
+                                                        autoComplete="off"
                                                     />
                                                     <Button variant="contained" onClick={handleSearch} color="primary">
                                                         <SearchIcon />

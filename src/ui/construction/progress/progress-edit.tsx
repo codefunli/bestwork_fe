@@ -227,6 +227,7 @@ const ProgressEdit = (props: Props) => {
                                             {...register('title', {
                                                 onChange: (e) => handleInputChange(e),
                                             })}
+                                            autoComplete="off"
                                         />
                                     </div>
                                 </Grid>
@@ -284,6 +285,7 @@ const ProgressEdit = (props: Props) => {
                                             {...register('startDate', {
                                                 onChange: (e) => handleInputChange(e),
                                             })}
+                                            autoComplete="off"
                                         />
                                         <InputLabel htmlFor="outlined-adornment-amount" error={Boolean(errors.endDate)}>
                                             {t('project.progress.endDate')} <span className="input-required">*</span>
@@ -309,6 +311,7 @@ const ProgressEdit = (props: Props) => {
                                             {...register('endDate', {
                                                 onChange: (e) => handleInputChange(e),
                                             })}
+                                            autoComplete="off"
                                         />
                                     </div>
                                 </Grid>
@@ -380,6 +383,7 @@ const ProgressEdit = (props: Props) => {
                                                 shrink: true,
                                             }}
                                             onChange={handleInputChange}
+                                            autoComplete="off"
                                         />
                                     </div>
                                 </Grid>
@@ -405,6 +409,7 @@ const ProgressEdit = (props: Props) => {
                                                 shrink: true,
                                             }}
                                             onChange={handleInputChange}
+                                            autoComplete="off"
                                         />
                                     </div>
                                 </Grid>

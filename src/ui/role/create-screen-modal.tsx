@@ -101,6 +101,7 @@ export default function CreateScreenModal(props: CreateRoleModalProps) {
                         {...register('name', {
                             onChange: (e) => handleInputChange(e),
                         })}
+                        autoComplete="off"
                     />
                 </div>
                 <div>
@@ -126,6 +127,7 @@ export default function CreateScreenModal(props: CreateRoleModalProps) {
                         {...register('url', {
                             onChange: (e) => handleInputChange(e),
                         })}
+                        autoComplete="off"
                     />
                 </div>
                 <div>

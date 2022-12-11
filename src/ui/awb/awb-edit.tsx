@@ -151,6 +151,7 @@ export default function EditAwb(props: CreateAwbProps) {
                             {...register('code', {
                                 onChange: (e) => handleInputChange(e),
                             })}
+                            autoComplete="off"
                         />
                     </div>
                     <div>
@@ -171,6 +172,7 @@ export default function EditAwb(props: CreateAwbProps) {
                             value={formValues.note}
                             name="note"
                             onChange={handleInputChange}
+                            autoComplete="off"
                         />
                     </div>
                     <div className="row justify-center">

@@ -392,6 +392,7 @@ export default function ConstructionSearch() {
                                                     '& fieldset': { top: 0 },
                                                     width: '100%',
                                                 }}
+                                                autoComplete="off"
                                                 id="outlined-required"
                                                 placeholder={t('common.placeholder')}
                                                 name="keyword"
@@ -469,6 +470,7 @@ export default function ConstructionSearch() {
                                                     name="location"
                                                     value={formValues.location}
                                                     onChange={handleInputChange}
+                                                    autoComplete="off"
                                                 />
                                             </div>
                                         </div>

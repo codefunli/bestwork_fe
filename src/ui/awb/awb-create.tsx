@@ -125,6 +125,7 @@ export default function CreateAwb(props: CreateAwbProps) {
                             required
                             id="code"
                             label=""
+                            autoComplete="off"
                             placeholder={t('common.placeholder')}
                             value={formValues.code}
                             error={Boolean(errors.code)}
@@ -152,6 +153,7 @@ export default function CreateAwb(props: CreateAwbProps) {
                             value={formValues.note}
                             name="note"
                             onChange={handleInputChange}
+                            autoComplete="off"
                         />
                     </div>
                     <div className="row justify-center">

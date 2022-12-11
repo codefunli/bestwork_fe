@@ -524,6 +524,7 @@ export default function Role() {
                                                 value={searchKeyword}
                                                 onChange={(e) => setSearchKeyword(e.target.value)}
                                                 onKeyDown={handleKeyDown}
+                                                autoComplete="off"
                                             />
                                             <Button
                                                 variant="contained"

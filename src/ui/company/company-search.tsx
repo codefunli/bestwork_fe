@@ -276,6 +276,7 @@ export default function CompanySearch(props: any) {
                                                 name="keyword"
                                                 value={formValues.keyword}
                                                 onChange={handleInputChange}
+                                                autoComplete="off"
                                             />
                                         </div>
                                     </div>

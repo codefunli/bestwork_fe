@@ -78,6 +78,7 @@ export default function CreateRoleModal(props: CreateRoleModalProps) {
                         {...register('roleName', {
                             onChange: (e) => handleInputChange(e),
                         })}
+                        autoComplete="off"
                     />
                 </div>
                 <div>
@@ -103,6 +104,7 @@ export default function CreateRoleModal(props: CreateRoleModalProps) {
                         {...register('description', {
                             onChange: (e) => handleInputChange(e),
                         })}
+                        autoComplete="off"
                     />
                 </div>
             </DialogContent>

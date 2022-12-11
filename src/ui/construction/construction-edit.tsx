@@ -300,6 +300,7 @@ export default function ConstructionEdit() {
                                         {...register('constructionName', {
                                             onChange: (e) => handleInputChange(e),
                                         })}
+                                        autoComplete="off"
                                     />
                                 </div>
                                 <div className="d-flex justify-content-start flex-column p-2 info-item">
@@ -322,6 +323,7 @@ export default function ConstructionEdit() {
                                         name="description"
                                         placeholder={t(Item.COMMON.PLACE_HOLDER)}
                                         onChange={(e) => handleInputChange(e)}
+                                        autoComplete="off"
                                     />
                                 </div>
                                 <div className="d-flex justify-content-start flex-column p-2 info-item">
@@ -349,6 +351,7 @@ export default function ConstructionEdit() {
                                         {...register('startDate', {
                                             onChange: (e) => handleInputChange(e),
                                         })}
+                                        autoComplete="off"
                                     />
                                 </div>
                                 <div className="d-flex justify-content-start flex-column p-2 info-item">
@@ -376,6 +379,7 @@ export default function ConstructionEdit() {
                                         {...register('endDate', {
                                             onChange: (e) => handleInputChange(e),
                                         })}
+                                        autoComplete="off"
                                     />
                                 </div>
                                 <div className="d-flex justify-content-start flex-column p-2 info-item">
@@ -433,6 +437,7 @@ export default function ConstructionEdit() {
                                         {...register('location', {
                                             onChange: (e) => handleInputChange(e),
                                         })}
+                                        autoComplete="off"
                                     />
                                 </div>
                                 <div className="d-flex justify-content-start flex-column p-2 info-item">

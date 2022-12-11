@@ -213,6 +213,7 @@ export default function CompanyEdit() {
                                                 {...register('companyName', {
                                                     onChange: (e) => handleInputChange(e),
                                                 })}
+                                                autoComplete="off"
                                             />
                                         </div>
                                         <div className="col-12 col-sm-6 d-block p-1">
@@ -240,6 +241,7 @@ export default function CompanyEdit() {
                                                 {...register('cpEmail', {
                                                     onChange: (e) => handleInputChange(e),
                                                 })}
+                                                autoComplete="off"
                                             />
                                         </div>
                                     </div>
@@ -268,6 +270,7 @@ export default function CompanyEdit() {
                                                 {...register('cpTelNo', {
                                                     onChange: (e) => handleInputChange(e),
                                                 })}
+                                                autoComplete="off"
                                             />
                                         </div>
                                         <div className="col-12 col-sm-6 d-block p-1">
@@ -295,6 +298,7 @@ export default function CompanyEdit() {
                                                 {...register('taxNo', {
                                                     onChange: (e) => handleInputChange(e),
                                                 })}
+                                                autoComplete="off"
                                             />
                                         </div>
                                     </div>
@@ -321,6 +325,7 @@ export default function CompanyEdit() {
                                                 error={Boolean(errors.national)}
                                                 helperText={errors.national?.message?.toString()}
                                                 onChange={handleInputChange}
+                                                autoComplete="off"
                                             />
                                         </div>
                                     </div>
@@ -345,6 +350,7 @@ export default function CompanyEdit() {
                                                 label=""
                                                 placeholder={t(Item.COMMON.PLACE_HOLDER)}
                                                 onChange={handleInputChange}
+                                                autoComplete="off"
                                             />
                                         </div>
                                         <div className="col-12 col-sm-6 p-1">
@@ -367,6 +373,7 @@ export default function CompanyEdit() {
                                                 label=""
                                                 placeholder={t(Item.COMMON.PLACE_HOLDER)}
                                                 onChange={handleInputChange}
+                                                autoComplete="off"
                                             />
                                         </div>
                                     </div>
@@ -391,6 +398,7 @@ export default function CompanyEdit() {
                                                 label=""
                                                 placeholder={t(Item.COMMON.PLACE_HOLDER)}
                                                 onChange={handleInputChange}
+                                                autoComplete="off"
                                             />
                                         </div>
                                         <div className="col-12 col-sm-6 d-block p-1">
@@ -410,6 +418,7 @@ export default function CompanyEdit() {
                                                 id="outlined-required"
                                                 placeholder={t(Item.COMMON.PLACE_HOLDER)}
                                                 onChange={handleInputChange}
+                                                autoComplete="off"
                                             />
                                         </div>
                                     </div>
@@ -441,6 +450,7 @@ export default function CompanyEdit() {
                                                 {...register('startDate', {
                                                     onChange: (e) => handleInputChange(e),
                                                 })}
+                                                autoComplete="off"
                                             />
                                         </div>
                                         <div className="col-12 col-sm-6 d-block p-1">
@@ -470,6 +480,7 @@ export default function CompanyEdit() {
                                                 {...register('expiredDate', {
                                                     onChange: (e) => handleInputChange(e),
                                                 })}
+                                                autoComplete="off"
                                             />
                                         </div>
                                     </div>
@@ -518,6 +529,7 @@ export default function CompanyEdit() {
                                                 {...register('userName', {
                                                     onChange: (e) => handleInputChange(e),
                                                 })}
+                                                autoComplete="off"
                                             />
                                         </div>
                                         <div className="col-12 col-sm-6 d-block p-1">
@@ -547,6 +559,7 @@ export default function CompanyEdit() {
                                                 {...register('password', {
                                                     onChange: (e) => handleInputChange(e),
                                                 })}
+                                                autoComplete="off"
                                             />
                                         </div>
                                     </div>
@@ -570,6 +583,7 @@ export default function CompanyEdit() {
                                                 id="outlined-required"
                                                 placeholder={t('common.placeholder')}
                                                 onChange={handleInputChange}
+                                                autoComplete="off"
                                             />
                                         </div>
                                         <div className="col-12 col-sm-6 d-block p-1">
@@ -591,6 +605,7 @@ export default function CompanyEdit() {
                                                 id="outlined-required"
                                                 placeholder={t('common.placeholder')}
                                                 onChange={handleInputChange}
+                                                autoComplete="off"
                                             />
                                         </div>
                                     </div>
@@ -620,6 +635,7 @@ export default function CompanyEdit() {
                                                 {...register('uTelNo', {
                                                     onChange: (e) => handleInputChange(e),
                                                 })}
+                                                autoComplete="off"
                                             />
                                         </div>
                                     </div>
@@ -649,6 +665,7 @@ export default function CompanyEdit() {
                                                 {...register('uEmail', {
                                                     onChange: (e) => handleInputChange(e),
                                                 })}
+                                                autoComplete="off"
                                             />
                                         </div>
                                     </div>

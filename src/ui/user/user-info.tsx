@@ -223,6 +223,7 @@ export default function UserInfo() {
                                                 onChange: (e) => handleInputChange(e),
                                             })}
                                             disabled={isLogedInUser}
+                                            autoComplete="off"
                                         />
                                     </div>
                                     <div className="col-12 col-sm-6 d-block p-1">
@@ -249,6 +250,7 @@ export default function UserInfo() {
                                                 onChange: (e) => handleInputChange(e),
                                             })}
                                             disabled={isLogedInUser}
+                                            autoComplete="off"
                                         />
                                     </div>
                                     <div className="col-12 col-sm-6 d-block p-1">
@@ -275,6 +277,7 @@ export default function UserInfo() {
                                                 onChange: (e) => handleInputChange(e),
                                             })}
                                             disabled={isLogedInUser}
+                                            autoComplete="off"
                                         />
                                     </div>
                                     <div className="col-12 col-sm-6 d-block p-1">
@@ -297,6 +300,7 @@ export default function UserInfo() {
                                             name="company"
                                             value={getCompanyName(formValues.company)}
                                             disabled
+                                            autoComplete="off"
                                         />
                                     </div>
                                 </div>
@@ -325,6 +329,7 @@ export default function UserInfo() {
                                                 onChange: (e) => handleInputChange(e),
                                             })}
                                             disabled={isLogedInUser}
+                                            autoComplete="off"
                                         />
                                     </div>
                                     <div className="col-12 col-sm-6 d-block p-1">
@@ -351,6 +356,7 @@ export default function UserInfo() {
                                                 onChange: (e) => handleInputChange(e),
                                             })}
                                             disabled={isLogedInUser}
+                                            autoComplete="off"
                                         />
                                     </div>
                                 </div>

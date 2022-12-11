@@ -239,6 +239,7 @@ export default function NotificationsSearch() {
                                                     name="keyword"
                                                     value={formValues.keyword}
                                                     onChange={handleInputChange}
+                                                    autoComplete="off"
                                                 />
                                             </div>
                                         </div>

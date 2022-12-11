@@ -228,6 +228,7 @@ export default function UserAdd() {
                                             {...register('userName', {
                                                 onChange: (e) => handleInputChange(e),
                                             })}
+                                            autoComplete="off"
                                         />
                                     </div>
                                     <div className="col-12 col-sm-6 d-block p-1">
@@ -295,6 +296,7 @@ export default function UserAdd() {
                                             {...register('uEmail', {
                                                 onChange: (e) => handleInputChange(e),
                                             })}
+                                            autoComplete="off"
                                         />
                                     </div>
                                     <div className="col-12 col-sm-6 d-block p-1">
@@ -320,6 +322,7 @@ export default function UserAdd() {
                                             {...register('uTelNo', {
                                                 onChange: (e) => handleInputChange(e),
                                             })}
+                                            autoComplete="off"
                                         />
                                     </div>
                                 </div>
@@ -347,6 +350,7 @@ export default function UserAdd() {
                                             {...register('firstName', {
                                                 onChange: (e) => handleInputChange(e),
                                             })}
+                                            autoComplete="off"
                                         />
                                     </div>
                                     <div className="col-12 col-sm-6 d-block p-1">
@@ -372,6 +376,7 @@ export default function UserAdd() {
                                             {...register('lastName', {
                                                 onChange: (e) => handleInputChange(e),
                                             })}
+                                            autoComplete="off"
                                         />
                                     </div>
                                 </div>
