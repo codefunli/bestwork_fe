@@ -237,8 +237,7 @@ export const validateConstruction = yup.object({
     status: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.STATUS])),
     awbCodes: yup
         .array()
-        .required(getMessage(ERROR_MSG.E01_001, [FieldConstants.AIR_WAY_BILL]))
-        .min(1)
-        .nullable(),
+        .min(1, getMessage(ERROR_MSG.E01_001, [FieldConstants.AIR_WAY_BILL]))
+        .nullable(true),
     nationId: yup.string().required(getMessage(ERROR_MSG.E01_001, [FieldConstants.NATION])),
 });

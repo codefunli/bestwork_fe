@@ -92,6 +92,7 @@ export default function ConstructionEdit() {
         register,
         handleSubmit,
         reset,
+        resetField,
         formState: { errors, isSubmitting },
     } = useForm({
         resolver: yupResolver(validateConstruction),
@@ -116,12 +117,6 @@ export default function ConstructionEdit() {
     useEffect(() => {
         getConstruction(params.id).then((result: any) => {
             if (result && result.data) {
-                setFormValues({
-                    ...result.data,
-                    startDate: formatDateTimeResNoneSuffixes(result.data.startDate),
-                    endDate: formatDateTimeResNoneSuffixes(result.data.endDate),
-                    awbCodes: result.data.awbCodes,
-                });
                 let awbCodeArr: any = [];
                 result.data.awbCodes.map((target: AWBCode) => {
                     awbCodeArr.push(target.id);
@@ -135,17 +130,22 @@ export default function ConstructionEdit() {
                         setProgressList(value.data);
                     }
                 });
-                getNationalList().then((nationList: any) => {
-                    if (nationList && nationList.data) setNationList(nationList.data);
+                setFormValues({
+                    ...result.data,
+                    startDate: formatDateTimeResNoneSuffixes(result.data.startDate),
+                    endDate: formatDateTimeResNoneSuffixes(result.data.endDate),
+                    awbCodes: result.data.awbCodes,
                 });
-                reset();
             }
+            reset();
         });
 
+        getNationalList().then((nationList: any) => {
+            if (nationList && nationList.data) setNationList(nationList.data);
+        });
         getConstructionStatus().then((result: any) => {
             if (result && result.data) setConstructionStatus(result.data);
         });
-
         getProgressStatus().then((value: any) => {
             if (value && value.data) setProgressStatus(value.data);
         });

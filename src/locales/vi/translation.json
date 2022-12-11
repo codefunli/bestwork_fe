@@ -441,10 +441,10 @@
             "title_card": "Tim kiếm thông tin công trình của bạn",
             "constructionName": "Tên công trình",
             "constructionTitle": "Title",
-            "constructionProject": "Project",
-            "constructionBrand": "Brand",
-            "constructionLocation": "Location",
-            "constructionNation": "Nation"
+            "constructionProject": "Dự án",
+            "constructionBrand": "Hãng",
+            "constructionLocation": "Địa điểm",
+            "constructionNation": "Quốc gia"
         },
         "register": {
             "title": "Đăng kí công trình",

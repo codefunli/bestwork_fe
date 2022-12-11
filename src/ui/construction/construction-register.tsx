@@ -105,13 +105,13 @@ export default function ConstructionRegister() {
         });
 
         if (params.id) {
+            getAirWayBillByProjectId(params.id).then((result: any) => {
+                if (result && result.data) setAwbCodesList(result.data);
+            });
+
             setFormValues({
                 ...formValues,
                 projectCode: params.id,
-            });
-
-            getAirWayBillByProjectId(params.id).then((result: any) => {
-                if (result && result.data) setAwbCodesList(result.data);
             });
         }
     }, []);
