@@ -1,9 +1,11 @@
 import axios from 'axios';
 import { stringify } from 'qs';
-import { BASE_API_PATH } from '../constants/urls';
+import { UrlFeApp } from '../constants/common';
+import { BASE_API_PATH, PREFIX_SERVER_URL } from '../constants/urls';
 
 let accessToken = window.localStorage.getItem('access_token');
 let refreshToken = window.localStorage.getItem('refresh_token');
+let acceptLanguage = window.localStorage.getItem('Accept-Language');
 
 let apiClient = axios.create({
     baseURL: BASE_API_PATH,
@@ -13,6 +15,7 @@ let apiClient = axios.create({
         prefix: 'Bearer',
         access_token: accessToken ? accessToken : '',
         refresh_token: refreshToken ? refreshToken : '',
+        accept_language: acceptLanguage ? acceptLanguage : '',
     },
     paramsSerializer(params: any) {
         return stringify(params);
@@ -22,13 +25,29 @@ let apiClient = axios.create({
 apiClient.interceptors.request.use((res: any) => {
     let at = window.localStorage.getItem('access_token');
     let rt = window.localStorage.getItem('refresh_token');
-    if (at && rt) {
-        res.headers.access_token = at;
-        res.headers.refresh_token = rt;
+    let al = window.localStorage.getItem('accept_language');
+
+    if (at && rt && al) {
+        res.headers = {
+            ...res.headers,
+            access_token: at,
+            refresh_token: rt,
+            'Accept-Language': al,
+        };
     }
-    if (!(res.headers.access_token && res.headers.refresh_token)) {
-        res.headers.access_token = accessToken;
-        res.headers.refresh_token = refreshToken;
+    if (!(res.headers.access_token && res.headers.refresh_token && res.headers.accept_language)) {
+        res.headers = {
+            ...res.headers,
+            access_token: at,
+            refresh_token: rt,
+            'Accept-Language': al,
+        };
+    }
+
+    if (location.pathname !== UrlFeApp.MAIN_APP && location.pathname !== UrlFeApp.LOGIN_URL && !(at || rt)) {
+        const downloadLink = document.createElement('a');
+        downloadLink.href = UrlFeApp.LOGIN_URL;
+        downloadLink.click();
     }
     return res;
 });

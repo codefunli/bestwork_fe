@@ -33,6 +33,7 @@ import { ErrorPagePath, StatusCode, UrlFeApp, UrlServer } from '../core/constant
 import { BASE_API_PATH } from '../core/constants/urls';
 import { useAppDispatch, useAppSelector } from '../core/hook/redux';
 import { appAction } from '../core/redux/app-slice';
+import { monitorActions } from '../core/redux/monitor-slice';
 import { getUserInfo, userActions } from '../core/redux/user-slice';
 import { isObjectEmpty } from '../core/utils/object-utils';
 import { renderIconLeftBar } from '../core/utils/render-utils';
@@ -149,7 +150,10 @@ export default function MiniDrawer() {
         }, 1000);
 
         getMonitor().then((result: any) => {
-            if (result && result.data) setMenuItems(result.data);
+            if (result && result.data) {
+                setMenuItems(result.data);
+                dispatch(monitorActions.setMonitor(result.data));
+            }
         });
         const accessToken = localStorage.getItem('access_token');
         const refreshToken = localStorage.getItem('refresh_token');

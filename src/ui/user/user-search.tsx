@@ -18,7 +18,14 @@ import {
     Chip,
 } from '@mui/material';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { AlertColorConstants, UrlFeApp, ConfirmConstants, Item } from '../../core/constants/common';
+import {
+    AlertColorConstants,
+    UrlFeApp,
+    ConfirmConstants,
+    Item,
+    MONITOR_NAME,
+    renderMonitorPermission,
+} from '../../core/constants/common';
 import { useQuery, useQueryClient } from 'react-query';
 import EnhancedTable, { ArrayAction } from '../../shared-components/table-manager/table-data';
 import { headUserCol } from '../../core/types/user';
@@ -33,6 +40,7 @@ import { green } from '@mui/material/colors';
 import { Permission } from '../../core/types/permission';
 import { useSelector } from 'react-redux';
 import { getUserInfo } from '../../core/redux/user-slice';
+import { getMonitorRedux } from '../../core/redux/monitor-slice';
 
 const initialValues = {
     page: '0',
@@ -58,9 +66,13 @@ export default function UserSearch() {
     const location = useLocation();
     const [permission, setPermission] = useState<Permission>();
     const userInfo = useSelector(getUserInfo);
+    const monitor = useSelector(getMonitorRedux);
 
     useEffect(() => {
-        if (userInfo && userInfo.permissions && userInfo.permissions[3][0]) setPermission(userInfo.permissions[3][0]);
+        setPermission(renderMonitorPermission(monitor, userInfo));
+    }, [monitor, userInfo]);
+
+    useEffect(() => {
         if (location.state && location.state.permission) setPermission(location.state.permission);
     }, [location]);
 

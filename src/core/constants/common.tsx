@@ -179,7 +179,7 @@ export const UrlServer = {
         GET_AWB_STATUS: `${PREFIX_SERVER_URL}/dashboard/awb/status`,
         GET_LATEST_PROGRESS: `${PREFIX_SERVER_URL}/dashboard/progress`,
         GET_TOP_LOCATION: `${PREFIX_SERVER_URL}/dashboard/location`,
-    }
+    },
 };
 
 export const FieldConstants = {
@@ -631,4 +631,25 @@ export const renderTimeString = (messages: any, t: any) => {
         : ((new Date().getTime() - new Date(messages.dateTime).getTime()) / (1000 * 3600 * 24)).toFixed(0) +
               ' ' +
               t('material.dayAgo');
+};
+
+export const MONITOR_NAME = {
+    COMPANY: 'Company',
+    PROGRESS: 'Progress',
+    CONSTRUCTION: 'Construction',
+    PROJECT: 'Project',
+    ROLE: 'Role',
+    USER: 'User',
+};
+
+export const renderMonitorPermission = (monitor: any, userInfo: any) => {
+    if (monitor && monitor.length > 0) {
+        for (let i = 0; i < monitor.length; i++) {
+            const element = monitor[i];
+            if (element.name === MONITOR_NAME.COMPANY) {
+                if (userInfo && userInfo.permissions && userInfo.permissions[element.id][0])
+                    return userInfo.permissions[element.id][0];
+            }
+        }
+    }
 };

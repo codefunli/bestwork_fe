@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import appSlice from './app-slice';
 import customsClearanceSlice from './customs-clearance-slice';
+import monitorSlice from './monitor-slice';
 import userSlice from './user-slice';
 
 export const store = configureStore({
@@ -8,6 +9,7 @@ export const store = configureStore({
         app: appSlice,
         user: userSlice,
         customsClearance: customsClearanceSlice,
+        monitor: monitorSlice,
     },
 });
 
