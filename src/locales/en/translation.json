@@ -472,5 +472,43 @@
             "colCreateDate": "Create Date",
             "colRead": "Read"
         }
+    },
+    "dashBoard": {
+        "company": "Companies",
+        "construction": "Constructions",
+        "project": "Projects",
+        "awb": "Air way bills",
+        "pie": "AWB Analystic",
+        "totalComp": "Total Company",
+        "topLocation": "Top Location",
+        "view": "View all",
+        "progress": "Recent Progress",
+        "progressTb": {
+            "constructionName": "Construction Name",
+            "title": "Progress Title",
+            "crtDate": "Create Date",
+            "endDate": "End Date",
+            "status": "Status"
+        }
+    },
+    "month": {
+        "jan": "January",
+        "feb": "Febuary",
+        "mar": "March",
+        "apr": "April",
+        "may": "May",
+        "jun": "June",
+        "jul": "July",
+        "aug": "August",
+        "sep": "September",
+        "oct": "October",
+        "nov": "November",
+        "dec": "December"
+    },
+    "awbStatus": {
+        "Not yet customs clearance": "Not yet customs clearance",
+        "Done": "Done",
+        "Cancel": "Cancel",
+        "In Customs Clearance Progress": "In Customs Clearance Progress"
     }
 }
