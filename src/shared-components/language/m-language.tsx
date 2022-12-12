@@ -48,6 +48,7 @@ export default function MLanguage(props: Props) {
 
     useEffect(() => {
         i18n.changeLanguage(options[selectedIndex].key);
+        localStorage.setItem('accept_language', options[selectedIndex].key);
     }, [selectedIndex]);
 
     const handleMenuItemClick = (index: any, key: string) => {

@@ -24,8 +24,16 @@ import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from 'react-query';
 import { useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { AlertColorConstants, ConfirmConstants, Item, UrlFeApp } from '../../core/constants/common';
+import {
+    AlertColorConstants,
+    ConfirmConstants,
+    Item,
+    MONITOR_NAME,
+    renderMonitorPermission,
+    UrlFeApp,
+} from '../../core/constants/common';
 import { ERROR_MSG, SUCCESS_MSG } from '../../core/constants/message';
+import { getMonitorRedux } from '../../core/redux/monitor-slice';
 import { getUserInfo } from '../../core/redux/user-slice';
 import { headCompanyCol } from '../../core/types/company';
 import { Permission } from '../../core/types/permission';
@@ -61,9 +69,13 @@ export default function CompanySearch(props: any) {
     const location = useLocation();
     const [permission, setPermission] = useState<Permission>();
     const userInfo = useSelector(getUserInfo);
+    const monitor = useSelector(getMonitorRedux);
 
     useEffect(() => {
-        if (userInfo && userInfo.permissions && userInfo.permissions[2][0]) setPermission(userInfo.permissions[2][0]);
+        setPermission(renderMonitorPermission(monitor, userInfo));
+    }, [monitor, userInfo]);
+
+    useEffect(() => {
         if (location.state && location.state.permission) setPermission(location.state.permission);
     }, [location]);
 

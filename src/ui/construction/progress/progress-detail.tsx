@@ -25,7 +25,8 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { AWB_LOADING, StatusCode } from '../../../core/constants/common';
+import { AWB_LOADING, MONITOR_NAME, renderMonitorPermission, StatusCode } from '../../../core/constants/common';
+import { getMonitorRedux } from '../../../core/redux/monitor-slice';
 import { getUserInfo } from '../../../core/redux/user-slice';
 import { Permission } from '../../../core/types/permission';
 import { formatDateTimeResList } from '../../../core/utils/get-current-datetime';
@@ -61,12 +62,11 @@ export default function ProgressDetail() {
     const [permission, setPermission] = useState<Permission>();
     const [resForHandleMsg, setResForHandleMsg] = useState<any>();
     const [isClose, setIsClose] = useState(false);
+    const monitor = useSelector(getMonitorRedux);
 
     useEffect(() => {
-        if (userInfo && userInfo.permissions && userInfo.permissions[5] && userInfo.permissions[5][0]) {
-            setPermission(userInfo.permissions[5][0]);
-        }
-    }, [userInfo]);
+        setPermission(renderMonitorPermission(monitor, userInfo));
+    }, [monitor, userInfo]);
 
     useEffect(() => {
         if (params.id) fetchData(true, true);

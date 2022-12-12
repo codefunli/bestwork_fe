@@ -25,8 +25,9 @@ import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from 'react-query';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ConfirmConstants, Item, UrlFeApp } from '../../core/constants/common';
+import { ConfirmConstants, Item, MONITOR_NAME, renderMonitorPermission, UrlFeApp } from '../../core/constants/common';
 import { SUCCESS_MSG } from '../../core/constants/message';
+import { getMonitorRedux } from '../../core/redux/monitor-slice';
 import { getUserInfo } from '../../core/redux/user-slice';
 import { headConstructionCol } from '../../core/types/construction';
 import { Permission } from '../../core/types/permission';
@@ -51,7 +52,7 @@ const initialValues = {
     sortBy: 'id',
     keyword: '',
     status: '-1',
-    projectId: '',
+    projectId: 0,
     nationId: 0,
     companyId: 0,
     location: '',
@@ -84,9 +85,13 @@ export default function ConstructionSearch() {
     const [projects, setProjects] = useState<any>([]);
     const [companies, setCompanies] = useState<any>([]);
     const [nations, setNations] = useState<any>([]);
+    const monitor = useSelector(getMonitorRedux);
 
     useEffect(() => {
-        if (userInfo && userInfo.permissions && userInfo.permissions[5][0]) setPermission(userInfo.permissions[5][0]);
+        setPermission(renderMonitorPermission(monitor, userInfo));
+    }, [monitor, userInfo]);
+
+    useEffect(() => {
         if (location.state && location.state.permission) setPermission(location.state.permission);
     }, [location]);
 

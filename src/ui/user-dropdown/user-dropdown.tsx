@@ -54,6 +54,9 @@ const UserDropdown = () => {
         logout().then(() => {
             localStorage.removeItem('access_token');
             localStorage.removeItem('refresh_token');
+            localStorage.removeItem('accept_language');
+            console.log(localStorage.getItem('Accept-Language'));
+
             navigate(UrlFeApp.LOGIN_URL);
         });
     };

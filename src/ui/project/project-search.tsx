@@ -20,11 +20,13 @@ import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from 'react-query';
 import { useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ConfirmConstants, UrlFeApp, Item } from '../../core/constants/common';
+import { ConfirmConstants, UrlFeApp, Item, MONITOR_NAME, renderMonitorPermission } from '../../core/constants/common';
 import { SUCCESS_MSG } from '../../core/constants/message';
+import { getMonitorRedux } from '../../core/redux/monitor-slice';
 import { getUserInfo } from '../../core/redux/user-slice';
 import { Permission } from '../../core/types/permission';
 import { headProjectCol } from '../../core/types/project';
+import { getMonitor } from '../../services/monitor-service';
 import { deleteProjects, getProjects, getProjectStatus } from '../../services/project-service';
 import MessageShow from '../../shared-components/message/message';
 import AlertDialogSlide from '../../shared-components/modal/alert-dialog-slide';
@@ -57,9 +59,13 @@ export default function ProjectSearch() {
     const location = useLocation();
     const [permission, setPermission] = useState<Permission>();
     const userInfo = useSelector(getUserInfo);
+    const monitor = useSelector(getMonitorRedux);
 
     useEffect(() => {
-        if (userInfo && userInfo.permissions && userInfo.permissions[4][0]) setPermission(userInfo.permissions[4][0]);
+        setPermission(renderMonitorPermission(monitor, userInfo));
+    }, [monitor, userInfo]);
+
+    useEffect(() => {
         if (location.state && location.state.permission) setPermission(location.state.permission);
     }, [location]);
 
