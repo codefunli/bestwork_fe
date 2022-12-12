@@ -191,7 +191,7 @@ export default function CommentEl(props: CommentProps) {
     };
 
     return (
-        <div className="mb-2 border shadow ">
+        <div className="mb-2 border shadow">
             <div
                 className={` msg-wrapper-scroll pt-3 ${
                     isEnabled && arrMsgIn && arrMsgIn.length > 0 ? 'msg-height-15rem' : ''
@@ -207,9 +207,8 @@ export default function CommentEl(props: CommentProps) {
             </div>
             <div>
                 {isEnabled && (
-                    <form>
+                    <>
                         <Paper
-                            w-fullWidth={true}
                             component="form"
                             sx={{
                                 p: '2px 4px',
@@ -221,13 +220,13 @@ export default function CommentEl(props: CommentProps) {
                                 size="small"
                                 name="newMsg"
                                 value={newMsg}
-                                fullWidth={true}
                                 sx={{ mt: 1, mb: 1 }}
                                 autoComplete="off"
                                 label={replyLabel}
                                 placeholder={t('material.placeholder')}
                                 onChange={handleInputChange}
                                 onKeyDown={handleKeyDown}
+                                className="w-100"
                             />
                             <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
                             <IconButton
@@ -247,7 +246,7 @@ export default function CommentEl(props: CommentProps) {
                                 <SendIcon />
                             </IconButton>
                         </Paper>
-                    </form>
+                    </>
                 )}
             </div>
         </div>

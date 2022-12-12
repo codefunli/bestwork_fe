@@ -610,3 +610,15 @@ export const renderBase64File = (data: any) => {
             return dataURLtoFile(`data:image/${data.type};base64,${data.content}`, data.name);
     }
 };
+
+export const renderTimeString = (messages: any, t: any) => {
+    return Number(((new Date().getTime() - new Date(messages.dateTime).getTime()) / (1000 * 3600 * 24)).toFixed(0)) <= 0
+        ? new Date().getHours() - new Date(messages.dateTime).getHours() <= 0
+            ? new Date().getMinutes() - new Date(messages.dateTime).getMinutes() <= 0
+                ? new Date().getSeconds() - new Date(messages.dateTime).getSeconds() + ' ' + t('material.secondAgo')
+                : new Date().getMinutes() - new Date(messages.dateTime).getMinutes() + ' ' + t('material.minuteAgo')
+            : new Date().getHours() - new Date(messages.dateTime).getHours() + ' ' + t('material.hourAgo')
+        : ((new Date().getTime() - new Date(messages.dateTime).getTime()) / (1000 * 3600 * 24)).toFixed(0) +
+              ' ' +
+              t('material.dayAgo');
+};

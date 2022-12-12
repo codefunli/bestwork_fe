@@ -375,7 +375,7 @@
     },
     "material": {
         "title": "Material Status",
-        "uploadTitle": "Upload image for material products",
+        "uploadTitle": "Upload image",
         "editTitle": "Edit for material products",
         "comment": "Comment",
         "edit": "Edit",
