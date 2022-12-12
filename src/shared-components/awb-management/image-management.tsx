@@ -169,15 +169,8 @@ export default function ImageManagement(props: any) {
             {isLoading === AWB_LOADING.HAS_DATA ? (
                 imagesData &&
                 imagesData.length > 0 &&
-                imagesData.map((data: any) => (
-                    <Grid
-                        key={data.id}
-                        container
-                        spacing={3}
-                        direction="row"
-                        justifyContent="center"
-                        alignItems="center"
-                    >
+                imagesData.map((data: any, index: any) => (
+                    <Grid key={index} container spacing={3} direction="row" justifyContent="center" alignItems="center">
                         <Grid item xs={12} lg={12}>
                             <div>
                                 <Card w-full="true">

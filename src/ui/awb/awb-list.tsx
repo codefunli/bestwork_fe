@@ -632,11 +632,6 @@ export default function AirWayBillList() {
             case CUSTOMS_CLEARANCE.INVOICE:
                 addInvoicePostComment(convertData, data.postId)
                     .then((res) => {
-                        setResForHandleMsg({
-                            status: res.status,
-                            message: res.message,
-                        });
-
                         if (res.status !== StatusCode.OK) {
                             fetchCommercialInvoiceAPI(currentAwbId).then((res: any) => {
                                 dispatch(customsClearanceActions.setCommercialInvoice(res.data));
@@ -656,11 +651,6 @@ export default function AirWayBillList() {
             case CUSTOMS_CLEARANCE.PACKAGE:
                 addPackingPostComment(convertData, data.postId)
                     .then((res) => {
-                        setResForHandleMsg({
-                            status: res.status,
-                            message: res.message,
-                        });
-
                         if (res.status !== StatusCode.OK) {
                             fetchPackingListApi(currentAwbId).then((res: any) => {
                                 dispatch(customsClearanceActions.setPackingList(res.data));
@@ -692,11 +682,6 @@ export default function AirWayBillList() {
             case CUSTOMS_CLEARANCE.IMAGE_BEFORE:
                 addImageBeforeComment(convertData, data.postId)
                     .then((res) => {
-                        setResForHandleMsg({
-                            status: res.status,
-                            message: res.message,
-                        });
-
                         if (res.status !== StatusCode.OK) {
                             fetchImageBefore(currentAwbId).then((res: any) => {
                                 dispatch(customsClearanceActions.setImageBefore(res.data));
@@ -716,11 +701,6 @@ export default function AirWayBillList() {
             case CUSTOMS_CLEARANCE.IMAGE_AFTER:
                 addImageAfterComment(convertData, data.postId)
                     .then((res) => {
-                        setResForHandleMsg({
-                            status: res.status,
-                            message: res.message,
-                        });
-
                         if (res.status !== StatusCode.OK) {
                             fetchImageAfter(currentAwbId).then((res: any) => {
                                 dispatch(customsClearanceActions.setImageAfter(res.data));

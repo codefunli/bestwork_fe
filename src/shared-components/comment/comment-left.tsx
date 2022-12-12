@@ -2,6 +2,7 @@ import { Avatar, Button } from '@mui/material';
 import { deepOrange } from '@mui/material/colors';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { renderTimeString } from '../../core/constants/common';
 import { Comment } from '../../core/types/base';
 import './comment.scss';
 
@@ -61,34 +62,7 @@ export default function CommentLeft(props: CommentRightProps) {
                 <div className="msg-content-detail">
                     <div className="fw-bold mb-1">
                         {messages.commentUser.name} -{' '}
-                        <small className="fw-normal">
-                            {Number(
-                                (
-                                    (new Date().getTime() - new Date(messages.dateTime).getTime()) /
-                                    (1000 * 3600 * 24)
-                                ).toFixed(0),
-                            ) <= 0
-                                ? new Date().getHours() - new Date(messages.dateTime).getHours() <= 0
-                                    ? new Date().getMinutes() - new Date(messages.dateTime).getMinutes() <= 0
-                                        ? new Date().getSeconds() -
-                                          new Date(messages.dateTime).getSeconds() +
-                                          ' ' +
-                                          t('material.secondAgo')
-                                        : new Date().getMinutes() -
-                                          new Date(messages.dateTime).getMinutes() +
-                                          ' ' +
-                                          t('material.minuteAgo')
-                                    : new Date().getHours() -
-                                      new Date(messages.dateTime).getHours() +
-                                      ' ' +
-                                      t('material.hourAgo')
-                                : (
-                                      (new Date().getTime() - new Date(messages.dateTime).getTime()) /
-                                      (1000 * 3600 * 24)
-                                  ).toFixed(0) +
-                                  ' ' +
-                                  t('material.dayAgo')}
-                        </small>
+                        <small className="fw-normal">{renderTimeString(messages, t)}</small>
                     </div>
                     <div>
                         <p className="mb-0" id={`cmt${messages.id}`}>
