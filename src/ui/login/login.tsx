@@ -20,6 +20,7 @@ import {
     NameElConstants,
     UrlFeApp,
 } from '../../core/constants/common';
+import { CommentConstant } from '../../core/constants/constant';
 import { ERROR_MSG, getMessage } from '../../core/constants/message';
 import { useAppDispatch } from '../../core/hook/redux';
 import { userActions } from '../../core/redux/user-slice';
@@ -130,6 +131,13 @@ export default function Login() {
         setIsShowMessage(false);
     };
 
+    const handleKeyDown = (event: any) => {
+        if (event.key === CommentConstant.ENTER) {
+            event.preventDefault();
+            handleLogin();
+        }
+    };
+
     return (
         <div className="login-form-wrapper">
             <form>
@@ -156,6 +164,7 @@ export default function Login() {
                                 error={isErrorUserName}
                                 autoComplete="false"
                                 label="Password"
+                                onKeyDown={handleKeyDown}
                             />
                             {isErrorUserName && <FormHelperText error>{msgUserName}</FormHelperText>}
                         </FormControl>
@@ -186,6 +195,7 @@ export default function Login() {
                                     </InputAdornment>
                                 }
                                 label="Password"
+                                onKeyDown={handleKeyDown}
                             />
                             {isErrorPassword && <FormHelperText error>{msgPassword}</FormHelperText>}
                         </FormControl>
