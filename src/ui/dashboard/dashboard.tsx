@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import DashCard from './dash-card';
 import TotalProject from './total-project';
 import './dashboard.scss';
-import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
+import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import HandymanOutlinedIcon from '@mui/icons-material/HandymanOutlined';
 import BusinessCenterOutlinedIcon from '@mui/icons-material/BusinessCenterOutlined';
 import HomeWorkOutlinedIcon from '@mui/icons-material/HomeWorkOutlined';
@@ -19,7 +19,6 @@ import {
 import { TopLocation } from './top-location';
 import { AnalyticsAwb } from './analystic-awb';
 import RecentProgress from './recent-progress';
-
 
 export default function DashBoard() {
     const { t } = useTranslation();
@@ -69,7 +68,7 @@ export default function DashBoard() {
             value: companyCount,
             title: t('dashBoard.company'),
             color: theme.palette.primary.main,
-            Icon: PeopleAltOutlinedIcon,
+            Icon: HomeWorkOutlinedIcon,
         },
         {
             value: constructionCount,
@@ -86,7 +85,7 @@ export default function DashBoard() {
         {
             value: awbCount,
             title: t('dashBoard.awb'),
-            Icon: HomeWorkOutlinedIcon,
+            Icon: DescriptionOutlinedIcon,
             color: theme.palette.primary.main,
         },
     ];
