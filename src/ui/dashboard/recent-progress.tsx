@@ -13,26 +13,14 @@ import {
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { v4 as uuid } from 'uuid';
-import { formatDateTimeRes, formatDateTimeResList } from '../../core/utils/get-current-datetime';
+import { formatDateTimeResList } from '../../core/utils/get-current-datetime';
 import { getLatestProgress } from '../../services/dashboard-service';
 import { getProgressStatus } from '../../services/project-service';
 import HandleProgressStatus from '../../shared-components/status-handle/progress-status-handle';
 
-const initData = [
-    {
-        constructionId: '',
-        constructionName: '',
-        createDate: formatDateTimeRes(new Date()),
-        status: '',
-        title: '',
-        startDate: formatDateTimeRes(new Date()),
-        endDate: formatDateTimeRes(new Date()),
-    },
-];
 export default function RecentProgress() {
     const { t } = useTranslation();
-    const [tableData, setTableData] = useState<any[]>(initData);
+    const [tableData, setTableData] = useState<any[]>();
     const [progressStatus, setProgressStatus] = useState([]);
 
     useEffect(() => {
@@ -66,14 +54,14 @@ export default function RecentProgress() {
                             <TableCell sortDirection="desc">
                                 <Tooltip enterDelay={300} title="Sort">
                                     <TableSortLabel active direction="desc">
-                                    {t('dashBoard.progressTb.crtDate')}
+                                        {t('dashBoard.progressTb.crtDate')}
                                     </TableSortLabel>
                                 </Tooltip>
                             </TableCell>
                             <TableCell sortDirection="desc">
                                 <Tooltip enterDelay={300} title="Sort">
                                     <TableSortLabel active direction="desc">
-                                    {t('dashBoard.progressTb.endDate')}
+                                        {t('dashBoard.progressTb.endDate')}
                                     </TableSortLabel>
                                 </Tooltip>
                             </TableCell>
@@ -81,20 +69,23 @@ export default function RecentProgress() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {tableData.map((item: any, index: any) => (
-                            <TableRow hover key={index}>
-                                <TableCell>{item.constructionName}</TableCell>
-                                <TableCell>{item.title}</TableCell>
-                                <TableCell>{formatDateTimeResList(item.startDate)}</TableCell>
-                                <TableCell>{formatDateTimeResList(item.endDate)}</TableCell>
-                                <TableCell>
-                                    <HandleProgressStatus
-                                        statusList={progressStatus && progressStatus.length > 0 ? progressStatus : []}
-                                        statusId={item.status}
-                                    />
-                                </TableCell>
-                            </TableRow>
-                        ))}
+                        {tableData &&
+                            tableData.map((item: any, index: any) => (
+                                <TableRow hover key={index}>
+                                    <TableCell>{item.constructionName}</TableCell>
+                                    <TableCell>{item.title}</TableCell>
+                                    <TableCell>{formatDateTimeResList(item.startDate)}</TableCell>
+                                    <TableCell>{formatDateTimeResList(item.endDate)}</TableCell>
+                                    <TableCell>
+                                        <HandleProgressStatus
+                                            statusList={
+                                                progressStatus && progressStatus.length > 0 ? progressStatus : []
+                                            }
+                                            statusId={item.status}
+                                        />
+                                    </TableCell>
+                                </TableRow>
+                            ))}
                     </TableBody>
                 </Table>
             </Box>
