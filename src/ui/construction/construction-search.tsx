@@ -88,7 +88,7 @@ export default function ConstructionSearch() {
     const monitor = useSelector(getMonitorRedux);
 
     useEffect(() => {
-        setPermission(renderMonitorPermission(monitor, userInfo));
+        setPermission(renderMonitorPermission(monitor, userInfo, MONITOR_NAME.CONSTRUCTION));
     }, [monitor, userInfo]);
 
     useEffect(() => {

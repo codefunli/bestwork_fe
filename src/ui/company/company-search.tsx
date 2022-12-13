@@ -72,7 +72,7 @@ export default function CompanySearch(props: any) {
     const monitor = useSelector(getMonitorRedux);
 
     useEffect(() => {
-        setPermission(renderMonitorPermission(monitor, userInfo));
+        setPermission(renderMonitorPermission(monitor, userInfo, MONITOR_NAME.COMPANY));
     }, [monitor, userInfo]);
 
     useEffect(() => {

@@ -65,7 +65,7 @@ export default function ProgressDetail() {
     const monitor = useSelector(getMonitorRedux);
 
     useEffect(() => {
-        setPermission(renderMonitorPermission(monitor, userInfo));
+        setPermission(renderMonitorPermission(monitor, userInfo, MONITOR_NAME.PROGRESS));
     }, [monitor, userInfo]);
 
     useEffect(() => {

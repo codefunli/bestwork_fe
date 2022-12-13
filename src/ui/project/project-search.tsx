@@ -62,7 +62,7 @@ export default function ProjectSearch() {
     const monitor = useSelector(getMonitorRedux);
 
     useEffect(() => {
-        setPermission(renderMonitorPermission(monitor, userInfo));
+        setPermission(renderMonitorPermission(monitor, userInfo, MONITOR_NAME.PROJECT));
     }, [monitor, userInfo]);
 
     useEffect(() => {
