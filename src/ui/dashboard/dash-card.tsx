@@ -1,13 +1,14 @@
 import { alpha, Box, Card, Icon, styled } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 interface CardProps {
     Icon: any;
     title: string;
     color: string;
-    value: 0;
+    value: number;
 }
 export default function DashCard(card: CardProps) {
     const { Icon, title, color, value } = card;
-
+    const { t } = useTranslation();
     const StyledCard = styled(Card)(({ theme }) => ({
         padding: '2rem 1.5rem',
         display: 'flex',
@@ -23,6 +24,20 @@ export default function DashCard(card: CardProps) {
             },
         },
     }));
+
+    const handleLargeValue = (value: number) => {
+        const nf = new Intl.NumberFormat();
+        if (value && value >= 1000000) {
+            let tempValue = value / 1000000;
+            const result = tempValue.toLocaleString('en-US', { maximumFractionDigits: 1 });
+            if (tempValue >= 1000) {
+                const bilValue = (tempValue / 1000).toLocaleString('en-US', { maximumFractionDigits: 1 });
+                return String(`${bilValue}${t('common.countBil')}`);
+            }
+            return String(`${result}${t('common.countMil')}`);
+        }
+        return nf.format(value);
+    };
 
     return (
         <StyledCard>
@@ -42,7 +57,7 @@ export default function DashCard(card: CardProps) {
             </Box>
             <Box mt={{ xs: '1rem', sm: 0 }}>
                 <h5 color="text.disabled">{title}</h5>
-                <h3>{String(value)}</h3>
+                <h3>{value ? String(handleLargeValue(value)) : 0}</h3>
             </Box>
         </StyledCard>
     );

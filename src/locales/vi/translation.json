@@ -129,7 +129,9 @@
         "disable": "Chưa kích hoạt",
         "read": "Đã đọc",
         "unRead": "Chưa đọc",
-        "urlPlacholder": "VD: /app/role"
+        "urlPlacholder": "VD: /app/role",
+        "countMil": "+ Tr",
+        "countBil": "+ Tỷ"
     },
     "message": {
         "required": "là bắt buộc.",

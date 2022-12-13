@@ -43,6 +43,20 @@ export function TopLocation() {
         nativgate(`${UrlFeApp.CONSTRUCTION.SEARCH}`);
     };
 
+    const handleLargeValue = (value: number) => {
+        const nf = new Intl.NumberFormat();
+        if (value && value >= 1000000) {
+            let tempValue = value / 1000000;
+            const result = tempValue.toLocaleString('en-US', { maximumFractionDigits: 1 });
+            if (tempValue >= 1000) {
+                const bilValue = (tempValue / 1000).toLocaleString('en-US', { maximumFractionDigits: 1 });
+                return String(`${bilValue}${t('common.countBil')}`);
+            }
+            return String(`${result}${t('common.countMil')}`);
+        }
+        return nf.format(value);
+    };
+
     return (
         <Card>
             <CardHeader title={t('dashBoard.topLocation')} />
@@ -55,7 +69,7 @@ export function TopLocation() {
                         </ListItemAvatar>
                         <ListItemText primary={item.location} secondary={item.nationName} />
                         <ListItemText>
-                            <Typography textAlign={'right'}>{item.count}</Typography>
+                            <Typography textAlign={'right'}>{handleLargeValue(Number(item.count))}</Typography>
                         </ListItemText>
                     </ListItem>
                 ))}

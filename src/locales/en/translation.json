@@ -129,7 +129,9 @@
         "disable": "Disable",
         "read": "Read",
         "unRead": "Unread",
-        "urlPlacholder": "Example: /app/role"
+        "urlPlacholder": "Example: /app/role",
+        "countMil": "+ Mil",
+        "countBil": "+ Bil"
     },
     "message": {
         "required": "is required.",
