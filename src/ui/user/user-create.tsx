@@ -55,12 +55,13 @@ export default function UserAdd() {
     const [resForHandleMsg, setResForHandleMsg] = useState<any>();
     const [isCreateWithCompany, setIsCreateWithCompany] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const {
         register,
         reset,
         handleSubmit,
-        formState: { errors, isSubmitting },
+        formState: { errors },
     } = useForm({
         resolver: yupResolver(isCreateWithCompany ? validateCreateUserWithCompanyForm : validateCreateUserForm),
     });
@@ -110,6 +111,7 @@ export default function UserAdd() {
         });
     };
     const handleSubmitForm = () => {
+        setIsSubmitting(true);
         createUsers(formValues)
             .then((res: any) => {
                 setResForHandleMsg({
@@ -118,12 +120,14 @@ export default function UserAdd() {
                 });
 
                 if (res.status === StatusCode.OK) {
+                    setIsSubmitting(false);
                     setTimeout(() => {
                         navigate(UrlFeApp.USER.SEARCH);
                     }, 1000);
                 }
             })
             .catch((err) => {
+                setIsSubmitting(false);
                 setResForHandleMsg({
                     status: StatusCode.ERROR,
                     message: t('message.error'),

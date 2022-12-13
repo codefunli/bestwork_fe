@@ -70,12 +70,13 @@ export default function CompanyRegister() {
     const { t } = useTranslation();
     const [showPassword, setShowPassword] = useState(false);
     const [resForHandleMsg, setResForHandleMsg] = useState<any>();
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const {
         register,
         handleSubmit,
         reset,
-        formState: { errors, isSubmitting },
+        formState: { errors },
     } = useForm({
         resolver: yupResolver(validateForm),
     });
@@ -131,6 +132,7 @@ export default function CompanyRegister() {
     };
 
     const handleSubmitForm = () => {
+        setIsSubmitting(true);
         let objValue: any = {
             company: {
                 ...formValues.company,
@@ -151,12 +153,14 @@ export default function CompanyRegister() {
                 });
 
                 if (res.status === StatusCode.OK) {
+                    setIsSubmitting(false);
                     setTimeout(() => {
                         navigate(UrlFeApp.COMPANY.SEARCH);
                     }, 1000);
                 }
             })
             .catch(() => {
+                setIsSubmitting(false);
                 setResForHandleMsg({
                     status: StatusCode.ERROR,
                     message: t('message.error'),

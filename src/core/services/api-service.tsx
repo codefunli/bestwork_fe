@@ -44,7 +44,11 @@ apiClient.interceptors.request.use((res: any) => {
         };
     }
 
-    if (location.pathname !== UrlFeApp.MAIN_APP && location.pathname !== UrlFeApp.LOGIN_URL && !(at || rt)) {
+    if (
+        window.location.pathname !== UrlFeApp.MAIN_APP &&
+        window.location.pathname !== UrlFeApp.LOGIN_URL &&
+        !(at || rt)
+    ) {
         const downloadLink = document.createElement('a');
         downloadLink.href = UrlFeApp.LOGIN_URL;
         downloadLink.click();

@@ -72,12 +72,13 @@ export default function ConstructionRegister() {
     const [fileData, setFileData] = useState(initialDataImg);
     const [eventImage, setEventImage] = useState<any>();
     const [nationList, setNationList] = useState<any>();
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const {
         register,
         handleSubmit,
         reset,
-        formState: { errors, isSubmitting },
+        formState: { errors },
     } = useForm({
         resolver: yupResolver(validateConstruction),
     });
@@ -161,6 +162,7 @@ export default function ConstructionRegister() {
     };
 
     const handleSubmitForm = async (event: any) => {
+        setIsSubmitting(true);
         let formData = new FormData();
 
         if (fileData && fileData.file && fileData.file.length > 0) {
@@ -186,12 +188,14 @@ export default function ConstructionRegister() {
                 });
 
                 if (res.status === StatusCode.OK) {
+                    setIsSubmitting(false);
                     setTimeout(() => {
                         navigate(UrlFeApp.CONSTRUCTION.SEARCH);
                     }, 1000);
                 }
             })
             .catch((err) => {
+                setIsSubmitting(false);
                 setResForHandleMsg({
                     status: StatusCode.ERROR,
                     message: t('message.error'),
