@@ -684,7 +684,7 @@ export default function Role() {
                                                                                         <IconButton
                                                                                             disabled={isDashBoard}
                                                                                             onClick={
-                                                                                                isDashBoard
+                                                                                                !isDashBoard
                                                                                                     ? () =>
                                                                                                           handleGetScreenValue(
                                                                                                               row,
@@ -710,7 +710,7 @@ export default function Role() {
                                                                                         <IconButton
                                                                                             disabled={isDashBoard}
                                                                                             onClick={
-                                                                                                isDashBoard
+                                                                                                !isDashBoard
                                                                                                     ? () =>
                                                                                                           handleDeleteScreen(
                                                                                                               row,
@@ -740,7 +740,7 @@ export default function Role() {
                                                                                         row.canDelete
                                                                                     }
                                                                                     onChange={
-                                                                                        isDashBoard
+                                                                                        !isDashBoard
                                                                                             ? (e) =>
                                                                                                   handleChangeCheckbox(
                                                                                                       e,
@@ -762,7 +762,7 @@ export default function Role() {
                                                                                     disabled={isDashBoard}
                                                                                     checked={row.canAccess}
                                                                                     onChange={
-                                                                                        isDashBoard
+                                                                                        !isDashBoard
                                                                                             ? (e) =>
                                                                                                   handleChangeCheckbox(
                                                                                                       e,
@@ -778,7 +778,7 @@ export default function Role() {
                                                                                 <Checkbox
                                                                                     checked={row.canAdd}
                                                                                     onChange={
-                                                                                        isDashBoard
+                                                                                        !isDashBoard
                                                                                             ? (e) =>
                                                                                                   handleChangeCheckbox(
                                                                                                       e,
@@ -797,7 +797,7 @@ export default function Role() {
                                                                                 <Checkbox
                                                                                     checked={row.canEdit}
                                                                                     onChange={
-                                                                                        isDashBoard
+                                                                                        !isDashBoard
                                                                                             ? (e) =>
                                                                                                   handleChangeCheckbox(
                                                                                                       e,
@@ -816,7 +816,7 @@ export default function Role() {
                                                                                 <Checkbox
                                                                                     checked={row.canDelete}
                                                                                     onChange={
-                                                                                        isDashBoard
+                                                                                        !isDashBoard
                                                                                             ? (e) =>
                                                                                                   handleChangeCheckbox(
                                                                                                       e,
