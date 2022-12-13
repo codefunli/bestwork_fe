@@ -320,6 +320,7 @@ export default function Role() {
             .then((res) => {
                 handleResponse(res);
                 fetchData();
+                fetchMonitorData();
             })
             .catch((err) => {
                 handleMessage(true, err.message, AlertColorConstants.ERROR);
@@ -686,7 +687,7 @@ export default function Role() {
                                                                                     </IconButton>
                                                                                 </Tooltip>
                                                                                 <Tooltip
-                                                                                    title={t('tooltip.edit')}
+                                                                                    title={t('tooltip.delete')}
                                                                                     placement="top"
                                                                                 >
                                                                                     <IconButton
