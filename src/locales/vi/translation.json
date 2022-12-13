@@ -137,7 +137,7 @@
         "rowsPerPage": "Hàng trên mỗi trang",
         "selected": "lựa chọn",
         "data": "DỮ LIỆU",
-        "delete": "Bạn có chắc chắn rằng bạn muốn xóa các bản ghi này!",
+        "delete": "Bạn có chắc chắn rằng bạn muốn xóa các bản ghi này?",
         "error": "Một lỗi đã xảy ra. Xin vui lòng liên hệ với quản trị viên!",
         "cityLabel": "Chọn tỉnh/thành phố",
         "districtLabel": "Chọn quận/huyện",
@@ -335,6 +335,18 @@
     },
     "create_screen": {
         "title": "Quản lý màn hình",
+        "modal": {
+            "name": "Tên màn hình",
+            "icon": "Biểu tượng",
+            "url": "Địa chỉ "
+        },
+        "guide": {
+            "title": "Hướng dẫn chọn biểu tượng: ",
+            "content": "Nhấn chuột trái vào vùng khoanh đỏ để sao chép tên của biểu tượng, sau đó dán nó vào ô nhập dữ liệu. "
+        }
+    },
+    "edit_screen": {
+        "title": "Chỉnh sửa màn hình",
         "modal": {
             "name": "Tên màn hình",
             "icon": "Biểu tượng",

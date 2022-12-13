@@ -1,3 +1,4 @@
+import EditIcon from '@mui/icons-material/Edit';
 import SearchIcon from '@mui/icons-material/Search';
 import {
     AlertColor,
@@ -7,6 +8,7 @@ import {
     CardContent,
     Checkbox,
     Grid,
+    IconButton,
     Paper,
     Tab,
     Table,
@@ -17,24 +19,30 @@ import {
     TableRow,
     Tabs,
     TextField,
+    Tooltip,
     Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import { useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AlertColorConstants, ConfirmConstants, Item, StatusCode } from '../../core/constants/common';
 import { CommentConstant } from '../../core/constants/constant';
 import { SUCCESS_MSG } from '../../core/constants/message';
+import { useAppDispatch } from '../../core/hook/redux';
+import { monitorActions } from '../../core/redux/monitor-slice';
 import { PermissionResDTO } from '../../models/permission-res-dto';
 import { RoleHasPermissionResDto, RoleResDto } from '../../models/role-res-dto';
+import { getMonitor } from '../../services/monitor-service';
 import {
     createRole,
     createScreen,
     deleteRole,
+    deleteScreen,
     getPermissionsList,
     getRoles,
     updatePermissions,
     updateRole,
+    updateScreen,
 } from '../../services/role-service';
 import MessageShow from '../../shared-components/message/message';
 import AlertDialogSlide from '../../shared-components/modal/alert-dialog-slide';
@@ -42,6 +50,8 @@ import CreateRoleModal from './create-modal';
 import CreateScreenModal from './create-screen-modal';
 import './role.scss';
 import UpdateRoleModal from './update-modal';
+import UpdateScreenModal from './update-screen-modal';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const initRoleList = [
     {
@@ -64,6 +74,8 @@ const initRoleList = [
     },
 ];
 
+export const ScreenContext = createContext<any>({});
+
 export default function Role() {
     const { t } = useTranslation();
     const [roleList, setRoleList] = useState<RoleResDto[]>();
@@ -82,13 +94,31 @@ export default function Role() {
     const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
     const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);
     const [isOpenCreateScreenModal, setIsOpenCreateScreenModal] = useState(false);
+    const [isOpenUpdateScreenModal, setIsOpenUpdateScreenModal] = useState(false);
     const [isOpenUpdateModal, setIsOpenUpdateModal] = useState(false);
+    const [targetScreen, setTargetScreen] = useState<any>();
+    const dispatch = useAppDispatch();
 
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const toggleCreateScreenModal = (value: boolean) => setIsOpenCreateScreenModal(value);
+    const toggleUpdateScreenModal = (value: boolean) => setIsOpenUpdateScreenModal(value);
     const toggleCreateModal = (value: boolean) => setIsOpenCreateModal(value);
     const toggleUpdateModal = (value: boolean) => setIsOpenUpdateModal(value);
+
+    const handleGetScreenValue = (data: any) => {
+        setTargetScreen(() => {
+            toggleUpdateScreenModal(true);
+            return data;
+        });
+    };
+
+    const handleDeleteScreen = (data: any) => {
+        setTargetScreen(() => {
+            setIsOpenDeleteModal(true);
+            return data;
+        });
+    };
 
     const fetchData = () => {
         getRoles().then((res: any) => {
@@ -295,6 +325,27 @@ export default function Role() {
                 handleMessage(true, err.message, AlertColorConstants.ERROR);
             });
     };
+    const handleUpdateNewScreen = (data: any) => {
+        updateScreen({
+            id: data.id,
+            name: data.name,
+            icon: data.icon,
+            url: data.url,
+        })
+            .then((res) => {
+                handleResponse(res);
+                fetchMonitorData();
+            })
+            .catch((err) => {
+                handleMessage(true, err.message, AlertColorConstants.ERROR);
+            });
+    };
+
+    const fetchMonitorData = () => {
+        getMonitor().then((data: any) => {
+            dispatch(monitorActions.setMonitor(data.data));
+        });
+    };
 
     const handleUpdateRole = (id: number, roleName: string, description: string) => {
         updateRole({ id: id, name: roleName, description })
@@ -405,17 +456,15 @@ export default function Role() {
     };
 
     const alertConfirmDelete = () => {
-        if (roleRegisterList) {
-            deleteRole(roleRegisterList[currentTab].id)
-                .then((value) => {
-                    setIsShowMsg(true);
-                    fetchData();
-                })
-                .catch((err) => {
-                    handleMessage(true, t('message.error'), AlertColorConstants.ERROR);
-                });
-            setIsOpenDeleteModal(false);
-        }
+        deleteScreen(targetScreen.monitorId)
+            .then((res) => {
+                handleResponse(res);
+                setIsOpenDeleteModal(false);
+                fetchData();
+            })
+            .catch((err) => {
+                handleMessage(true, err.message, AlertColorConstants.ERROR);
+            });
     };
 
     const closeDeleteModal = () => {
@@ -599,6 +648,7 @@ export default function Role() {
                                                             <TableCell>
                                                                 <b>{t('role.tab.screen')}</b>
                                                             </TableCell>
+                                                            <TableCell align="center">{t('common.action')}</TableCell>
                                                             <TableCell align="center">{t('role.tab.all')}</TableCell>
                                                             <TableCell align="center">{t('role.tab.view')}</TableCell>
                                                             <TableCell align="center">{t('role.tab.create')}</TableCell>
@@ -622,6 +672,33 @@ export default function Role() {
                                                                             <TableCell component="th" scope="row">
                                                                                 {row.monitorName}
                                                                             </TableCell>
+                                                                            <TableCell align="center">
+                                                                                <Tooltip
+                                                                                    title={t('tooltip.edit')}
+                                                                                    placement="top"
+                                                                                >
+                                                                                    <IconButton
+                                                                                        onClick={() =>
+                                                                                            handleGetScreenValue(row)
+                                                                                        }
+                                                                                    >
+                                                                                        <EditIcon color="primary" />
+                                                                                    </IconButton>
+                                                                                </Tooltip>
+                                                                                <Tooltip
+                                                                                    title={t('tooltip.edit')}
+                                                                                    placement="top"
+                                                                                >
+                                                                                    <IconButton
+                                                                                        onClick={() =>
+                                                                                            handleDeleteScreen(row)
+                                                                                        }
+                                                                                    >
+                                                                                        <DeleteIcon color="primary" />
+                                                                                    </IconButton>
+                                                                                </Tooltip>
+                                                                            </TableCell>
+
                                                                             <TableCell align="center">
                                                                                 <Checkbox
                                                                                     checked={
@@ -754,12 +831,20 @@ export default function Role() {
                 />
             )}
 
-            {isOpenCreateScreenModal && (
+            {isOpenCreateScreenModal ? (
                 <CreateScreenModal
                     isOpen={isOpenCreateScreenModal}
                     toggleOpen={toggleCreateScreenModal}
                     handleCreateNewScreen={handleCreateNewScreen}
                 />
+            ) : (
+                <ScreenContext.Provider value={targetScreen}>
+                    <UpdateScreenModal
+                        isOpen={isOpenUpdateScreenModal}
+                        toggleOpen={toggleUpdateScreenModal}
+                        handleUpdateNewScreen={handleUpdateNewScreen}
+                    />
+                </ScreenContext.Provider>
             )}
 
             <MessageShow message={roleMsg} showMessage={isShowMsg} type={roleMsgType} handleCloseMsg={handleCloseMsg} />

@@ -26,6 +26,16 @@ export const createScreen = async (screen: any) => {
     return res.data;
 };
 
+export const updateScreen = async (screen: any) => {
+    const res = await apiClient.put<DataResSuccess<MonitorResDTO>>(UrlServer.ROLE.SCREEN, screen);
+    return res.data;
+};
+
+export const deleteScreen = async (id: string) => {
+    const res = await apiClient.delete<DataResSuccess<MonitorResDTO>>(`${UrlServer.ROLE.SCREEN}/${id}`);
+    return res.data;
+};
+
 export const updateRole = async (role: any) => {
     const res = await apiClient.put<DataResSuccess<RoleResDto[]>>(UrlServer.ROLE.UPDATE, role);
     return res.data;

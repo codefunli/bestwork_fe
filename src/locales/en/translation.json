@@ -137,7 +137,7 @@
         "rowsPerPage": "Rows per page",
         "selected": "selected",
         "data": "DATA",
-        "delete": "Are you certain that you want to delete this records!",
+        "delete": "Are you certain that you want to delete this records?",
         "error": "An error has occurred. Please contact your system administrator!",
         "cityLabel": "Please choose a city/Province",
         "districtLabel": "Please choose a district/town",
@@ -336,6 +336,18 @@
     },
     "create_screen": {
         "title": "Screen Creation",
+        "modal": {
+            "name": "Screen Name",
+            "icon": "Icon",
+            "url": "Url"
+        },
+        "guide": {
+            "title": "How to choose icon?",
+            "content": "Click on the red area to copy Icon Name, then paste it in the icon input."
+        }
+    },
+    "edit_screen": {
+        "title": "Screen Edit",
         "modal": {
             "name": "Screen Name",
             "icon": "Icon",
