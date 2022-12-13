@@ -643,11 +643,11 @@ export const MONITOR_NAME = {
     USER: 'User',
 };
 
-export const renderMonitorPermission = (monitor: any, userInfo: any) => {
+export const renderMonitorPermission = (monitor: any, userInfo: any, monitorName: string) => {
     if (monitor && monitor.length > 0) {
         for (let i = 0; i < monitor.length; i++) {
             const element = monitor[i];
-            if (element.name === MONITOR_NAME.COMPANY) {
+            if (element.name === monitorName) {
                 if (userInfo && userInfo.permissions && userInfo.permissions[element.id][0])
                     return userInfo.permissions[element.id][0];
             }
