@@ -238,7 +238,8 @@
         "addAll": "Add all",
         "add": "Add",
         "remove": "Remove",
-        "readMore": "Read More"
+        "readMore": "Read More",
+        "delete": "Delete"
     },
     "edit": {
         "title": "Brand Edition",

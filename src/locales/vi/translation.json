@@ -237,7 +237,8 @@
         "projectDetail": "Thêm tiến độ thi công",
         "addAll": "Thêm tất cả",
         "add": "Thêm",
-        "remove": "Gỡ"
+        "remove": "Gỡ",
+        "delete": "Xóa"
     },
     "edit": {
         "title": "Chỉnh sửa công ty",
