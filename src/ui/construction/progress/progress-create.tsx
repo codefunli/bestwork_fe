@@ -62,6 +62,7 @@ const ProgressCreate = (props: Props) => {
     const [fileDataBefore, setFileDataBefore] = useState(initialDataImg);
     const [fileDataAfter, setFileDataAfter] = useState(initialDataImg);
     const [eventImage, setEventImage] = useState<any>();
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
         if (params.id) {
@@ -81,7 +82,7 @@ const ProgressCreate = (props: Props) => {
         register,
         handleSubmit,
         reset,
-        formState: { errors, isSubmitting },
+        formState: { errors },
     } = useForm({
         resolver: yupResolver(validateProjectProgress),
     });
@@ -130,6 +131,7 @@ const ProgressCreate = (props: Props) => {
     };
 
     const handleSubmitForm = async (event: any) => {
+        setIsSubmitting(true);
         let formData = new FormData();
 
         const progressValue: any = {
@@ -170,10 +172,12 @@ const ProgressCreate = (props: Props) => {
                 });
 
                 if (res.status === StatusCode.OK) {
+                    setIsSubmitting(false);
                     callBackFn(false, true);
                 }
             })
             .catch(() => {
+                setIsSubmitting(false);
                 setResForHandleMsg({
                     status: StatusCode.ERROR,
                     message: t('message.error'),
