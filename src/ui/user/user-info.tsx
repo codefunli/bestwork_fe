@@ -30,7 +30,7 @@ import ApiAlert from '../../shared-components/alert/api-alert';
 import FileUpload from '../../shared-components/file-upload/file-upload';
 
 const initialValues = {
-    id: '',
+    id: -1,
     userName: '',
     firstName: '',
     lastName: '',
@@ -78,11 +78,11 @@ export default function UserInfo() {
     useEffect(() => {
         const fetchUserInfo = async () => {
             const data = await getUser(userId);
-            if (data && data.data) {
+            if (data && data.data && data.data.id !== -1) {
                 setFormValues({
                     ...data.data,
                     role: data.data.role.id,
-                    company: data.data.company.id,
+                    company: data.data.company ? data.data.company.id : '',
                 });
                 reset();
             }
@@ -387,6 +387,9 @@ export default function UserInfo() {
                                             >
                                                 <MenuItem value="" disabled>
                                                     <em className="placeholder-color">{t('user.search.selectRole')}</em>
+                                                </MenuItem>
+                                                <MenuItem value="1" disabled>
+                                                    <em>System admin</em>
                                                 </MenuItem>
                                                 {roles &&
                                                     roles.length > 0 &&
