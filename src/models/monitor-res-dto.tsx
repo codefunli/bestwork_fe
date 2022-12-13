@@ -3,4 +3,5 @@ export interface MonitorResDTO {
     name: string;
     icon: string;
     url: string;
+    isMenu: boolean;
 }
