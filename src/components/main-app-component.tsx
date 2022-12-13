@@ -144,6 +144,10 @@ export default function MiniDrawer() {
         }
     };
 
+    const checkIsmenu = (item: any) => {
+        return item && item.isMenu && item.isMenu !== false;
+    };
+
     useEffect(() => {
         const timer = setInterval(() => {
             setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10));
@@ -358,7 +362,8 @@ export default function MiniDrawer() {
                                 {menuItems.map((menuItem: any, index: number) => (
                                     <React.Fragment key={index}>
                                         {filterRoleByMonitorId(menuItem.id) &&
-                                            filterRoleByMonitorId(menuItem.id).canAccess && (
+                                            filterRoleByMonitorId(menuItem.id).canAccess &&
+                                            checkIsmenu(menuItem) && (
                                                 <ListItem disablePadding sx={{ display: 'block' }}>
                                                     <ListItemButton
                                                         sx={{
