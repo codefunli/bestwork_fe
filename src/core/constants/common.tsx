@@ -210,6 +210,7 @@ export const FieldConstants = {
     AWB: 'AWB',
     URL: 'Url',
     NATION: 'Nationality',
+    DASHBOARD: 'Dashboard',
 };
 
 export const ConfirmConstants = {

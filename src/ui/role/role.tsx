@@ -25,7 +25,7 @@ import {
 import { Box } from '@mui/system';
 import { createContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AlertColorConstants, ConfirmConstants, Item, StatusCode } from '../../core/constants/common';
+import { AlertColorConstants, ConfirmConstants, FieldConstants, Item, StatusCode } from '../../core/constants/common';
 import { CommentConstant } from '../../core/constants/constant';
 import { SUCCESS_MSG } from '../../core/constants/message';
 import { useAppDispatch } from '../../core/hook/redux';
@@ -659,7 +659,9 @@ export default function Role() {
                                                     </TableHead>
                                                     <TableBody>
                                                         {currentRole &&
-                                                            currentRole.permissions.map((row, index) => {
+                                                            currentRole.permissions.map((row: any, index: any) => {
+                                                                const isDashBoard =
+                                                                    row.monitorName === FieldConstants.DASHBOARD;
                                                                 return (
                                                                     row.monitorId !== -1 && (
                                                                         <TableRow
@@ -678,60 +680,96 @@ export default function Role() {
                                                                                     title={t('tooltip.edit')}
                                                                                     placement="top"
                                                                                 >
-                                                                                    <IconButton
-                                                                                        onClick={() =>
-                                                                                            handleGetScreenValue(row)
-                                                                                        }
-                                                                                    >
-                                                                                        <EditIcon color="primary" />
-                                                                                    </IconButton>
+                                                                                    <span>
+                                                                                        <IconButton
+                                                                                            disabled={isDashBoard}
+                                                                                            onClick={
+                                                                                                isDashBoard
+                                                                                                    ? () =>
+                                                                                                          handleGetScreenValue(
+                                                                                                              row,
+                                                                                                          )
+                                                                                                    : () => {}
+                                                                                            }
+                                                                                        >
+                                                                                            <EditIcon
+                                                                                                color={`${
+                                                                                                    isDashBoard
+                                                                                                        ? 'disabled'
+                                                                                                        : 'primary'
+                                                                                                }`}
+                                                                                            />
+                                                                                        </IconButton>
+                                                                                    </span>
                                                                                 </Tooltip>
                                                                                 <Tooltip
                                                                                     title={t('tooltip.delete')}
                                                                                     placement="top"
                                                                                 >
-                                                                                    <IconButton
-                                                                                        onClick={() =>
-                                                                                            handleDeleteScreen(row)
-                                                                                        }
-                                                                                    >
-                                                                                        <DeleteIcon color="primary" />
-                                                                                    </IconButton>
+                                                                                    <span>
+                                                                                        <IconButton
+                                                                                            disabled={isDashBoard}
+                                                                                            onClick={
+                                                                                                isDashBoard
+                                                                                                    ? () =>
+                                                                                                          handleDeleteScreen(
+                                                                                                              row,
+                                                                                                          )
+                                                                                                    : () => {}
+                                                                                            }
+                                                                                        >
+                                                                                            <DeleteIcon
+                                                                                                color={`${
+                                                                                                    isDashBoard
+                                                                                                        ? 'disabled'
+                                                                                                        : 'primary'
+                                                                                                }`}
+                                                                                            />
+                                                                                        </IconButton>
+                                                                                    </span>
                                                                                 </Tooltip>
                                                                             </TableCell>
 
                                                                             <TableCell align="center">
                                                                                 <Checkbox
+                                                                                    disabled={isDashBoard}
                                                                                     checked={
                                                                                         row.canAccess &&
                                                                                         row.canAdd &&
                                                                                         row.canEdit &&
                                                                                         row.canDelete
                                                                                     }
-                                                                                    onChange={(e) =>
-                                                                                        handleChangeCheckbox(
-                                                                                            e,
-                                                                                            row.monitorId,
-                                                                                            index,
-                                                                                            true,
-                                                                                            row.canAccess &&
-                                                                                                row.canAdd &&
-                                                                                                row.canEdit &&
-                                                                                                row.canDelete,
-                                                                                        )
+                                                                                    onChange={
+                                                                                        isDashBoard
+                                                                                            ? (e) =>
+                                                                                                  handleChangeCheckbox(
+                                                                                                      e,
+                                                                                                      row.monitorId,
+                                                                                                      index,
+                                                                                                      true,
+                                                                                                      row.canAccess &&
+                                                                                                          row.canAdd &&
+                                                                                                          row.canEdit &&
+                                                                                                          row.canDelete,
+                                                                                                  )
+                                                                                            : () => {}
                                                                                     }
                                                                                     name="all"
                                                                                 />
                                                                             </TableCell>
                                                                             <TableCell align="center">
                                                                                 <Checkbox
+                                                                                    disabled={isDashBoard}
                                                                                     checked={row.canAccess}
-                                                                                    onChange={(e) =>
-                                                                                        handleChangeCheckbox(
-                                                                                            e,
-                                                                                            row.monitorId,
-                                                                                            index,
-                                                                                        )
+                                                                                    onChange={
+                                                                                        isDashBoard
+                                                                                            ? (e) =>
+                                                                                                  handleChangeCheckbox(
+                                                                                                      e,
+                                                                                                      row.monitorId,
+                                                                                                      index,
+                                                                                                  )
+                                                                                            : () => {}
                                                                                     }
                                                                                     name="canAccess"
                                                                                 />
@@ -739,43 +777,58 @@ export default function Role() {
                                                                             <TableCell align="center">
                                                                                 <Checkbox
                                                                                     checked={row.canAdd}
-                                                                                    onChange={(e) =>
-                                                                                        handleChangeCheckbox(
-                                                                                            e,
-                                                                                            row.monitorId,
-                                                                                            index,
-                                                                                        )
+                                                                                    onChange={
+                                                                                        isDashBoard
+                                                                                            ? (e) =>
+                                                                                                  handleChangeCheckbox(
+                                                                                                      e,
+                                                                                                      row.monitorId,
+                                                                                                      index,
+                                                                                                  )
+                                                                                            : () => {}
                                                                                     }
                                                                                     name="canAdd"
-                                                                                    disabled={!row.canAccess}
+                                                                                    disabled={
+                                                                                        !row.canAccess || isDashBoard
+                                                                                    }
                                                                                 />
                                                                             </TableCell>
                                                                             <TableCell align="center">
                                                                                 <Checkbox
                                                                                     checked={row.canEdit}
-                                                                                    onChange={(e) =>
-                                                                                        handleChangeCheckbox(
-                                                                                            e,
-                                                                                            row.monitorId,
-                                                                                            index,
-                                                                                        )
+                                                                                    onChange={
+                                                                                        isDashBoard
+                                                                                            ? (e) =>
+                                                                                                  handleChangeCheckbox(
+                                                                                                      e,
+                                                                                                      row.monitorId,
+                                                                                                      index,
+                                                                                                  )
+                                                                                            : () => {}
                                                                                     }
                                                                                     name="canEdit"
-                                                                                    disabled={!row.canAccess}
+                                                                                    disabled={
+                                                                                        !row.canAccess || isDashBoard
+                                                                                    }
                                                                                 />
                                                                             </TableCell>
                                                                             <TableCell align="center">
                                                                                 <Checkbox
                                                                                     checked={row.canDelete}
-                                                                                    onChange={(e) =>
-                                                                                        handleChangeCheckbox(
-                                                                                            e,
-                                                                                            row.monitorId,
-                                                                                            index,
-                                                                                        )
+                                                                                    onChange={
+                                                                                        isDashBoard
+                                                                                            ? (e) =>
+                                                                                                  handleChangeCheckbox(
+                                                                                                      e,
+                                                                                                      row.monitorId,
+                                                                                                      index,
+                                                                                                  )
+                                                                                            : () => {}
                                                                                     }
                                                                                     name="canDelete"
-                                                                                    disabled={!row.canAccess}
+                                                                                    disabled={
+                                                                                        !row.canAccess || isDashBoard
+                                                                                    }
                                                                                 />
                                                                             </TableCell>
                                                                         </TableRow>
