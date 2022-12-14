@@ -391,6 +391,9 @@ export default function UserInfo() {
                                                 <MenuItem value="1" disabled>
                                                     <em>System admin</em>
                                                 </MenuItem>
+                                                <MenuItem value="2" disabled>
+                                                    <em>System Company Admin</em>
+                                                </MenuItem>
                                                 {roles &&
                                                     roles.length > 0 &&
                                                     roles.map((role: any) => (
